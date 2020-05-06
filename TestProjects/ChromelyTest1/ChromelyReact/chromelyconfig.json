@@ -1,10 +1,10 @@
 {
   "appName": "chromely_demo",
   "startUrl": {
-    "url": "https://google.com",
-    "loadType": "absolute"
-    //"url": "local://dist/index.html",
-   // "loadType": "localResource"
+    //"url": "https://google.com",
+    //"loadType": "absolute"
+    "url": "local://dist/index.html",
+    "loadType": "localResource"
   },
   "loadCefBinariesIfNotFound": true,
   "silentCefBinariesLoading": false,
