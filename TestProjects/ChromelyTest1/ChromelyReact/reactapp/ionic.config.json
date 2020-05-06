@@ -1,0 +1,7 @@
+{
+  "name": "my-chromely",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

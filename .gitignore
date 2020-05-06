@@ -2,6 +2,7 @@ node_modules
 bin
 .cache
 obj
+build
 
 
 ## Ignore Visual Studio temporary files, build results, and

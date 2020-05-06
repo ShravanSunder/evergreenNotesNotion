@@ -1,13 +1,7 @@
 {
-  "name": "my-app",
+  "name": "my-chromely",
   "version": "0.1.1",
   "private": true,
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
   "dependencies": {
     "@capacitor/core": "2.0.2",
     "@ionic/react": "^5.0.7",

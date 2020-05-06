@@ -26,8 +26,14 @@
   </ItemGroup>
  
   <ItemGroup>
+    <Compile Remove="reactapp\build\**" />
+    <Compile Remove="reactapp\dist\**" />
     <Compile Remove="reactapp\node_modules\**" />
+    <EmbeddedResource Remove="reactapp\build\**" />
+    <EmbeddedResource Remove="reactapp\dist\**" />
     <EmbeddedResource Remove="reactapp\node_modules\**" />
+    <None Remove="reactapp\build\**" />
+    <None Remove="reactapp\dist\**" />
     <None Remove="reactapp\node_modules\**" />
   </ItemGroup>
 
@@ -38,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="reactapp\dist\" />
     <Folder Include="reactapp\src\assets\css\" />
     <Folder Include="reactapp\src\assets\img\" />
     <Folder Include="reactapp\src\assets\js\" />
