@@ -1,4 +1,3 @@
-
 module.exports = {
     messageRouterGet: (url, parameters, callback, _self) => {
         var request = {

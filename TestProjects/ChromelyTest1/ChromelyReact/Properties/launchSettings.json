@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ChromelyReact": {
+      "commandName": "Project",
+      "commandLineArgs": "NODE_ENV=dev npm run build"
+    }
+  }
+}

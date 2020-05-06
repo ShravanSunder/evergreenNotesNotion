@@ -26,12 +26,15 @@
   </ItemGroup>
  
   <ItemGroup>
+    <Compile Remove="list\**" />
     <Compile Remove="reactapp\build\**" />
     <Compile Remove="reactapp\dist\**" />
     <Compile Remove="reactapp\node_modules\**" />
+    <EmbeddedResource Remove="list\**" />
     <EmbeddedResource Remove="reactapp\build\**" />
     <EmbeddedResource Remove="reactapp\dist\**" />
     <EmbeddedResource Remove="reactapp\node_modules\**" />
+    <None Remove="list\**" />
     <None Remove="reactapp\build\**" />
     <None Remove="reactapp\dist\**" />
     <None Remove="reactapp\node_modules\**" />
@@ -74,6 +77,7 @@
 
     <Message Importance="High" Text="Copying React App to debug folder.." />
     <Exec Command="xcopy &quot;$(ProjectDir)reactapp\dist&quot; &quot;$(TargetDir)dist&quot;   /i /s /r /y /c" />
+      <Exec Command="xcopy &quot;$(ProjectDir)reactapp\public&quot; &quot;$(TargetDir)public&quot;   /i /s /r /y /c" />
   </Target>
 
   <Target Name="ReleaseChromelyApp" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Release' ">

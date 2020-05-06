@@ -3,13 +3,15 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
+    "parcel-start": "parcel src/index.html --open  --target browser --bundle-node-modules",
+    "parcel-build": "parcel build src/index.html --target browser --bundle-node-modules",
+    "build": "ionic build --engine=browser --source-maps",
     "start": "react-scripts start",
-    "build": "react-scripts build /d /s /c",
+    "build-r": "react-scripts build /d /s /c",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "@capacitor/core": "2.0.2",
     "@ionic/pwa-elements": "^1.5.2",
     "@ionic/react": "^5.0.7",
     "@ionic/react-hooks": "0.0.6",

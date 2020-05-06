@@ -1,8 +1,21 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Home from './components/Home';
 import './App.css';
+import '@ionic/react/css/core.css';
 import { openExternalUrl } from './services/Chromely.Service.js'; 
+
+//pages
+import Home from './components/Home';
+import About from './components/About';
+
+//react
+import React, { Component } from 'react';
+//react-router
+import { BrowserRouter as Router, Switch, Route, Link, Redirection, Redirect } from 'react-router-dom';
+
+//ionic
+import { IonReactRouter, } from '@ionic/react-router';
+import { IonApp, IonPage, IonRouterOutlet } from '@ionic/react';
+import { IonToolbar, IonTitle, IonContent, IonCard, IonHeader, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton } from '@ionic/react'
+
 
 export default class App extends Component {
     constructor(props) {
@@ -14,18 +27,20 @@ export default class App extends Component {
 
     render() {
         return (
-            <Router>
-                <div>
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                        <Route path="*" component={Home} />
-                    </Switch>
-                </div>
-                <div className="dropdown-item">
-                    <Link to={'/showDevTools'} className="nav-link" onClick={this.showDevTools}>Show DevTools Remote</Link>
-                    <Link to={'/showDevTools'} className="nav-link" onClick={this.showDevTools}>Show DevTools Remote</Link>
-                </div>
-            </Router>
+            <ion-header>
+  <ion-toolbar>
+    <ion-title>Tab 2</ion-title>
+  </ion-toolbar>
+</ion-header>
+            // <IonApp>
+            //     <IonReactRouter>
+            //         <IonRouterOutlet>
+            //             <Route path="/" exact component={Home} />
+            //             <Route path="/about" exact component={About} />
+            //             <Redirect exact from="/" to="/about" />
+            //         </IonRouterOutlet>
+            //     </IonReactRouter>
+            // </IonApp>
         );
     }
 
