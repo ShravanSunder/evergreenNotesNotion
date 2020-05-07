@@ -3,8 +3,8 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build /d /s /c",
+    "start": "ionic serve",
+    "build": "ionic build --engine=browser",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -49,8 +49,7 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "2.0.2",
-    "parcel-bundler": "^1.12.4"
+    "@capacitor/cli": "2.0.2"
   },
   "description": ""
 }
