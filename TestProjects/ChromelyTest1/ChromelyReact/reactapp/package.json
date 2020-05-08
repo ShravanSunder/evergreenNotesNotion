@@ -3,10 +3,12 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "start": "parcel src/index.html --open",
+    "start": "parcel serve src/index.html --open -t browser",
     "build": "parcel build src/index.html",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.13",
@@ -47,7 +49,13 @@
     ]
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.4"
+    "@storybook/addon-actions": "^5.3.18",
+    "@storybook/addon-links": "^5.3.18",
+    "@storybook/addons": "^5.3.18",
+    "@storybook/preset-create-react-app": "^2.1.1",
+    "@storybook/react": "^5.3.18",
+    "parcel-bundler": "^1.12.4",
+    "storybook": "^5.3.18"
   },
   "description": ""
 }

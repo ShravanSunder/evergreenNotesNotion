@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-ro
 
 //pages
 import { openExternalUrl } from './services/Chromely.Service.js'; 
-import { Home } from '~/components/Home';
+import { Home } from './components/Home';
 
 
 

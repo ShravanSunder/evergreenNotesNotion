@@ -22,15 +22,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
-
-    "baseUrl": ".",
-    "paths": {
-      "~*": ["./src/*"]
-    }
+    "baseUrl": "."
   },
   "include": [
     "src"
