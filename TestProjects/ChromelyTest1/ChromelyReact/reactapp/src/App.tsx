@@ -1,10 +1,17 @@
+import './App.css';
+import 'typeface-roboto'
+
 //react
 import React, { Component } from 'react';
 //react-router
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, Redirection, Redirect } from 'react-router-dom';
 
-/* Theme variables */
-import './theme/variables.css';
+//pages
+import { openExternalUrl } from './services/Chromely.Service.js'; 
+import Home from './components/Home';
+import About from './components/About';
+
+
 
 const App: React.FC = () => (
   <Router>

@@ -1,15 +1,16 @@
 import './App.css';
-import '@ionic/react/css/core.css';
-import { openExternalUrl } from './services/Chromely.Service.js'; 
-
-//pages
-import Home from './components/Home';
-import About from './components/About';
+import 'typeface-roboto'
 
 //react
 import React, { Component } from 'react';
 //react-router
 import { BrowserRouter as Router, Switch, Route, Link, Redirection, Redirect } from 'react-router-dom';
+
+//pages
+import { openExternalUrl } from './services/Chromely.Service.js'; 
+import Home from './components/Home';
+import About from './components/About';
+
 
 
 export default class App extends Component {
