@@ -7,8 +7,6 @@ import MenuIcon  from '@material-ui/icons/Menu';
 
 interface AppProps {
     Title: string
-    Image: string
-    Body: string
 }
 
 export const Header: React.FC<AppProps> =
@@ -18,8 +16,8 @@ export const Header: React.FC<AppProps> =
             <IconButton edge="start" color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit">
-              Photos
+          <Typography variant="h6" color="inherit">
+            {props.Title}
             </Typography>
           </Toolbar>
         </AppBar>
