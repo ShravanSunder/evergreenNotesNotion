@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "scripts": {
-    "start": "parcel src/index.html",
+    "start": "parcel src/index.html --open",
     "build": "parcel build src/index.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

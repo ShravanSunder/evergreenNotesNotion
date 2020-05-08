@@ -8,8 +8,7 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-ro
 
 //pages
 import { openExternalUrl } from './services/Chromely.Service.js'; 
-import Home from './components/Home';
-import About from './components/About';
+import { Home } from '~/components/Home';
 
 
 
@@ -18,8 +17,8 @@ const App: React.FC = () => (
   <Router>
       <div>
           <Switch>
-              <Route exact path='/' component={Home} />
-              <Route path="*" component={Home} />
+                <Route exact path='/' component={Home} />
+                <Route path="*" component={Home} />
           </Switch>
       </div>
       <div className="dropdown-item">
