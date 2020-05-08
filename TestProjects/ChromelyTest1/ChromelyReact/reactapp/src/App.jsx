@@ -11,11 +11,6 @@ import React, { Component } from 'react';
 //react-router
 import { BrowserRouter as Router, Switch, Route, Link, Redirection, Redirect } from 'react-router-dom';
 
-//ionic
-import { IonReactRouter, } from '@ionic/react-router';
-import { IonApp, IonPage, IonRouterOutlet } from '@ionic/react';
-import { IonToolbar, IonTitle, IonContent, IonCard, IonHeader, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton } from '@ionic/react'
-
 
 export default class App extends Component {
     constructor(props) {
@@ -27,20 +22,18 @@ export default class App extends Component {
 
     render() {
         return (
-            <ion-header>
-  <ion-toolbar>
-    <ion-title>Tab 2</ion-title>
-  </ion-toolbar>
-</ion-header>
-            // <IonApp>
-            //     <IonReactRouter>
-            //         <IonRouterOutlet>
-            //             <Route path="/" exact component={Home} />
-            //             <Route path="/about" exact component={About} />
-            //             <Redirect exact from="/" to="/about" />
-            //         </IonRouterOutlet>
-            //     </IonReactRouter>
-            // </IonApp>
+            <Router>
+                <div>
+                    <Switch>
+                        <Route exact path='/' component={Home} />
+                        <Route path="*" component={Home} />
+                    </Switch>
+                </div>
+                <div className="dropdown-item">
+                    <Link to={'/showDevTools'} className="nav-link" onClick={this.showDevTools}>Show DevTools Remote</Link>
+                    <Link to={'/showDevTools'} className="nav-link" onClick={this.showDevTools}>Show DevTools Remote</Link>
+                </div>
+            </Router>
         );
     }
 
