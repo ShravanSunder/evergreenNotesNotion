@@ -1,7 +1,0 @@
-{
-  "name": "list",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "react"
-}
