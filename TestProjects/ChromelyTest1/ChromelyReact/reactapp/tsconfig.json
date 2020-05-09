@@ -28,6 +28,11 @@
     "baseUrl": "."
   },
   "include": [
-    "src"
+    "src",
+    "src/*.test.ts*",
+    "src/*.stories.ts*",
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

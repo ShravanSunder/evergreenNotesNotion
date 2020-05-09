@@ -4,7 +4,7 @@ bin
 obj
 build
 dist
-
+.yarn
 
 
 ## Ignore Visual Studio temporary files, build results, and
