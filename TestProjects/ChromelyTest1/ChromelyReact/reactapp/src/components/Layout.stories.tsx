@@ -8,3 +8,4 @@ export default {
     excludeStories: /.*Data$/,
 };
 export const title = () => <Header Title={"Monkeys"}></Header>;
+

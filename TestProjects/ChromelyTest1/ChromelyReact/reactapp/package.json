@@ -5,17 +5,15 @@
   "scripts": {
     "start": "parcel serve src/index.html --open -t browser",
     "build": "parcel build src/index.html",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "yarn test",
+    "r-test": "react-scripts test",
+    "r-eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.9.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/user-event": "^8.0.3",
-    "@types/jest": "^24.9.1",
     "@types/node": "^12.12.38",
     "@types/parcel-env": "0.0.0",
     "@types/react": "^16.9.34",
@@ -58,10 +56,16 @@
     "@storybook/preset-create-react-app": "^2.1.1",
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^5.3.18",
+    "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^8.0.3",
+    "@types/jest": "^24.9.1",
+    "@types/react-test-renderer": "^16.9.2",
+    "jest": "^26.0.1",
     "parcel-bundler": "^1.12.4",
     "react-test-renderer": "^16.13.1",
-    "storybook": "^5.3.18"
+    "storybook": "^5.3.18",
+    "ts-jest": "^25.5.1"
   },
   "description": ""
 }

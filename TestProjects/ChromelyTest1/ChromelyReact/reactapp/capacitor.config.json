@@ -1,8 +1,0 @@
-{
-  "appId": "io.ionic.starter",
-  "appName": "my-chromely",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "dist",
-  "cordova": {}
-}
