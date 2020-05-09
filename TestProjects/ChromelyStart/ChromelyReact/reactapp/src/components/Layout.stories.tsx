@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from './Layout';  
 
 export default {
-    title: 'Components/Layout',
+    title: 'Components/Layout:Header',
     component: Header,
     // Our exports that end in "Data" are not stories.
     excludeStories: /.*Data$/,
