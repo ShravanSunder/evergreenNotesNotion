@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from './Layout';
+import { Header } from './Layout';  
 
 export default {
     title: 'Components/Layout',

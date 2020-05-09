@@ -5,7 +5,7 @@
   "scripts": {
     "start": "parcel serve src/index.html --open -t browser",
     "build": "parcel build src/index.html",
-    "test": "yarn test",
+    "test": "yarn jest",
     "r-test": "react-scripts test",
     "r-eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",

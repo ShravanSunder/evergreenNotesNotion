@@ -1,4 +1,3 @@
-import './App.css';
 import 'typeface-roboto'
 
 //react
