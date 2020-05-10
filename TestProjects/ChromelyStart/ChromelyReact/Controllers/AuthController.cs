@@ -4,7 +4,6 @@ using Chromely.Core;
 using Chromely.Core.Configuration;
 using Chromely.Core.Network;
 using Newtonsoft.Json;
-using SpotifyAPI.Web.Auth;
 
 namespace ChromelyReact.Controllers
 {
