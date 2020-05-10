@@ -4,7 +4,7 @@ using Xunit;
 
 namespace TrakDiscovery.Services.Test
 {
-    public class StpotiyAuthService
+    public class StpotiyAuthTests
     {
         [Fact]
         public void AuthTest()

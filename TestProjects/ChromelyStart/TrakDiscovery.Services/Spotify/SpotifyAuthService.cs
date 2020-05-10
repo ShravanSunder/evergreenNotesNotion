@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Polly;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using SpotifyAPI.Web.Enums;
@@ -15,7 +17,7 @@ namespace TrakDiscovery.Services.Spotify
 
         //GET https://accounts.spotify.com/authorize
 
-        public void ImplicitAuthenticate()
+        public SpotifyAuthService ImplicitAuthenticate()
         {
             ImplicitGrantAuth auth = new ImplicitGrantAuth(
               ClientId,
@@ -28,7 +30,8 @@ namespace TrakDiscovery.Services.Spotify
               ,
               "TrakDiscoveryAuthV1"
             );
-            auth.AuthReceived += async (sender, payload) =>
+
+            auth.AuthReceived += (sender, payload) =>
             {
                 auth.Stop();
                 this.token = payload;
@@ -37,7 +40,25 @@ namespace TrakDiscovery.Services.Spotify
             auth.ShowDialog = false;
             auth.Start(); // Starts an internal HTTP Server
             auth.OpenBrowser();
+
+            return this;
         }
 
+        public async Task<Token> GetToken()
+        {
+            var t = await Task.Run (() => { 
+                    while (token == null) { }
+                return token;
+            }); 
+
+            if (t != null)
+            {
+                return t;
+            }
+            else
+            {
+                throw new Exception("No Token");
+            }
+        }
     }
 }
