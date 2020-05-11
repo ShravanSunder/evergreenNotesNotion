@@ -9,7 +9,12 @@ namespace ChromelyReact.Controllers
 {
     public class AuthController : ChromelyController
     {
+        [HttpGet(Route = "/authController/Auth")]
+        public ChromelyResponse Auth(ChromelyRequest request)
+        {
 
+            return null;
+        }
 
     }
 }

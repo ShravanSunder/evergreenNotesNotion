@@ -24,7 +24,7 @@ namespace ChromelyReact
         public override void Configure(IChromelyContainer container)
         {
             base.Configure(container);
-            container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(DemoController));
+            container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(AuthController));
         }
     }
 }

@@ -12,8 +12,9 @@ namespace TrakDiscovery.Services.Test
         [Fact]
         public void SearchTest()
         {
-            var s = new SpotifySearchService(new SpotifyAuthService().ImplicitAuthenticate());
-            //var item = api.SearchItemsEscaped("roadhouse+blues", SearchType.Album | SearchType.Playlist);
+            var service = new SpotifySearchService();
+            var item = service.Search("U2");
+
         }
     }
 }

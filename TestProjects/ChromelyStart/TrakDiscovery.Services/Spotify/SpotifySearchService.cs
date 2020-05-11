@@ -13,21 +13,18 @@ namespace TrakDiscovery.Services.Spotify
         //public SpotifyWebAPI Api { get => api; set => api = value; }
         protected SpotifyWebAPI api = null;
 
-        public SpotifySearchService(SpotifyAuthService authService)
-        {
-            api = new SpotifyWebAPI()
+        public SpotifyWebAPI WebApi
+        {  
+            get
             {
-                AccessToken = token.AccessToken,
-                TokenType = token.TokenType
-            };
-        }
+                return SpotifyAuthService.GetService();
+            } 
+        }        
 
-        
-
-        public void Search (string search)
+        public SearchItem Search (string search)
         {
-            var item = api.SearchItemsEscaped("roadhouse+blues", SearchType.Album | SearchType.Playlist);
-
+            var item = WebApi.SearchItemsEscaped(search, SearchType.Album | SearchType.Playlist);
+            return item;
         }
     }
 }

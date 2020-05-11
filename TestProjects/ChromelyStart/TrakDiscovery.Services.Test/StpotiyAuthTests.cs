@@ -9,9 +9,8 @@ namespace TrakDiscovery.Services.Test
         [Fact]
         public void AuthTest()
         {
-            var auth = new SpotifyAuthService();
-
-            auth.ImplicitAuthenticate();
+            var service = SpotifyAuthService.GetService();
+            Assert.NotNull(service);
         }
     }
 }
