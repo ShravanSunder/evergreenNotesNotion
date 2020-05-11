@@ -16,10 +16,10 @@ namespace TrakDiscovery.Services.Spotify
     {
         private static string ClientId { get; set; } = "48f4b92c22f346e5850c31187fb208ff";
         private static string LocalAuthServer { get; set; } = "http://localhost:4013";
-        private static string State { get; set; } = "xx.TrakDiscoveryAuthV0.1";
+        private static string State { get; set; } = "xx.TrakDiscoveryAuthV0.1.r";
         
         protected static Token token = null;
-        public static Token CurrentToken { get; protected set; }
+        public static Token CurrentToken { get; protected set; } = null;
         //GET https://accounts.spotify.com/authorize
 
         protected static void ImplicitAuthenticate()
@@ -28,11 +28,11 @@ namespace TrakDiscovery.Services.Spotify
               ClientId,
               LocalAuthServer,
               LocalAuthServer,
-              Scope.PlaylistModifyPublic |  
-              Scope.UserLibraryRead | Scope.UserLibraryModify | Scope.UserTopRead | 
+              Scope.PlaylistModifyPublic |
+              Scope.UserLibraryRead | Scope.UserLibraryModify | Scope.UserTopRead |
               Scope.UserReadRecentlyPlayed | Scope.PlaylistReadCollaborative | Scope.UserReadCurrentlyPlaying |
               Scope.Streaming,
-              State
+              State + new Random().Next(0, 10000)
             );
 
             void callback(object sender, Token payload)
@@ -68,7 +68,7 @@ namespace TrakDiscovery.Services.Spotify
                 CurrentToken = token;
                 return new SpotifyWebAPI()
                 {
-                    TokenType = "bearer",
+                    TokenType = "Bearer",
                     AccessToken = CurrentToken.AccessToken,
                 };
             }
