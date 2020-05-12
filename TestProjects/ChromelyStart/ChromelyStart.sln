@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChromelyApp", "ChromelyReact\ChromelyApp.csproj", "{470F77AD-5CF7-4055-A86C-6200D0D6A2D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrakDiscovery.Services", "TrakDiscovery.Services\TrakDiscovery.Services.csproj", "{52792A1B-8ADD-450F-8EB2-C99269A77802}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrakDiscovery.Services", "TrakDiscovery.Services\TrakDiscovery.Services.csproj", "{52792A1B-8ADD-450F-8EB2-C99269A77802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrakDiscovery.Services.Test", "TrakDiscovery.Services.Test\TrakDiscovery.Services.Test.csproj", "{43C23506-D75C-42EF-98AD-B7FDA64F9713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrakDiscovery.Services.Test", "TrakDiscovery.Services.Test\TrakDiscovery.Services.Test.csproj", "{43C23506-D75C-42EF-98AD-B7FDA64F9713}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrakDiscovery.Controllers.Interfaces", "TrakDiscovery.Controllers.Interfaces\TrakDiscovery.Controllers.Interfaces.csproj", "{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,14 @@ Global
 		{43C23506-D75C-42EF-98AD-B7FDA64F9713}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43C23506-D75C-42EF-98AD-B7FDA64F9713}.Release|x64.ActiveCfg = Release|Any CPU
 		{43C23506-D75C-42EF-98AD-B7FDA64F9713}.Release|x64.Build.0 = Release|Any CPU
+		{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}.Debug|x64.Build.0 = Debug|Any CPU
+		{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}.Release|x64.ActiveCfg = Release|Any CPU
+		{51AFCFFE-C419-48CC-AEF6-8A6C04963D10}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
