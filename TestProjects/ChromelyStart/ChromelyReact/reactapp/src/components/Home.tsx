@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { Header } from './Layout';
+import {Body} from './Body'
 
 
 interface HomeProps {
@@ -11,5 +11,8 @@ interface HomeProps {
 
 export const Home: React.FC<HomeProps> =
     (props: HomeProps) => (
-        <Header Title={''} Image = "" Body=""></Header>
+        <React.Fragment>
+            <Header Title={''}></Header>
+            <Body></Body>
+        </React.Fragment>
     );

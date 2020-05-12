@@ -1,8 +1,6 @@
 {
   "appName": "chromely_demo",
   "startUrl": {
-    //"url": "https://google.com",
-    //"loadType": "absolute"
     "url": "local://dist/index.html",
     "loadType": "localResource"
   },
@@ -39,7 +37,7 @@
       "name": "default-custom-http",
       "baseUrl": "",
       "scheme": "http",
-      "host": "chromely.com",
+      "host": "trak-chromely.com",
       "urlSchemeType": "custom",
       "baseUrlStrict": false
     },
@@ -47,7 +45,7 @@
       "name": "default-command-http",
       "baseUrl": "",
       "scheme": "http",
-      "host": "command.com",
+      "host": "trak-command.com",
       "urlSchemeType": "command",
       "baseUrlStrict": false
     },

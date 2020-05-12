@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "parcel serve src/index.html --open -t browser",
-    "build": "parcel build src/index.html",
+    "build": "set NODE_ENV=development && parcel build src/index.html --no-minify",
+    "watch": "parcel watch src/index.html -t browser",
+    "build-prod": "parcel build src/index.html --no-minify",
     "test": "yarn jest",
     "r-test": "react-scripts test",
     "r-eject": "react-scripts eject",
@@ -14,10 +16,15 @@
   "dependencies": {
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.9.1",
+    "@types/bent": "^7.0.2",
+    "@types/lodash": "^4.14.150",
     "@types/parcel-env": "0.0.0",
     "@types/react-router": "^5.1.7",
     "@types/react-router-dom": "^5.1.5",
     "add": "^2.0.6",
+    "bent": "^7.3.0",
+    "date-fns": "^2.13.0",
+    "lodash-core": "^4.17.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
@@ -31,14 +38,10 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 5 chrome versions"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 5 chrome versions"
     ]
   },
   "devDependencies": {

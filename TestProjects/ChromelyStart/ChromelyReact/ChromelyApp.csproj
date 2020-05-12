@@ -13,6 +13,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon />
     <StartupObject />
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -44,6 +45,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Chromely.External.Controllers.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="chromelyconfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -53,6 +57,10 @@
     <Folder Include="reactapp\src\assets\css\" />
     <Folder Include="reactapp\src\assets\img\" />
     <Folder Include="reactapp\src\assets\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrakDiscovery.Services\TrakDiscovery.Services.csproj" />
   </ItemGroup>
 
   <Target Name="DependsOn" DependsOnTargets="ValidateChromelyApp">

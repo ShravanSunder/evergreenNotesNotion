@@ -11,7 +11,7 @@ interface AppProps {
 
 export const Header: React.FC<AppProps> =
     (props: AppProps) => (
-        <AppBar>
+      <AppBar position="sticky">
           <Toolbar variant="dense">
             <IconButton edge="start" color="inherit" aria-label="menu">
               <MenuIcon />

@@ -20,9 +20,6 @@ const App: React.FC = () => (
                 <Route path="*" component={Home} />
           </Switch>
       </div>
-      <div className="dropdown-item">
-          <Link to={'/showDevTools'} className="nav-link" onClick={showDevTools}>Show DevTools Remote</Link>
-      </div>
   </Router>
 );
 
