@@ -27,4 +27,7 @@ namespace ChromelyReact
             container.RegisterSingleton(typeof(ChromelyController), Guid.NewGuid().ToString(), typeof(SearchController));
         }
     }
+
+
+
 }

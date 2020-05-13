@@ -26,15 +26,6 @@ namespace ChromelyReact.Controllers
         }
 
 
-        [HttpGet(Route = "/search/spotify1")]
-        public dynamic Search1()
-        {
-            var service = new SpotifySearchService();
-            var items = service.Search("U2");
-
-            return items.Artists.Items;
-        }
-
         [HttpGet(Route = "/search/spotify3")]
         public ChromelyResponse Search3(ChromelyRequest request)
         {
