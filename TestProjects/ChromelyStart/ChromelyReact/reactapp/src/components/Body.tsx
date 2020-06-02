@@ -1,9 +1,6 @@
 import React, {useState} from 'react';
 import { Button, Paper, Typography } from '@material-ui/core/';
-import bent from 'bent';
-const get = bent('json')
-import { messageRouterGet } from '../services/Chromely.Service.js'
-
+import superagent from 'superagent';
 
 ///
 
@@ -12,12 +9,12 @@ export const Body: React.FC = () => {
     const [text, setText] = useState('');
 
     async function callSearchApi () : Promise<any>  {
-        const get = bent('http://trak-chromely.com', 'GET', 'json', 200);
-        const response = await get('/search/spotify3');
+        const get = superagent
+            .get('http://trak-chromely.com' + '/search/spotify3')
+            .set('Accept', 'application/json')
+            .withCredentials();
+        const response = await get;
     }
-    // const callSearchApi = () => {
-    //     messageRouterGet('/search/spotify2', {}, setText('jkjjj'), null)
-    // }
 
     return (
         <Paper>

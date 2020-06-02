@@ -54,12 +54,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="reactapp\src\assets\css\" />
     <Folder Include="reactapp\src\assets\img\" />
     <Folder Include="reactapp\src\assets\js\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ChromelyControllers\ChromelyControllers.csproj" />
     <ProjectReference Include="..\TrakDiscovery.Services\TrakDiscovery.Services.csproj" />
   </ItemGroup>
 

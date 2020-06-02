@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrakDiscovery.Services", "T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrakDiscovery.Services.Test", "TrakDiscovery.Services.Test\TrakDiscovery.Services.Test.csproj", "{43C23506-D75C-42EF-98AD-B7FDA64F9713}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrakDiscoveryServer", "TrakDiscoveryServer\TrakDiscoveryServer.csproj", "{DC48C68C-3BB2-4338-A00F-E5C2561DAE0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrakDiscoveryServer", "TrakDiscoveryServer\TrakDiscoveryServer.csproj", "{DC48C68C-3BB2-4338-A00F-E5C2561DAE0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromelyControllers", "ChromelyControllers\ChromelyControllers.csproj", "{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,14 @@ Global
 		{DC48C68C-3BB2-4338-A00F-E5C2561DAE0C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DC48C68C-3BB2-4338-A00F-E5C2561DAE0C}.Release|x64.ActiveCfg = Release|Any CPU
 		{DC48C68C-3BB2-4338-A00F-E5C2561DAE0C}.Release|x64.Build.0 = Release|Any CPU
+		{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}.Debug|x64.Build.0 = Debug|Any CPU
+		{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}.Release|x64.ActiveCfg = Release|Any CPU
+		{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

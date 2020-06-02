@@ -32,18 +32,19 @@ namespace TrakDiscovery.Services.Spotify
 
         public SearchItem Search (string search, SearchType[] searchTypes = null)
         {
-            SearchType sTypes;
-            if (searchTypes == null || searchTypes.Length == 0)
+            SearchType? sTypes = null;
+            if (searchTypes == null || searchTypes.Length <= 0)
                 sTypes = SearchType.All;
             else
-                sTypes = searchTypes[0];
-            
-            foreach (var s in searchTypes)
             {
-                sTypes = sTypes | s;
+                foreach (var s in searchTypes)
+                {
+                    sTypes |= s;
+                }
             }
+            
 
-            var item = WebApi.SearchItemsEscaped(search, sTypes);
+            var item = WebApi.SearchItemsEscaped(search, sTypes.Value);
             return item;
         }
     }
