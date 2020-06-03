@@ -11,8 +11,10 @@ import { Home } from './components/Home';
 
 
 
-const App: React.FC = () => (
-  <Router>
+const App: React.FC = () => {
+  setupApiPath();
+
+  return <Router>
       <div>
           <Switch>
                 <Route exact path='/' component={Home} />
@@ -20,6 +22,15 @@ const App: React.FC = () => (
           </Switch>
       </div>
   </Router>
-);
+};
+
+const setupApiPath = () => {
+  if(__CONFIG__.chromely === true) {
+    window.vPath = 'http://trak-chromely.com/';
+  }
+  else {
+    window.vPath = 'http://localhost:1235';
+  }
+}
 
 export default App;

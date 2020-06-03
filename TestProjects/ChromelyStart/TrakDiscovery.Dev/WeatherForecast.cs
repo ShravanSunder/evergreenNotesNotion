@@ -1,6 +1,6 @@
 using System;
 
-namespace TrakDiscoveryServer
+namespace TrakDiscovery.Dev
 {
     public class WeatherForecast
     {

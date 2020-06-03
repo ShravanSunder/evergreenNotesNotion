@@ -15,9 +15,9 @@ namespace ChromelyReact.Controllers
 {
 
     [Asp.ApiController]
-    [Asp.Route("api/[controller]")]
+    [Asp.Route("[controller]")]
     [ControllerProperty(Name = "SearchController", Route = "search")]
-    public class SearchController : ChromelyController
+    public class SearchController : Asp.ControllerBase
     {
         private readonly IChromelyConfiguration _config;
 
@@ -28,10 +28,11 @@ namespace ChromelyReact.Controllers
         {
             _config = config;
 
-            RegisterGetRequest("/search/spotify2", Search2); 
+            //RegisterGetRequest("/search/spotify2", Search2); 
         }
 
         [Asp.HttpGet]
+        //[Asp.HttpGet("[controller]/search3")]
         [HttpGet(Route = "/search/spotify3")]
         public ChromelyResponse Search3(ChromelyRequest request)
         {
@@ -63,7 +64,7 @@ namespace ChromelyReact.Controllers
         /// <returns>
         /// The <see cref="ChromelyResponse"/>.
         /// </returns>
-        [Asp.HttpGet]
+        //[Asp.HttpGet]
         public ChromelyResponse Search2(ChromelyRequest request)
         {
             
