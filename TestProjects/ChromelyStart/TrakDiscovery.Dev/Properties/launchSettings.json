@@ -14,7 +14,8 @@
       "launchUrl": "weatherforecast",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "use64Bit": true
     },
     "TrakDiscovery.Dev": {
       "commandName": "Project",

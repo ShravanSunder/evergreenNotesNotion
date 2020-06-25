@@ -27,7 +27,7 @@ namespace TrakDiscovery.Dev
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            var ass = Assembly.Load(new AssemblyName("ChromelyControllers"));
+            //var ass = Assembly.Load(new AssemblyName("ChromelyControllers"));
             //services.AddControllers().AddApplicationPart(ass);
         }
 

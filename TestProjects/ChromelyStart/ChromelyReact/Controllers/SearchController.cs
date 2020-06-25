@@ -7,15 +7,9 @@ using Chromely.Core.Configuration;
 using Chromely.Core.Network;
 using Newtonsoft.Json;
 using TrakDiscovery.Services.Spotify;
-using Asp = Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Components.Routing;
 
 namespace ChromelyReact.Controllers
 {
-
-    [Asp.ApiController]
-    [Asp.Route("api/[controller]")]
     [ControllerProperty(Name = "SearchController", Route = "search")]
     public class SearchController : ChromelyController
     {
@@ -27,11 +21,8 @@ namespace ChromelyReact.Controllers
         public SearchController(IChromelyConfiguration config)
         {
             _config = config;
-
-            RegisterGetRequest("/search/spotify2", Search2); 
         }
 
-        [Asp.HttpGet]
         [HttpGet(Route = "/search/spotify3")]
         public ChromelyResponse Search3(ChromelyRequest request)
         {
@@ -54,24 +45,6 @@ namespace ChromelyReact.Controllers
         }
 
 
-        /// <summary>
-        /// The get movies.
-        /// </summary>
-        /// <param name="request">
-        /// The request.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ChromelyResponse"/>.
-        /// </returns>
-        [Asp.HttpGet]
-        public ChromelyResponse Search2(ChromelyRequest request)
-        {
-            
-            return new ChromelyResponse(request.Id)
-            {
-                Data = new { }
-            };
-        }
 
     }
 }

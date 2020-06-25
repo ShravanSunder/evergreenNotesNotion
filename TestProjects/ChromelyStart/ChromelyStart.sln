@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrakDiscovery.Services", "T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrakDiscovery.Services.Test", "TrakDiscovery.Services.Test\TrakDiscovery.Services.Test.csproj", "{43C23506-D75C-42EF-98AD-B7FDA64F9713}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChromelyControllers", "ChromelyControllers\ChromelyControllers.csproj", "{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Controllers.Interfaces", "ChromelyControllers\Controllers.Interfaces.csproj", "{72936E06-273D-4F86-BF8C-9C7A7F5AD99E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrakDiscovery.Dev", "TrakDiscovery.Dev\TrakDiscovery.Dev.csproj", "{345C06FE-12A3-46DE-8510-8D3D4886B1F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrakDiscovery.Dev", "TrakDiscovery.Dev\TrakDiscovery.Dev.csproj", "{345C06FE-12A3-46DE-8510-8D3D4886B1F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,36 +1,40 @@
-import 'typeface-roboto'
+import "typeface-roboto";
 
 //react
-import React, { Component, SyntheticEvent } from 'react';
+import React, { Component, SyntheticEvent } from "react";
 //react-router
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect
+} from "react-router-dom";
 
 //pages
-import { Home } from './components/Home';
-
-
-
+import { Home } from "./components/Home";
 
 const App: React.FC = () => {
   setupApiPath();
 
-  return <Router>
+  return (
+    <Router>
       <div>
-          <Switch>
-                <Route exact path='/' component={Home} />
-                <Route path="*" component={Home} />
-          </Switch>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="*" component={Home} />
+        </Switch>
       </div>
-  </Router>
+    </Router>
+  );
 };
 
 const setupApiPath = () => {
-  if(__CONFIG__.chromely === true) {
-    window.vPath = 'http://trak-chromely.com/';
+  if (__CONFIG__.chromely === true) {
+    window.vPath = "http://trak-chromely.com/";
+  } else {
+    window.vPath = "https://localhost:44381/";
   }
-  else {
-    window.vPath = 'http://localhost:1235';
-  }
-}
+};
 
 export default App;

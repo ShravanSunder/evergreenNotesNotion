@@ -23,4 +23,6 @@ namespace TrakDiscovery.Dev
                     webBuilder.UseStartup<Startup>();
                 });
     }
+
+
 }
