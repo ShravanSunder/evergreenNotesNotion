@@ -25,6 +25,6 @@
     "gulp-sequence": "^1.0.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.3"
   }
 }
