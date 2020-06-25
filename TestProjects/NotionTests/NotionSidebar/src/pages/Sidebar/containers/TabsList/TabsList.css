@@ -1,0 +1,36 @@
+.NewTabButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 8px 8px 10px;
+  color: rgb(60, 64, 67);
+}
+
+.NewTabButtonContainer.Dark {
+  color: rgb(190, 193, 198);
+}
+
+.NewTabButton {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+  color: rgb(60, 64, 67);
+  transition: all 0.2s ease-in;
+}
+
+.NewTabButton.Dark {
+  color: rgb(190, 193, 198);
+}
+
+.NewTabButton:hover {
+  background-color: rgb(203, 206, 211);
+}
+
+.NewTabButton.Dark:hover {
+  background-color: rgb(68, 69, 71);
+}

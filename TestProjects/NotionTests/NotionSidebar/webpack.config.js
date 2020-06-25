@@ -34,9 +34,10 @@ if (fileSystem.existsSync(secretsPath)) {
 var options = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
-    options: path.join(__dirname, 'src', 'pages', 'Options', 'index.jsx'),
-    background: path.join(__dirname, 'src', 'pages', 'Background', 'index.js'),
-    contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.js'),
+    options: path.join(__dirname, 'src', 'pages', 'Options', 'index.tsx'),
+    background: path.join(__dirname, 'src', 'pages', 'Background', 'index.ts'),
+    contentScript: path.join(__dirname, 'src', 'pages', 'Content', 'index.ts'),
+    sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'index.jsx'),
   },
   chromeExtensionBoilerplate: {
     notHotReload: ['contentScript'],
@@ -124,6 +125,11 @@ var options = {
       template: path.join(__dirname, 'src', 'pages', 'Options', 'index.html'),
       filename: 'options.html',
       chunks: ['options'],
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'src', 'pages', 'Sidebar', 'index.html'),
+      filename: 'sidebar.html',
+      chunks: ['sidebar'],
     }),
     new HtmlWebpackPlugin({
       template: path.join(
