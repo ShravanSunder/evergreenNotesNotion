@@ -79,7 +79,7 @@ var options = {
          {
             test: /\.(js|jsx)$/,
             loader: 'babel-loader',
-            exclude: /node_modules/,
+            exclude: [/node_modules\/(webpack|html-webpack-plugin)\//],
          },
          {
             test: /\.(ts|tsx)$/,
@@ -88,8 +88,8 @@ var options = {
                {
                   loader: 'ts-loader',
                   options: {
-                     transpileOnly: true,
-                     happyPackMode: true,
+                     // transpileOnly: true,
+                     // happyPackMode: true,
                      configFile: path.resolve(__dirname, 'tsconfig.json'),
                   },
                },
@@ -112,11 +112,11 @@ var options = {
       }),
       // expose and write the allowed env vars on the compiled bundle
       new webpack.EnvironmentPlugin(['NODE_ENV']),
-      new ForkTsCheckerWebpackPlugin({
-         eslint: {
-            files: './src/**/*.{ts,tsx,js,jsx}', // required - same as command `eslint ./src/**/*.{ts,tsx,js,jsx} --ext .ts,.tsx,.js,.jsx`
-         },
-      }),
+      // new ForkTsCheckerWebpackPlugin({
+      //    eslint: {
+      //       files: './src/**/*.{ts,tsx,js,jsx}', // required - same as command `eslint ./src/**/*.{ts,tsx,js,jsx} --ext .ts,.tsx,.js,.jsx`
+      //    },
+      // }),
       new CopyWebpackPlugin(
          [
             {
@@ -191,7 +191,7 @@ var options = {
 };
 
 if (env.NODE_ENV === 'development') {
-   options.devtool = 'cheap-module-eval-source-map';
+   options.devtool = 'inline-cheap-module-eval-source-map';
 }
 
 module.exports = options;

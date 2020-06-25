@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 // import UpdateNotice from '../Content/modules/UpdateNotice/UpdateNotice';
 
-import './Sidebar.css';
-
 class Sidebar extends Component {
    render() {
       return <div>Sidebar Page</div>;
