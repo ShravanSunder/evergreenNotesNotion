@@ -1,11 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export const mountSidebar = (e: HTMLDivElement) => {
+export const mountSidebar = (
+   sidebar: HTMLElement,
+   newRoot: HTMLElement,
+   notionApp: HTMLElement
+) => {
    console.log('render');
-   ReactDOM.render(<Sidebar />, e);
+   newRoot.append(notionApp);
+   newRoot.append(sidebar);
+
+   ReactDOM.render(<Sidebar />, sidebar);
 };
 
 export const Sidebar = ({}) => {
-   return <div style={{ width: 500, height: 500 }}>Sidebar Page</div>;
+   return <div>adjfldjfdklsfjsdjfsjdfkl</div>;
 };

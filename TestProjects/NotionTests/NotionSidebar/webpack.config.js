@@ -182,6 +182,11 @@ var options = {
       }),
       new WriteFilePlugin(),
    ],
+   devServer: {
+      contentBase: path.join(__dirname, 'dist'),
+      compress: true,
+      port: 3000
+   },
 };
 
 if (env.NODE_ENV === 'development') {

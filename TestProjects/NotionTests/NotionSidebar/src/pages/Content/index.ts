@@ -13,16 +13,27 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
    }
 });
 
-const notionSidebarRoot = 'notion-sidebar-root-987384';
+const notionAppId = 'notion-app';
+const notionSidebarRootId = 'notion-sidebar-root-987384';
+const notionBaseNewRootId = 'notion-base-new-root';
 const initalize = () => {
-   if (!document.getElementById(notionSidebarRoot)) {
+   if (!document.getElementById(notionSidebarRootId)) {
       let sidebarRoot = document.createElement('div');
       document.body.appendChild(sidebarRoot);
-      sidebarRoot.setAttribute('id', notionSidebarRoot);
+      sidebarRoot.setAttribute('id', notionSidebarRootId);
+
+      let newRoot = document.createElement('div');
+      document.body.appendChild(newRoot);
+      newRoot.setAttribute('id', notionBaseNewRootId);
    }
 
-   var sidebarRoot = document.createElement('div');
-   mountSidebar(sidebarRoot);
+   var sidebarRoot = document.getElementById(notionSidebarRootId);
+   var newRoot = document.getElementById(notionBaseNewRootId);
+   var notionApp = document.getElementById(notionAppId);
+
+   if (sidebarRoot && newRoot && notionApp) {
+      mountSidebar(sidebarRoot, newRoot, notionApp);
+   }
 };
 
 const toggleSidebar = () => {};
