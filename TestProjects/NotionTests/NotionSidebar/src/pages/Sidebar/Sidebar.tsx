@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
+import ReactDOM from 'react-dom';
 // import UpdateNotice from '../Content/modules/UpdateNotice/UpdateNotice';
 
-class Sidebar extends Component {
-   render() {
-      return <div>Sidebar Page</div>;
-   }
-}
+export const mountSidebar = (e: HTMLDivElement) => {
+   ReactDOM.render(<Sidebar />, e);
+};
+
+export const Sidebar = ({}) => {
+   return <div>Sidebar Page</div>;
+};
 
 export default Sidebar;
 

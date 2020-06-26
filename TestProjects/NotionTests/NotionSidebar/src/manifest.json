@@ -1,29 +1,30 @@
 {
-  "name": "Notion Sidebar",
-  "options_page": "options.html",
-  "background": {
-    "page": "background.html"
-  },
-  "browser_action": {
-    "default_title": "Notion Sidebar",
-    "default_icon": "icon-34.png"
-  },
-  "icons": {
-    "128": "icon-128.png"
-  },
-  "content_scripts": [
-    {
-      "matches": ["http://*.notion.so/*", "https://*.notion.so/*"],
-      "js": ["contentScript.bundle.js"],
-      "css": ["content.styles.css"]
-    }
-  ],
-  "web_accessible_resources": [
-    "content.styles.css",
-    "icon-128.png",
-    "icon-34.png",
-    "sidebar.html"
-  ],
-  "manifest_version": 2,
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+   "name": "Notion Sidebar",
+   "options_page": "options.html",
+   "background": {
+      "page": "background.html"
+   },
+   "browser_action": {
+      "default_title": "Notion Sidebar",
+      "default_icon": "icon-34.png"
+   },
+   "icons": {
+      "128": "icon-128.png"
+   },
+   "permissions": ["activeTab", "tabs", "https://*.notion.so/*"],
+   "content_scripts": [
+      {
+         "matches": ["http://*.notion.so/*", "https://*.notion.so/*"],
+         "js": ["contentScript.bundle.js"],
+         "css": ["content.styles.css"]
+      }
+   ],
+   "web_accessible_resources": [
+      "content.styles.css",
+      "icon-128.png",
+      "icon-34.png",
+      "sidebar.html"
+   ],
+   "manifest_version": 2,
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
