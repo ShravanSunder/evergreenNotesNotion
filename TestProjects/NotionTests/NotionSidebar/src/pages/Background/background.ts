@@ -3,6 +3,9 @@ import '../../assets/img/icon-128.png';
 
 console.log('This is the background page.');
 console.log('Put the background scripts here.');
+if (module && module.hot) {
+   module.hot.accept();
+}
 
 // Regex-pattern to check URLs against.
 // It matches URLs like: http[s]://[...]stackoverflow.com[...]

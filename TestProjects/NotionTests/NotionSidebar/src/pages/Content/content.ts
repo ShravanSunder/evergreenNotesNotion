@@ -33,6 +33,8 @@ const initalize = () => {
 
    if (sidebarRoot && newRoot && notionApp) {
       mountSidebar(sidebarRoot, newRoot, notionApp);
+      var d = 3 + 3;
+      //mountSidebar();
    }
 };
 

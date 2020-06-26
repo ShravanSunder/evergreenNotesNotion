@@ -9,11 +9,11 @@ var webpack = require('webpack'),
    CopyWebpackPlugin = require('copy-webpack-plugin'),
    HtmlWebpackPlugin = require('html-webpack-plugin'),
    WriteFilePlugin = require('write-file-webpack-plugin'),
+   ReloadPlugin = require("./ReloadPlugin"),
    ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // load the secrets
 var alias = {
    'react-dom': '@hot-loader/react-dom',
-   Sidebar: path.resolve(__dirname, 'src/pages/sidebar/'),
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
@@ -38,26 +38,26 @@ if (fileSystem.existsSync(secretsPath)) {
 var options = {
    mode: process.env.NODE_ENV || 'development',
    entry: {
-      options: path.join(__dirname, 'src', 'pages', 'Options', 'index.tsx'),
+      options: path.join(__dirname, 'src', 'pages', 'Options', 'options.tsx'),
       background: path.join(
          __dirname,
          'src',
          'pages',
          'Background',
-         'index.ts'
+         'background.ts'
       ),
-      contentScript: path.join(
+      content: path.join(
          __dirname,
          'src',
          'pages',
          'Content',
-         'index.ts'
+         'content.ts'
       ),
-      sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'index.jsx'),
+      //sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'index.jsx'),
    },
-   chromeExtensionBoilerplate: {
-      notHotReload: ['contentScript'],
-   },
+   //   chromeExtensionBoilerplate: {
+   //      notHotReload: ['contentScript'],
+   //   },
    output: {
       path: path.resolve(__dirname, 'build'),
       filename: '[name].bundle.js',
@@ -105,6 +105,15 @@ var options = {
    },
    plugins: [
       new webpack.ProgressPlugin(),
+      new ReloadPlugin({
+         contentScripts: ["content"],
+         backgroundScript: "background",
+         transformManifest: manifest => ({
+            description: process.env.npm_package_description,
+            version: process.env.npm_package_version,
+            ...manifest
+         })
+      }),
       // clean the build folder
       new CleanWebpackPlugin({
          verbose: true,
@@ -153,29 +162,29 @@ var options = {
             'src',
             'pages',
             'Options',
-            'index.html'
+            'options.html'
          ),
          filename: 'options.html',
          chunks: ['options'],
       }),
-      new HtmlWebpackPlugin({
-         template: path.join(
-            __dirname,
-            'src',
-            'pages',
-            'Sidebar',
-            'index.html'
-         ),
-         filename: 'sidebar.html',
-         chunks: ['sidebar'],
-      }),
+      // new HtmlWebpackPlugin({
+      //    template: path.join(
+      //       __dirname,
+      //       'src',
+      //       'pages',
+      //       'Sidebar',
+      //       'index.html'
+      //    ),
+      //    filename: 'sidebar.html',
+      //    chunks: ['sidebar'],
+      // }),
       new HtmlWebpackPlugin({
          template: path.join(
             __dirname,
             'src',
             'pages',
             'Background',
-            'index.html'
+            'background.html'
          ),
          filename: 'background.html',
          chunks: ['background'],
