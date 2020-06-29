@@ -23,17 +23,9 @@ const notionAppInnerClass = 'notion-app-inner';
 var initalized = false;
 
 const initalize = () => {
-   let notionApp = document.getElementById(notionAppId);
-   let notionFrame = document.getElementsByClassName(notionFrameClass)[0];
-   let notionNav = document.getElementsByClassName(notionNavClass)[0];
-   let notionContentScroller = notionFrame.getElementsByClassName(
-      notionScrollerClass
-   )[0];
-   let notionAppInnerChildren = document.getElementsByClassName(
-      notionAppInnerClass
-   )[0].children;
+   let notionApp = document.getElementById(notionAppId) as HTMLElement;
 
-   if (!notionApp || !notionFrame || !notionContentScroller) {
+   if (!notionApp) {
       error('could not find notion elements');
    } else if (!initalized) {
       initalized = true;
@@ -52,40 +44,11 @@ const initalize = () => {
          );
       }
 
-      let sidebarRoot = document.getElementById(notionSidebarRootId);
-
-      if (sidebarRoot && notionApp && notionFrame && notionContentScroller) {
-         let nNavWidth = Math.round(notionNav.getBoundingClientRect().width);
-         let nFrameWidth = Math.round(
-            notionFrame.getBoundingClientRect().width
-         );
-
-         let sidebarWidth = Math.round((nFrameWidth + nNavWidth) * 0.25) - 10;
-         let newFrameWidth = nFrameWidth - sidebarWidth;
-         let newAppWidth = newFrameWidth + nNavWidth + 10;
-
-         //Todo add a obeserver: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
-         notionContentScroller.setAttribute(
-            'style',
-            `max-width:${newFrameWidth}px;`
-         );
-         notionFrame.setAttribute('style', `max-width:${newFrameWidth}px;`);
-
-         // [...notionAppInnerChildren].forEach((e) => {
-         //    e.setAttribute('style', `max-width:${newAppWidth}px;`);
-         // });
-
-         notionApp.setAttribute(
-            'style',
-            `max-width:${newAppWidth}px; overflow:auto;`
-         );
-
-         sidebarRoot.setAttribute('style', `max-width:${sidebarWidth}px`);
-      }
+      adjustSidebarWidth(notionApp);
    }
 
    let sidebarRoot = document.getElementById(notionSidebarRootId);
-   sidebarRoot && mountSidebar(sidebarRoot);
+   if (sidebarRoot) mountSidebar(sidebarRoot);
    return true;
 };
 
@@ -94,3 +57,47 @@ const error = (str: string) => {
 };
 
 const toggleSidebar = () => {};
+function adjustSidebarWidth(notionApp: HTMLElement) {
+   let newRoot = document.getElementById(notionBaseNewRootId);
+   let sidebarRoot = document.getElementById(notionSidebarRootId);
+   let notionFrame = document.getElementsByClassName(
+      notionFrameClass
+   )[0] as HTMLElement;
+   let notionNav = document.getElementsByClassName(
+      notionNavClass
+   )[0] as HTMLElement;
+   let notionContentScroller = notionFrame.getElementsByClassName(
+      notionScrollerClass
+   )[0] as HTMLElement;
+   let notionInnerAppCollection = [
+      ...document.getElementsByClassName(notionAppInnerClass)[0].children,
+   ];
+
+   if (
+      newRoot &&
+      sidebarRoot &&
+      notionApp &&
+      notionFrame &&
+      notionContentScroller
+   ) {
+      //let width = newRoot.getBoundingClientRect().width;
+
+      let nNavWidth = Math.round(notionNav.getBoundingClientRect().width);
+      let nFrameWidth = Math.round(notionFrame.getBoundingClientRect().width);
+
+      let sidebarWidth = Math.round((nFrameWidth + nNavWidth) * 0.25) - 10;
+      let newFrameWidth = nFrameWidth - sidebarWidth;
+      let newAppWidth = newFrameWidth + nNavWidth + 10;
+
+      //Todo add a obeserver: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
+      notionFrame.style.maxWidth = `${newFrameWidth}px`;
+      notionContentScroller.style.maxWidth = `${newFrameWidth}px`;
+      [...notionInnerAppCollection].forEach((element) => {
+         let e = element as HTMLElement;
+         e.style.maxWidth = `${newAppWidth}px`;
+      });
+      notionApp.style.maxWidth = `${newAppWidth}px`;
+
+      sidebarRoot.setAttribute('style', `max-width:${sidebarWidth}px`);
+   }
+}

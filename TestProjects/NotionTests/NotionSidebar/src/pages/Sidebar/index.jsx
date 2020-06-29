@@ -29,10 +29,6 @@ const App = () => {
       <React.Fragment>
          <div>sdjklfsjdfjs</div>
          <div>sdjklfsjdfjs</div>
-         <div>sdjklfsjdfjs</div>
-         <div>sdjklfsjdfjs</div>
-
-         <div>sdjklfsjdfjs</div>
       </React.Fragment>
    );
 };
