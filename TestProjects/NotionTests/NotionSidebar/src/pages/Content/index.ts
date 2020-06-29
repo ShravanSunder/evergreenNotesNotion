@@ -42,6 +42,8 @@ const initalize = () => {
             'style',
             `display:inline-flex; flex-wrap: nowrap; justify-content: flex-start;`
          );
+
+         window.onresize = () => adjustSidebarWidth(notionApp);
       }
 
       adjustSidebarWidth(notionApp);
@@ -57,6 +59,7 @@ const error = (str: string) => {
 };
 
 const toggleSidebar = () => {};
+
 function adjustSidebarWidth(notionApp: HTMLElement) {
    let newRoot = document.getElementById(notionBaseNewRootId);
    let sidebarRoot = document.getElementById(notionSidebarRootId);
@@ -80,13 +83,11 @@ function adjustSidebarWidth(notionApp: HTMLElement) {
       notionFrame &&
       notionContentScroller
    ) {
-      //let width = newRoot.getBoundingClientRect().width;
-
+      let wWidth = window.innerWidth;
       let nNavWidth = Math.round(notionNav.getBoundingClientRect().width);
-      let nFrameWidth = Math.round(notionFrame.getBoundingClientRect().width);
 
-      let sidebarWidth = Math.round((nFrameWidth + nNavWidth) * 0.25) - 10;
-      let newFrameWidth = nFrameWidth - sidebarWidth;
+      let sidebarWidth = Math.round(wWidth * 0.25) - 10;
+      let newFrameWidth = wWidth - nNavWidth - sidebarWidth;
       let newAppWidth = newFrameWidth + nNavWidth + 10;
 
       //Todo add a obeserver: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
