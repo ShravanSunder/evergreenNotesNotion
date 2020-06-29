@@ -31,6 +31,7 @@ var urlRegex = /^https?:\/\/(?:[^./?#]+\.)?notion.so/;
 chrome.browserAction.onClicked.addListener(function(tab) {
    chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
       var t = tabs[0];
+      console.log('onclick');
       if (t.id != null && t.url != null) {
          if (urlRegex.test(t.url)) {
             chrome.tabs.sendMessage(t.id, { command: 'chromeOnClick' });

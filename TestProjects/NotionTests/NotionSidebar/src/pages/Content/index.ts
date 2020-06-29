@@ -16,18 +16,22 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 const notionAppId = 'notion-app';
 const notionFrameClass = 'notion-frame';
 const notionScrollerClass = 'notion-scroller';
-const notionSideClass = 'notion-sidebar-container';
+const notionNavClass = 'notion-sidebar-container';
 const notionSidebarRootId = 'notion-sidebar-root-987384';
 const notionBaseNewRootId = 'new-app-root';
+const notionAppInnerClass = 'notion-app-inner';
 var initalized = false;
 
 const initalize = () => {
    let notionApp = document.getElementById(notionAppId);
    let notionFrame = document.getElementsByClassName(notionFrameClass)[0];
-   let notionSide = document.getElementsByClassName(notionSideClass)[0];
+   let notionNav = document.getElementsByClassName(notionNavClass)[0];
    let notionContentScroller = notionFrame.getElementsByClassName(
       notionScrollerClass
    )[0];
+   let notionAppInnerChildren = document.getElementsByClassName(
+      notionAppInnerClass
+   )[0].children;
 
    if (!notionApp || !notionFrame || !notionContentScroller) {
       error('could not find notion elements');
@@ -42,23 +46,40 @@ const initalize = () => {
          sidebarRoot.setAttribute('id', notionSidebarRootId);
          newRoot.appendChild(notionApp);
          newRoot.appendChild(sidebarRoot);
+         newRoot.setAttribute(
+            'style',
+            `display:inline-flex; flex-wrap: nowrap; justify-content: flex-start;`
+         );
       }
 
       let sidebarRoot = document.getElementById(notionSidebarRootId);
 
       if (sidebarRoot && notionApp && notionFrame && notionContentScroller) {
-         let nSideWidth = Math.round(notionSide.getBoundingClientRect().width);
-         let fullWidth = Math.round(notionFrame.getBoundingClientRect().width);
-         let sidebarWidth = Math.round((fullWidth - nSideWidth) * 0.15);
-         let nFrameWidth = Math.round((fullWidth - nSideWidth) * 0.85);
-         let nAppWidth = fullWidth - sidebarWidth;
+         let nNavWidth = Math.round(notionNav.getBoundingClientRect().width);
+         let nFrameWidth = Math.round(
+            notionFrame.getBoundingClientRect().width
+         );
+
+         let sidebarWidth = Math.round((nFrameWidth + nNavWidth) * 0.25) - 10;
+         let newFrameWidth = nFrameWidth - sidebarWidth;
+         let newAppWidth = newFrameWidth + nNavWidth + 10;
 
          //Todo add a obeserver: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
          notionContentScroller.setAttribute(
             'style',
-            `max-width:${nFrameWidth}px; overflow:auto`
+            `max-width:${newFrameWidth}px;`
          );
-         notionApp.setAttribute('style', `max-width:${nAppWidth}px`);
+         notionFrame.setAttribute('style', `max-width:${newFrameWidth}px;`);
+
+         // [...notionAppInnerChildren].forEach((e) => {
+         //    e.setAttribute('style', `max-width:${newAppWidth}px;`);
+         // });
+
+         notionApp.setAttribute(
+            'style',
+            `max-width:${newAppWidth}px; overflow:auto;`
+         );
+
          sidebarRoot.setAttribute('style', `max-width:${sidebarWidth}px`);
       }
    }

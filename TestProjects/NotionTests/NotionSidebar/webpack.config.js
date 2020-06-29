@@ -3,9 +3,7 @@ var webpack = require('webpack'),
    path = require('path'),
    fileSystem = require('fs-extra'),
    env = require('./utils/env'),
-   {
-      CleanWebpackPlugin
-   } = require('clean-webpack-plugin'),
+   { CleanWebpackPlugin } = require('clean-webpack-plugin'),
    CopyWebpackPlugin = require('copy-webpack-plugin'),
    HtmlWebpackPlugin = require('html-webpack-plugin'),
    WriteFilePlugin = require('write-file-webpack-plugin'),
@@ -63,7 +61,8 @@ var options = {
       filename: '[name].bundle.js',
    },
    module: {
-      rules: [{
+      rules: [
+         {
             test: /\.css$/,
             loader: 'style-loader!css-loader',
             exclude: /node_modules/,
@@ -86,14 +85,16 @@ var options = {
          {
             test: /\.(ts|tsx)$/,
             exclude: /node_modules/,
-            use: [{
-               loader: 'ts-loader',
-               options: {
-                  // transpileOnly: true,
-                  // happyPackMode: true,
-                  configFile: path.resolve(__dirname, 'tsconfig.json'),
+            use: [
+               {
+                  loader: 'ts-loader',
+                  options: {
+                     // transpileOnly: true,
+                     // happyPackMode: true,
+                     configFile: path.resolve(__dirname, 'tsconfig.json'),
+                  },
                },
-            }, ],
+            ],
          },
       ],
    },
@@ -118,31 +119,37 @@ var options = {
       //    },
       // }),
       new CopyWebpackPlugin(
-         [{
-            from: 'src/manifest.json',
-            to: path.join(__dirname, 'build'),
-            force: true,
-            transform: function (content, path) {
-               // generates the manifest file using the package.json informations
-               return Buffer.from(
-                  JSON.stringify({
-                     description: process.env.npm_package_description,
-                     version: process.env.npm_package_version,
-                     ...JSON.parse(content.toString()),
-                  })
-               );
+         [
+            {
+               from: 'src/manifest.json',
+               to: path.join(__dirname, 'build'),
+               force: true,
+               transform: function(content, path) {
+                  // generates the manifest file using the package.json informations
+                  return Buffer.from(
+                     JSON.stringify({
+                        description: process.env.npm_package_description,
+                        version: process.env.npm_package_version,
+                        ...JSON.parse(content.toString()),
+                     })
+                  );
+               },
             },
-         }, ], {
+         ],
+         {
             logLevel: 'info',
             copyUnmodified: true,
          }
       ),
       new CopyWebpackPlugin(
-         [{
-            from: 'src/pages/Content/content.styles.css',
-            to: path.join(__dirname, 'build'),
-            force: true,
-         }, ], {
+         [
+            {
+               from: 'src/pages/Content/content.styles.css',
+               to: path.join(__dirname, 'build'),
+               force: true,
+            },
+         ],
+         {
             logLevel: 'info',
             copyUnmodified: true,
          }
@@ -182,15 +189,10 @@ var options = {
       }),
       new WriteFilePlugin(),
    ],
-   devServer: {
-      contentBase: path.join(__dirname, 'dist'),
-      compress: true,
-      port: 3000
-   },
 };
 
 if (env.NODE_ENV === 'development') {
-   options.devtool = 'inline-cheap-module-eval-source-map';
+   options.devtool = 'cheap-module-eval-source-map';
 }
 
 module.exports = options;
