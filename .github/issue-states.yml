@@ -3,6 +3,7 @@
 # Open issues that are moved to these project columns. Set to `[]` to disable
 openIssueColumns:
   - 🔥Next
+  - In Progress
 
 # Close issues that are moved to these project columns. Set to `[]` to disable
 closedIssueColumns:
