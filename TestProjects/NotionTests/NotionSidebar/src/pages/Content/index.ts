@@ -20,6 +20,8 @@ const notionNavClass = 'notion-sidebar-container';
 const notionSidebarRootId = 'notion-sidebar-root-987384';
 const notionBaseNewRootId = 'new-app-root';
 const notionAppInnerClass = 'notion-app-inner';
+const notionPageContentClass = 'notion-page-content';
+const notionPageControlsClass = 'notion-page-controls';
 var initalized = false;
 
 const initalize = () => {
@@ -46,6 +48,7 @@ const initalize = () => {
          window.onresize = () => adjustSidebarWidth(notionApp);
       }
 
+      reduceContentPadding(notionApp);
       adjustSidebarWidth(notionApp);
    }
 
@@ -101,4 +104,22 @@ function adjustSidebarWidth(notionApp: HTMLElement) {
 
       sidebarRoot.setAttribute('style', `max-width:${sidebarWidth}px`);
    }
+}
+function reduceContentPadding(notionApp: HTMLElement) {
+   let notionPageContent = notionApp.getElementsByClassName(
+      notionPageContentClass
+   )[0] as HTMLElement;
+   let notionPageControlParent = notionApp.getElementsByClassName(
+      notionPageControlsClass
+   )[0].parentElement as HTMLElement;
+
+   const offset = ' - 40px ';
+   notionPageContent.style.paddingLeft =
+      notionPageContent.style.paddingLeft + offset;
+   notionPageContent.style.paddingRight =
+      notionPageContent.style.paddingRight + offset;
+   notionPageControlParent.style.paddingLeft =
+      notionPageControlParent.style.paddingLeft + offset;
+   notionPageControlParent.style.paddingRight =
+      notionPageControlParent.style.paddingRight + offset;
 }
