@@ -1,7 +1,6 @@
 import { mountSidebar } from './SidebarFrame';
 
-console.log('Content script works!');
-console.log('Must reload extension for modifications to take effect.');
+console.log('Content script loaded!');
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
    if (request.command === 'notionTabLoaded') {
@@ -103,6 +102,7 @@ function adjustSidebarWidth(notionApp: HTMLElement) {
       notionApp.style.maxWidth = `${newAppWidth}px`;
 
       sidebarRoot.setAttribute('style', `max-width:${sidebarWidth}px`);
+      console.log(document.cookie);
    }
 }
 function reduceContentPadding(notionApp: HTMLElement) {

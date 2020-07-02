@@ -42,16 +42,16 @@ var options = {
          'src',
          'pages',
          'Background',
-         'index.ts'
+         'background.ts'
       ),
       contentScript: path.join(
          __dirname,
          'src',
          'pages',
          'Content',
-         'index.ts'
+         'content.ts'
       ),
-      sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'index.jsx'),
+      sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'sidebar.tsx'),
    },
    chromeExtensionBoilerplate: {
       notHotReload: ['contentScript'],
@@ -160,7 +160,7 @@ var options = {
             'src',
             'pages',
             'Options',
-            'index.html'
+            'options.html'
          ),
          filename: 'options.html',
          chunks: ['options'],
@@ -171,7 +171,7 @@ var options = {
             'src',
             'pages',
             'Sidebar',
-            'index.html'
+            'sidebar.html'
          ),
          filename: 'sidebar.html',
          chunks: ['sidebar'],
@@ -182,7 +182,7 @@ var options = {
             'src',
             'pages',
             'Background',
-            'index.html'
+            'background.html'
          ),
          filename: 'background.html',
          chunks: ['background'],

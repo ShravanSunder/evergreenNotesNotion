@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { App } from '../Sidebar/sidebar';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render');
    chrome.extension.getURL('sidebar.html');
 
-   ReactDOM.render(<Sidebar />, sidebar);
+   ReactDOM.render(<LoadSidebarFrame />, sidebar);
 };
 
-export const Sidebar = () => {
+export const LoadSidebarFrame = () => {
    let url = chrome.extension.getURL('sidebar.html');
 
    return (

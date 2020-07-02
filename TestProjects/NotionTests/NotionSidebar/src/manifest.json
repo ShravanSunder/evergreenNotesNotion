@@ -11,7 +11,13 @@
    "icons": {
       "128": "icon-128.png"
    },
-   "permissions": ["activeTab", "tabs", "https://*.notion.so/*"],
+   "permissions": [
+      "activeTab",
+      "tabs",
+      "*://*.notion.so/*",
+      "https://notion.so/*",
+      "cookies"
+   ],
    "content_scripts": [
       {
          "matches": ["http://*.notion.so/*", "https://*.notion.so/*"],
