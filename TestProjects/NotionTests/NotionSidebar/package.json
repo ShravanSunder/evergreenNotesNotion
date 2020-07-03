@@ -9,7 +9,7 @@
    },
    "scripts": {
       "build": "node utils/build.js",
-      "start": "set PORT=3000 && node utils/webserver.js",
+      "start": "set PORT=3000 && node utils/webserver.js --max-old-space-size 3096",
       "prettier": "prettier --write '**/*.{js,jsx,css,html}'"
    },
    "dependencies": {
