@@ -61,6 +61,14 @@
       // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
 
       /* Advanced Options */
-      "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
-   }
+      "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
+
+      "baseUrl": ".",
+      "paths": {
+         "Sidebar/*": ["src/pages/Sidebar/*"],
+         "Common/*": ["src/pages/Common/*"],
+         "Notion/*": ["src/Notion/*"]
+      }
+   },
+   "exclude": ["node_modules", "dist", "build"]
 }

@@ -1,6 +1,6 @@
+import { commands } from 'Common/commands';
 import React from 'react';
 import { render } from 'react-dom';
-import { commands } from 'Common/commands';
 import superagent from 'superagent';
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from 'Sidebar/rootReducer';
