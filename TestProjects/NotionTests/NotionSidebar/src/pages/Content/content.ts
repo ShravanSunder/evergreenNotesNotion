@@ -1,12 +1,17 @@
 import { mountSidebar } from './SidebarFrame';
-import { msgTypes } from '../Common/msgTypes';
+import { commands } from 'Common/commands';
+import superagent from 'superagent';
 
 console.log('Content script loaded!');
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-   if (request.command === 'notionTabLoaded') {
-      initalize();
-   } else if (request.msgType === msgTypes.extensionOnClick) {
+chrome.runtime.onMessage.addListener(async function(
+   request,
+   sender,
+   sendResponse
+) {
+   if (request.command === commands.receivedCookies) {
+      await receivedCookies(request);
+   } else if (request.command === commands.extensionOnClick) {
       initalize();
       toggleSidebar();
    }
@@ -59,6 +64,10 @@ const error = (str: string) => {
 };
 
 const toggleSidebar = () => {};
+
+async function receivedCookies(request: any) {
+   console.log('received cookies', request.notionCookies);
+}
 
 function adjustSidebarWidth(notionApp: HTMLElement) {
    let newRoot = document.getElementById(notionBaseNewRootId);

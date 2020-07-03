@@ -1,13 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { msgTypes } from '../Common/msgTypes';
+import { commands } from 'Common/commands';
 import superagent from 'superagent';
+import { configureStore } from '@reduxjs/toolkit';
+import { rootReducer } from 'Sidebar/rootReducer';
+
+const store = configureStore({ reducer: rootReducer });
 
 ///////////////
 
 export const App = () => {
-   // getCurrentCookies();
-   //console.log(document.cookies);
    return (
       <React.Fragment>
          <div>sdjklfsjdfjs</div>
@@ -21,7 +23,7 @@ chrome.runtime.onMessage.addListener(async function(
    sender,
    sendResponse
 ) {
-   if (request.msgType === msgTypes.cookies) {
+   if (request.command === commands.receivedCookies) {
       console.log('received cookies', request.notionCookies);
       var data = await superagent
          .post('https://www.notion.so/api/v3/search')
@@ -29,7 +31,7 @@ chrome.runtime.onMessage.addListener(async function(
             'x-notion-active-user-header',
             '79888584-c56f-4b10-9e82-9411c5793cfa'
          )
-         .set('Cookie', request.notionCookies)
+         //.set('Cookie', request.notionCookies)
          .send({
             type: 'BlocksInSpace',
             query: 'search',

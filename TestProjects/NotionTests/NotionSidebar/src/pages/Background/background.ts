@@ -1,7 +1,8 @@
 import '../../assets/img/icon-34.png';
 import '../../assets/img/icon-128.png';
 import 'chrome-extension-async';
-import { msgTypes } from '../Common/msgTypes';
+import { commands } from 'Common/commands';
+import { Tab } from '@material-ui/core';
 
 console.log('Loaded background page.');
 
@@ -9,37 +10,42 @@ console.log('Loaded background page.');
 // It matches URLs like: http[s]://[...]stackoverflow.com[...]
 var urlRegex = /^https?:\/\/(?:[^./?#]+\.)?notion.so/;
 
-// async function doSomething(script) {
-//    try {
-//        // Query the tabs and continue once we have the result
-//        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-//        const activeTab = tabs[0];
+const isNotionTab = (tab: chrome.tabs.Tab) => {
+   if (tab.id != null && tab.url != null) {
+      if (urlRegex.test(tab.url)) {
+         return true;
+      }
+   }
+   return false;
+};
 
-//        // Execute the injected script and continue once we have the result
-//        const results = await chrome.tabs.executeScript(activeTab.id, { code: script });
-//        const firstScriptResult = results[0];
-//        return firstScriptResult;
-//    }
-//    catch(err) {
-//        // Handle errors from chrome.tabs.query, chrome.tabs.executeScript or my code
-//    }
-// }
+chrome.tabs.onUpdated.addListener(async function(tabId, info, tab) {
+   if (info.status === 'complete') {
+      if (isNotionTab(tab)) {
+         let cookies = await chrome.cookies.getAll({ domain: 'notion.so' });
+         console.log('got cookies' + cookies);
+         chrome.tabs.sendMessage(tabId, {
+            command: commands.receivedCookies,
+            notionCookies: cookies,
+         });
+      }
+   }
+});
 
 // When the browser-action button is clicked...
-chrome.browserAction.onClicked.addListener(async function (tab) {
+chrome.browserAction.onClicked.addListener(async function(tab) {
    let tabs = await chrome.tabs.query({ currentWindow: true, active: true });
    let t = tabs[0];
 
-   if (t?.id != null && t?.url != null) {
-      if (urlRegex.test(t.url)) {
-         chrome.tabs.sendMessage(t.id, {
-            msgType: msgTypes.extensionOnClick,
-         });
-      }
+   if (isNotionTab(tab)) {
+      chrome.tabs.sendMessage(tab.id!, {
+         command: commands.extensionOnClick,
+      });
+
       let cookies = await chrome.cookies.getAll({ domain: 'notion.so' });
       console.log('got cookies' + cookies);
-      chrome.tabs.sendMessage(t.id, {
-         msgType: msgTypes.cookies,
+      chrome.tabs.sendMessage(t.id!, {
+         command: commands.receivedCookies,
          notionCookies: cookies,
       });
    }
