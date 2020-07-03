@@ -18,3 +18,5 @@ export const reduxStore = configureStore({
    devTools: process.env.NODE_ENV !== 'production',
    preloadedState: preloadedState,
 });
+
+export default reduxStore;

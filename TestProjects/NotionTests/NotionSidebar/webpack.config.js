@@ -11,7 +11,7 @@ var webpack = require('webpack'),
 // load the secrets
 var alias = {
    'react-dom': '@hot-loader/react-dom',
-   APP: path.resolve(__dirname, 'src/pages/App/'),
+   Sidebar: path.resolve(__dirname, 'src/pages/Sidebar/'),
    Notion: path.resolve(__dirname, 'src/notion/'),
    Common: path.resolve(__dirname, 'src/pages/common'),
 };
