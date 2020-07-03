@@ -1,12 +1,12 @@
 import { mountSidebar } from './SidebarFrame';
+import { msgTypes } from '../Common/msgTypes';
 
 console.log('Content script loaded!');
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
    if (request.command === 'notionTabLoaded') {
       initalize();
-   } else if (request.command === 'chromeOnClick') {
-      console.log('afdsfsdfsdfdsfsdf');
+   } else if (request.msgType === msgTypes.extensionOnClick) {
       initalize();
       toggleSidebar();
    }
@@ -19,8 +19,6 @@ const notionNavClass = 'notion-sidebar-container';
 const notionSidebarRootId = 'notion-sidebar-root-987384';
 const notionBaseNewRootId = 'new-app-root';
 const notionAppInnerClass = 'notion-app-inner';
-const notionPageContentClass = 'notion-page-content';
-const notionPageControlsClass = 'notion-page-controls';
 var initalized = false;
 
 const initalize = () => {
@@ -102,9 +100,11 @@ function adjustSidebarWidth(notionApp: HTMLElement) {
       notionApp.style.maxWidth = `${newAppWidth}px`;
 
       sidebarRoot.setAttribute('style', `max-width:${sidebarWidth}px`);
-      console.log(document.cookie);
    }
 }
+
+const notionPageContentClass = 'notion-page-content';
+const notionPageControlsClass = 'notion-page-controls';
 function reduceContentPadding(notionApp: HTMLElement) {
    let notionPageContent = notionApp.getElementsByClassName(
       notionPageContentClass
@@ -114,12 +114,14 @@ function reduceContentPadding(notionApp: HTMLElement) {
    )[0].parentElement as HTMLElement;
 
    const offset = ' - 40px ';
-   notionPageContent.style.paddingLeft =
-      notionPageContent.style.paddingLeft + offset;
-   notionPageContent.style.paddingRight =
-      notionPageContent.style.paddingRight + offset;
-   notionPageControlParent.style.paddingLeft =
-      notionPageControlParent.style.paddingLeft + offset;
-   notionPageControlParent.style.paddingRight =
-      notionPageControlParent.style.paddingRight + offset;
+   if (notionPageContent != null) {
+      notionPageContent.style.paddingLeft =
+         notionPageContent.style.paddingLeft + offset;
+      notionPageContent.style.paddingRight =
+         notionPageContent.style.paddingRight + offset;
+      notionPageControlParent.style.paddingLeft =
+         notionPageControlParent.style.paddingLeft + offset;
+      notionPageControlParent.style.paddingRight =
+         notionPageControlParent.style.paddingRight + offset;
+   }
 }

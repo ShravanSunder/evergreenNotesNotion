@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { msgTypes } from '../Common/msgTypes';
 
 ///////////////
 
@@ -13,5 +14,11 @@ export const App = () => {
       </React.Fragment>
    );
 };
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+   if (request.msgType === msgTypes.cookies) {
+      console.log('received cookies', request.notionCookies);
+   }
+});
 
 render(<App />, window.document.querySelector('#app-container'));

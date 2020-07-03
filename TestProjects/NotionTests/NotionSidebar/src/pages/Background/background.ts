@@ -1,5 +1,7 @@
 import '../../assets/img/icon-34.png';
 import '../../assets/img/icon-128.png';
+import 'chrome-extension-async';
+import { msgTypes } from '../Common/msgTypes';
 
 console.log('Loaded background page.');
 
@@ -7,24 +9,38 @@ console.log('Loaded background page.');
 // It matches URLs like: http[s]://[...]stackoverflow.com[...]
 var urlRegex = /^https?:\/\/(?:[^./?#]+\.)?notion.so/;
 
-chrome.tabs.onUpdated.addListener(function(tabId, info) {
-   console.log('onupdate');
-   if (info.status === 'complete') {
-      chrome.cookies.getAll({ url: 'www.notion.so' }, function(cookies) {
-         console.log(cookies);
-      });
-   }
-});
+// async function doSomething(script) {
+//    try {
+//        // Query the tabs and continue once we have the result
+//        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+//        const activeTab = tabs[0];
+
+//        // Execute the injected script and continue once we have the result
+//        const results = await chrome.tabs.executeScript(activeTab.id, { code: script });
+//        const firstScriptResult = results[0];
+//        return firstScriptResult;
+//    }
+//    catch(err) {
+//        // Handle errors from chrome.tabs.query, chrome.tabs.executeScript or my code
+//    }
+// }
 
 // When the browser-action button is clicked...
-chrome.browserAction.onClicked.addListener(function(tab) {
-   chrome.tabs.query({ currentWindow: true, active: true }, function(tabs) {
-      var t = tabs[0];
-      console.log('onclick');
-      if (t.id != null && t.url != null) {
-         if (urlRegex.test(t.url)) {
-            chrome.tabs.sendMessage(t.id, { command: 'chromeOnClick' });
-         }
+chrome.browserAction.onClicked.addListener(async function (tab) {
+   let tabs = await chrome.tabs.query({ currentWindow: true, active: true });
+   let t = tabs[0];
+
+   if (t?.id != null && t?.url != null) {
+      if (urlRegex.test(t.url)) {
+         chrome.tabs.sendMessage(t.id, {
+            msgType: msgTypes.extensionOnClick,
+         });
       }
-   });
+      let cookies = await chrome.cookies.getAll({ domain: 'notion.so' });
+      console.log('got cookies' + cookies);
+      chrome.tabs.sendMessage(t.id, {
+         msgType: msgTypes.cookies,
+         notionCookies: cookies,
+      });
+   }
 });
