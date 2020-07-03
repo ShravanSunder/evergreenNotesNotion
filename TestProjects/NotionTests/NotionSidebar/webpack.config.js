@@ -11,7 +11,7 @@ var webpack = require('webpack'),
 // load the secrets
 var alias = {
    'react-dom': '@hot-loader/react-dom',
-   Sidebar: path.resolve(__dirname, 'src/pages/sidebar/'),
+   APP: path.resolve(__dirname, 'src/pages/App/'),
    Notion: path.resolve(__dirname, 'src/notion/'),
    Common: path.resolve(__dirname, 'src/pages/common'),
 };
@@ -53,7 +53,7 @@ var options = {
          'Content',
          'content.ts'
       ),
-      sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'sidebar.tsx'),
+      sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'App.tsx'),
    },
    chromeExtensionBoilerplate: {
       notHotReload: ['contentScript'],

@@ -2,20 +2,11 @@ import { commands } from 'Common/commands';
 import React from 'react';
 import { render } from 'react-dom';
 import superagent from 'superagent';
-import { configureStore } from '@reduxjs/toolkit';
-import { rootReducer } from 'Sidebar/rootReducer';
-
-const store = configureStore({ reducer: rootReducer });
-
-///////////////
+import { Provider } from 'react-redux';
+import { reduxStore } from 'Sidebar/reduxStore';
 
 export const App = () => {
-   return (
-      <React.Fragment>
-         <div>sdjklfsjdfjs</div>
-         <div>sdjklfsjdfjs</div>
-      </React.Fragment>
-   );
+   return <div>sdjklfsjdfjs</div>;
 };
 
 chrome.runtime.onMessage.addListener(async function(

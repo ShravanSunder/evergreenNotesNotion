@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from '../Sidebar/sidebar';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render');

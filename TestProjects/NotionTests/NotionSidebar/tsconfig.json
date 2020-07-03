@@ -65,7 +65,7 @@
 
       "baseUrl": ".",
       "paths": {
-         "Sidebar/*": ["src/pages/Sidebar/*"],
+         "App/*": ["src/pages/App/*"],
          "Common/*": ["src/pages/Common/*"],
          "Notion/*": ["src/Notion/*"]
       }

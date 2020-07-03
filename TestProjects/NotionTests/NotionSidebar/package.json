@@ -19,13 +19,18 @@
       "@reduxjs/toolkit": "^1.4.0",
       "@types/react": "^16.9.26",
       "@types/react-dom": "^16.9.8",
+      "@types/redux-logger": "^3.0.8",
       "chrome-extension-async": "^3.4.1",
+      "normalizr": "^3.6.0",
       "npm": "^6.14.5",
+      "re-reselect": "^4.0.0",
       "react": "^16.13.1",
       "react-dom": "^16.13.1",
       "react-hot-loader": "^4.12.20",
       "react-redux": "^7.2.0",
       "redux": "^4.0.5",
+      "redux-logger": "^3.0.6",
+      "reselect": "^4.0.0",
       "superagent": "^5.3.1"
    },
    "devDependencies": {
