@@ -65,9 +65,9 @@
 
       "baseUrl": ".",
       "paths": {
-         "App/*": ["src/pages/App/*"],
-         "Common/*": ["src/pages/Common/*"],
-         "Notion/*": ["src/Notion/*"]
+         "aApp/*": ["src/pages/App/*"],
+         "aCommon/*": ["src/pages/Common/*"],
+         "aNotion/*": ["src/Notion/*"]
       }
    },
    "exclude": ["node_modules", "dist", "build"]

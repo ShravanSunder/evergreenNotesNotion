@@ -1,7 +1,7 @@
 import { mountSidebar } from './SidebarFrame';
-import { commands } from 'Common/commands';
-import { reduceNotionContentPadding } from '../../notion/visualFormatting';
-import { receivedCookies } from '../../notion/notionCookies';
+import { commands } from 'aCommon/commands';
+import 'chrome-extension-async';
+import { reduceNotionContentPadding } from 'aNotion/styleFixes';
 import {
    toggleSidebar,
    createNewRootElement,
@@ -15,12 +15,14 @@ chrome.runtime.onMessage.addListener(async function(
    sender,
    sendResponse
 ) {
-   if (request.command === commands.receivedCookies) {
-      await receivedCookies(request);
-   } else if (request.command === commands.extensionOnClick) {
-      initalize();
-      toggleSidebar();
+   switch (request.command) {
+      case commands.extensionOnClick: {
+         initalize();
+         toggleSidebar();
+         break;
+      }
    }
+   return true;
 });
 
 const notionAppId = 'notion-app';
