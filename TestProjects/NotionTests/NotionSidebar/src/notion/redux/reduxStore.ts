@@ -23,3 +23,9 @@ export default reduxStore;
 export type AppDispatch = typeof reduxStore.dispatch;
 export const appDispatch = reduxStore.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
+export type StateSelector<T> = (state: RootState) => T;
+
+export const getAppState = <T>(selector: StateSelector<T>): T => {
+   let state = reduxStore.getState();
+   return selector(state);
+};
