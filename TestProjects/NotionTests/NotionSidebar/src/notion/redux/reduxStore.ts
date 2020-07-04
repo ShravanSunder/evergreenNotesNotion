@@ -4,6 +4,7 @@ import {
    combineReducers,
 } from '@reduxjs/toolkit';
 import { logger } from 'redux-logger';
+import { useDispatch } from 'react-redux';
 
 const rootReducer = combineReducers({
    data: () => {
@@ -16,7 +17,7 @@ const preloadedState = {
    // data: [],
 } as RootState;
 
-const middleware = [...getDefaultMiddleware(), logger];
+const middleware = getDefaultMiddleware().concat(logger);
 
 //@ts-ignore
 export const reduxStore = configureStore({
@@ -27,3 +28,7 @@ export const reduxStore = configureStore({
 });
 
 export default reduxStore;
+
+export type AppDispatch = typeof reduxStore.dispatch;
+export const appDispatch = reduxStore.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();

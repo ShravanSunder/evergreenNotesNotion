@@ -1,12 +1,15 @@
 import { commands } from 'aCommon/commands';
-import reduxStore from 'aNotion/redux/reduxStore';
+import reduxStore, { useAppDispatch } from 'aNotion/redux/reduxStore';
 import { cookieActions } from 'aNotion/redux/cookieSlice';
-
-export async function receivedCookies(request: any) {}
+import { CookieData } from 'aNotion/types/CookieData';
 
 export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
    console.log(cookies);
-   let spaceId = cookies.find((f) => f.name === 'ajs_group_id');
-   let token = cookies.find((f) => f.name === 'token_v2');
-   // reduxStore.dispatch(cookieActions.saveCookieData({ cookies }));
+
+   let spaceId = cookies.find((f) => f.name === 'ajs_group_id')?.value;
+   let userId = cookies.find((f) => f.name === 'ajs_user_id')?.value;
+   let token = cookies.find((f) => f.name === 'token_v2')?.value;
+   let c = { spaceId, userId, token } as CookieData;
+
+   reduxStore.dispatch(cookieActions.save(c));
 };
