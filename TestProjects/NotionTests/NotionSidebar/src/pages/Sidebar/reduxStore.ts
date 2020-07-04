@@ -2,7 +2,9 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { logger } from 'redux-logger';
 
 const rootReducer = {
-   data: {},
+   data: () => {
+      return true;
+   },
 };
 
 const preloadedState = {

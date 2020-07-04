@@ -108,7 +108,7 @@ var options = {
          .concat(['.jsx', '.js', '.css', '.ts', '.tsx']),
    },
    plugins: [
-      new HardSourceWebpackPlugin(),
+      //new HardSourceWebpackPlugin(),
       new webpack.ProgressPlugin(),
       // clean the build folder
       new CleanWebpackPlugin({
@@ -138,19 +138,6 @@ var options = {
                      })
                   );
                },
-            },
-         ],
-         {
-            logLevel: 'info',
-            copyUnmodified: true,
-         }
-      ),
-      new CopyWebpackPlugin(
-         [
-            {
-               from: 'src/pages/Content/content.styles.css',
-               to: path.join(__dirname, 'build'),
-               force: true,
             },
          ],
          {
