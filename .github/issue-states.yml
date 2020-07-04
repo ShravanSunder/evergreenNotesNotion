@@ -2,6 +2,7 @@
 
 # Open issues that are moved to these project columns. Set to `[]` to disable
 openIssueColumns:
+  - To do
   - In Progress
   - 🔥Next
 
