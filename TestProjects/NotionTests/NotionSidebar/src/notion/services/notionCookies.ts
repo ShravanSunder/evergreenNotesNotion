@@ -20,5 +20,12 @@ export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
 };
 
 const clean = (str: string) => {
-   return toGuid(str.replace('%22', '').replace('%20', '').trim());
+   return toGuid(
+      str
+         .replace('%22', '')
+         .replace('%20', '')
+         .replace('%22', '')
+         .replace('%20', '')
+         .trim()
+   );
 };

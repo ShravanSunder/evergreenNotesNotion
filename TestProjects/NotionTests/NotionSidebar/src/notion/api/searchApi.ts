@@ -52,17 +52,9 @@ export const searchForTitle = async () => {
    let limit = 10;
    let userData = getAppState(cookieSelector).data as CookieData;
    let filters = commonFilters();
-   console.log('try 4');
-   console.log(data);
-   console.log(createParam(userData, 'note', filters, limit));
-
    let response = await superagent
       .post('https://www.notion.so/api/v3/search')
-      .set('Content-Type', 'application/json')
-      .accept('application/json')
-      .send(data);
-   //.send(createParam(userData, 'note', filters, limit));
-   //.send(createParam(userData, 's', filters, limit));
+      .send(createParam(userData, 'note', filters, limit));
    console.log(response.body);
 };
 

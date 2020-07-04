@@ -1,5 +1,4 @@
 import { mountSidebar } from '../Sidebar/SidebarFrame';
-import { commands } from 'aCommon/commands';
 import 'chrome-extension-async';
 import { reduceNotionContentPadding } from 'aNotion/dom/styleFixes';
 import {
@@ -7,18 +6,21 @@ import {
    createNewRootElement,
    adjustSidebarWidth,
 } from '../Sidebar/sidebarElements';
-import { commandRequest, payloadRequest } from 'aCommon/requests';
-import { emptyResponse } from '../Common/extensionHelpers';
-
+import { contentCommands, contentCommandRequest } from './contentMessaging';
 console.log('Content script loaded!');
 
+const emptyResponse = (sendResponse: (response: any) => void) => {
+   sendResponse({});
+   return true;
+};
+
 chrome.runtime.onMessage.addListener(async function (
-   request: payloadRequest,
+   request: contentCommandRequest,
    sender,
    sendResponse
 ) {
    switch (request.command) {
-      case commands.extensionOnClick: {
+      case contentCommands.extensionOnClick: {
          initalize();
          toggleSidebar();
          break;

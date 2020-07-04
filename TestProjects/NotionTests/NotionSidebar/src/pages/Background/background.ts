@@ -4,7 +4,11 @@ import 'chrome-extension-async';
 import { commands } from 'aCommon/commands';
 import { Tab } from '@material-ui/core';
 import 'chrome-extension-async';
-import { commandRequest, payloadRequest } from 'aCommon/requests';
+import { payloadRequest } from 'aCommon/requests';
+import {
+   contentCommands,
+   contentCommandRequest,
+} from '../Content/contentMessaging';
 
 console.log('Loaded background page.');
 
@@ -47,8 +51,8 @@ chrome.browserAction.onClicked.addListener(async function (tab) {
 
    if (isNotionTab(tab)) {
       chrome.tabs.sendMessage(tab.id!, {
-         command: commands.extensionOnClick,
-      } as commandRequest);
+         command: contentCommands.extensionOnClick,
+      } as contentCommandRequest);
 
       // let cookies = await chrome.cookies.getAll({ domain: 'notion.so' });
       // console.log('got cookies' + cookies);

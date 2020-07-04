@@ -108,7 +108,7 @@ var options = {
          .concat(['.jsx', '.js', '.css', '.ts', '.tsx']),
    },
    plugins: [
-      //new HardSourceWebpackPlugin(),
+      new HardSourceWebpackPlugin(),
       new webpack.ProgressPlugin(),
       // clean the build folder
       new CleanWebpackPlugin({
@@ -121,6 +121,16 @@ var options = {
       //    eslint: {
       //       files: './src/**/*.{ts,tsx,js,jsx}', // required - same as command `eslint ./src/**/*.{ts,tsx,js,jsx} --ext .ts,.tsx,.js,.jsx`
       //    },
+      //    issue: {
+      //       scope: 'webpack'
+      //    },
+      //    async: true,
+      //    typescript: false,
+      //    logger: {
+      //       issues: 'silent',
+      //       infrastructure: 'webpack-infrastructure'
+
+      //    }
       // }),
       new CopyWebpackPlugin(
          [
@@ -128,7 +138,7 @@ var options = {
                from: 'src/manifest.json',
                to: path.join(__dirname, 'build'),
                force: true,
-               transform: function(content, path) {
+               transform: function (content, path) {
                   // generates the manifest file using the package.json informations
                   return Buffer.from(
                      JSON.stringify({
