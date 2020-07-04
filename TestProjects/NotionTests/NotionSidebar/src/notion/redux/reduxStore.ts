@@ -1,17 +1,7 @@
-import {
-   configureStore,
-   getDefaultMiddleware,
-   combineReducers,
-} from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { logger } from 'redux-logger';
 import { useDispatch } from 'react-redux';
-
-const rootReducer = combineReducers({
-   data: () => {
-      return {};
-   },
-});
-export type RootState = ReturnType<typeof rootReducer>;
+import { RootState, rootReducer } from './rootReducer';
 
 const preloadedState = {
    // data: [],

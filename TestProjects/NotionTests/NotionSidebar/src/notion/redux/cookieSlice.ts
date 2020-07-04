@@ -3,6 +3,7 @@ import {
    createAsyncThunk,
    CaseReducer,
    PayloadAction,
+   combineReducers,
 } from '@reduxjs/toolkit';
 import { CookieData } from '../types/CookieData';
 
@@ -13,10 +14,10 @@ const logPath = 'notion/cookies/';
 //    async (data: CookieData) => {}
 // );
 
-type SliceState = { status: string; data?: CookieData | null };
-const initialState: SliceState = { status: 'pending', data: null };
+type CookieState = { status: string; data?: CookieData | null };
+const initialState: CookieState = { status: 'pending', data: null };
 
-const save: CaseReducer<SliceState, PayloadAction<CookieData>> = (
+const save: CaseReducer<CookieState, PayloadAction<CookieData>> = (
    state,
    action
 ) => {
@@ -44,6 +45,4 @@ const cookieSlice = createSlice({
 });
 
 export const cookieActions = { ...cookieSlice.actions };
-export const cookieReducers = {
-   storeInfo: cookieSlice.reducer,
-};
+export const cookieReducers = cookieSlice.reducer;

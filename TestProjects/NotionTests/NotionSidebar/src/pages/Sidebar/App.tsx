@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import reduxStore from 'aNotion/redux/reduxStore';
 import { commands } from 'aCommon/commands';
-import { extractUserData } from 'aNotion/services/notionCookies';
 import { getCurrentTab } from 'aCommon/extensionHelpers';
+import { Layout } from 'aNotion/components/Layout';
 
 export const App = () => {
    useEffect(() => {
@@ -13,7 +13,7 @@ export const App = () => {
 
    return (
       <Provider store={reduxStore}>
-         <div>sdjklfsjdfjs</div>;
+         <Layout />
       </Provider>
    );
 };
