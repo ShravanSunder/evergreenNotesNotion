@@ -3,9 +3,7 @@ var webpack = require('webpack'),
    path = require('path'),
    fileSystem = require('fs-extra'),
    env = require('./utils/env'),
-   {
-      CleanWebpackPlugin
-   } = require('clean-webpack-plugin'),
+   { CleanWebpackPlugin } = require('clean-webpack-plugin'),
    CopyWebpackPlugin = require('copy-webpack-plugin'),
    HtmlWebpackPlugin = require('html-webpack-plugin'),
    WriteFilePlugin = require('write-file-webpack-plugin');
@@ -14,9 +12,9 @@ var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 // load the secrets
 var alias = {
    'react-dom': '@hot-loader/react-dom',
-   'aSidebar': path.resolve(__dirname, 'src/pages/Sidebar/'),
-   'aNotion': path.resolve(__dirname, 'src/notion/'),
-   'aCommon': path.resolve(__dirname, 'src/pages/common'),
+   aSidebar: path.resolve(__dirname, 'src/pages/sidebar/'),
+   aNotion: path.resolve(__dirname, 'src/notion/'),
+   aCommon: path.resolve(__dirname, 'src/pages/common'),
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
@@ -66,7 +64,8 @@ var options = {
       filename: '[name].bundle.js',
    },
    module: {
-      rules: [{
+      rules: [
+         {
             test: /\.css$/,
             loader: 'style-loader!css-loader',
             exclude: /node_modules/,
@@ -89,14 +88,16 @@ var options = {
          {
             test: /\.(ts|tsx)$/,
             exclude: /node_modules/,
-            use: [{
-               loader: 'ts-loader',
-               options: {
-                  // transpileOnly: true,
-                  // happyPackMode: true,
-                  configFile: path.resolve(__dirname, 'tsconfig.json'),
+            use: [
+               {
+                  loader: 'ts-loader',
+                  options: {
+                     // transpileOnly: true,
+                     // happyPackMode: true,
+                     configFile: path.resolve(__dirname, 'tsconfig.json'),
+                  },
                },
-            }, ],
+            ],
          },
       ],
    },
@@ -122,21 +123,24 @@ var options = {
       //    },
       // }),
       new CopyWebpackPlugin(
-         [{
-            from: 'src/manifest.json',
-            to: path.join(__dirname, 'build'),
-            force: true,
-            transform: function (content, path) {
-               // generates the manifest file using the package.json informations
-               return Buffer.from(
-                  JSON.stringify({
-                     description: process.env.npm_package_description,
-                     version: process.env.npm_package_version,
-                     ...JSON.parse(content.toString()),
-                  })
-               );
+         [
+            {
+               from: 'src/manifest.json',
+               to: path.join(__dirname, 'build'),
+               force: true,
+               transform: function(content, path) {
+                  // generates the manifest file using the package.json informations
+                  return Buffer.from(
+                     JSON.stringify({
+                        description: process.env.npm_package_description,
+                        version: process.env.npm_package_version,
+                        ...JSON.parse(content.toString()),
+                     })
+                  );
+               },
             },
-         }, ], {
+         ],
+         {
             logLevel: 'info',
             copyUnmodified: true,
          }

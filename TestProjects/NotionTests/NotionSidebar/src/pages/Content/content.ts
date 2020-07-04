@@ -1,17 +1,19 @@
-import { mountSidebar } from './SidebarFrame';
+import { mountSidebar } from '../Sidebar/SidebarFrame';
 import { commands } from 'aCommon/commands';
 import 'chrome-extension-async';
-import { reduceNotionContentPadding } from 'aNotion/styleFixes';
+import { reduceNotionContentPadding } from 'aNotion/dom/styleFixes';
 import {
    toggleSidebar,
    createNewRootElement,
    adjustSidebarWidth,
-} from './sidebarElements';
+} from '../Sidebar/sidebarElements';
+import { extractUserData } from 'aNotion/services/notionCookies';
+import { commandRequest, payloadRequest } from 'aCommon/requests';
 
 console.log('Content script loaded!');
 
 chrome.runtime.onMessage.addListener(async function(
-   request,
+   request: payloadRequest,
    sender,
    sendResponse
 ) {
@@ -21,8 +23,15 @@ chrome.runtime.onMessage.addListener(async function(
          toggleSidebar();
          break;
       }
+      case commands.receivedCookies: {
+         let cookie = request.payload as chrome.cookies.Cookie[];
+         if (cookie != null) {
+            extractUserData(cookie);
+         }
+         break;
+      }
    }
-   return true;
+   return emptyResponse(sendResponse);
 });
 
 const notionAppId = 'notion-app';
@@ -46,10 +55,14 @@ const initalize = () => {
 
    let sidebarRoot = document.getElementById(notionSidebarRootId);
    if (sidebarRoot) mountSidebar(sidebarRoot);
-   return true;
+   // return true;
 };
 
 const error = (str: string) => {
    console.log(str);
    //add more logging
 };
+function emptyResponse(sendResponse: (response: any) => void) {
+   sendResponse({});
+   return true;
+}

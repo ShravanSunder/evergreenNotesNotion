@@ -1,24 +1,29 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import {
+   configureStore,
+   getDefaultMiddleware,
+   combineReducers,
+} from '@reduxjs/toolkit';
 import { logger } from 'redux-logger';
 
-const rootReducer = {
+const rootReducer = combineReducers({
    data: () => {
-      return true;
+      return {};
    },
-};
+});
+export type RootState = ReturnType<typeof rootReducer>;
 
 const preloadedState = {
-   data: [],
-};
+   // data: [],
+} as RootState;
 
 const middleware = [...getDefaultMiddleware(), logger];
 
 //@ts-ignore
 export const reduxStore = configureStore({
-   reducer: rootReducer as any,
+   reducer: rootReducer,
    middleware: middleware,
    devTools: process.env.NODE_ENV !== 'production',
-   preloadedState: preloadedState,
+   //preloadedState: preloadedState,
 });
 
 export default reduxStore;

@@ -1,4 +1,4 @@
-import { notionSidebarRootId } from './content';
+import { notionSidebarRootId } from '../Content/content';
 
 export const notionFrameClass = 'notion-frame';
 export const notionScrollerClass = 'notion-scroller';

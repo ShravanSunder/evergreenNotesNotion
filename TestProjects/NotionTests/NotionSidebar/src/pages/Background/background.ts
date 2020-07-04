@@ -4,6 +4,7 @@ import 'chrome-extension-async';
 import { commands } from 'aCommon/commands';
 import { Tab } from '@material-ui/core';
 import 'chrome-extension-async';
+import { commandRequest, payloadRequest } from 'aCommon/requests';
 
 console.log('Loaded background page.');
 
@@ -23,18 +24,20 @@ const isNotionTab = (tab: chrome.tabs.Tab) => {
 
 chrome.tabs.onUpdated.addListener(async function(tabId, info, tab) {
    if (info.status === 'complete') {
-      if (isNotionTab(tab)) await fetchCookies(tabId);
+      if (isNotionTab(tab)) {
+         await fetchCookies(tabId);
+      }
    }
-   return true;
+   //return true;
 });
 
 chrome.runtime.onMessage.addListener(async function(request) {
    switch (request.command) {
       case commands.fetchCookies:
-         fetchCookies(request.tabId);
+         await fetchCookies(request.tabId);
          break;
    }
-   return true;
+   // return true;
 });
 
 // When the browser-action button is clicked...
@@ -45,7 +48,7 @@ chrome.browserAction.onClicked.addListener(async function(tab) {
    if (isNotionTab(tab)) {
       chrome.tabs.sendMessage(tab.id!, {
          command: commands.extensionOnClick,
-      });
+      } as commandRequest);
 
       // let cookies = await chrome.cookies.getAll({ domain: 'notion.so' });
       // console.log('got cookies' + cookies);
@@ -54,13 +57,17 @@ chrome.browserAction.onClicked.addListener(async function(tab) {
       //    notionCookies: cookies,
       // });
    }
+
+   // return true;
 });
 
 const fetchCookies = async (tabId: number) => {
    let cookies = await chrome.cookies.getAll({ domain: notionDomain });
    console.log('got cookies' + cookies);
-   chrome.tabs.sendMessage(tabId, {
+   let req = {
       command: commands.receivedCookies,
-      notionCookies: cookies,
-   });
+      payload: cookies,
+   } as payloadRequest;
+
+   chrome.tabs.sendMessage(tabId, req);
 };
