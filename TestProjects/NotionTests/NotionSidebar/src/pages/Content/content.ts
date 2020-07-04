@@ -7,12 +7,12 @@ import {
    createNewRootElement,
    adjustSidebarWidth,
 } from '../Sidebar/sidebarElements';
-import { extractUserData } from 'aNotion/services/notionCookies';
 import { commandRequest, payloadRequest } from 'aCommon/requests';
+import { emptyResponse } from '../Common/extensionHelpers';
 
 console.log('Content script loaded!');
 
-chrome.runtime.onMessage.addListener(async function(
+chrome.runtime.onMessage.addListener(async function (
    request: payloadRequest,
    sender,
    sendResponse
@@ -21,13 +21,6 @@ chrome.runtime.onMessage.addListener(async function(
       case commands.extensionOnClick: {
          initalize();
          toggleSidebar();
-         break;
-      }
-      case commands.receivedCookies: {
-         let cookie = request.payload as chrome.cookies.Cookie[];
-         if (cookie != null) {
-            extractUserData(cookie);
-         }
          break;
       }
    }
@@ -62,7 +55,3 @@ const error = (str: string) => {
    console.log(str);
    //add more logging
 };
-function emptyResponse(sendResponse: (response: any) => void) {
-   sendResponse({});
-   return true;
-}

@@ -22,16 +22,16 @@ const isNotionTab = (tab: chrome.tabs.Tab) => {
    return false;
 };
 
-chrome.tabs.onUpdated.addListener(async function(tabId, info, tab) {
-   if (info.status === 'complete') {
-      if (isNotionTab(tab)) {
-         await fetchCookies(tabId);
-      }
-   }
-   //return true;
-});
+// chrome.tabs.onUpdated.addListener(async function(tabId, info, tab) {
+//    if (info.status === 'complete') {
+//       if (isNotionTab(tab)) {
+//          await fetchCookies(tabId);
+//       }
+//    }
+//    //return true;
+// });
 
-chrome.runtime.onMessage.addListener(async function(request) {
+chrome.runtime.onMessage.addListener(async function (request) {
    switch (request.command) {
       case commands.fetchCookies:
          await fetchCookies(request.tabId);
@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(async function(request) {
 });
 
 // When the browser-action button is clicked...
-chrome.browserAction.onClicked.addListener(async function(tab) {
+chrome.browserAction.onClicked.addListener(async function (tab) {
    let tabs = await chrome.tabs.query({ currentWindow: true, active: true });
    let t = tabs[0];
 

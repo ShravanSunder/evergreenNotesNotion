@@ -1,13 +1,23 @@
 import React, { useEffect } from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector, shallowEqual, connect } from 'react-redux';
 
 import { cookieSelector } from 'aNotion/redux/rootReducer';
 
-export const UnlinkedReferences = () => {
-   const state = useSelector(cookieSelector, () => false);
+export const UnlinkedReferences = ({ status, data }: any) => {
+   const state = useSelector(cookieSelector, shallowEqual);
    return (
       <div style={{ width: 100, height: 100 }}>
          {'lets do this' + state.status + state.data?.token}
       </div>
    );
 };
+
+// const mapStateToProps = (state: any, oldProps: any) => {
+//    let s = cookieSelector(state);
+//    return {
+//       status: s.status,
+//       data: s.data,
+//    };
+// };
+// const mapDispatchToProps = {};
+// export default connect(mapStateToProps)(UnlinkedReferences);

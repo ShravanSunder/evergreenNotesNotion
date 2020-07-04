@@ -1,7 +1,7 @@
 import { commands } from 'aCommon/commands';
-import reduxStore, { useAppDispatch } from 'aNotion/redux/reduxStore';
 import { cookieActions } from 'aNotion/redux/cookieSlice';
 import { CookieData } from 'aNotion/types/CookieData';
+import { appDispatch } from 'aNotion/redux/reduxStore';
 
 export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
    console.log(cookies);
@@ -11,5 +11,5 @@ export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
    let token = cookies.find((f) => f.name === 'token_v2')?.value;
    let c = { spaceId, userId, token } as CookieData;
 
-   reduxStore.dispatch(cookieActions.loadCookies(c));
+   appDispatch(cookieActions.loadCookies(c));
 };
