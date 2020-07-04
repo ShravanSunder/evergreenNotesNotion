@@ -3,6 +3,7 @@ import { useSelector, shallowEqual, connect } from 'react-redux';
 
 import { cookieSelector } from 'aNotion/redux/rootReducer';
 
+// comment
 export const UnlinkedReferences = ({ status, data }: any) => {
    const state = useSelector(cookieSelector, shallowEqual);
    return (
