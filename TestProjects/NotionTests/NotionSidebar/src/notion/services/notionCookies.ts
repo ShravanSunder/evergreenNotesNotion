@@ -11,5 +11,5 @@ export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
    let token = cookies.find((f) => f.name === 'token_v2')?.value;
    let c = { spaceId, userId, token } as CookieData;
 
-   reduxStore.dispatch(cookieActions.save(c));
+   reduxStore.dispatch(cookieActions.loadCookies(c));
 };

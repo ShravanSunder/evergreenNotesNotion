@@ -17,11 +17,12 @@ const logPath = 'notion/cookies/';
 type CookieState = { status: string; data?: CookieData | null };
 const initialState: CookieState = { status: 'pending', data: null };
 
-const save: CaseReducer<CookieState, PayloadAction<CookieData>> = (
+const loadCookies: CaseReducer<CookieState, PayloadAction<CookieData>> = (
    state,
    action
 ) => {
    state.data = action.payload;
+   state.status = 'fulfilled';
 };
 
 // Then, handle actions in your reducers:
@@ -29,7 +30,7 @@ const cookieSlice = createSlice({
    name: 'locations',
    initialState: initialState,
    reducers: {
-      save,
+      loadCookies: loadCookies,
    },
    extraReducers: {
       // [saveCookieData.fulfilled.toString()]: (state, action) => {

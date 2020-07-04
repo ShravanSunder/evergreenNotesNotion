@@ -13,12 +13,12 @@ const middleware = getDefaultMiddleware().concat(logger);
 export const reduxStore = configureStore({
    reducer: rootReducer,
    middleware: middleware,
-   devTools: process.env.NODE_ENV !== 'production',
+   devTools: true, //process.env.NODE_ENV !== 'production',
    //preloadedState: preloadedState,
 });
-
-export default reduxStore;
 
 export type AppDispatch = typeof reduxStore.dispatch;
 export const appDispatch = reduxStore.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
+
+export default reduxStore;
