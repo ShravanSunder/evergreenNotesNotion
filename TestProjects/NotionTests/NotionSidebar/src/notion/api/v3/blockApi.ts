@@ -1,18 +1,14 @@
-import { notionPageActions } from 'aNotion/services/notionPageSlice';
-import { CookieData } from 'aNotion/services/NotionPageTypes';
-import { appDispatch, getAppState } from 'aNotion/redux/reduxStore';
-import { cookieSelector } from 'aNotion/redux/rootReducer';
 import superagent from 'superagent';
-import { SearchFilters, Type, SearchSort } from './SearchApiTypes';
+//import { LoadPageChunk } from 'typings/notion-api/v3/loadPageChunk';
 
-export const loadPageChunk = async (pageId: string): LoadPageChunk => {
+export const loadPageChunk = async (pageId: string): Promise<any> => {
    let response = await superagent
       .post('https://www.notion.so/api/v3/loadPageChunk')
       .send({
          pageId: pageId,
-         limit: 1,
+         limit: 10,
          chunkNumber: 0,
-         verticalColumns: true,
+         verticalColumns: false,
       });
    console.log(response.body);
    return response.body;

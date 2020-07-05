@@ -4,6 +4,7 @@ import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { cookieSelector, navigationSelector } from 'aNotion/redux/rootReducer';
 import * as searchApi from 'aNotion/api/v3/searchApi';
+import * as blockApi from 'aNotion/api/v3/blockApi';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { extractPageData } from 'aNotion/services/notionPage';
 
@@ -23,8 +24,13 @@ export const UnlinkedReferences = ({ status, data }: any) => {
    };
 
    useEffect(() => {
-      searchApi.searchForTitle('');
+      callApi();
    }, [navigation.pageId]);
+
+   const callApi = async () => {
+      let data = await blockApi.loadPageChunk(navigation.pageId!);
+      console.log(data);
+   };
 
    const handleClick = (e: MouseEvent) => {
       //searchApi.searchForTitle();

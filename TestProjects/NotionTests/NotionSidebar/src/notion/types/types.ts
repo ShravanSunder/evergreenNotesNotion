@@ -193,7 +193,7 @@ export interface NotionSearchResultsType {
 }
 
 export interface HandlerRequest {
-   params: Params;
+   params: any;
    searchParams: URLSearchParams;
    request: Request;
    notionToken?: string;
