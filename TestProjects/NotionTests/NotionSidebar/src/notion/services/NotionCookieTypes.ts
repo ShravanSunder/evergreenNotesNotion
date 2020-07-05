@@ -4,3 +4,5 @@ export type CookieData = {
    spaceId: string;
    cookies: chrome.cookies.Cookie[];
 };
+
+export type CookieState = { status: string; data?: CookieData | null };

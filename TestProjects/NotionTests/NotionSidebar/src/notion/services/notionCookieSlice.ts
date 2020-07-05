@@ -3,20 +3,12 @@ import {
    createAsyncThunk,
    CaseReducer,
    PayloadAction,
-   combineReducers,
 } from '@reduxjs/toolkit';
-import { CookieData } from '../types/CookieData';
+import { CookieData, CookieState } from './NotionCookieTypes';
 
 const logPath = 'notion/cookies/';
 
-// const saveCookieData = createAsyncThunk(
-//    `${logPath}/getStore`,
-//    async (data: CookieData) => {}
-// );
-
-type CookieState = { status: string; data?: CookieData | null };
 const initialState: CookieState = { status: 'pending', data: null };
-
 const loadCookies: CaseReducer<CookieState, PayloadAction<CookieData>> = (
    state,
    action
@@ -26,7 +18,7 @@ const loadCookies: CaseReducer<CookieState, PayloadAction<CookieData>> = (
 };
 
 // Then, handle actions in your reducers:
-const cookieSlice = createSlice({
+const notionCookieSlice = createSlice({
    name: 'locations',
    initialState: initialState,
    reducers: {
@@ -45,5 +37,5 @@ const cookieSlice = createSlice({
    },
 });
 
-export const cookieActions = { ...cookieSlice.actions };
-export const cookieReducers = cookieSlice.reducer;
+export const notionCookieActions = { ...notionCookieSlice.actions };
+export const notionCookieReducers = notionCookieSlice.reducer;

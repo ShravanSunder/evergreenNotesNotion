@@ -23,13 +23,3 @@ export const UnlinkedReferences = ({ status, data }: any) => {
       </div>
    );
 };
-
-// const mapStateToProps = (state: any, oldProps: any) => {
-//    let s = cookieSelector(state);
-//    return {
-//       status: s.status,
-//       data: s.data,
-//    };
-// };
-// const mapDispatchToProps = {};
-// export default connect(mapStateToProps)(UnlinkedReferences);

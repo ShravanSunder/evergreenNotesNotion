@@ -1,52 +1,9 @@
-import { cookieActions } from 'aNotion/redux/cookieSlice';
-import { CookieData } from 'aNotion/types/CookieData';
+import { notionCookieActions } from 'aNotion/services/notionCookieSlice';
+import { CookieData } from 'aNotion/services/NotionCookieTypes';
 import { appDispatch, getAppState } from 'aNotion/redux/reduxStore';
 import { cookieSelector } from 'aNotion/redux/rootReducer';
 import superagent from 'superagent';
-
-export enum ApiType {
-   blocksInspace = 'BlocksInSpace',
-}
-
-var data = {
-   type: 'BlocksInSpace',
-   query: 'week',
-   spaceId: '8c4bb92b-8b88-4caa-9168-93ebe20f619c',
-   limit: 20,
-   filters: {
-      isDeletedOnly: false,
-      excludeTemplates: false,
-      isNavigableOnly: false,
-      requireEditPermissions: false,
-      ancestors: [],
-      createdBy: [],
-      editedBy: [],
-      lastEditedTime: {},
-      createdTime: {},
-   },
-   sort: 'Relevance',
-   source: 'quick_find',
-};
-
-export enum SearchSort {
-   relevance = 'Relevance',
-   LastEditedOldest = 'LastEditedOldest',
-   LastEditedNewest = 'LastEditedNewest',
-   CreatedNewest = 'CreatedNewest',
-   CreatedOldest = 'CreatedOldest',
-}
-
-export interface SearchFilters {
-   isDeletedOnly: false;
-   excludeTemplates: true;
-   isNavigableOnly: boolean;
-   requireEditPermissions: false;
-   ancestors: [];
-   createdBy: [];
-   editedBy: [];
-   lastEditedTime: {};
-   createdTime: {};
-}
+import { SearchFilters, Type, SearchSort } from './searchApiTypes';
 
 export const searchForTitle = async () => {
    let limit = 10;
@@ -66,7 +23,7 @@ const createParam = (
 ) => {
    let q = {
       query,
-      type: ApiType.blocksInspace,
+      type: Type.blocksInspace,
       spaceId: userData.spaceId,
       limit,
       filters,

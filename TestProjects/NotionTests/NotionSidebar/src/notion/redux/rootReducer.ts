@@ -1,9 +1,9 @@
 import { combineReducers, Reducer } from '@reduxjs/toolkit';
-import { cookieReducers } from 'aNotion/redux/cookieSlice';
+import { notionCookieReducers } from 'aNotion/services/notionCookieSlice';
 //import {}
 
 export const rootReducer = combineReducers({
-   cookie: cookieReducers,
+   cookie: notionCookieReducers,
 });
 export type RootState = ReturnType<typeof rootReducer>;
 

@@ -1,7 +1,6 @@
-import { cookieActions } from 'aNotion/redux/cookieSlice';
-import { CookieData } from 'aNotion/types/CookieData';
-import { appDispatch, getAppState } from 'aNotion/redux/reduxStore';
-import { cookieSelector } from 'aNotion/redux/rootReducer';
+import { notionCookieActions } from 'aNotion/services/notionCookieSlice';
+import { CookieData } from 'aNotion/services/NotionCookieTypes';
+import { appDispatch } from 'aNotion/redux/reduxStore';
 import { toGuid } from 'aCommon/extensionHelpers';
 
 export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
@@ -16,7 +15,7 @@ export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
    let token = cookies.find((f) => f.name === 'token_v2')?.value;
    let c = { spaceId, userId, token, cookies } as CookieData;
 
-   appDispatch(cookieActions.loadCookies(c));
+   appDispatch(notionCookieActions.loadCookies(c));
 };
 
 const clean = (str: string) => {
