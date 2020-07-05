@@ -3,7 +3,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 
 import { Button } from '@material-ui/core';
 import { cookieSelector } from 'aNotion/redux/rootReducer';
-import * as searchApi from 'aNotion/Api/searchApi';
+import * as searchApi from 'aNotion/api/v3/searchApi';
 
 // comment
 export const UnlinkedReferences = ({ status, data }: any) => {

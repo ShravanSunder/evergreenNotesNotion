@@ -3,7 +3,7 @@ import { CookieData } from 'aNotion/services/NotionCookieTypes';
 import { appDispatch, getAppState } from 'aNotion/redux/reduxStore';
 import { cookieSelector } from 'aNotion/redux/rootReducer';
 import superagent from 'superagent';
-import { SearchFilters, Type, SearchSort } from './searchApiTypes';
+import { SearchFilters, Type, SearchSort } from './SearchApiTypes';
 
 export const searchForTitle = async () => {
    let limit = 10;
