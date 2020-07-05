@@ -1,3 +1,5 @@
+import { RecordMap } from 'aNotion/typing/notionApi_V3/page';
+
 export enum Type {
    blocksInspace = 'BlocksInSpace',
 }
@@ -20,4 +22,20 @@ export interface SearchFilters {
    editedBy: [];
    lastEditedTime: {};
    createdTime: {};
+}
+
+export interface SearchResultType {
+   id: string;
+   isNavigable: boolean;
+   score: number;
+   highlight: {
+      pathText: string;
+      text: string;
+   };
+}
+
+export interface SearchResultsType {
+   recordMap: RecordMap;
+   results: SearchResultType[];
+   total: number;
 }

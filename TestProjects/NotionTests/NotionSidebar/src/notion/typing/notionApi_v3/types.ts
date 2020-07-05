@@ -1,3 +1,4 @@
+/*
 type BoldFormatType = ['b'];
 type ItalicFormatType = ['i'];
 type StrikeFormatType = ['s'];
@@ -198,3 +199,5 @@ export interface HandlerRequest {
    request: Request;
    notionToken?: string;
 }
+
+*/

@@ -8,3 +8,4 @@ export const rootReducer = combineReducers({
 export type RootState = ReturnType<typeof rootReducer>;
 export const cookieSelector = (state: RootState) => state.page.cookie;
 export const navigationSelector = (state: RootState) => state.page.navigation;
+export const currentPageSelector = (state: RootState) => state.page.currentPage;

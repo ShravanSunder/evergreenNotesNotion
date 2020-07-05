@@ -12,13 +12,15 @@ export interface Cursor {
    stack: CursorItem[][];
 }
 
+export interface RecordMap {
+   block: Map<models.Block>;
+   collection?: Map<models.Collection>;
+   collection_view?: Map<models.CollectionView>;
+   notion_user?: Map<unknown>;
+   space: Map<models.Space>;
+}
+
 export interface PageChunk {
-   cursor: Cursor;
-   recordMap: {
-      block: Map<models.Block>;
-      collection?: Map<models.Collection>;
-      collection_view?: Map<models.CollectionView>;
-      notion_user: Map<unknown>;
-      space: Map<models.Space>;
-   };
+   cursor?: Cursor;
+   recordMap: RecordMap;
 }

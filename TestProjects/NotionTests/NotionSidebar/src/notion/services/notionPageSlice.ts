@@ -7,18 +7,20 @@ import {
 import { CookieData, PageState, NavigationState } from './NotionPageTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/typing/notionApi_V3/page';
+import { thunkStatus } from 'aNotion/typing/thunkStatus';
 
 const logPath = 'notion/page/';
 
 const initialState: PageState = {
-   cookie: { status: 'pending' },
+   cookie: { status: thunkStatus.pending },
    navigation: {},
-   currentPage: { status: 'pending' },
+   currentPage: { status: thunkStatus.pending },
 };
 
+type fetchCurrentPageRequest = { pageId: string; limit: number };
 const fetchCurrentPage = createAsyncThunk(
    logPath + 'current',
-   async ({ pageId, limit }: any) => {
+   async ({ pageId, limit }: fetchCurrentPageRequest) => {
       return (await blockApi.loadPageChunk(
          pageId,
          limit
@@ -31,7 +33,7 @@ const loadCookies: CaseReducer<PageState, PayloadAction<CookieData>> = (
    action
 ) => {
    state.cookie.data = action.payload;
-   state.cookie.status = 'fulfilled';
+   state.cookie.status = thunkStatus.fulfilled;
 };
 
 const savePageId = {
@@ -49,16 +51,25 @@ const notionPageSlice = createSlice({
       savePageId: savePageId,
    },
    extraReducers: {
-      [fetchCurrentPage.fulfilled.toString()]: (state, action) => {
-         state.currentPage = action.payload;
-         state.currentPage.status = 'fulfilled';
+      [fetchCurrentPage.fulfilled.toString()]: (
+         state,
+         action: PayloadAction<LoadPageChunk.PageChunk>
+      ) => {
+         state.currentPage.page = action.payload;
+         state.currentPage.status = thunkStatus.fulfilled;
       },
-      [fetchCurrentPage.pending.toString()]: (state, action) => {
-         state.currentPage.status = 'pending';
+      [fetchCurrentPage.pending.toString()]: (
+         state,
+         action: PayloadAction<LoadPageChunk.PageChunk>
+      ) => {
+         state.currentPage.status = thunkStatus.pending;
          state.currentPage.page = undefined;
       },
-      [fetchCurrentPage.rejected.toString()]: (state, action) => {
-         state.currentPage.status = 'rejected';
+      [fetchCurrentPage.rejected.toString()]: (
+         state,
+         action: PayloadAction<LoadPageChunk.PageChunk>
+      ) => {
+         state.currentPage.status = thunkStatus.rejected;
       },
    },
 });

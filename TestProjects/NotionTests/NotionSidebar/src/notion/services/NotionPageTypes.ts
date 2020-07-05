@@ -15,7 +15,7 @@ export type NavigationState = {
 };
 export type CurrentPageState = {
    page?: PageChunk;
-   status: string;
+   status: thunkStatus;
 };
 
 export type PageState = {

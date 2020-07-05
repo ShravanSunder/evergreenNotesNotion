@@ -2,7 +2,11 @@ import React, { useEffect, MouseEvent } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { Button } from '@material-ui/core';
-import { cookieSelector, navigationSelector } from 'aNotion/redux/rootReducer';
+import {
+   cookieSelector,
+   navigationSelector,
+   currentPageSelector,
+} from 'aNotion/redux/rootReducer';
 import * as searchApi from 'aNotion/api/v3/searchApi';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import { notionPageActions } from 'aNotion/services/notionPageSlice';
@@ -14,6 +18,7 @@ export const UnlinkedReferences = ({ status, data }: any) => {
    let dispatch = useDispatch();
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
+   const page = useSelector(currentPageSelector, shallowEqual);
 
    useEffect(() => {
       getCurrentPageId();
@@ -25,8 +30,17 @@ export const UnlinkedReferences = ({ status, data }: any) => {
    };
 
    useEffect(() => {
-      dispatch(notionPageActions.fetchCurrentPage);
+      if (navigation.pageId !== undefined) {
+         dispatch(
+            notionPageActions.fetchCurrentPage({
+               pageId: navigation.pageId,
+               limit: 1,
+            })
+         );
+      }
    }, [navigation.pageId]);
+
+   useEffect(() => {}, [page.status]);
 
    const handleClick = (e: MouseEvent) => {
       //searchApi.searchForTitle();
