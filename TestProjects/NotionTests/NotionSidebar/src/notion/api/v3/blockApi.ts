@@ -1,12 +1,16 @@
 import superagent from 'superagent';
+import * as LoadPageChunk from 'aNotion/typing/notionApi_V3/page';
 //import { LoadPageChunk } from 'typings/notion-api/v3/loadPageChunk';
 
-export const loadPageChunk = async (pageId: string): Promise<any> => {
+export const loadPageChunk = async (
+   pageId: string,
+   limit: number = 1
+): Promise<LoadPageChunk.PageChunk> => {
    let response = await superagent
       .post('https://www.notion.so/api/v3/loadPageChunk')
       .send({
          pageId: pageId,
-         limit: 10,
+         limit: limit,
          chunkNumber: 0,
          verticalColumns: false,
       });

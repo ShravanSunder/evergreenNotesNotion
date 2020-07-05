@@ -30,7 +30,7 @@ const cleanValue = (str: string) => {
    );
 };
 
-export const extractPageData = (url: string | undefined): void => {
+export const extractNavigationData = (url: string | undefined): void => {
    let result: NavigationState = {};
    if (url === undefined || url == null) {
       console.log("error: can't get page");

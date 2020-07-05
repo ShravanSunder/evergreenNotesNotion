@@ -1,6 +1,6 @@
 import { commands } from 'aCommon/commands';
 import { emptyResponse } from 'aCommon/extensionHelpers';
-import { payloadRequest } from 'aCommon/requests';
+import { payloadRequest } from 'aCommon/commands';
 import { extractUserData } from 'aNotion/services/notionPage';
 
 export const registerListener = () => {

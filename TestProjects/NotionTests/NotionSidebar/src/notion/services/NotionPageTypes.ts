@@ -1,3 +1,5 @@
+import { PageChunk } from 'aNotion/typing/notionApi_V3/page';
+
 export type CookieData = {
    userId: string;
    token: string;
@@ -11,4 +13,13 @@ export type NavigationState = {
    locationId?: string;
    backgroundId?: string;
 };
-export type PageState = { cookie: CookieState; navigation: NavigationState };
+export type CurrentPageState = {
+   page?: PageChunk;
+   status: string;
+};
+
+export type PageState = {
+   cookie: CookieState;
+   navigation: NavigationState;
+   currentPage: CurrentPageState;
+};

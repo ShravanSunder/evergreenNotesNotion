@@ -3,7 +3,7 @@ import '../../assets/img/icon-128.png';
 import 'chrome-extension-async';
 import { commands } from 'aCommon/commands';
 import { Tab } from '@material-ui/core';
-import { payloadRequest } from 'aCommon/requests';
+import { payloadRequest } from 'aCommon/commands';
 import {
    contentCommands,
    contentCommandRequest,

@@ -4,19 +4,27 @@ import {
    CaseReducer,
    PayloadAction,
 } from '@reduxjs/toolkit';
-import {
-   CookieData,
-   PageState,
-   CookieState,
-   NavigationState,
-} from './NotionPageTypes';
+import { CookieData, PageState, NavigationState } from './NotionPageTypes';
+import * as blockApi from 'aNotion/api/v3/blockApi';
+import * as LoadPageChunk from 'aNotion/typing/notionApi_V3/page';
 
-const logPath = 'notion/cookies/';
+const logPath = 'notion/page/';
 
 const initialState: PageState = {
    cookie: { status: 'pending' },
    navigation: {},
+   currentPage: { status: 'pending' },
 };
+
+const fetchCurrentPage = createAsyncThunk(
+   logPath + 'current',
+   async ({ pageId, limit }: any) => {
+      return (await blockApi.loadPageChunk(
+         pageId,
+         limit
+      )) as LoadPageChunk.PageChunk;
+   }
+);
 
 const loadCookies: CaseReducer<PageState, PayloadAction<CookieData>> = (
    state,
@@ -41,17 +49,22 @@ const notionPageSlice = createSlice({
       savePageId: savePageId,
    },
    extraReducers: {
-      // [saveCookieData.fulfilled.toString()]: (state, action) => {
-      //    state.store = action.payload;
-      // },
-      // [saveCookieData.pending.toString()]: (state, action) => {
-      //    state.store = {};
-      // },
-      // [saveCookieData.rejected.toString()]: (state, action) => {
-      //    state.store = {};
-      // },
+      [fetchCurrentPage.fulfilled.toString()]: (state, action) => {
+         state.currentPage = action.payload;
+         state.currentPage.status = 'fulfilled';
+      },
+      [fetchCurrentPage.pending.toString()]: (state, action) => {
+         state.currentPage.status = 'pending';
+         state.currentPage.page = undefined;
+      },
+      [fetchCurrentPage.rejected.toString()]: (state, action) => {
+         state.currentPage.status = 'rejected';
+      },
    },
 });
 
-export const notionPageActions = { ...notionPageSlice.actions };
+export const notionPageActions = {
+   ...notionPageSlice.actions,
+   fetchCurrentPage,
+};
 export const notionPageReducers = notionPageSlice.reducer;
