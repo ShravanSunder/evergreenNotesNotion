@@ -1,17 +1,22 @@
-import { notionCookieActions } from 'aNotion/services/notionCookieSlice';
-import { CookieData } from 'aNotion/services/NotionCookieTypes';
+import { notionPageActions } from 'aNotion/services/notionPageSlice';
+import { CookieData } from 'aNotion/services/NotionPageTypes';
 import { appDispatch, getAppState } from 'aNotion/redux/reduxStore';
 import { cookieSelector } from 'aNotion/redux/rootReducer';
 import superagent from 'superagent';
 import { SearchFilters, Type, SearchSort } from './SearchApiTypes';
 
-export const searchForTitle = async () => {
-   let limit = 10;
+export const searchForTitle = async (
+   query: string,
+   pageTitlesOnly: boolean = true,
+   limit: number = 10
+) => {
    let userData = getAppState(cookieSelector).data as CookieData;
-   let filters = commonFilters();
+   let filters = defaultFilters();
+   filters.isNavigableOnly = pageTitlesOnly;
+
    let response = await superagent
       .post('https://www.notion.so/api/v3/search')
-      .send(createParam(userData, 'note', filters, limit));
+      .send(createParam(userData, query, filters, limit));
    console.log(response.body);
 };
 
@@ -32,7 +37,7 @@ const createParam = (
    return q;
 };
 
-const commonFilters = (): SearchFilters => {
+const defaultFilters = (): SearchFilters => {
    return {
       isDeletedOnly: false,
       excludeTemplates: true,
@@ -44,24 +49,4 @@ const commonFilters = (): SearchFilters => {
       lastEditedTime: {},
       createdTime: {},
    };
-};
-
-var data = {
-   type: 'BlocksInSpace',
-   query: 'search',
-   spaceId: '8c4bb92b-8b88-4caa-9168-93ebe20f619c',
-   limit: 20,
-   filters: {
-      isDeletedOnly: false,
-      excludeTemplates: false,
-      isNavigableOnly: false,
-      requireEditPermissions: false,
-      ancestors: [],
-      createdBy: [],
-      editedBy: [],
-      lastEditedTime: {},
-      createdTime: {},
-   },
-   sort: 'Relevance',
-   source: 'quick_find',
 };

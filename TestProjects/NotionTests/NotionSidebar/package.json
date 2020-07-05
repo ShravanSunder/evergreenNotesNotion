@@ -23,6 +23,7 @@
       "chrome-extension-async": "^3.4.1",
       "normalizr": "^3.6.0",
       "npm": "^6.14.5",
+      "query-string": "^6.13.1",
       "re-reselect": "^4.0.0",
       "react": "^16.13.1",
       "react-dom": "^16.13.1",

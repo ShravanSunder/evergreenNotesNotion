@@ -5,7 +5,9 @@ import reduxStore from 'aNotion/redux/reduxStore';
 import { commands } from 'aCommon/commands';
 import { getCurrentTab } from 'aCommon/extensionHelpers';
 import { Layout } from 'aNotion/components/Layout';
-import { registerListener } from './appListeners';
+import { registerListener as registerCookiesListener } from './appListeners';
+import 'chrome-extension-async';
+import { registerTabUpdateListener } from 'aNotion/services/notionListeners';
 
 console.log('App loading...');
 
@@ -32,4 +34,5 @@ const fetchCookies = async () => {
 render(<App />, window.document.querySelector('#app-container'));
 console.log('App loaded!');
 
-registerListener();
+registerCookiesListener();
+registerTabUpdateListener();

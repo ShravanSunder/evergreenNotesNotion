@@ -16,7 +16,8 @@
       "tabs",
       "*://*.notion.so/*",
       "https://notion.so/*",
-      "cookies"
+      "cookies",
+      "webRequest"
    ],
    "content_scripts": [
       {

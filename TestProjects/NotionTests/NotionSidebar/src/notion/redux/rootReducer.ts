@@ -1,10 +1,10 @@
 import { combineReducers, Reducer } from '@reduxjs/toolkit';
-import { notionCookieReducers } from 'aNotion/services/notionCookieSlice';
+import { notionPageReducers } from 'aNotion/services/notionPageSlice';
 //import {}
 
 export const rootReducer = combineReducers({
-   cookie: notionCookieReducers,
+   page: notionPageReducers,
 });
 export type RootState = ReturnType<typeof rootReducer>;
-
-export const cookieSelector = (state: RootState) => state.cookie;
+export const cookieSelector = (state: RootState) => state.page.cookie;
+export const navigationSelector = (state: RootState) => state.page.navigation;

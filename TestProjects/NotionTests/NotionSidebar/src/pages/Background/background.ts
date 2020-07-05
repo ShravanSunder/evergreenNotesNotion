@@ -3,12 +3,12 @@ import '../../assets/img/icon-128.png';
 import 'chrome-extension-async';
 import { commands } from 'aCommon/commands';
 import { Tab } from '@material-ui/core';
-import 'chrome-extension-async';
 import { payloadRequest } from 'aCommon/requests';
 import {
    contentCommands,
    contentCommandRequest,
 } from '../Content/contentMessaging';
+import { emptyResponse } from 'aCommon/extensionHelpers';
 
 console.log('Loaded background page.');
 
@@ -26,43 +26,23 @@ const isNotionTab = (tab: chrome.tabs.Tab) => {
    return false;
 };
 
-// chrome.tabs.onUpdated.addListener(async function(tabId, info, tab) {
-//    if (info.status === 'complete') {
-//       if (isNotionTab(tab)) {
-//          await fetchCookies(tabId);
-//       }
-//    }
-//    //return true;
-// });
-
-chrome.runtime.onMessage.addListener(async function (request) {
+chrome.runtime.onMessage.addListener(async function (request, sendResponse) {
    switch (request.command) {
       case commands.fetchCookies:
          await fetchCookies(request.tabId);
          break;
    }
-   // return true;
+   return true;
 });
 
 // When the browser-action button is clicked...
 chrome.browserAction.onClicked.addListener(async function (tab) {
-   let tabs = await chrome.tabs.query({ currentWindow: true, active: true });
-   let t = tabs[0];
-
    if (isNotionTab(tab)) {
       chrome.tabs.sendMessage(tab.id!, {
          command: contentCommands.extensionOnClick,
       } as contentCommandRequest);
-
-      // let cookies = await chrome.cookies.getAll({ domain: 'notion.so' });
-      // console.log('got cookies' + cookies);
-      // chrome.tabs.sendMessage(t.id!, {
-      //    command: commands.receivedCookies,
-      //    notionCookies: cookies,
-      // });
    }
-
-   // return true;
+   return true;
 });
 
 const fetchCookies = async (tabId: number) => {
