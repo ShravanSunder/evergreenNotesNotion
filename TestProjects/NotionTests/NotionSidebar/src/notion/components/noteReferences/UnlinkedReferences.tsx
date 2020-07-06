@@ -9,9 +9,9 @@ import {
 } from 'aNotion/redux/rootReducer';
 import * as searchApi from 'aNotion/api/v3/searchApi';
 import * as blockApi from 'aNotion/api/v3/blockApi';
-import { notionPageActions } from 'aNotion/services/notionPageSlice';
+import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
-import { extractNavigationData } from 'aNotion/services/notionPage';
+import { extractNavigationData } from 'aNotion/services/notionSiteService';
 
 // comment
 export const UnlinkedReferences = ({ status, data }: any) => {
@@ -32,7 +32,7 @@ export const UnlinkedReferences = ({ status, data }: any) => {
    useEffect(() => {
       if (navigation.pageId !== undefined) {
          dispatch(
-            notionPageActions.fetchCurrentPage({
+            notionSiteActions.fetchCurrentPage({
                pageId: navigation.pageId,
                limit: 1,
             })

@@ -1,11 +1,11 @@
 import { combineReducers, Reducer } from '@reduxjs/toolkit';
-import { notionPageReducers } from 'aNotion/services/notionPageSlice';
+import { notionSiteReducers } from 'aNotion/components/notionSiteSlice';
 //import {}
 
 export const rootReducer = combineReducers({
-   page: notionPageReducers,
+   site: notionSiteReducers,
 });
 export type RootState = ReturnType<typeof rootReducer>;
-export const cookieSelector = (state: RootState) => state.page.cookie;
-export const navigationSelector = (state: RootState) => state.page.navigation;
-export const currentPageSelector = (state: RootState) => state.page.currentPage;
+export const cookieSelector = (state: RootState) => state.site.cookie;
+export const navigationSelector = (state: RootState) => state.site.navigation;
+export const currentPageSelector = (state: RootState) => state.site.currentPage;

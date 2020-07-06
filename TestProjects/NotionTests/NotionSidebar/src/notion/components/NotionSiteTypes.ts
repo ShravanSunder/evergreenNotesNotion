@@ -1,4 +1,5 @@
 import { PageChunk } from 'aNotion/typing/notionApi_V3/page';
+import { thunkStatus as ThunkStatus } from 'aNotion/typing/thunkStatus';
 
 export type CookieData = {
    userId: string;
@@ -15,10 +16,10 @@ export type NavigationState = {
 };
 export type CurrentPageState = {
    page?: PageChunk;
-   status: thunkStatus;
+   status: ThunkStatus;
 };
 
-export type PageState = {
+export type SiteState = {
    cookie: CookieState;
    navigation: NavigationState;
    currentPage: CurrentPageState;

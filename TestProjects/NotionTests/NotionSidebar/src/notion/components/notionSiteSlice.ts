@@ -4,14 +4,18 @@ import {
    CaseReducer,
    PayloadAction,
 } from '@reduxjs/toolkit';
-import { CookieData, PageState, NavigationState } from './NotionPageTypes';
+import {
+   CookieData,
+   SiteState,
+   NavigationState,
+} from 'aNotion/components/NotionSiteTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/typing/notionApi_V3/page';
 import { thunkStatus } from 'aNotion/typing/thunkStatus';
 
 const logPath = 'notion/page/';
 
-const initialState: PageState = {
+const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
    navigation: {},
    currentPage: { status: thunkStatus.pending },
@@ -28,7 +32,7 @@ const fetchCurrentPage = createAsyncThunk(
    }
 );
 
-const loadCookies: CaseReducer<PageState, PayloadAction<CookieData>> = (
+const loadCookies: CaseReducer<SiteState, PayloadAction<CookieData>> = (
    state,
    action
 ) => {
@@ -37,13 +41,13 @@ const loadCookies: CaseReducer<PageState, PayloadAction<CookieData>> = (
 };
 
 const savePageId = {
-   reducer: (state: PageState, action: PayloadAction<NavigationState>) => {
+   reducer: (state: SiteState, action: PayloadAction<NavigationState>) => {
       state.navigation = action.payload;
    },
    prepare: (payload: NavigationState) => ({ payload: payload }),
 };
 
-const notionPageSlice = createSlice({
+const notionSiteSlice = createSlice({
    name: 'locations',
    initialState: initialState,
    reducers: {
@@ -74,8 +78,8 @@ const notionPageSlice = createSlice({
    },
 });
 
-export const notionPageActions = {
-   ...notionPageSlice.actions,
+export const notionSiteActions = {
+   ...notionSiteSlice.actions,
    fetchCurrentPage,
 };
-export const notionPageReducers = notionPageSlice.reducer;
+export const notionSiteReducers = notionSiteSlice.reducer;

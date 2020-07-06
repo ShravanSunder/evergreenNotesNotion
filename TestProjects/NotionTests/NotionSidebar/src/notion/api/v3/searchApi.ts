@@ -1,5 +1,5 @@
-import { notionPageActions } from 'aNotion/services/notionPageSlice';
-import { CookieData } from 'aNotion/services/NotionPageTypes';
+import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
+import { CookieData } from 'aNotion/components/NotionSiteTypes';
 import { appDispatch, getAppState } from 'aNotion/redux/reduxStore';
 import { cookieSelector } from 'aNotion/redux/rootReducer';
 import superagent from 'superagent';
@@ -13,7 +13,8 @@ import {
 export const searchForTitle = async (
    query: string,
    pageTitlesOnly: boolean = true,
-   limit: number = 10
+   limit: number = 10,
+   sort: SearchSort = SearchSort.relevance
 ): Promise<SearchResultsType> => {
    let userData = getAppState(cookieSelector).data as CookieData;
    let filters = defaultFilters();
@@ -21,7 +22,7 @@ export const searchForTitle = async (
 
    let response = await superagent
       .post('https://www.notion.so/api/v3/search')
-      .send(createParam(userData, query, filters, limit));
+      .send(createParam(userData, query, filters, sort, limit));
    return response.body;
 };
 
@@ -29,6 +30,7 @@ const createParam = (
    userData: CookieData,
    query: string,
    filters: SearchFilters,
+   sort: SearchSort,
    limit: number
 ) => {
    let q = {

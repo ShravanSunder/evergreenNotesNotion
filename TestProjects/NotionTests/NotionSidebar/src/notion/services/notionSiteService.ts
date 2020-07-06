@@ -1,5 +1,8 @@
-import { notionPageActions } from 'aNotion/services/notionPageSlice';
-import { CookieData, NavigationState } from 'aNotion/services/NotionPageTypes';
+import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
+import {
+   CookieData,
+   NavigationState,
+} from 'aNotion/components/NotionSiteTypes';
 import { appDispatch } from 'aNotion/redux/reduxStore';
 import { toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
@@ -16,7 +19,7 @@ export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
    let token = cookies.find((f) => f.name === 'token_v2')?.value;
    let c = { spaceId, userId, token, cookies } as CookieData;
 
-   appDispatch(notionPageActions.loadCookies(c));
+   appDispatch(notionSiteActions.loadCookies(c));
 };
 
 const cleanValue = (str: string) => {
@@ -46,7 +49,7 @@ export const extractNavigationData = (url: string | undefined): void => {
       }
       console.log(result);
    }
-   appDispatch(notionPageActions.savePageId(result));
+   appDispatch(notionSiteActions.savePageId(result));
 };
 
 const getGuidFromUrl = (url: string): string => {

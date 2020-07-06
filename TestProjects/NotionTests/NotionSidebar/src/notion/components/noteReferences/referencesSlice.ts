@@ -5,9 +5,10 @@ import {
    PayloadAction,
 } from '@reduxjs/toolkit';
 import * as searchApi from 'aNotion/api/v3/searchApi';
-import { SearchResultsType } from 'aNotion/api/v3/SearchApiTypes';
+import { SearchResultsType, SearchSort } from 'aNotion/api/v3/SearchApiTypes';
 import { ReferenceState } from './referenceTypes';
 import { thunkStatus } from 'aNotion/typing/thunkStatus';
+import { createUnlinkedReferences } from 'aNotion/services/referenceService';
 
 const logPath = 'notion/page/';
 
@@ -16,46 +17,57 @@ const initialState: ReferenceState = {
    searchResults: { status: thunkStatus.pending },
 };
 
-type fetchTitleRefs = { query: string; pageTitlesOnly: boolean; limit: number };
-const searchForTitles = createAsyncThunk(
+type FetchTitleRefsParams = {
+   query: string;
+   pageTitlesOnly: boolean;
+   limit: number;
+   sort: SearchSort;
+};
+const fetchTitleRefs = createAsyncThunk(
    logPath + 'current',
-   async ({ query, limit }: fetchTitleRefs) => {
-      return (await searchApi.searchForTitle(
+   async ({ query, limit, sort }: FetchTitleRefsParams, thunkApi) => {
+      let result = (await searchApi.searchForTitle(
          query,
          true,
-         limit
+         limit,
+         sort
       )) as SearchResultsType;
+
+      thunkApi.dispatch(processTitleRefs({ searchData: result }));
+      return result;
    }
 );
 
-// const loadCookies: CaseReducer<ReferenceState, PayloadAction<Search>> = (
-//    state,
-//    action
-// ) => {
-//    state.cookie.data = action.payload;
-//    state.cookie.status = thunkStatus.fulfilled;
-// };
+type ProcessTitleRefsParams = { searchData: SearchResultsType };
+const processTitleRefs = createAsyncThunk(
+   logPath + 'current',
+   async ({ searchData: refs }: ProcessTitleRefsParams) => {
+      createUnlinkedReferences(refs);
+      //return result;
+      return 1;
+   }
+);
 
 const referenceSlice = createSlice({
    name: 'locations',
    initialState: initialState,
    reducers: {},
    extraReducers: {
-      [searchForTitles.fulfilled.toString()]: (
+      [fetchTitleRefs.fulfilled.toString()]: (
          state,
          action: PayloadAction<SearchResultsType>
       ) => {
          state.searchResults.results = action.payload;
          state.searchResults.status = thunkStatus.fulfilled;
       },
-      [searchForTitles.pending.toString()]: (
+      [fetchTitleRefs.pending.toString()]: (
          state,
          action: PayloadAction<SearchResultsType>
       ) => {
          state.searchResults.status = thunkStatus.pending;
          state.searchResults.results = undefined;
       },
-      [searchForTitles.rejected.toString()]: (
+      [fetchTitleRefs.rejected.toString()]: (
          state,
          action: PayloadAction<SearchResultsType>
       ) => {

@@ -1,7 +1,7 @@
 import { commands } from 'aCommon/commands';
 import { emptyResponse } from 'aCommon/extensionHelpers';
 import { payloadRequest } from 'aCommon/commands';
-import { extractUserData } from 'aNotion/services/notionPage';
+import { extractUserData } from 'aNotion/services/notionSiteService';
 
 export const registerListener = () => {
    chrome.runtime.onMessage.addListener(receiveCookiesListener);
