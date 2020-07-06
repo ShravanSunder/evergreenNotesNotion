@@ -60,6 +60,9 @@ const notionSiteSlice = createSlice({
          action: PayloadAction<LoadPageChunk.PageChunk>
       ) => {
          state.currentPage.page = action.payload;
+         console.log(state.currentPage.page.recordMap);
+         //need to get the title
+         //action.payload.recordMap.block[state.navigation.pageId!]
          state.currentPage.status = thunkStatus.fulfilled;
       },
       [fetchCurrentPage.pending.toString()]: (

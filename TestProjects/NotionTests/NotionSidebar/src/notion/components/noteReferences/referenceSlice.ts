@@ -78,5 +78,7 @@ const referenceSlice = createSlice({
 
 export const referenceActions = {
    ...referenceSlice.actions,
+   fetchTitleRefs,
+   processTitleRefs,
 };
 export const referenceReducers = referenceSlice.reducer;
