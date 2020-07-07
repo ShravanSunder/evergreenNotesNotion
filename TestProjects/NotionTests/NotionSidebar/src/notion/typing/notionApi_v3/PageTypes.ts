@@ -1,5 +1,5 @@
 import { Map } from './Map';
-import { Table, UUID } from './baseTypes';
+import { Table, UUID } from './baseNotionTypes';
 import * as models from './models/notionModels';
 
 export interface CursorItem {

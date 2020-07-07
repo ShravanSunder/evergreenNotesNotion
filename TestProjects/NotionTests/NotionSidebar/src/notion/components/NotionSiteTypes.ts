@@ -1,5 +1,6 @@
-import { PageChunk } from 'aNotion/typing/notionApi_V3/page';
+import { PageChunk } from 'aNotion/typing/notionApi_v3/PageTypes';
 import { thunkStatus as ThunkStatus } from 'aNotion/typing/thunkStatus';
+import { Page } from 'aNotion/typing/notionApi_V3/blockTypes';
 
 export type CookieData = {
    userId: string;
@@ -15,8 +16,9 @@ export type NavigationState = {
    backgroundId?: string;
 };
 export type CurrentPageState = {
-   page?: PageChunk;
+   pageChunk?: PageChunk;
    status: ThunkStatus;
+   pageBlock?: Page;
 };
 
 export type SiteState = {

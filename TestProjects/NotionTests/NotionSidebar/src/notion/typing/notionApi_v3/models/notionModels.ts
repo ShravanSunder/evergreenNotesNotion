@@ -1,4 +1,5 @@
 import { Block } from './block';
+import * as Blocks from './block';
 import { Collection } from './collection';
 import { CollectionView } from './collection_view';
 import { Space } from './space';
@@ -25,5 +26,7 @@ export {
    // UserRoot,
    // UserSettings,
 };
+
+export { Blocks };
 
 export * from './semantic_string';

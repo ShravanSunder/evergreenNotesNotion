@@ -14,39 +14,37 @@ export type Block =
    | EmbedBlock.EmbedBlockUnion
    | MediaBlock.MediaBlockUnion;
 
-export namespace Block {
-   type Breadcrumb = AdvancedBlock.Breadcrumb;
-   type Equation = AdvancedBlock.Equation;
-   type Factory = AdvancedBlock.Factory;
-   type TableOfContents = AdvancedBlock.TableOfContents;
+export type Breadcrumb = AdvancedBlock.Breadcrumb;
+export type Equation = AdvancedBlock.Equation;
+export type Factory = AdvancedBlock.Factory;
+export type TableOfContents = AdvancedBlock.TableOfContents;
 
-   type BulletedList = BasicBlock.BulletedList;
-   type Callout = BasicBlock.Callout;
-   type Column = BasicBlock.Column;
-   type ColumnList = BasicBlock.ColumnList;
-   type Divider = BasicBlock.Divider;
-   type Header = BasicBlock.Header;
-   type NumberedList = BasicBlock.NumberedList;
-   type Page = BasicBlock.Page;
-   type Quote = BasicBlock.Quote;
-   type SubHeader = BasicBlock.SubHeader;
-   type SubSubHeader = BasicBlock.SubSubHeader;
-   type Text = BasicBlock.Text;
-   type ToDo = BasicBlock.ToDo;
-   type Toggle = BasicBlock.Toggle;
+export type BulletedList = BasicBlock.BulletedList;
+export type Callout = BasicBlock.Callout;
+export type Column = BasicBlock.Column;
+export type ColumnList = BasicBlock.ColumnList;
+export type Divider = BasicBlock.Divider;
+export type Header = BasicBlock.Header;
+export type NumberedList = BasicBlock.NumberedList;
+export type Page = BasicBlock.Page;
+export type Quote = BasicBlock.Quote;
+export type SubHeader = BasicBlock.SubHeader;
+export type SubSubHeader = BasicBlock.SubSubHeader;
+export type Text = BasicBlock.Text;
+export type ToDo = BasicBlock.ToDo;
+export type Toggle = BasicBlock.Toggle;
 
-   type CollectionViewInline = DatabaseBlock.CollectionViewInline;
-   type CollectionViewPage = DatabaseBlock.CollectionViewPage;
+export type CollectionViewInline = DatabaseBlock.CollectionViewInline;
+export type CollectionViewPage = DatabaseBlock.CollectionViewPage;
 
-   type Codepen = EmbedBlock.Codepen;
-   type Embed = EmbedBlock.Embed;
-   type Invision = EmbedBlock.Invision;
-   type PDF = EmbedBlock.PDF;
+export type Codepen = EmbedBlock.Codepen;
+export type Embed = EmbedBlock.Embed;
+export type Invision = EmbedBlock.Invision;
+export type PDF = EmbedBlock.PDF;
 
-   type Audio = MediaBlock.Audio;
-   type Bookmark = MediaBlock.Bookmark;
-   type Code = MediaBlock.Code;
-   type File = MediaBlock.File;
-   type Image = MediaBlock.Image;
-   type Video = MediaBlock.Video;
-}
+export type Audio = MediaBlock.Audio;
+export type Bookmark = MediaBlock.Bookmark;
+export type Code = MediaBlock.Code;
+export type File = MediaBlock.File;
+export type Image = MediaBlock.Image;
+export type Video = MediaBlock.Video;

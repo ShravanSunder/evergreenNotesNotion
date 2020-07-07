@@ -1,6 +1,6 @@
 import { SemanticString } from '../notionModels';
 import { EmptyBlock } from './empty_block';
-import * as base from '../../baseTypes';
+import * as base from '../../baseNotionTypes';
 
 /**
  * Image block.

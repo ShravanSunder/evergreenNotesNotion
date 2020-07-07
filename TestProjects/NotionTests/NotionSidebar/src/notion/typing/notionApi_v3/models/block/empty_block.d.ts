@@ -1,4 +1,4 @@
-import * as base from '../../baseTypes';
+import * as base from '../../baseNotionTypes';
 import { BlockFormat } from './block_format';
 
 /**

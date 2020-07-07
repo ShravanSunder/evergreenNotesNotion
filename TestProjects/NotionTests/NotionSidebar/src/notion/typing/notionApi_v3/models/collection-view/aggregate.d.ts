@@ -1,5 +1,5 @@
 import { Collection } from '../notionModels';
-import * as base from '../../baseTypes';
+import * as base from '../../baseNotionTypes';
 
 /** Fundamental aggregation types. */
 export type CountAggregationType =
