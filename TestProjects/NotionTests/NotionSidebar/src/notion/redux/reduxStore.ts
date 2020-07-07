@@ -1,9 +1,21 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import {
+   configureStore,
+   getDefaultMiddleware,
+   StoreEnhancer,
+} from '@reduxjs/toolkit';
 import { logger } from 'redux-logger';
 import { useDispatch } from 'react-redux';
 import { RootState, rootReducer } from './rootReducer';
+import { composeWithDevTools } from 'remote-redux-devtools';
 
 console.log('Redux store configuration loaded');
+
+const composeEnhancers = composeWithDevTools({
+   hostname: 'localhost',
+   port: 8000,
+   realtime: true,
+   shouldHotReload: true,
+});
 
 const preloadedState = {
    // data: [],
@@ -17,6 +29,7 @@ export const reduxStore = configureStore({
    middleware: middleware,
    devTools: true, //process.env.NODE_ENV !== 'production',
    //preloadedState: preloadedState,
+   enhancers: [composeEnhancers()],
 });
 
 export default reduxStore;

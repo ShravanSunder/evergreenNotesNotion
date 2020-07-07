@@ -23,7 +23,7 @@ export const UnlinkedReferences = ({ status, data }: any) => {
 
    useEffect(() => {
       getCurrentPageId();
-   }, [cookie]);
+   }, [cookie.status]);
 
    const getCurrentPageId = async () => {
       let url = await getCurrentUrl();

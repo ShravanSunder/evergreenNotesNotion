@@ -39,7 +39,7 @@ export const extractNavigationData = (
    let result: NavigationState = {};
    if (url === undefined || url == null) {
       console.log("error: can't get page");
-   } else {
+   } else if (isNotionUrl(url)) {
       let data = queryString.parseUrl(url, { parseFragmentIdentifier: true });
       result.locationId = data.fragmentIdentifier;
       if (data.query?.p != null) {
@@ -49,7 +49,8 @@ export const extractNavigationData = (
          result.pageId = getGuidFromUrl(data.url);
          result.backgroundId = undefined;
       }
-      console.log(result);
+   } else {
+      console.log('not notion page');
    }
    return result;
 };
@@ -57,4 +58,14 @@ export const extractNavigationData = (
 const getGuidFromUrl = (url: string): string => {
    let guid = url.slice(url.length - 32);
    return toGuid(guid.trim());
+};
+
+const isNotionUrl = (url: string) => {
+   let urlRegex = /^https?:\/\/(?:[^./?#]+\.)?notion.so/;
+   if (url != null) {
+      if (urlRegex.test(url)) {
+         return true;
+      }
+   }
+   return false;
 };

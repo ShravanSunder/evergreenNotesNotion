@@ -14,10 +14,10 @@ console.log('Loaded background page.');
 
 // Regex-pattern to check URLs against.
 // It matches URLs like: http[s]://[...]stackoverflow.com[...]
-var urlRegex = /^https?:\/\/(?:[^./?#]+\.)?notion.so/;
 const notionDomain = 'notion.so';
 
 const isNotionTab = (tab: chrome.tabs.Tab) => {
+   let urlRegex = /^https?:\/\/(?:[^./?#]+\.)?notion.so/;
    if (tab.id != null && tab.url != null) {
       if (urlRegex.test(tab.url)) {
          return true;
