@@ -33,7 +33,9 @@ const cleanValue = (str: string) => {
    );
 };
 
-export const extractNavigationData = (url: string | undefined): void => {
+export const extractNavigationData = (
+   url: string | undefined
+): NavigationState => {
    let result: NavigationState = {};
    if (url === undefined || url == null) {
       console.log("error: can't get page");
@@ -49,7 +51,7 @@ export const extractNavigationData = (url: string | undefined): void => {
       }
       console.log(result);
    }
-   appDispatch(notionSiteActions.savePageId(result));
+   return result;
 };
 
 const getGuidFromUrl = (url: string): string => {

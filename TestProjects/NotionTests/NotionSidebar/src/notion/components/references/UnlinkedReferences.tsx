@@ -27,7 +27,7 @@ export const UnlinkedReferences = ({ status, data }: any) => {
 
    const getCurrentPageId = async () => {
       let url = await getCurrentUrl();
-      extractNavigationData(url);
+      dispatch(notionSiteActions.currentPage(url));
    };
 
    useEffect(() => {

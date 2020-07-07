@@ -15,6 +15,7 @@ import * as LoadPageChunk from 'aNotion/typing/notionApi_v3/PageTypes';
 import { thunkStatus } from 'aNotion/typing/thunkStatus';
 import { pageBlockFromChunk } from 'aNotion/services/blockService';
 import { Page } from 'aNotion/typing/notionApi_V3/blockTypes';
+import { extractNavigationData } from 'aNotion/services/notionSiteService';
 
 const logPath = 'notion/page/';
 
@@ -48,11 +49,14 @@ const loadCookies: CaseReducer<SiteState, PayloadAction<CookieData>> = (
    state.cookie.status = thunkStatus.fulfilled;
 };
 
-const savePageId = {
+const currentPage = {
    reducer: (state: SiteState, action: PayloadAction<NavigationState>) => {
       state.navigation = action.payload;
    },
-   prepare: (payload: NavigationState) => ({ payload: payload }),
+   prepare: (payload: string) => {
+      let data = extractNavigationData(payload);
+      return { payload: data };
+   },
 };
 
 type processChunkToBlockType = {
@@ -73,7 +77,7 @@ const notionSiteSlice = createSlice({
    initialState: initialState,
    reducers: {
       loadCookies: loadCookies,
-      savePageId: savePageId,
+      currentPage: currentPage,
       processChunkToBlock: processChunkToBlock,
    },
    extraReducers: {
