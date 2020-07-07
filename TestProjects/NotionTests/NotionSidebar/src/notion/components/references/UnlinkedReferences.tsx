@@ -7,12 +7,8 @@ import {
    navigationSelector,
    currentPageSelector,
 } from 'aNotion/redux/rootReducer';
-import * as searchApi from 'aNotion/api/v3/searchApi';
-import * as blockApi from 'aNotion/api/v3/blockApi';
 import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
-import { extractNavigationData } from 'aNotion/services/notionSiteService';
-import { referenceActions } from './referenceSlice';
 
 // comment
 export const UnlinkedReferences = ({ status, data }: any) => {
@@ -22,10 +18,10 @@ export const UnlinkedReferences = ({ status, data }: any) => {
    const page = useSelector(currentPageSelector, shallowEqual);
 
    useEffect(() => {
-      getCurrentPageId();
+      updateCurrentPageId();
    }, [cookie.status]);
 
-   const getCurrentPageId = async () => {
+   const updateCurrentPageId = async () => {
       let url = await getCurrentUrl();
       dispatch(notionSiteActions.currentPage(url));
    };
@@ -49,9 +45,13 @@ export const UnlinkedReferences = ({ status, data }: any) => {
       //searchApi.searchForTitle();
    };
 
+   let m = '';
+   if (page.pageBlock !== undefined)
+      m = page.pageBlock?.properties['title'][0][0];
+
    return (
       <div style={{ width: 100, height: 100 }}>
-         <Button onClick={handleClick}>NEWBUTTON</Button>
+         <Button onClick={handleClick}>{m}</Button>
       </div>
    );
 };

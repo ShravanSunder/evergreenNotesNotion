@@ -22,7 +22,7 @@ export interface Page extends EmptyBlock {
     * [InlineMentionPage, [","], InlineMentionPage, [","], InlineMentionPage]
     * ```
     */
-   properties?: {
+   properties: {
       [key in Collection.ColumnID]: SemanticString[];
    };
    permissions?: Permission[];

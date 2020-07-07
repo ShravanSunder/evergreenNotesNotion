@@ -40,6 +40,7 @@ chrome.browserAction.onClicked.addListener(async function (tab) {
    if (isNotionTab(tab)) {
       chrome.tabs.sendMessage(tab.id!, {
          command: contentCommands.extensionOnClick,
+         tabId: tab.id!,
       } as contentCommandRequest);
    }
    return true;

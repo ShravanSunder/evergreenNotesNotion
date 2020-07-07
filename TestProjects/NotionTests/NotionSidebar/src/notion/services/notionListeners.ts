@@ -1,9 +1,14 @@
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
+import { getCurrentTabId } from 'aCommon/extensionHelpers';
+import { appDispatch } from 'aNotion/redux/reduxStore';
+import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 
 export const registerTabUpdateListener = () => {
-   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-      if (tab.url !== undefined && isNotionTab(tab!)) {
-         extractNavigationData(tab.url);
+   chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
+      if (changeInfo.status === 'complete') {
+         if (isNotionTab(tab!) && tab.id === getCurrentTabId()) {
+            appDispatch(notionSiteActions.currentPage(tab.url!));
+         }
       }
    });
 };

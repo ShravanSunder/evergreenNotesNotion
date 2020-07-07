@@ -21,7 +21,7 @@ chrome.runtime.onMessage.addListener(async function (
 ) {
    switch (request.command) {
       case contentCommands.extensionOnClick: {
-         initalize();
+         initalize(request.tabId);
          toggleSidebar();
          break;
       }
@@ -32,14 +32,17 @@ chrome.runtime.onMessage.addListener(async function (
 const notionAppId = 'notion-app';
 export const notionSidebarRootId = 'notion-sidebar-root-987384';
 var initalized = false;
+var contentTabId: number | undefined = undefined;
 
-const initalize = () => {
+const initalize = (tabId: number) => {
    let notionApp = document.getElementById(notionAppId) as HTMLElement;
 
    if (!notionApp) {
       error('could not find notion elements');
    } else if (!initalized) {
       initalized = true;
+      contentTabId = tabId;
+
       if (!document.getElementById(notionSidebarRootId)) {
          createNewRootElement(notionApp);
       }
@@ -49,8 +52,7 @@ const initalize = () => {
    }
 
    let sidebarRoot = document.getElementById(notionSidebarRootId);
-   if (sidebarRoot) mountSidebar(sidebarRoot);
-   // return true;
+   if (sidebarRoot) mountSidebar(sidebarRoot, tabId);
 };
 
 const error = (str: string) => {

@@ -3,4 +3,5 @@ export enum contentCommands {
 }
 export interface contentCommandRequest {
    command: contentCommands;
+   tabId: number;
 }

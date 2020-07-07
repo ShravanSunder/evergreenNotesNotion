@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export const mountSidebar = (sidebar: HTMLElement) => {
+export const mountSidebar = (sidebar: HTMLElement, tabId: number) => {
    console.log('render');
    chrome.extension.getURL('sidebar.html');
 
