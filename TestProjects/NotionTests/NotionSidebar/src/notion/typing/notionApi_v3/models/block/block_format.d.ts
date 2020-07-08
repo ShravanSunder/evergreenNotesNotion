@@ -1,4 +1,4 @@
-import * as base from '../../baseNotionTypes';
+import * as base from '../../notionBaseTypes';
 
 /**
  * Everything about how to layout a block.

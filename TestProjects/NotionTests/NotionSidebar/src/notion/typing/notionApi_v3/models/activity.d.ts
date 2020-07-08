@@ -1,5 +1,5 @@
-import * as base from '../baseNotionTypes';
-import { Block } from '../blockTypes';
+import * as base from '../notionBaseTypes';
+import { Block } from '../notionBlockTypes';
 import { Collection } from './collection';
 
 export type EditType =

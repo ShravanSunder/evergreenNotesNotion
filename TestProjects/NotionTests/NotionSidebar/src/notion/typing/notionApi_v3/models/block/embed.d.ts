@@ -1,6 +1,6 @@
-import { SemanticString } from '../notionModels';
+import { SemanticString } from '../../notionModels';
 import { EmptyBlock } from './empty_block';
-import * as base from '../../baseNotionTypes';
+import * as base from '../../notionBaseTypes';
 
 /**
  * General purpose embed block.

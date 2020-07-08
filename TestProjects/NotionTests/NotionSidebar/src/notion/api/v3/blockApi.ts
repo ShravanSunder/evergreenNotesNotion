@@ -1,5 +1,5 @@
 import superagent from 'superagent';
-import * as LoadPageChunk from 'aNotion/typing/notionApi_v3/PageTypes';
+import * as LoadPageChunk from 'aNotion/typing/notionApi_v3/notionRecordTypes';
 //import { LoadPageChunk } from 'typings/notion-api/v3/loadPageChunk';
 
 export const loadPageChunk = async (

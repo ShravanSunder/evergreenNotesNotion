@@ -1,4 +1,4 @@
-import * as base from '../../baseNotionTypes';
+import * as base from '../../notionBaseTypes';
 import { EmptyBlock } from './empty_block';
 
 /**

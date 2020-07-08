@@ -1,4 +1,4 @@
-import * as base from '../baseNotionTypes';
+import * as base from '../notionBaseTypes';
 
 export interface SpaceView {
    id: base.UUID;

@@ -11,10 +11,10 @@ import {
    CurrentPageState,
 } from 'aNotion/components/NotionSiteTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
-import * as LoadPageChunk from 'aNotion/typing/notionApi_v3/PageTypes';
+import * as LoadPageChunk from 'aNotion/typing/notionApi_v3/notionRecordTypes';
 import { thunkStatus } from 'aNotion/typing/thunkStatus';
 import { pageBlockFromChunk } from 'aNotion/services/blockService';
-import { Page } from 'aNotion/typing/notionApi_V3/blockTypes';
+import { Page } from 'aNotion/typing/notionApi_v3/notionBlockTypes';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
 
 const logPath = 'notion/page/';

@@ -1,4 +1,4 @@
-import * as Util from '../types';
+import * as base from '../notionBaseTypes';
 import { Query, Query2 } from './collection-view/query';
 import { Collection } from './collection';
 
@@ -6,7 +6,7 @@ import { Collection } from './collection';
  * Describe a view of a collection.
  */
 export interface CollectionView {
-   id: Util;
+   id: base.UUID;
    version: number;
    /** The type of view. */
    type: CollectionView.Type;

@@ -1,5 +1,5 @@
-import { SemanticString, Permission } from '../notionModels';
-import * as base from '../../baseNotionTypes';
+import { SemanticString, Permission } from '../../notionModels';
+import * as base from '../../notionBaseTypes';
 import { EmptyBlock } from './empty_block';
 import { Collection } from '../collection';
 

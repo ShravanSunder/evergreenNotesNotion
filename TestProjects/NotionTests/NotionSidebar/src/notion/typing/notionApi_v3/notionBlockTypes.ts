@@ -1,18 +1,43 @@
+import { Collection } from './models/collection';
+import { CollectionView } from './models/collection_view';
+import { Space } from './models/space';
+import { SpaceView } from './models/space_view';
+import { Activity } from './models/activity';
+// import { Follow } from "./follow"
+// import { SlackIntegration } from "./slack_integration"
+import { Permission } from './models/permission';
+// import { NotionUser } from "./notion_user"
+// import { UserRoot } from "./user_root"
+// import { UserSettings } from "./user_settings"
+
+////////////////////////////////////////////////
+// All types of blocks.
 import * as AdvancedBlock from './models/block/advanced_block';
 import * as BasicBlock from './models/block/basic_block';
 import * as DatabaseBlock from './models/block/database';
 import * as EmbedBlock from './models/block/embed';
 import * as MediaBlock from './models/block/media';
 
-/**
- * All types of blocks.
- */
 export type Block =
    | AdvancedBlock.AdvancedBlockUnion
    | BasicBlock.BasicBlockUnion
    | DatabaseBlock.DatabaseBlockUnion
    | EmbedBlock.EmbedBlockUnion
    | MediaBlock.MediaBlockUnion;
+
+export {
+   Collection,
+   CollectionView,
+   Space,
+   SpaceView,
+   Activity,
+   // Follow,
+   // SlackIntegration,
+   Permission,
+   // NotionUser,
+   // UserRoot,
+   // UserSettings,
+};
 
 export type Breadcrumb = AdvancedBlock.Breadcrumb;
 export type Equation = AdvancedBlock.Equation;
@@ -48,3 +73,5 @@ export type Code = MediaBlock.Code;
 export type File = MediaBlock.File;
 export type Image = MediaBlock.Image;
 export type Video = MediaBlock.Video;
+
+export * from './models/semantic_string';

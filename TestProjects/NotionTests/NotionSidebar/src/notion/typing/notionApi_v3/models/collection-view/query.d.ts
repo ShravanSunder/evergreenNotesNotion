@@ -1,7 +1,7 @@
 import { Aggregate, Aggregate2 } from './aggregate';
 import { Filter, Filter2, FilterOperator } from './filter';
 import { Sort } from './sort';
-import { Collection } from '../notionModels';
+import { Collection } from '../../notionModels';
 /**
  * Settings for the stable version of query engine.
  */

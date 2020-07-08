@@ -1,5 +1,5 @@
-import { SemanticString } from './notionModels';
-import * as base from '../baseNotionTypes';
+import { SemanticString } from '../notionModels';
+import * as base from '../notionBaseTypes';
 import { CollectionView } from './collection_view';
 
 export interface Collection {

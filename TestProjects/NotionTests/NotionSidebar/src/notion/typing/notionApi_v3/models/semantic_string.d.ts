@@ -1,4 +1,4 @@
-import * as base from '../baseNotionTypes';
+import * as base from '../notionBaseTypes';
 
 /**
  * TODO: Some collection-only structures not included.

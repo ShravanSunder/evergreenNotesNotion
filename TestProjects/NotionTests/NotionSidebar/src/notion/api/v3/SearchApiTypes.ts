@@ -1,4 +1,4 @@
-import { RecordMap } from 'aNotion/typing/notionApi_v3/PageTypes';
+import { RecordMap } from 'aNotion/typing/notionApi_v3/notionRecordTypes';
 
 export enum Type {
    blocksInspace = 'BlocksInSpace',
