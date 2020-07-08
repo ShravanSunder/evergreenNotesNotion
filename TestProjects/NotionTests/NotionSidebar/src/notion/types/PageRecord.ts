@@ -32,7 +32,7 @@ export class PageRecord implements PageRecordModel {
          let cId = this.block.collection_id;
          this.collection = data.collection![cId].value!;
          let viewIds = this.block.view_ids;
-         for (let vId in viewIds) {
+         for (let vId of viewIds) {
             let cv = data.collection_view![vId].value;
             if (cv !== undefined) {
                this.collection_views?.push(cv);
