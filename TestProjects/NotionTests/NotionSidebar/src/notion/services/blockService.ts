@@ -3,10 +3,18 @@
 // get title, properties etc.  using blocks as reference
 
 import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
-import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
+import { PageRecord, PageRecordModel } from 'aNotion/types/PageRecord';
+// import {
+//    Page,
+//    Collection,
+//    CollectionView,
+// } from 'aNotion/types/notionV3/notionBlockTypes';
 
-export const pageBlockFromChunk = (page: PageChunk, pageId: string): Page => {
-   let block = page.recordMap.block[pageId].value as Page;
-   console.log(block);
-   return block;
+export const getPageRecordFromChunk = (
+   page: PageChunk,
+   pageId: string
+): PageRecordModel => {
+   return new PageRecord(page.recordMap, pageId).toModel();
 };
+
+export const getTitleForPageRecord = (record: PageRecord) => {};

@@ -3,7 +3,7 @@ import {
    CookieData,
    NavigationState,
 } from 'aNotion/components/NotionSiteTypes';
-import { appDispatch } from 'aNotion/redux/reduxStore';
+import { appDispatch } from 'aNotion/providers/reduxStore';
 import { toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
 

@@ -8,21 +8,21 @@ import {
    CookieData,
    SiteState,
    NavigationState,
-   CurrentPageState,
+   PageRecordState,
 } from 'aNotion/components/NotionSiteTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { pageBlockFromChunk } from 'aNotion/services/blockService';
-import { Page } from 'aNotion/types/notionv3/notionBlockTypes';
+import { getPageRecordFromChunk } from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
+import { PageRecordModel } from 'aNotion/types/PageRecord';
 
 const logPath = 'notion/page/';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
    navigation: {},
-   currentPage: { status: thunkStatus.pending },
+   currentPageRecord: { status: thunkStatus.pending },
 };
 
 type fetchCurrentPageRequest = { pageId: string; limit: number };
@@ -64,11 +64,11 @@ type processChunkToBlockType = {
    pageId: string;
 };
 const processChunkToBlock = {
-   reducer: (state: SiteState, action: PayloadAction<Page>) => {
-      state.currentPage.pageBlock = action.payload;
+   reducer: (state: SiteState, action: PayloadAction<PageRecordModel>) => {
+      state.currentPageRecord.pageRecord = action.payload;
    },
    prepare: (payload: processChunkToBlockType) => ({
-      payload: pageBlockFromChunk(payload.chunk, payload.pageId),
+      payload: getPageRecordFromChunk(payload.chunk, payload.pageId),
    }),
 };
 
@@ -85,21 +85,21 @@ const notionSiteSlice = createSlice({
          state,
          action: PayloadAction<LoadPageChunk.PageChunk>
       ) => {
-         state.currentPage.pageChunk = action.payload;
-         state.currentPage.status = thunkStatus.fulfilled;
+         state.currentPageRecord.pageChunk = action.payload;
+         state.currentPageRecord.status = thunkStatus.fulfilled;
       },
       [fetchCurrentPage.pending.toString()]: (
          state,
          action: PayloadAction<LoadPageChunk.PageChunk>
       ) => {
-         state.currentPage.status = thunkStatus.pending;
-         state.currentPage.pageBlock = undefined;
+         state.currentPageRecord.status = thunkStatus.pending;
+         state.currentPageRecord.pageRecord = undefined;
       },
       [fetchCurrentPage.rejected.toString()]: (
          state,
          action: PayloadAction<LoadPageChunk.PageChunk>
       ) => {
-         state.currentPage.status = thunkStatus.rejected;
+         state.currentPageRecord.status = thunkStatus.rejected;
       },
    },
 });

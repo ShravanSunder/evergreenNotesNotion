@@ -1,7 +1,7 @@
 import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import { CookieData } from 'aNotion/components/NotionSiteTypes';
-import { appDispatch, getAppState } from 'aNotion/redux/reduxStore';
-import { cookieSelector } from 'aNotion/redux/rootReducer';
+import { appDispatch, getAppState } from 'aNotion/providers/reduxStore';
+import { cookieSelector } from 'aNotion/providers/rootReducer';
 import superagent from 'superagent';
 import {
    SearchFilters,

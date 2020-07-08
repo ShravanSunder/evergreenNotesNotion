@@ -1,4 +1,5 @@
-import { Util, Permission } from '../notionModels';
+import { Permission } from './permission';
+import * as base from '../notionBaseTypes';
 
 export interface Group {
    id: base.UUID;

@@ -5,8 +5,8 @@ import { Button } from '@material-ui/core';
 import {
    cookieSelector,
    navigationSelector,
-   currentPageSelector,
-} from 'aNotion/redux/rootReducer';
+   currentRecordSelector,
+} from 'aNotion/providers/rootReducer';
 import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
 
@@ -15,7 +15,7 @@ export const UnlinkedReferences = ({ status, data }: any) => {
    let dispatch = useDispatch();
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
-   const page = useSelector(currentPageSelector, shallowEqual);
+   const record = useSelector(currentRecordSelector, shallowEqual);
 
    useEffect(() => {
       updateCurrentPageId();
@@ -39,15 +39,13 @@ export const UnlinkedReferences = ({ status, data }: any) => {
 
    useEffect(() => {
       //dispatch(referenceActions.fetchTitleRefs({page.}:));
-   }, [page.status]);
+   }, [record.status]);
 
    const handleClick = (e: MouseEvent) => {
       //searchApi.searchForTitle();
    };
 
-   let m = '';
-   if (page.pageBlock !== undefined)
-      m = page.pageBlock?.properties['title'][0][0];
+   let m = record.pageRecord?.name ?? '';
 
    return (
       <div style={{ width: 100, height: 100 }}>
