@@ -1,12 +1,13 @@
 import { SemanticString } from '../../notionModels';
 import { EmptyBlock } from './empty_block';
 import * as base from '../../notionBaseTypes';
+import { BlockNames } from '../../BlockEnums';
 
 /**
  * Image block.
  */
 export interface Image extends EmptyBlock {
-   type: 'image';
+   type: BlockNames.Image;
    properties?: {
       /**
        * Normally, the same as `display_source` in {@link BlockFormat}.
@@ -23,7 +24,7 @@ export interface Image extends EmptyBlock {
  * Video block.
  */
 export interface Video extends EmptyBlock {
-   type: 'video';
+   type: BlockNames.Video;
    properties?: {
       /**
        * Normally, the same as `display_source` in {@link BlockFormat}.
@@ -40,7 +41,7 @@ export interface Video extends EmptyBlock {
  * Audio block.
  */
 export interface Audio extends EmptyBlock {
-   type: 'audio';
+   type: BlockNames.Audio;
    properties?: {
       source: [[base.NotionSecureUrl | base.PublicUrl]];
    };
@@ -52,7 +53,7 @@ export interface Audio extends EmptyBlock {
  * Web Bookmark block.
  */
 export interface Bookmark extends EmptyBlock {
-   type: 'bookmark';
+   type: BlockNames.Bookmark;
    properties?: {
       /** Link of the bookmarked web page. */
       link: [[string]];
@@ -67,7 +68,7 @@ export interface Bookmark extends EmptyBlock {
  * Code block.
  */
 export interface Code extends EmptyBlock {
-   type: 'code';
+   type: BlockNames.Code;
    properties?: {
       /** Code content. */
       title?: [[string]];
@@ -79,7 +80,7 @@ export interface Code extends EmptyBlock {
  * File block.
  */
 export interface File extends EmptyBlock {
-   type: 'file';
+   type: BlockNames.File;
    properties?: {
       /** Filename. */
       title: [[string]];

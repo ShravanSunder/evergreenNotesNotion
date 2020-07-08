@@ -1,40 +1,6 @@
 import * as base from '../../notionBaseTypes';
 import { BlockFormat } from './block_format';
-
-/**
- * All block names.
- */
-export type BlockType =
-   | 'page'
-   | 'text'
-   | 'bulleted_list'
-   | 'numbered_list'
-   | 'to_do'
-   | 'toggle'
-   | 'header'
-   | 'sub_header'
-   | 'sub_sub_header'
-   | 'quote'
-   | 'callout'
-   | 'column_list'
-   | 'column'
-   | 'divider'
-   | 'collection_view'
-   | 'collection_view_page'
-   | 'image'
-   | 'video'
-   | 'audio'
-   | 'bookmark'
-   | 'code'
-   | 'file'
-   | 'embed'
-   | 'codepen'
-   | 'invision'
-   | 'pdf'
-   | 'table_of_contents'
-   | 'equation'
-   | 'factory'
-   | 'breadcrumb';
+import { BlockNamesEnum } from '../../BlockEnums';
 
 /**
  * An abstract block, used to hold common properties of all blocks.
@@ -44,7 +10,7 @@ export type BlockType =
 export interface EmptyBlock {
    id: base.UUID;
    version: number;
-   type: BlockType;
+   type: BlockNamesEnum;
    format?: BlockFormat;
    /** Ids of children blocks */
    content?: base.UUID[];

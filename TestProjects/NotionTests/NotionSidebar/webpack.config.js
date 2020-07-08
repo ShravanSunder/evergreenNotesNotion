@@ -108,7 +108,7 @@ var options = {
          .concat(['.jsx', '.js', '.css', '.ts', '.tsx']),
    },
    plugins: [
-      new HardSourceWebpackPlugin(),
+      // new HardSourceWebpackPlugin(),
       new webpack.ProgressPlugin(),
       // clean the build folder
       new CleanWebpackPlugin({

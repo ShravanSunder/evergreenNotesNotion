@@ -41,7 +41,7 @@ export {
 
 export type Breadcrumb = AdvancedBlock.Breadcrumb;
 export type Equation = AdvancedBlock.Equation;
-export type Factory = AdvancedBlock.Factory;
+export type Factory = AdvancedBlock.TemplateButton;
 export type TableOfContents = AdvancedBlock.TableOfContents;
 
 export type BulletedList = BasicBlock.BulletedList;
@@ -49,12 +49,12 @@ export type Callout = BasicBlock.Callout;
 export type Column = BasicBlock.Column;
 export type ColumnList = BasicBlock.ColumnList;
 export type Divider = BasicBlock.Divider;
-export type Header = BasicBlock.Header;
+export type Header = BasicBlock.Header1;
 export type NumberedList = BasicBlock.NumberedList;
 export type Page = BasicBlock.Page;
 export type Quote = BasicBlock.Quote;
-export type SubHeader = BasicBlock.SubHeader;
-export type SubSubHeader = BasicBlock.SubSubHeader;
+export type SubHeader = BasicBlock.Header2;
+export type SubSubHeader = BasicBlock.Header3;
 export type Text = BasicBlock.Text;
 export type ToDo = BasicBlock.ToDo;
 export type Toggle = BasicBlock.Toggle;
@@ -62,9 +62,9 @@ export type Toggle = BasicBlock.Toggle;
 export type CollectionViewInline = DatabaseBlock.CollectionViewInline;
 export type CollectionViewPage = DatabaseBlock.CollectionViewPage;
 
-export type Codepen = EmbedBlock.Codepen;
+//export type Codepen = EmbedBlock.Codepen;
 export type Embed = EmbedBlock.Embed;
-export type Invision = EmbedBlock.Invision;
+//export type Invision = EmbedBlock.Invision;
 export type PDF = EmbedBlock.PDF;
 
 export type Audio = MediaBlock.Audio;

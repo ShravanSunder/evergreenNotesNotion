@@ -14,7 +14,8 @@ export const getPageRecordFromChunk = (
    page: PageChunk,
    pageId: string
 ): PageRecordModel => {
-   return new PageRecord(page.recordMap, pageId).toModel();
+   let m = new PageRecord(page.recordMap, pageId).toModel();
+   return m;
 };
 
 export const getTitleForPageRecord = (record: PageRecord) => {};

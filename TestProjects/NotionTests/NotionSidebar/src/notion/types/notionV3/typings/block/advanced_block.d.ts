@@ -1,14 +1,15 @@
 import { EmptyBlock } from './empty_block';
+import { BlockNames } from '../../BlockEnums';
 
 export interface TableOfContents extends EmptyBlock {
-   type: 'table_of_contents';
+   type: BlockNames.TableOfContents;
 }
 
 /**
  * Math Equation block.
  */
 export interface Equation extends EmptyBlock {
-   type: 'equation';
+   type: BlockNames.Equation;
    properties?: {
       /** LaTeX. */
       title?: [[string]];
@@ -18,8 +19,8 @@ export interface Equation extends EmptyBlock {
 /**
  * Template button block.
  */
-export interface Factory extends EmptyBlock {
-   type: 'factory';
+export interface TemplateButton extends EmptyBlock {
+   type: BlockNames.TemplateButton;
    properties?: {
       /** Button name. */
       title?: [[string]];
@@ -27,11 +28,11 @@ export interface Factory extends EmptyBlock {
 }
 
 export interface Breadcrumb extends EmptyBlock {
-   type: 'breadcrumb';
+   type: BlockNames.BreadCrumb;
 }
 
 export type AdvancedBlockUnion =
    | TableOfContents
    | Equation
-   | Factory
+   | TemplateButton
    | Breadcrumb;

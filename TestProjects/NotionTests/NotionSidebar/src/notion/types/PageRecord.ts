@@ -1,14 +1,14 @@
 import { RecordMap, Record, BlockRecord } from './notionV3/notionRecordTypes';
 import { Map } from './notionV3/Map';
 import * as blockTypes from './notionV3/notionBlockTypes';
-import { Space } from './notionV3/typings/space';
+import { BlockNames, BlockProps } from './notionV3/BlockEnums';
 
 export interface PageRecordModel {
    block: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined;
    recordMapData: RecordMap;
-   type: BlockEnum;
+   type: BlockNames;
    name: string;
 }
 
@@ -17,18 +17,18 @@ export class PageRecord implements PageRecordModel {
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined = [];
    recordMapData: RecordMap;
-   type: BlockEnum;
+   type: BlockNames;
    name: string = '';
 
    constructor(data: RecordMap, blockId: string) {
       this.recordMapData = data;
       this.block = data.block[blockId].value!;
-      this.type = this.block.type as BlockEnum;
+      this.type = this.block.type;
 
-      if (this.block.type === BlockEnum.CollectionViewPage) {
+      if (this.block.type === BlockNames.CollectionViewPage) {
          let cId = this.block.collection_id;
          this.collection = data.collection![cId].value!;
-      } else if (this.block.type === BlockEnum.CollectionViewInline) {
+      } else if (this.block.type === BlockNames.CollectionViewInline) {
          let cId = this.block.collection_id;
          this.collection = data.collection![cId].value!;
          let viewIds = this.block.view_ids;
@@ -43,13 +43,13 @@ export class PageRecord implements PageRecordModel {
 
    getName = (): string | undefined => {
       if (
-         this.type === BlockEnum.CollectionViewPage ||
-         this.type === BlockEnum.CollectionViewInline
+         this.type === BlockNames.CollectionViewPage ||
+         this.type === BlockNames.CollectionViewInline
       ) {
          return this.collection!.name![0][0];
-      } else if (this.type === BlockEnum.Page) {
+      } else if (this.type === BlockNames.Page) {
          let page = this.block as blockTypes.Page;
-         return page.properties[BlockPropertyEnum.Title][0];
+         return page.properties[BlockProps.Title][0];
       }
       console.log('Log: unkown block type: ' + this.type);
       return undefined;

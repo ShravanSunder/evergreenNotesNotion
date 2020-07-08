@@ -2,12 +2,13 @@ import { SemanticString, Permission } from '../../notionModels';
 import * as base from '../../notionBaseTypes';
 import { EmptyBlock } from './empty_block';
 import { Collection } from '../collection';
+import { BlockNames } from '../../BlockEnums';
 
 /**
  * Embedded Sub-Page block or Link To Page block.
  */
 export interface Page extends EmptyBlock {
-   type: 'page';
+   type: BlockNames.Page;
    /**
     * In a database, every record is a page. Properties set in a database
     * are stored here.
@@ -36,7 +37,7 @@ export interface Page extends EmptyBlock {
  * Text block. Editable, can have children.
  */
 export interface Text extends EmptyBlock {
-   type: 'text';
+   type: BlockNames.Text;
    properties?: {
       title?: SemanticString[];
    };
@@ -46,7 +47,7 @@ export interface Text extends EmptyBlock {
  * Bulleted List block. Editable, can have children.
  */
 export interface BulletedList extends EmptyBlock {
-   type: 'bulleted_list';
+   type: BlockNames.ButtetedList;
    properties?: {
       title?: SemanticString[];
    };
@@ -56,7 +57,7 @@ export interface BulletedList extends EmptyBlock {
  * Numbered List block. Editable, can have children.
  */
 export interface NumberedList extends EmptyBlock {
-   type: 'numbered_list';
+   type: BlockNames.NumberedList;
    properties?: {
       title?: SemanticString[];
    };
@@ -66,7 +67,7 @@ export interface NumberedList extends EmptyBlock {
  * To Do block. Editable, can have children.
  */
 export interface ToDo extends EmptyBlock {
-   type: 'to_do';
+   type: BlockNames.ToDo;
    properties?: {
       title?: SemanticString[];
       checked?: [['Yes' | 'No']];
@@ -77,7 +78,7 @@ export interface ToDo extends EmptyBlock {
  * Toggle block. Editable, can have children.
  */
 export interface Toggle extends EmptyBlock {
-   type: 'toggle';
+   type: BlockNames.Toggle;
    properties?: {
       title?: SemanticString[];
    };
@@ -86,8 +87,8 @@ export interface Toggle extends EmptyBlock {
 /**
  * Heading1 block. Editable, can't have children.
  */
-export interface Header extends EmptyBlock {
-   type: 'header';
+export interface Header1 extends EmptyBlock {
+   type: BlockNames.Header1;
    properties?: {
       title?: SemanticString[];
    };
@@ -96,8 +97,8 @@ export interface Header extends EmptyBlock {
 /**
  * Heading2 block. Editable, can't have children.
  */
-export interface SubHeader extends EmptyBlock {
-   type: 'sub_header';
+export interface Header2 extends EmptyBlock {
+   type: BlockNames.Header2;
    properties?: {
       title?: SemanticString[];
    };
@@ -106,8 +107,8 @@ export interface SubHeader extends EmptyBlock {
 /**
  * Heading3 block. Editable, can't have children.
  */
-export interface SubSubHeader extends EmptyBlock {
-   type: 'sub_sub_header';
+export interface Header3 extends EmptyBlock {
+   type: BlockNames.Header3;
    properties?: {
       title?: SemanticString[];
    };
@@ -117,7 +118,7 @@ export interface SubSubHeader extends EmptyBlock {
  * Quote block. Editable, can't have children.
  */
 export interface Quote extends EmptyBlock {
-   type: 'quote';
+   type: BlockNames.Quote;
    properties?: {
       title?: SemanticString[];
    };
@@ -127,7 +128,7 @@ export interface Quote extends EmptyBlock {
  * Callout block. Editable, can't have children.
  */
 export interface Callout extends EmptyBlock {
-   type: 'callout';
+   type: BlockNames.Callout;
    properties?: {
       title?: SemanticString[];
    };
@@ -143,7 +144,7 @@ export interface Callout extends EmptyBlock {
  * Children of this block must be {@link Column}.
  */
 export interface ColumnList extends EmptyBlock {
-   type: 'column_list';
+   type: BlockNames.ColumnList;
 }
 
 /**
@@ -152,14 +153,14 @@ export interface ColumnList extends EmptyBlock {
  * Parent of this block must be {@link ColumnList}.
  */
 export interface Column extends EmptyBlock {
-   type: 'column';
+   type: BlockNames.Column;
 }
 
 /**
  * Divider block. Not editable, can't have children.
  */
 export interface Divider extends EmptyBlock {
-   type: 'divider';
+   type: BlockNames.Divider;
 }
 
 export type BasicBlockUnion =
@@ -169,9 +170,9 @@ export type BasicBlockUnion =
    | NumberedList
    | ToDo
    | Toggle
-   | Header
-   | SubHeader
-   | SubSubHeader
+   | Header1
+   | Header2
+   | Header3
    | Quote
    | Callout
    | ColumnList
