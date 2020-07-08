@@ -10,8 +10,8 @@
 //    NavigationState,
 // } from 'aNotion/components/NotionSiteTypes';
 // import * as blockApi from 'aNotion/api/v3/blockApi';
-// import * as LoadPageChunk from 'aNotion/typing/notionApi_v3/PageTypes';
-// import { thunkStatus } from 'aNotion/typing/thunkStatus';
+// import * as LoadPageChunk from 'aNotion/types/notionV3/PageTypes';
+// import { thunkStatus } from 'aNotion/types/thunkStatus';
 // import { pageBlockFromChunk } from 'aNotion/services/blockService';
 
 // const logPath = 'notion/page/';

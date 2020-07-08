@@ -1,6 +1,6 @@
-import { PageChunk } from 'aNotion/typing/notionApi_v3/notionRecordTypes';
-import { thunkStatus as ThunkStatus } from 'aNotion/typing/thunkStatus';
-import { Page } from 'aNotion/typing/notionApi_v3/notionBlockTypes';
+import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
+import { thunkStatus as ThunkStatus } from 'aNotion/types/thunkStatus';
+import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
 
 export type CookieData = {
    userId: string;

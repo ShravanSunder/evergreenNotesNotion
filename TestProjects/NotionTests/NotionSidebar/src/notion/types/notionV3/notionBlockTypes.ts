@@ -1,22 +1,22 @@
-import { Collection } from './models/collection';
-import { CollectionView } from './models/collection_view';
-import { Space } from './models/space';
-import { SpaceView } from './models/space_view';
-import { Activity } from './models/activity';
+import { Collection } from './typings/collection';
+import { CollectionView } from './typings/collection_view';
+import { Space } from './typings/space';
+import { SpaceView } from './typings/space_view';
+import { Activity } from './typings/activity';
 // import { Follow } from "./follow"
 // import { SlackIntegration } from "./slack_integration"
-import { Permission } from './models/permission';
+import { Permission } from './typings/permission';
 // import { NotionUser } from "./notion_user"
 // import { UserRoot } from "./user_root"
 // import { UserSettings } from "./user_settings"
 
 ////////////////////////////////////////////////
 // All types of blocks.
-import * as AdvancedBlock from './models/block/advanced_block';
-import * as BasicBlock from './models/block/basic_block';
-import * as DatabaseBlock from './models/block/database';
-import * as EmbedBlock from './models/block/embed';
-import * as MediaBlock from './models/block/media';
+import * as AdvancedBlock from './typings/block/advanced_block';
+import * as BasicBlock from './typings/block/basic_block';
+import * as DatabaseBlock from './typings/block/database';
+import * as EmbedBlock from './typings/block/embed';
+import * as MediaBlock from './typings/block/media';
 
 export type Block =
    | AdvancedBlock.AdvancedBlockUnion
@@ -74,4 +74,4 @@ export type File = MediaBlock.File;
 export type Image = MediaBlock.Image;
 export type Video = MediaBlock.Video;
 
-export * from './models/semantic_string';
+export * from './typings/semantic_string';

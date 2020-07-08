@@ -7,7 +7,7 @@ import {
 import * as searchApi from 'aNotion/api/v3/searchApi';
 import { SearchResultsType, SearchSort } from 'aNotion/api/v3/SearchApiTypes';
 import { ReferenceState } from './referenceTypes';
-import { thunkStatus } from 'aNotion/typing/thunkStatus';
+import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { createUnlinkedReferences } from 'aNotion/services/referenceService';
 
 const logPath = 'notion/page/';

@@ -1,5 +1,5 @@
 import { SearchResultsType } from 'aNotion/api/v3/SearchApiTypes';
-import { thunkStatus } from 'aNotion/typing/thunkStatus';
+import { thunkStatus } from 'aNotion/types/thunkStatus';
 
 type UnlinkedRefs = {};
 
