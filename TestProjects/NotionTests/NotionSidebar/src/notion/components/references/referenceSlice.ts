@@ -5,24 +5,22 @@ import {
    PayloadAction,
 } from '@reduxjs/toolkit';
 import * as searchApi from 'aNotion/api/v3/searchApi';
-import { SearchResultsType, SearchSort } from 'aNotion/api/v3/SearchApiTypes';
+import {
+   SearchResultsType,
+   SearchSort,
+   FetchTitleRefsParams,
+} from 'aNotion/api/v3/SearchApiTypes';
 import { ReferenceState } from './referenceTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { createUnlinkedReferences } from 'aNotion/services/referenceService';
 
-const logPath = 'notion/page/';
+const logPath = 'notion/reference/';
 
 const initialState: ReferenceState = {
    unlinkedRefs: {},
    searchResults: { status: thunkStatus.pending },
 };
 
-type FetchTitleRefsParams = {
-   query: string;
-   pageTitlesOnly: boolean;
-   limit: number;
-   sort: SearchSort;
-};
 const fetchTitleRefs = createAsyncThunk(
    logPath + 'current',
    async ({ query, limit, sort }: FetchTitleRefsParams, thunkApi) => {
@@ -44,14 +42,24 @@ const processTitleRefs = createAsyncThunk(
    async ({ searchData: refs }: ProcessTitleRefsParams) => {
       createUnlinkedReferences(refs);
       //return result;
-      return 1;
+      return '';
    }
 );
+
+const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
+   state,
+   action
+) => {
+   state.searchResults.results = undefined;
+   state.searchResults.status = thunkStatus.pending;
+};
 
 const referenceSlice = createSlice({
    name: 'locations',
    initialState: initialState,
-   reducers: {},
+   reducers: {
+      unloadReferences: unloadReferences,
+   },
    extraReducers: {
       [fetchTitleRefs.fulfilled.toString()]: (
          state,
@@ -59,6 +67,7 @@ const referenceSlice = createSlice({
       ) => {
          state.searchResults.results = action.payload;
          state.searchResults.status = thunkStatus.fulfilled;
+         console.log(action.payload);
       },
       [fetchTitleRefs.pending.toString()]: (
          state,

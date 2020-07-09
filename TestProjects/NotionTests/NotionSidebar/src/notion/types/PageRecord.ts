@@ -10,6 +10,7 @@ export interface PageRecordModel {
    recordMapData: RecordMap;
    type: BlockNames;
    name: string;
+   blockId: string;
 }
 
 export class PageRecord implements PageRecordModel {
@@ -19,11 +20,13 @@ export class PageRecord implements PageRecordModel {
    recordMapData: RecordMap;
    type: BlockNames;
    name: string = '';
+   blockId: string = '';
 
    constructor(data: RecordMap, blockId: string) {
       this.recordMapData = data;
       this.block = data.block[blockId].value!;
       this.type = this.block.type;
+      this.blockId = blockId;
 
       if (this.block.type === BlockNames.CollectionViewPage) {
          let cId = this.block.collection_id;
@@ -49,7 +52,7 @@ export class PageRecord implements PageRecordModel {
          return this.collection!.name![0][0];
       } else if (this.type === BlockNames.Page) {
          let page = this.block as blockTypes.Page;
-         return page.properties[BlockProps.Title][0];
+         return page.properties[BlockProps.Title][0][0];
       }
       console.log('Log: unkown block type: ' + this.type);
       return undefined;
@@ -64,6 +67,7 @@ export class PageRecord implements PageRecordModel {
          recordMapData: this.recordMapData,
          type: this.type,
          name: this.name,
+         blockId: this.blockId,
       };
       return model;
    };

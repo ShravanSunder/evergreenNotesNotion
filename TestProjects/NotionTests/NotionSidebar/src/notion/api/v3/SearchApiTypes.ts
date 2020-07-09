@@ -5,7 +5,7 @@ export enum Type {
 }
 
 export enum SearchSort {
-   relevance = 'Relevance',
+   Relevance = 'Relevance',
    LastEditedOldest = 'LastEditedOldest',
    LastEditedNewest = 'LastEditedNewest',
    CreatedNewest = 'CreatedNewest',
@@ -39,3 +39,10 @@ export interface SearchResultsType {
    results: SearchResultType[];
    total: number;
 }
+
+export type FetchTitleRefsParams = {
+   query: string;
+   pageTitlesOnly: boolean;
+   limit: number;
+   sort: SearchSort;
+};

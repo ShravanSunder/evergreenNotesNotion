@@ -7,6 +7,7 @@ var webpack = require('webpack'),
    CopyWebpackPlugin = require('copy-webpack-plugin'),
    HtmlWebpackPlugin = require('html-webpack-plugin'),
    WriteFilePlugin = require('write-file-webpack-plugin');
+const ReactDevToolsIFramePlugin = require('react-dev-tools-iframe-webpack-plugin');
 var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 // load the secrets
@@ -133,6 +134,7 @@ var options = {
    },
    plugins: [
       // new HardSourceWebpackPlugin(),
+      //new ReactDevToolsIFramePlugin(),
       new webpack.ProgressPlugin(),
       // clean the build folder
       new CleanWebpackPlugin({

@@ -14,7 +14,7 @@ export const searchForTitle = async (
    query: string,
    pageTitlesOnly: boolean = true,
    limit: number = 10,
-   sort: SearchSort = SearchSort.relevance
+   sort: SearchSort = SearchSort.Relevance
 ): Promise<SearchResultsType> => {
    let userData = getAppState(cookieSelector).data as CookieData;
    let filters = defaultFilters();
@@ -39,7 +39,7 @@ const createParam = (
       spaceId: userData.spaceId,
       limit,
       filters,
-      sort: SearchSort.relevance,
+      sort: SearchSort.Relevance,
    };
    return q;
 };
