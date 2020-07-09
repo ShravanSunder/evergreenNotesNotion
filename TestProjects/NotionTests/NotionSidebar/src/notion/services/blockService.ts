@@ -14,7 +14,7 @@ export const getPageRecordFromChunk = (
    page: PageChunk,
    pageId: string
 ): PageRecordModel => {
-   let m = new PageRecord(page.recordMap, pageId).toModel();
+   let m = new PageRecord(page.recordMap, pageId).toSerializable();
    return m;
 };
 

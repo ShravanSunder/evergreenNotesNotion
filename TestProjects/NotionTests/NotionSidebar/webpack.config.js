@@ -66,8 +66,32 @@ var options = {
    module: {
       rules: [
          {
+            test: /latin-[0-9]*\.css$/,
+            use: [
+               {
+                  loader: 'css-loader',
+                  options: {
+                     modules: true,
+                  },
+               },
+            ],
+         },
+         {
+            test: /roboto-latin-[0-9]*-[a-z]*\.woff(2)?$/,
+            use: [
+               {
+                  loader: 'url-loader',
+                  options: {
+                     limit: 10000,
+                     name: './font/[hash].[ext]',
+                     mimetype: 'application/font-woff',
+                  },
+               },
+            ],
+         },
+         {
             test: /\.css$/,
-            loader: 'style-loader!css-loader',
+            use: ['style-loader', 'css-loader'],
             exclude: /node_modules/,
          },
          {

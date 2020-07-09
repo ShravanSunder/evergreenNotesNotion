@@ -55,8 +55,16 @@ export class PageRecord implements PageRecordModel {
       return undefined;
    };
 
-   toModel = (): PageRecordModel => {
+   toSerializable = (): PageRecordModel => {
       this.name = this.getName() ?? '';
-      return this as PageRecordModel;
+      let model: PageRecordModel = {
+         block: this.block,
+         collection: this.collection,
+         collection_views: this.collection_views,
+         recordMapData: this.recordMapData,
+         type: this.type,
+         name: this.name,
+      };
+      return model;
    };
 }
