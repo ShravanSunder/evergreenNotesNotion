@@ -9,6 +9,8 @@ import { registerListener as registerCookiesListener } from './appListeners';
 import 'chrome-extension-async';
 import { registerTabUpdateListener } from 'aNotion/services/notionListeners';
 import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 
 console.log('App loading...');
 
@@ -20,7 +22,9 @@ export const App = () => {
 
    return (
       <Provider store={reduxStore}>
-         <Layout />
+         <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Layout />
+         </ErrorBoundary>
       </Provider>
    );
 };
