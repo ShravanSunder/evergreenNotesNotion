@@ -3,12 +3,9 @@ import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { Button, Dialog } from '@material-ui/core';
 import {
-   cookieSelector,
-   navigationSelector,
    currentRecordSelector,
+   referenceSelector,
 } from 'aNotion/providers/rootReducer';
-import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
-import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { referenceActions } from './referenceSlice';
 import {
    FetchTitleRefsParams,
@@ -20,6 +17,7 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 export const UnlinkedReferences = ({ status, data }: any) => {
    let dispatch = useDispatch();
    const record = useSelector(currentRecordSelector, shallowEqual);
+   const unlinkedReferences = useSelector(referenceSelector, shallowEqual);
 
    useEffect(() => {
       if (record.status === thunkStatus.fulfilled && record.pageRecord?.name) {
@@ -31,7 +29,10 @@ export const UnlinkedReferences = ({ status, data }: any) => {
          };
          dispatch(referenceActions.fetchTitleRefs(p));
       }
-   }, [record.status]);
+   }, [record.status, dispatch, record.pageRecord]);
+   useEffect(() => {
+      console.log(unlinkedReferences.results);
+   }, [unlinkedReferences.status, dispatch, unlinkedReferences.results]);
 
    const handleClick = (e: MouseEvent) => {
       //searchApi.searchForTitle();

@@ -13,12 +13,12 @@ import {
 import { ReferenceState } from './referenceTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { createUnlinkedReferences } from 'aNotion/services/referenceService';
+import { SearchRecordModel } from 'aNotion/types/SearchRecord';
 
 const logPath = 'notion/reference/';
 
 const initialState: ReferenceState = {
-   unlinkedRefs: {},
-   searchResults: { status: thunkStatus.pending },
+   unlinkedReferences: { status: thunkStatus.pending },
 };
 
 const fetchTitleRefs = createAsyncThunk(
@@ -31,27 +31,27 @@ const fetchTitleRefs = createAsyncThunk(
          sort
       )) as SearchResultsType;
 
-      thunkApi.dispatch(processTitleRefs({ searchData: result }));
-      return result;
+      //thunkApi.dispatch(processTitleRefs({ searchData: result }));
+
+      return createUnlinkedReferences(result);
    }
 );
 
-type ProcessTitleRefsParams = { searchData: SearchResultsType };
-const processTitleRefs = createAsyncThunk(
-   logPath + 'current',
-   async ({ searchData: refs }: ProcessTitleRefsParams) => {
-      createUnlinkedReferences(refs);
-      //return result;
-      return '';
-   }
-);
+// type ProcessTitleRefsParams = { searchData: SearchResultsType };
+// const processTitleRefs = createAsyncThunk(
+//    logPath + 'current',
+//    async ({ searchData: refs }: ProcessTitleRefsParams) => {
+//       let results = createUnlinkedReferences(refs);
+//       return results;
+//    }
+// );
 
 const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
    state,
    action
 ) => {
-   state.searchResults.results = undefined;
-   state.searchResults.status = thunkStatus.pending;
+   state.unlinkedReferences.results = undefined;
+   state.unlinkedReferences.status = thunkStatus.pending;
 };
 
 const referenceSlice = createSlice({
@@ -63,24 +63,24 @@ const referenceSlice = createSlice({
    extraReducers: {
       [fetchTitleRefs.fulfilled.toString()]: (
          state,
-         action: PayloadAction<SearchResultsType>
+         action: PayloadAction<SearchRecordModel>
       ) => {
-         state.searchResults.results = action.payload;
-         state.searchResults.status = thunkStatus.fulfilled;
+         state.unlinkedReferences.results = action.payload;
+         state.unlinkedReferences.status = thunkStatus.fulfilled;
          console.log(action.payload);
       },
       [fetchTitleRefs.pending.toString()]: (
          state,
-         action: PayloadAction<SearchResultsType>
+         action: PayloadAction<SearchRecordModel>
       ) => {
-         state.searchResults.status = thunkStatus.pending;
-         state.searchResults.results = undefined;
+         state.unlinkedReferences.status = thunkStatus.pending;
+         state.unlinkedReferences.results = undefined;
       },
       [fetchTitleRefs.rejected.toString()]: (
          state,
-         action: PayloadAction<SearchResultsType>
+         action: PayloadAction<SearchRecordModel>
       ) => {
-         state.searchResults.status = thunkStatus.rejected;
+         state.unlinkedReferences.status = thunkStatus.rejected;
       },
    },
 });
@@ -88,6 +88,6 @@ const referenceSlice = createSlice({
 export const referenceActions = {
    ...referenceSlice.actions,
    fetchTitleRefs,
-   processTitleRefs,
+   //processTitleRefs,
 };
 export const referenceReducers = referenceSlice.reducer;

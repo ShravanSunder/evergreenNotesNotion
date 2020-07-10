@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
@@ -23,14 +23,16 @@ export const Layout = () => {
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
 
-   useEffect(() => {
-      if (cookie.status !== thunkStatus.fulfilled) updateCurrentPageId();
-   }, [cookie.status]);
-
-   const updateCurrentPageId = async () => {
+   const updateCurrentPageId = useCallback(async () => {
       let url = await getCurrentUrl();
       dispatch(notionSiteActions.currentPage(url));
-   };
+   }, [dispatch]);
+
+   useEffect(() => {
+      if (cookie.status !== thunkStatus.fulfilled) {
+         updateCurrentPageId();
+      }
+   }, [cookie.status, updateCurrentPageId]);
 
    useEffect(() => {
       if (
@@ -45,7 +47,7 @@ export const Layout = () => {
          );
          dispatch(referenceActions.unloadReferences());
       }
-   }, [navigation.pageId, cookie.status]);
+   }, [navigation.pageId, cookie.status, dispatch]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
