@@ -12,8 +12,9 @@ export const LoadSidebarFrame = () => {
    let url = chrome.extension.getURL('sidebar.html');
 
    return (
-      <div>
-         <iframe title="Notion Sidebar Extension" src={url}></iframe>
-      </div>
+      <iframe
+         style={{ flexGrow: 1 }}
+         title="Notion Sidebar Extension"
+         src={url}></iframe>
    );
 };

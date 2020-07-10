@@ -9,7 +9,7 @@ export interface PageRecordModel {
    collection_views?: blockTypes.CollectionView[] | undefined;
    recordMapData: RecordMap;
    type: BlockNames;
-   name: string;
+   name?: string;
    blockId: string;
 }
 
@@ -44,7 +44,7 @@ export class PageRecord implements PageRecordModel {
       }
    }
 
-   getName = (): string | undefined => {
+   getName = (): string => {
       if (
          this.type === BlockNames.CollectionViewPage ||
          this.type === BlockNames.CollectionViewInline
@@ -55,7 +55,7 @@ export class PageRecord implements PageRecordModel {
          return page.properties[BlockProps.Title][0][0];
       }
       console.log('Log: unkown block type: ' + this.type);
-      return undefined;
+      return '';
    };
 
    toSerializable = (): PageRecordModel => {

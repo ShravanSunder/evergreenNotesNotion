@@ -12,7 +12,10 @@ import {
 } from 'aNotion/api/v3/SearchApiTypes';
 import { ReferenceState } from './referenceTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { createUnlinkedReferences } from 'aNotion/services/referenceService';
+import {
+   createUnlinkedReferences,
+   UnlinkedReferences,
+} from 'aNotion/services/referenceService';
 import { SearchRecordModel } from 'aNotion/types/SearchRecord';
 
 const logPath = 'notion/reference/';
@@ -63,7 +66,7 @@ const referenceSlice = createSlice({
    extraReducers: {
       [fetchTitleRefs.fulfilled.toString()]: (
          state,
-         action: PayloadAction<SearchRecordModel>
+         action: PayloadAction<UnlinkedReferences>
       ) => {
          state.unlinkedReferences.results = action.payload;
          state.unlinkedReferences.status = thunkStatus.fulfilled;
@@ -71,14 +74,14 @@ const referenceSlice = createSlice({
       },
       [fetchTitleRefs.pending.toString()]: (
          state,
-         action: PayloadAction<SearchRecordModel>
+         action: PayloadAction<UnlinkedReferences>
       ) => {
          state.unlinkedReferences.status = thunkStatus.pending;
          state.unlinkedReferences.results = undefined;
       },
       [fetchTitleRefs.rejected.toString()]: (
          state,
-         action: PayloadAction<SearchRecordModel>
+         action: PayloadAction<UnlinkedReferences>
       ) => {
          state.unlinkedReferences.status = thunkStatus.rejected;
       },

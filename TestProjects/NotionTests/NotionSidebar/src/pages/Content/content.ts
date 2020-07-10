@@ -47,7 +47,7 @@ const initalize = (tabId: number) => {
          createNewRootElement(notionApp);
       }
 
-      reduceNotionContentPadding(notionApp);
+      //reduceNotionContentPadding(notionApp);
       adjustSidebarWidth(notionApp);
    }
 

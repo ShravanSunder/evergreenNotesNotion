@@ -1,12 +1,13 @@
 import { SearchResultsType } from 'aNotion/api/v3/SearchApiTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { SearchRecordModel } from 'aNotion/types/SearchRecord';
+import { UnlinkedReferences } from 'aNotion/services/referenceService';
 
-type UnlinkedReferences = {
+type UnlinedReferenceState = {
    status: thunkStatus;
-   results?: SearchRecordModel;
+   results?: UnlinkedReferences;
 };
 
 export type ReferenceState = {
-   unlinkedReferences: UnlinkedReferences;
+   unlinkedReferences: UnlinedReferenceState;
 };

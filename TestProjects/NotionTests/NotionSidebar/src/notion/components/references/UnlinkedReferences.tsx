@@ -39,8 +39,11 @@ export const UnlinkedReferences = ({ status, data }: any) => {
    };
 
    return (
-      <div style={{ width: 100, height: 100 }}>
-         <div>{record.pageRecord?.name ?? 'loading...'}</div>
+      <div style={{ width: 250, height: 1000 }}>
+         {unlinkedReferences.status === thunkStatus.fulfilled &&
+            unlinkedReferences.results!.references.map((u) => {
+               return <div key={u.id}>{u.highlight.text}</div>;
+            })}
       </div>
    );
 };
