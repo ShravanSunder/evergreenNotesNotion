@@ -15,12 +15,17 @@ export interface SearchRecordModel {
    };
    blockRecord: PageRecordModel;
 }
+type HighlightType = {
+   pathText: string;
+   text: string;
+   pureText?: string;
+};
 
 export class SearchRecord implements SearchRecordModel {
    id: string;
    isNavigable: boolean;
    score: number;
-   highlight: { pathText: string; text: string };
+   highlight: HighlightType;
    blockRecord: PageRecord;
 
    constructor(data: RecordMap, searchResult: SearchResultType) {
@@ -29,6 +34,12 @@ export class SearchRecord implements SearchRecordModel {
       this.highlight = searchResult.highlight;
       this.score = searchResult.score;
       this.blockRecord = new PageRecord(data, this.id);
+   }
+
+   cleanHighlight(highlight: HighlightType) {
+      highlight.pureText = highlight.text.replace('<gzkNfoUU>', '');
+      highlight.pureText = highlight.text.replace('</gzkNfoUU>', '');
+      highlight.text = highlight.text.replace('gzkNfoUU', 'b');
    }
 
    toSerializable = (): SearchRecordModel => {

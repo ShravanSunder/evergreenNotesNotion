@@ -37,7 +37,7 @@ export const extractNavigationData = (
    url: string | undefined
 ): NavigationState => {
    let result: NavigationState = {};
-   if (url === undefined || url == null) {
+   if (url == null) {
       console.log("error: can't get page");
    } else if (isNotionUrl(url)) {
       let data = queryString.parseUrl(url, { parseFragmentIdentifier: true });

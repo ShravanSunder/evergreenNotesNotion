@@ -12,10 +12,11 @@ import {
    SearchSort,
 } from 'aNotion/api/v3/SearchApiTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
+import { AppThunkDispatch } from 'aNotion/providers/reduxStore';
 
 // comment
 export const UnlinkedReferences = ({ status, data }: any) => {
-   let dispatch = useDispatch();
+   const dispatch: AppThunkDispatch<Promise<any>> = useDispatch();
    const record = useSelector(currentRecordSelector, shallowEqual);
    const unlinkedReferences = useSelector(referenceSelector, shallowEqual);
 
@@ -23,12 +24,18 @@ export const UnlinkedReferences = ({ status, data }: any) => {
       if (record.status === thunkStatus.fulfilled && record.pageRecord?.name) {
          let p: FetchTitleRefsParams = {
             query: record.pageRecord?.name,
-            pageTitlesOnly: true,
-            limit: 10,
+            pageTitlesOnly: false,
+            limit: 50,
             sort: SearchSort.Relevance,
          };
-         dispatch(referenceActions.fetchTitleRefs(p));
+         const pr = dispatch(referenceActions.fetchTitleRefs(p));
+
+         return () => {
+            console.log('abort');
+            pr.abort();
+         };
       }
+      return () => {};
    }, [record.status, dispatch, record.pageRecord]);
    useEffect(() => {
       console.log(unlinkedReferences.results);
@@ -42,6 +49,7 @@ export const UnlinkedReferences = ({ status, data }: any) => {
       <div style={{ width: 250, height: 1000 }}>
          {unlinkedReferences.status === thunkStatus.fulfilled &&
             unlinkedReferences.results!.references.map((u) => {
+               console.log(u);
                return <div key={u.id}>{u.highlight.text}</div>;
             })}
       </div>

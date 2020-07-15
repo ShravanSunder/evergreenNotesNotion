@@ -26,15 +26,17 @@ const initialState: ReferenceState = {
 
 const fetchTitleRefs = createAsyncThunk(
    logPath + 'current',
-   async ({ query, limit, sort }: FetchTitleRefsParams, thunkApi) => {
-      let result = (await searchApi.searchForTitle(
+   async (
+      { query, limit, pageTitlesOnly, sort }: FetchTitleRefsParams,
+      thunkApi
+   ) => {
+      let result = await searchApi.searchByRelevance(
          query,
-         true,
+         pageTitlesOnly,
          limit,
-         sort
-      )) as SearchResultsType;
-
-      //thunkApi.dispatch(processTitleRefs({ searchData: result }));
+         sort,
+         thunkApi.signal
+      );
 
       return createUnlinkedReferences(result);
    }
@@ -84,6 +86,7 @@ const referenceSlice = createSlice({
          action: PayloadAction<UnlinkedReferences>
       ) => {
          state.unlinkedReferences.status = thunkStatus.rejected;
+         state.unlinkedReferences.results = undefined;
       },
    },
 });

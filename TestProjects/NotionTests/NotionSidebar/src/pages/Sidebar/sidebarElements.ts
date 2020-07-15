@@ -54,13 +54,13 @@ export function adjustSidebarWidth(notionApp: HTMLElement) {
       let newAppWidth = newFrameWidth + nNavWidth + 10;
 
       //Todo add a obeserver: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
-      notionFrame.style.maxWidth = `${newFrameWidth}px`;
+      //notionFrame.style.maxWidth = `${newFrameWidth}px`;
       // notionContentScroller.style.maxWidth = `${newFrameWidth}px`;
       // [...notionInnerAppCollection].forEach((element) => {
       //    let e = element as HTMLElement;
       //    e.style.maxWidth = `${newAppWidth}px`;
       // });
-      //notionApp.style.maxWidth = `${newAppWidth}px`;
+      notionApp.style.maxWidth = `${newAppWidth}px`;
 
       sidebarRoot.style.width = `${sidebarWidth}px`;
       sidebarRoot.style.maxWidth = `${sidebarWidth}px`;

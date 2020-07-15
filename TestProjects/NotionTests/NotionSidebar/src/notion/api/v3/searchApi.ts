@@ -10,20 +10,29 @@ import {
    SearchResultsType,
 } from './SearchApiTypes';
 
-export const searchForTitle = async (
+export const searchByRelevance = async (
    query: string,
    pageTitlesOnly: boolean = true,
    limit: number = 10,
-   sort: SearchSort = SearchSort.Relevance
+   sort: SearchSort = SearchSort.Relevance,
+   abort: AbortSignal
 ): Promise<SearchResultsType> => {
    let userData = getAppState(cookieSelector).data as CookieData;
    let filters = defaultFilters();
    filters.isNavigableOnly = pageTitlesOnly;
 
-   let response = await superagent
+   let req = superagent
       .post('https://www.notion.so/api/v3/search')
       .send(createParam(userData, query, filters, sort, limit));
-   return response.body;
+
+   req.on('progress', () => {
+      if (abort.aborted) {
+         req.abort();
+         console.log('abort');
+      }
+   });
+
+   return (await req).body;
 };
 
 const createParam = (

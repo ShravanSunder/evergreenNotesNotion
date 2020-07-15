@@ -21,9 +21,16 @@ export const createUnlinkedReferences = (
    let references: SearchRecordModel[] = [];
 
    for (let s of searchData.results) {
-      references.push(
-         new SearchRecord(searchData.recordMap, s).toSerializable()
-      );
+      try {
+         if (s.score > 10 && s.highlight != null) {
+            references.push(
+               new SearchRecord(searchData.recordMap, s).toSerializable()
+            );
+         }
+      } catch (err) {
+         console.log(s);
+         console.log(err);
+      }
    }
    // let recordArray: PageRecord[] = [];
 
