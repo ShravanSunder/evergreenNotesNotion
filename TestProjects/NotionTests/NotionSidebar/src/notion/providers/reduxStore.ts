@@ -37,7 +37,7 @@ export const reduxStore = configureStore({
 export default reduxStore;
 //export type AppDispatch = typeof reduxStore.dispatch;
 export const appDispatch = reduxStore.dispatch;
-//export const useAppDispatch = () => useDispatch<AppDispatch>();
+// //export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export type AppThunkDispatch<T> = ThunkDispatch<T, any, AnyAction>;
 export type AppPromiseDispatch<T> = AppThunkDispatch<Promise<T>>;

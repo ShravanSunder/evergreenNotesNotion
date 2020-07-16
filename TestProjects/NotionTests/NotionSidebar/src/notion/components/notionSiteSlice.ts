@@ -31,7 +31,8 @@ const fetchCurrentPage = createAsyncThunk(
    async ({ pageId, limit }: fetchCurrentPageRequest, thunkApi) => {
       let chunk = (await blockApi.loadPageChunk(
          pageId,
-         limit
+         limit,
+         thunkApi.signal
       )) as LoadPageChunk.PageChunk;
 
       thunkApi.dispatch(

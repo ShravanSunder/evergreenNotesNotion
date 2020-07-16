@@ -1,6 +1,5 @@
-import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import { CookieData } from 'aNotion/components/NotionSiteTypes';
-import { appDispatch, getAppState } from 'aNotion/providers/reduxStore';
+import { getAppState } from 'aNotion/providers/reduxStore';
 import { cookieSelector } from 'aNotion/providers/rootReducer';
 import superagent from 'superagent';
 import {
@@ -9,6 +8,7 @@ import {
    SearchSort,
    SearchResultsType,
 } from './SearchApiTypes';
+import { addAbortSignal } from 'aUtilities/restApi';
 
 export const searchByRelevance = async (
    query: string,
@@ -25,12 +25,7 @@ export const searchByRelevance = async (
       .post('https://www.notion.so/api/v3/search')
       .send(createParam(userData, query, filters, sort, limit));
 
-   req.on('progress', () => {
-      if (abort.aborted) {
-         req.abort();
-         console.log('abort');
-      }
-   });
+   addAbortSignal(req, abort);
 
    return (await req).body;
 };

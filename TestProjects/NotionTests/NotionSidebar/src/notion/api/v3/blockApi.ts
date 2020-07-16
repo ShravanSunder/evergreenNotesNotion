@@ -1,12 +1,13 @@
 import superagent from 'superagent';
 import * as LoadPageChunk from 'aNotion/types/notionV3/notionRecordTypes';
-//import { LoadPageChunk } from 'typings/notion-api/v3/loadPageChunk';
+import { addAbortSignal } from 'aUtilities/restApi';
 
 export const loadPageChunk = async (
    pageId: string,
-   limit: number = 1
+   limit: number = 1,
+   abort: AbortSignal
 ): Promise<LoadPageChunk.PageChunk> => {
-   let response = await superagent
+   let req = superagent
       .post('https://www.notion.so/api/v3/loadPageChunk')
       .send({
          pageId: pageId,
@@ -14,13 +15,8 @@ export const loadPageChunk = async (
          chunkNumber: 0,
          verticalColumns: false,
       });
-   console.log(response.body);
-   return response.body;
-};
 
-// {
-//    "pageId": "ae094404-f2c3-4274-8ffe-9cf93b0bfcea",
-//    "limit": 1,
-//    "chunkNumber": 100,
-//    "verticalColumns": true
-// }
+   addAbortSignal(req, abort);
+
+   return (await req).body;
+};

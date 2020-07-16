@@ -8,8 +8,6 @@ import { toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
 
 export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
-   console.log(cookies);
-
    let spaceId = cleanValue(
       cookies.find((f) => f.name === 'ajs_group_id')?.value as string
    );
@@ -50,7 +48,7 @@ export const extractNavigationData = (
          result.backgroundId = undefined;
       }
    } else {
-      console.log('not notion page');
+      console.log('error: not notion page');
    }
    return result;
 };

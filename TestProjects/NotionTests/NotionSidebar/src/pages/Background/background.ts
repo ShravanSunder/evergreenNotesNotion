@@ -48,7 +48,6 @@ chrome.browserAction.onClicked.addListener(async function (tab) {
 
 const fetchCookies = async (tabId: number) => {
    let cookies = await chrome.cookies.getAll({ domain: notionDomain });
-   console.log('got cookies' + cookies);
    let req = {
       command: commands.receivedCookies,
       payload: cookies,

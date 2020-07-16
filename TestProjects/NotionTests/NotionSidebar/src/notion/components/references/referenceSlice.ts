@@ -30,6 +30,7 @@ const fetchTitleRefs = createAsyncThunk(
       { query, limit, pageTitlesOnly, sort }: FetchTitleRefsParams,
       thunkApi
    ) => {
+      await thunkApi.dispatch(referenceActions.unloadReferences());
       let result = await searchApi.searchByRelevance(
          query,
          pageTitlesOnly,
@@ -41,15 +42,6 @@ const fetchTitleRefs = createAsyncThunk(
       return createUnlinkedReferences(result);
    }
 );
-
-// type ProcessTitleRefsParams = { searchData: SearchResultsType };
-// const processTitleRefs = createAsyncThunk(
-//    logPath + 'current',
-//    async ({ searchData: refs }: ProcessTitleRefsParams) => {
-//       let results = createUnlinkedReferences(refs);
-//       return results;
-//    }
-// );
 
 const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
    state,
@@ -72,7 +64,6 @@ const referenceSlice = createSlice({
       ) => {
          state.unlinkedReferences.results = action.payload;
          state.unlinkedReferences.status = thunkStatus.fulfilled;
-         console.log(action.payload);
       },
       [fetchTitleRefs.pending.toString()]: (
          state,

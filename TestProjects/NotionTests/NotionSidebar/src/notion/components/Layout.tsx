@@ -17,9 +17,10 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { notionSiteActions } from './notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { referenceActions } from './references/referenceSlice';
+import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 
 export const Layout = () => {
-   let dispatch = useDispatch();
+   const dispatch: AppPromiseDispatch<any> = useDispatch();
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
 
@@ -35,19 +36,20 @@ export const Layout = () => {
    }, [cookie.status, updateCurrentPageId]);
 
    useEffect(() => {
-      if (
-         navigation.pageId !== undefined &&
-         cookie.status === thunkStatus.fulfilled
-      ) {
-         dispatch(
+      if (navigation.pageId != null) {
+         let promise = dispatch(
             notionSiteActions.fetchCurrentPage({
                pageId: navigation.pageId,
                limit: 1,
             })
          );
-         dispatch(referenceActions.unloadReferences());
+
+         return () => {
+            promise.abort();
+         };
       }
-   }, [navigation.pageId, cookie.status, dispatch]);
+      return () => {};
+   }, [navigation.pageId, dispatch]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>

@@ -70,7 +70,8 @@
       "paths": {
          "aApp/*": ["src/pages/app/*"],
          "aCommon/*": ["src/pages/common/*"],
-         "aNotion/*": ["src/notion/*"]
+         "aNotion/*": ["src/notion/*"],
+         "aUtilities/*": ["src/utilities/*"]
       }
    },
    "exclude": ["node_modules", "dist", "build"]
