@@ -1,5 +1,4 @@
-import { RecordMap, Record, BlockRecord } from './notionV3/notionRecordTypes';
-import { Map } from './notionV3/Map';
+import { RecordMap } from './notionV3/notionRecordTypes';
 import * as blockTypes from './notionV3/notionBlockTypes';
 import { BlockNames, BlockProps } from './notionV3/BlockEnums';
 
@@ -19,7 +18,7 @@ export class PageRecord implements PageRecordModel {
    collection_views?: blockTypes.CollectionView[] | undefined = [];
    recordMapData: RecordMap;
    type: BlockNames;
-   name: string = '';
+   name: string | undefined;
    blockId: string = '';
 
    constructor(data: RecordMap, blockId: string) {
@@ -46,22 +45,24 @@ export class PageRecord implements PageRecordModel {
       }
    }
 
-   getName = (): string => {
-      if (
-         this.type === BlockNames.CollectionViewPage ||
-         this.type === BlockNames.CollectionViewInline
-      ) {
-         return this.collection!.name![0][0];
-      } else if (this.type === BlockNames.Page) {
-         let page = this.block as blockTypes.Page;
-         return page.properties[BlockProps.Title][0][0];
-      }
+   getName = (): string | undefined => {
+      try {
+         if (
+            this.type === BlockNames.CollectionViewPage ||
+            this.type === BlockNames.CollectionViewInline
+         ) {
+            return this.collection!.name![0][0];
+         } else if (this.type === BlockNames.Page) {
+            let page = this.block as blockTypes.Page;
+            return page.properties[BlockProps.Title][0][0];
+         }
+      } catch {}
       console.log('Log: unkown block type: ' + this.type);
-      return '';
+      return undefined;
    };
 
    toSerializable = (): PageRecordModel => {
-      this.name = this.getName() ?? '';
+      this.name = this.getName();
       let model: PageRecordModel = {
          block: this.block,
          collection: this.collection,

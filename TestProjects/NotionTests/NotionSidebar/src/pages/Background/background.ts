@@ -2,13 +2,11 @@ import '../../assets/img/icon-34.png';
 import '../../assets/img/icon-128.png';
 import 'chrome-extension-async';
 import { commands } from 'aCommon/commands';
-import { Tab } from '@material-ui/core';
 import { payloadRequest } from 'aCommon/commands';
 import {
    contentCommands,
    contentCommandRequest,
 } from '../Content/contentMessaging';
-import { emptyResponse } from 'aCommon/extensionHelpers';
 
 console.log('Loaded background page.');
 
@@ -26,7 +24,7 @@ const isNotionTab = (tab: chrome.tabs.Tab) => {
    return false;
 };
 
-chrome.runtime.onMessage.addListener(async function (request, sendResponse) {
+chrome.runtime.onMessage.addListener(async function (request) {
    switch (request.command) {
       case commands.fetchCookies:
          await fetchCookies(request.tabId);

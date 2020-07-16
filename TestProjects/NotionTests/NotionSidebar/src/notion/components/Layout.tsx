@@ -3,7 +3,6 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
    navigationSelector,
-   currentRecordSelector,
 } from 'aNotion/providers/rootReducer';
 import { UnlinkedReferences } from './references/UnlinkedReferences';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
@@ -16,7 +15,6 @@ import 'fontsource-roboto/latin-700.css';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { notionSiteActions } from './notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
-import { referenceActions } from './references/referenceSlice';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 
 export const Layout = () => {
@@ -49,7 +47,7 @@ export const Layout = () => {
          };
       }
       return () => {};
-   }, [navigation.pageId, dispatch]);
+   }, [navigation.pageId, navigation.url, dispatch]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>

@@ -1,12 +1,10 @@
 import {
    configureStore,
    getDefaultMiddleware,
-   StoreEnhancer,
    ThunkDispatch,
    AnyAction,
 } from '@reduxjs/toolkit';
 import { logger } from 'redux-logger';
-import { useDispatch } from 'react-redux';
 import { RootState, rootReducer } from './rootReducer';
 import { composeWithDevTools } from 'remote-redux-devtools';
 
@@ -18,10 +16,6 @@ const composeEnhancers = composeWithDevTools({
    realtime: true,
    shouldHotReload: true,
 });
-
-const preloadedState = {
-   // data: [],
-} as RootState;
 
 const middleware = getDefaultMiddleware().concat(logger);
 

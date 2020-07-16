@@ -8,7 +8,6 @@ import {
    CookieData,
    SiteState,
    NavigationState,
-   PageRecordState,
 } from 'aNotion/components/NotionSiteTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
@@ -16,8 +15,6 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { getPageRecordFromChunk } from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
 import { PageRecordModel } from 'aNotion/types/PageRecord';
-
-const logPath = 'notion/page/';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
@@ -27,7 +24,7 @@ const initialState: SiteState = {
 
 type fetchCurrentPageRequest = { pageId: string; limit: number };
 const fetchCurrentPage = createAsyncThunk(
-   logPath + 'current',
+   'notion/page/current',
    async ({ pageId, limit }: fetchCurrentPageRequest, thunkApi) => {
       let chunk = (await blockApi.loadPageChunk(
          pageId,
@@ -35,9 +32,11 @@ const fetchCurrentPage = createAsyncThunk(
          thunkApi.signal
       )) as LoadPageChunk.PageChunk;
 
-      thunkApi.dispatch(
-         notionSiteSlice.actions.processChunkToBlock({ chunk, pageId })
-      );
+      if (chunk != null) {
+         thunkApi.dispatch(
+            notionSiteSlice.actions.processChunkToBlock({ chunk, pageId })
+         );
+      }
       return chunk;
    }
 );
@@ -74,7 +73,7 @@ const processChunkToBlock = {
 };
 
 const notionSiteSlice = createSlice({
-   name: 'locations',
+   name: 'notionSiteSlice',
    initialState: initialState,
    reducers: {
       loadCookies: loadCookies,

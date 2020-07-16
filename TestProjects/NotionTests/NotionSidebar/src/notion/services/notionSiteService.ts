@@ -47,6 +47,7 @@ export const extractNavigationData = (
          result.pageId = getGuidFromUrl(data.url);
          result.backgroundId = undefined;
       }
+      result.url = url;
    } else {
       console.log('error: not notion page');
    }

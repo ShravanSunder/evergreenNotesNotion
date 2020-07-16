@@ -19,6 +19,7 @@ export type NavigationState = {
    pageId?: string;
    locationId?: string;
    backgroundId?: string;
+   url?: string;
 };
 export type PageRecordState = {
    pageChunk?: PageChunk;
