@@ -5,7 +5,10 @@ import {
    PayloadAction,
 } from '@reduxjs/toolkit';
 import * as searchApi from 'aNotion/api/v3/searchApi';
-import { FetchTitleRefsParams } from 'aNotion/api/v3/SearchApiTypes';
+import {
+   FetchTitleRefsParams,
+   SearchSort,
+} from 'aNotion/api/v3/SearchApiTypes';
 import { ReferenceState } from './referenceTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import {
@@ -17,21 +20,43 @@ const initialState: ReferenceState = {
    unlinkedReferences: { status: thunkStatus.pending },
 };
 
-const fetchTitleRefs = createAsyncThunk(
+const fetchRefsBasedOnTitle = createAsyncThunk(
    'notion/reference/current',
-   async (
-      { query, limit, pageTitlesOnly, sort }: FetchTitleRefsParams,
-      thunkApi
-   ) => {
-      let result = await searchApi.searchByRelevance(
+   async ({ query }: FetchTitleRefsParams, thunkApi) => {
+      let req1 = searchApi.searchByRelevance(
          query,
-         pageTitlesOnly,
-         limit,
-         sort,
+         false,
+         20,
+         SearchSort.Relevance,
+         thunkApi.signal
+      );
+      let backRef = '[[' + query + ']]';
+      let req2 = searchApi.searchByRelevance(
+         backRef,
+         true,
+         40,
+         SearchSort.Relevance,
          thunkApi.signal
       );
 
-      return createUnlinkedReferences(result);
+      let req3 = searchApi.searchByRelevance(
+         query,
+         true,
+         20,
+         SearchSort.Relevance,
+         thunkApi.signal
+      );
+
+      let result1 = await req1;
+      let result2 = await req2;
+      let result3 = await req3;
+      createUnlinkedReferences(
+         query,
+         result1,
+         result2,
+         result3,
+         thunkApi.signal
+      );
    }
 );
 
@@ -49,18 +74,18 @@ const referenceSlice = createSlice({
       unloadReferences: unloadReferences,
    },
    extraReducers: {
-      [fetchTitleRefs.fulfilled.toString()]: (
+      [fetchRefsBasedOnTitle.fulfilled.toString()]: (
          state,
          action: PayloadAction<UnlinkedReferences>
       ) => {
          state.unlinkedReferences.results = action.payload;
          state.unlinkedReferences.status = thunkStatus.fulfilled;
       },
-      [fetchTitleRefs.pending.toString()]: (state) => {
+      [fetchRefsBasedOnTitle.pending.toString()]: (state) => {
          state.unlinkedReferences.status = thunkStatus.pending;
          state.unlinkedReferences.results = undefined;
       },
-      [fetchTitleRefs.rejected.toString()]: (state) => {
+      [fetchRefsBasedOnTitle.rejected.toString()]: (state) => {
          state.unlinkedReferences.status = thunkStatus.rejected;
          state.unlinkedReferences.results = undefined;
       },
@@ -69,7 +94,7 @@ const referenceSlice = createSlice({
 
 export const referenceActions = {
    ...referenceSlice.actions,
-   fetchTitleRefs,
+   fetchTitleRefs: fetchRefsBasedOnTitle,
    //processTitleRefs,
 };
 export const referenceReducers = referenceSlice.reducer;

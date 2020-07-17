@@ -1,5 +1,5 @@
 import * as base from '../../notionBaseTypes';
-import { EmptyBlock } from './empty_block';
+import { EmptyBlock } from './basic_block';
 import { BlockNames } from '../../BlockEnums';
 
 /**

@@ -2,7 +2,7 @@ import { RecordMap, Record, BlockRecord } from './notionV3/notionRecordTypes';
 import { Map } from './notionV3/Map';
 import * as blockTypes from './notionV3/notionBlockTypes';
 import { BlockNames, BlockProps } from './notionV3/BlockEnums';
-import { PageRecordModel, PageRecord } from './PageRecord';
+import { NotionBlockModel, NotionBlock } from './NotionBlock';
 import { SearchResultType } from 'aNotion/api/v3/SearchApiTypes';
 
 export interface SearchRecordModel {
@@ -13,7 +13,7 @@ export interface SearchRecordModel {
       pathText: string;
       text: string;
    };
-   blockRecord: PageRecordModel;
+   notionBlock: NotionBlockModel;
 }
 type HighlightType = {
    pathText: string;
@@ -26,14 +26,15 @@ export class SearchRecord implements SearchRecordModel {
    isNavigable: boolean;
    score: number;
    highlight: HighlightType;
-   blockRecord: PageRecord;
+   notionBlock: NotionBlockModel;
 
    constructor(data: RecordMap, searchResult: SearchResultType) {
       this.id = searchResult.id;
       this.isNavigable = searchResult.isNavigable;
       this.highlight = searchResult.highlight;
       this.score = searchResult.score;
-      this.blockRecord = new PageRecord(data, this.id);
+      this.notionBlock = new NotionBlock(data, this.id);
+      this.cleanHighlight(this.highlight);
    }
 
    cleanHighlight(highlight: HighlightType) {
@@ -48,7 +49,7 @@ export class SearchRecord implements SearchRecordModel {
          isNavigable: this.isNavigable,
          score: this.score,
          highlight: this.highlight,
-         blockRecord: this.blockRecord.toSerializable(),
+         notionBlock: (this.notionBlock as NotionBlock).toSerializable(),
       };
       return model;
    };

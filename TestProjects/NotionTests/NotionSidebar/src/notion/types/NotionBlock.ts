@@ -2,23 +2,23 @@ import { RecordMap } from './notionV3/notionRecordTypes';
 import * as blockTypes from './notionV3/notionBlockTypes';
 import { BlockNames, BlockProps } from './notionV3/BlockEnums';
 
-export interface PageRecordModel {
+export interface NotionBlockModel {
    block: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined;
    recordMapData: RecordMap;
    type: BlockNames;
-   name?: string;
+   title?: string;
    blockId: string;
 }
 
-export class PageRecord implements PageRecordModel {
+export class NotionBlock implements NotionBlockModel {
    block: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined = [];
    recordMapData: RecordMap;
    type: BlockNames;
-   name: string | undefined;
+   title: string | undefined;
    blockId: string = '';
 
    constructor(data: RecordMap, blockId: string) {
@@ -55,21 +55,36 @@ export class PageRecord implements PageRecordModel {
          } else if (this.type === BlockNames.Page) {
             let page = this.block as blockTypes.Page;
             return page.properties[BlockProps.Title][0][0];
+         } else {
+            let u = this.block as any;
+            let title = u.page.properties[BlockProps.Title][0][0];
+            return title;
          }
-      } catch {}
-      console.log('Log: unkown block type: ' + this.type);
+      } catch {
+         console.log('Log: unkown block type: ' + this.type);
+      }
       return undefined;
    };
 
-   toSerializable = (): PageRecordModel => {
-      this.name = this.getName();
-      let model: PageRecordModel = {
+   asType = () => {
+      switch (this.type) {
+         case BlockNames.Page:
+            break;
+
+         default:
+            break;
+      }
+   };
+
+   toSerializable = (): NotionBlockModel => {
+      this.title = this.getName();
+      let model: NotionBlockModel = {
          block: this.block,
          collection: this.collection,
          collection_views: this.collection_views,
          recordMapData: this.recordMapData,
          type: this.type,
-         name: this.name,
+         title: this.title,
          blockId: this.blockId,
       };
       return model;

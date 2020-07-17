@@ -1,7 +1,7 @@
 import { SearchResultsType } from 'aNotion/api/v3/SearchApiTypes';
 import { SearchRecord, SearchRecordModel } from 'aNotion/types/SearchRecord';
 import { BlockNames } from 'aNotion/types/notionV3/BlockEnums';
-import { PageRecord } from 'aNotion/types/PageRecord';
+//import { BlockRecord } from 'aNotion/types/PageRecord';
 
 export type UnlinkedReferences = {
    references: SearchRecordModel[];
@@ -15,46 +15,47 @@ export type TitleLookup = {
    blockType: BlockNames;
 };
 
-export const createUnlinkedReferences = (
-   searchData: SearchResultsType
-): UnlinkedReferences => {
-   let references: SearchRecordModel[] = [];
+enum resultTypeEnum {
+   FullTitleMatch = 0,
+   PartialTitleMatch = 1,
+   BackLinkMatch = 2,
+   RelatedSearch = 3,
+}
 
-   for (let s of searchData.results) {
+export const createUnlinkedReferences = (
+   query: string,
+   titleSearch: SearchResultsType,
+   backLinks: SearchResultsType,
+   generalSearch: SearchResultsType,
+   signal?: AbortSignal
+): UnlinkedReferences | null => {
+   let result: SearchRecord[] = [];
+
+   for (let s of titleSearch.results) {
       try {
          if (s.score > 10 && s.highlight != null) {
-            references.push(
-               new SearchRecord(searchData.recordMap, s).toSerializable()
-            );
+            let data = new SearchRecord(titleSearch.recordMap, s);
          }
       } catch (err) {
          console.log(s);
          console.log(err);
       }
    }
-   // let recordArray: PageRecord[] = [];
 
-   // for (let key of Object.keys(searchData.recordMap.block)) {
-   //    let block = searchData.recordMap.block[key];
-   //    recordArray.push(new PageRecord(searchData.recordMap, key));
-   // }
-
-   // //minimum score and maybe a top
-
-   // for (let r of references) {
-   //    let p = r.highlight.pathText.replace(r.highlight.text, '');
-   //    let matches = recordArray.find((x) => {
-   //       if (x.blockId !== r.id) {
-   //          return p.includes(x.getName()!);
+   // for (let s of titleSearch.results) {
+   //    try {
+   //       if (s.score > 10 && s.highlight != null) {
+   //          titleRefs.push(
+   //             new SearchRecord(titleSearch.recordMap, s).toSerializable()
+   //          );
    //       }
-   //       return false;
-   //    });
-   //    //finish later
+   //    } catch (err) {
+   //       console.log(s);
+   //       console.log(err);
+   //    }
    // }
 
-   return {
-      references: references,
-      blockLookup: {},
-      titleLookup: {},
-   };
+   return null;
 };
+
+const matchQuery = (data: SearchResultsType, results: any) => {};

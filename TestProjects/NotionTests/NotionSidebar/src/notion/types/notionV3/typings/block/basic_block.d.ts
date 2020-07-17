@@ -1,8 +1,70 @@
-import { SemanticString, Permission } from '../../notionModels';
+import { SemanticString } from '../semantic_string';
+import { Permission } from '../permission';
 import * as base from '../../notionBaseTypes';
-import { EmptyBlock } from './empty_block';
 import { Collection } from '../collection';
 import { BlockNames } from '../../BlockEnums';
+
+/**
+ * An abstract block, used to hold common properties of all blocks.
+ *
+ * Doesn't actually exist in Notion.
+ */
+export interface EmptyBlock {
+   id: base.UUID;
+   version: number;
+   type: BlockNames;
+   format?: BlockFormat;
+   /** Ids of children blocks */
+   content?: base.UUID[];
+   created_by: base.UUID;
+   /** Appear in recently created blocks. */
+   created_by_id?: base.UUID;
+   /** Appear in recently created blocks. */
+   created_by_table?: base.Table;
+   created_time: base.TimestampNumber;
+   last_edited_by: base.UUID;
+   /** Appear in recently created blocks. */
+   last_edited_by_id?: base.UUID;
+   /** Appear in recently created blocks. */
+   last_edited_by_table?: base.Table;
+   last_edited_time: base.TimestampNumber;
+   parent_id: base.UUID;
+   parent_table: base.Table;
+   alive: boolean;
+   /** Copied from another block. */
+   copied_from?: base.UUID;
+}
+
+/**
+ * Everything about how to layout a block.
+ */
+export interface BlockFormat {
+   block_locked?: boolean;
+   /** User ID. */
+   block_locked_by?: base.UUID;
+   block_color?: base.NotionColor;
+   block_width?: number;
+   block_height?: number;
+   /** Full viewport width. */
+   block_full_width?: boolean;
+   /** The same width as the parent page. */
+   block_page_width?: boolean;
+   /** Height divided by width. */
+   block_aspect_ratio?: number;
+   /** Whether to force isotropic [scaling](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale). */
+   block_preserve_scale?: boolean;
+   /** Icon URL of the bookmarked web page. */
+   bookmark_icon?: base.PublicUrl;
+   /** Cover URL of the bookmarked web page. */
+   bookmark_cover?: base.PublicUrl;
+   column_ratio?: base.Proportion;
+   code_wrap?: boolean;
+   display_source?: base.NotionSecureUrl | base.PublicUrl;
+   page_icon?: base.Emoji | base.NotionSecureUrl | base.PublicUrl;
+   page_cover?: base.NotionRelativePath | base.NotionSecureUrl | base.PublicUrl;
+   page_full_width?: boolean;
+   page_cover_position?: base.Proportion;
+}
 
 /**
  * Embedded Sub-Page block or Link To Page block.
@@ -163,6 +225,36 @@ export interface Divider extends EmptyBlock {
    type: BlockNames.Divider;
 }
 
+export interface TableOfContents extends EmptyBlock {
+   type: BlockNames.TableOfContents;
+}
+
+/**
+ * Math Equation block.
+ */
+export interface Equation extends EmptyBlock {
+   type: BlockNames.Equation;
+   properties?: {
+      /** LaTeX. */
+      title?: [[string]];
+   };
+}
+
+/**
+ * Template button block.
+ */
+export interface TemplateButton extends EmptyBlock {
+   type: BlockNames.TemplateButton;
+   properties?: {
+      /** Button name. */
+      title?: [[string]];
+   };
+}
+
+export interface Breadcrumb extends EmptyBlock {
+   type: BlockNames.BreadCrumb;
+}
+
 export type BasicBlockUnion =
    | Page
    | Text
@@ -177,4 +269,104 @@ export type BasicBlockUnion =
    | Callout
    | ColumnList
    | Column
-   | Divider;
+   | Divider
+   | TableOfContents
+   | Equation
+   | TemplateButton
+   | Breadcrumb
+   | Image
+   | Video
+   | Audio
+   | Bookmark
+   | Code
+   | File;
+
+/**
+ * Image block.
+ */
+export interface Image extends EmptyBlock {
+   type: BlockNames.Image;
+   properties?: {
+      /**
+       * Normally, the same as `display_source` in {@link BlockFormat}.
+       * When they are different, use `display_source`.
+       */
+      source?: [[base.NotionSecureUrl | base.PublicUrl]];
+      caption?: SemanticString[];
+   };
+   /**  Defined if the user uploaded an image. */
+   file_ids?: base.UUID[];
+}
+
+/**
+ * Video block.
+ */
+export interface Video extends EmptyBlock {
+   type: BlockNames.Video;
+   properties?: {
+      /**
+       * Normally, the same as `display_source` in {@link BlockFormat}.
+       * When they are different, use `display_source`.
+       */
+      source?: [[base.NotionSecureUrl | base.PublicUrl]];
+      caption?: SemanticString[];
+   };
+   /**  Defined if the user uploaded a video. */
+   file_ids?: base.UUID[];
+}
+
+/**
+ * Audio block.
+ */
+export interface Audio extends EmptyBlock {
+   type: BlockNames.Audio;
+   properties?: {
+      source: [[base.NotionSecureUrl | base.PublicUrl]];
+   };
+   /**  Defined if the user uploaded an audio file. */
+   file_ids?: base.UUID[];
+}
+
+/**
+ * Web Bookmark block.
+ */
+export interface Bookmark extends EmptyBlock {
+   type: BlockNames.Bookmark;
+   properties?: {
+      /** Link of the bookmarked web page. */
+      link: [[string]];
+      /** Title of the bookmarked web page, auto detected. */
+      title?: [[string]];
+      /** Description of the bookmarked web page, auto detected. */
+      description?: [[string]];
+   };
+}
+
+/**
+ * Code block.
+ */
+export interface Code extends EmptyBlock {
+   type: BlockNames.Code;
+   properties?: {
+      /** Code content. */
+      title?: [[string]];
+      language?: [[string]];
+   };
+}
+
+/**
+ * File block.
+ */
+export interface File extends EmptyBlock {
+   type: BlockNames.File;
+   properties?: {
+      /** Filename. */
+      title: [[string]];
+      /** URL of the file. */
+      source: [[base.NotionSecureUrl | base.PublicUrl]];
+      /** File size, defined if the user uploaded a file. */
+      size?: [[string]];
+   };
+   /**  Defined if the user uploaded a file. */
+   file_ids?: base.UUID[];
+}

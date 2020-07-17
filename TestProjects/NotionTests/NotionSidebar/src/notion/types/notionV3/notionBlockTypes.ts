@@ -12,18 +12,14 @@ import { Permission } from './typings/permission';
 
 ////////////////////////////////////////////////
 // All types of blocks.
-import * as AdvancedBlock from './typings/block/advanced_block';
 import * as BasicBlock from './typings/block/basic_block';
 import * as DatabaseBlock from './typings/block/database';
 import * as EmbedBlock from './typings/block/embed';
-import * as MediaBlock from './typings/block/media';
 
 export type Block =
-   | AdvancedBlock.AdvancedBlockUnion
    | BasicBlock.BasicBlockUnion
    | DatabaseBlock.DatabaseBlockUnion
-   | EmbedBlock.EmbedBlockUnion
-   | MediaBlock.MediaBlockUnion;
+   | EmbedBlock.EmbedBlockUnion;
 
 export {
    Collection,
@@ -39,10 +35,10 @@ export {
    // UserSettings,
 };
 
-export type Breadcrumb = AdvancedBlock.Breadcrumb;
-export type Equation = AdvancedBlock.Equation;
-export type Factory = AdvancedBlock.TemplateButton;
-export type TableOfContents = AdvancedBlock.TableOfContents;
+export type Breadcrumb = BasicBlock.Breadcrumb;
+export type Equation = BasicBlock.Equation;
+export type Factory = BasicBlock.TemplateButton;
+export type TableOfContents = BasicBlock.TableOfContents;
 
 export type BulletedList = BasicBlock.BulletedList;
 export type Callout = BasicBlock.Callout;
@@ -67,11 +63,11 @@ export type Embed = EmbedBlock.Embed;
 //export type Invision = EmbedBlock.Invision;
 export type PDF = EmbedBlock.PDF;
 
-export type Audio = MediaBlock.Audio;
-export type Bookmark = MediaBlock.Bookmark;
-export type Code = MediaBlock.Code;
-export type File = MediaBlock.File;
-export type Image = MediaBlock.Image;
-export type Video = MediaBlock.Video;
+export type Audio = BasicBlock.Audio;
+export type Bookmark = BasicBlock.Bookmark;
+export type Code = BasicBlock.Code;
+export type File = BasicBlock.File;
+export type Image = BasicBlock.Image;
+export type Video = BasicBlock.Video;
 
 export * from './typings/semantic_string';

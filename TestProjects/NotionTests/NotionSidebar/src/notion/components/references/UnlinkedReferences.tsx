@@ -21,7 +21,7 @@ export const UnlinkedReferences = ({ status, data }: any) => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const record = useSelector(currentRecordSelector, shallowEqual);
    const unlinkedReferences = useSelector(referenceSelector, shallowEqual);
-   const pageName = record.pageRecord?.name;
+   const pageName = record.pageRecord?.title;
 
    useEffect(() => {
       if (record.status === thunkStatus.fulfilled && pageName != null) {

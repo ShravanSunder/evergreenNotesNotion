@@ -14,7 +14,7 @@ import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { getPageRecordFromChunk } from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
-import { PageRecordModel } from 'aNotion/types/PageRecord';
+import { NotionBlockModel } from 'aNotion/types/NotionBlock';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
@@ -64,7 +64,7 @@ type processChunkToBlockType = {
    pageId: string;
 };
 const processChunkToBlock = {
-   reducer: (state: SiteState, action: PayloadAction<PageRecordModel>) => {
+   reducer: (state: SiteState, action: PayloadAction<NotionBlockModel>) => {
       state.currentPageRecord.pageRecord = action.payload;
    },
    prepare: (payload: processChunkToBlockType) => ({
