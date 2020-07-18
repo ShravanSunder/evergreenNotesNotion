@@ -9,10 +9,7 @@ export interface SearchRecordModel {
    id: string;
    isNavigable: boolean;
    score: number;
-   highlight: {
-      pathText: string;
-      text: string;
-   };
+   highlight: HighlightType;
    notionBlock: NotionBlockModel;
 }
 type HighlightType = {
@@ -38,9 +35,9 @@ export class SearchRecord implements SearchRecordModel {
    }
 
    cleanHighlight(highlight: HighlightType) {
-      highlight.pureText = highlight.text.replace('<gzkNfoUU>', '');
-      highlight.pureText = highlight.text.replace('</gzkNfoUU>', '');
-      highlight.text = highlight.text.replace('gzkNfoUU', 'b');
+      highlight.pureText = highlight.text.split('<gzkNfoUU>').join('');
+      highlight.pureText = highlight.pureText.split('</gzkNfoUU>').join('');
+      highlight.text = highlight.text.split('gzkNfoUU').join('b');
    }
 
    toSerializable = (): SearchRecordModel => {

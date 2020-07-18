@@ -20,7 +20,7 @@ import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 export const UnlinkedReferences = ({ status, data }: any) => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const record = useSelector(currentRecordSelector, shallowEqual);
-   const unlinkedReferences = useSelector(referenceSelector, shallowEqual);
+   const references = useSelector(referenceSelector, shallowEqual);
    const pageName = record.pageRecord?.title;
 
    useEffect(() => {
@@ -50,12 +50,15 @@ export const UnlinkedReferences = ({ status, data }: any) => {
 
    return (
       <div style={{ width: 250, height: 1000 }}>
-         {unlinkedReferences.status === thunkStatus.fulfilled &&
-            unlinkedReferences.results!.references.map((u) => {
-               return <div key={u.id}>{u.highlight.text}</div>;
+         {references.status === thunkStatus.fulfilled &&
+            references.pageReferences.direct.map((u) => {
+               return (
+                  <div key={u.reference.id}>
+                     {u.reference.highlight.pureText}
+                  </div>
+               );
             })}
-         {(unlinkedReferences.status !== thunkStatus.fulfilled ||
-            unlinkedReferences.results == null) && (
+         {references.status === thunkStatus.pending && (
             <div>
                <Skeleton />
                <Skeleton />
@@ -64,6 +67,7 @@ export const UnlinkedReferences = ({ status, data }: any) => {
                <Skeleton />
             </div>
          )}
+         {references.status === thunkStatus.rejected && <div>error!</div>}
       </div>
    );
 };

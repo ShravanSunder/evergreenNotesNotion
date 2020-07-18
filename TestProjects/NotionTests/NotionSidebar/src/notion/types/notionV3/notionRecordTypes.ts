@@ -8,25 +8,15 @@ export type Record<T> = {
    value?: T;
 };
 
-export type RecordUnion =
-   | blockTypes.Block
-   | blockTypes.Collection
-   | blockTypes.CollectionView
-   | blockTypes.Space
-   | blockTypes.SpaceView
-   | blockTypes.Activity;
-//| Follow |  SlackIntegration | NotionUser | UserRoot | UserSettings
-
-export type AnyRecord = Record<RecordUnion>;
 export type BlockRecord = Record<blockTypes.Block>;
 export type CollectionRecord = Record<blockTypes.Collection>;
 export type CollectionViewRecord = Record<blockTypes.CollectionView>;
-// export type NotionUserRecord = Record<NotionUser>;
-// export type UserRootRecord = Record<UserRoot>;
-// export type UserSettingsRecord = Record<UserSettings>;
 export type SpaceRecord = Record<blockTypes.Space>;
 export type SpaceViewRecord = Record<blockTypes.SpaceView>;
 export type ActivityRecord = Record<blockTypes.Activity>;
+// export type NotionUserRecord = Record<NotionUser>;
+// export type UserRootRecord = Record<UserRoot>;
+// export type UserSettingsRecord = Record<UserSettings>;
 // export type FollowRecord = Record<Follow>;
 // export type SlackIntegrationRecord = Record<SlackIntegration>;
 
