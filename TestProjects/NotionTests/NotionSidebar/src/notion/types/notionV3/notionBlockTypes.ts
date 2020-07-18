@@ -1,7 +1,7 @@
 import { Collection } from './typings/collection';
 import { CollectionView } from './typings/collection_view';
 import { Space } from './typings/space';
-import { SpaceView } from './typings/space_view';
+import { SpaceView } from './typings/space';
 import { Activity } from './typings/activity';
 // import { Follow } from "./follow"
 // import { SlackIntegration } from "./slack_integration"
@@ -12,9 +12,9 @@ import { Permission } from './typings/permission';
 
 ////////////////////////////////////////////////
 // All types of blocks.
-import * as BasicBlock from './typings/block/basic_block';
-import * as DatabaseBlock from './typings/block/database';
-import * as EmbedBlock from './typings/block/embed';
+import * as BasicBlock from './typings/basic_blocks';
+import * as DatabaseBlock from './typings/database';
+import * as EmbedBlock from './typings/embed_blocks';
 
 export type Block =
    | BasicBlock.BasicBlockUnion
@@ -69,5 +69,3 @@ export type Code = BasicBlock.Code;
 export type File = BasicBlock.File;
 export type Image = BasicBlock.Image;
 export type Video = BasicBlock.Video;
-
-export * from './typings/semantic_string';

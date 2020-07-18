@@ -1,6 +1,6 @@
 import { SearchResultsType } from 'aNotion/api/v3/SearchApiTypes';
 import { SearchRecord, SearchRecordModel } from 'aNotion/types/SearchRecord';
-import { BlockNames } from 'aNotion/types/notionV3/BlockEnums';
+import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 //import { BlockRecord } from 'aNotion/types/PageRecord';
 
 export type UnlinkedReferences = {
@@ -12,7 +12,7 @@ export type TitleLookup = {
    name: string;
    path: string[];
    blockId: string;
-   blockType: BlockNames;
+   blockType: BlockTypes;
 };
 
 enum resultTypeEnum {

@@ -1,12 +1,12 @@
-import * as base from '../../notionBaseTypes';
-import { EmptyBlock } from './basic_block';
-import { BlockNames } from '../../BlockEnums';
+import * as base from '../notionBaseTypes';
+import { EmptyBlock } from './basic_blocks';
+import { BlockTypes } from '../BlockTypes';
 
 /**
  * Inline database block or Linked database block.
  */
 export interface CollectionViewInline extends EmptyBlock {
-   type: BlockNames.CollectionViewInline;
+   type: BlockTypes.CollectionViewInline;
    view_ids: base.UUID[];
    collection_id: base.UUID;
 }
@@ -15,7 +15,7 @@ export interface CollectionViewInline extends EmptyBlock {
  * Full page database block.
  */
 export interface CollectionViewPage extends EmptyBlock {
-   type: BlockNames.CollectionViewPage;
+   type: BlockTypes.CollectionViewPage;
    view_ids: base.UUID[];
    collection_id: base.UUID;
 }

@@ -1,8 +1,8 @@
-import { SemanticString } from '../semantic_string';
-import { Permission } from '../permission';
-import * as base from '../../notionBaseTypes';
-import { Collection } from '../collection';
-import { BlockNames } from '../../BlockEnums';
+import { SemanticString } from './semantic_string';
+import { Permission } from './permission';
+import * as base from '../notionBaseTypes';
+import { Collection } from './collection';
+import { BlockTypes } from '../BlockTypes';
 
 /**
  * An abstract block, used to hold common properties of all blocks.
@@ -12,7 +12,7 @@ import { BlockNames } from '../../BlockEnums';
 export interface EmptyBlock {
    id: base.UUID;
    version: number;
-   type: BlockNames;
+   type: BlockTypes;
    format?: BlockFormat;
    /** Ids of children blocks */
    content?: base.UUID[];
@@ -70,7 +70,7 @@ export interface BlockFormat {
  * Embedded Sub-Page block or Link To Page block.
  */
 export interface Page extends EmptyBlock {
-   type: BlockNames.Page;
+   type: BlockTypes.Page;
    /**
     * In a database, every record is a page. Properties set in a database
     * are stored here.
@@ -99,7 +99,7 @@ export interface Page extends EmptyBlock {
  * Text block. Editable, can have children.
  */
 export interface Text extends EmptyBlock {
-   type: BlockNames.Text;
+   type: BlockTypes.Text;
    properties?: {
       title?: SemanticString[];
    };
@@ -109,7 +109,7 @@ export interface Text extends EmptyBlock {
  * Bulleted List block. Editable, can have children.
  */
 export interface BulletedList extends EmptyBlock {
-   type: BlockNames.ButtetedList;
+   type: BlockTypes.ButtetedList;
    properties?: {
       title?: SemanticString[];
    };
@@ -119,7 +119,7 @@ export interface BulletedList extends EmptyBlock {
  * Numbered List block. Editable, can have children.
  */
 export interface NumberedList extends EmptyBlock {
-   type: BlockNames.NumberedList;
+   type: BlockTypes.NumberedList;
    properties?: {
       title?: SemanticString[];
    };
@@ -129,7 +129,7 @@ export interface NumberedList extends EmptyBlock {
  * To Do block. Editable, can have children.
  */
 export interface ToDo extends EmptyBlock {
-   type: BlockNames.ToDo;
+   type: BlockTypes.ToDo;
    properties?: {
       title?: SemanticString[];
       checked?: [['Yes' | 'No']];
@@ -140,7 +140,7 @@ export interface ToDo extends EmptyBlock {
  * Toggle block. Editable, can have children.
  */
 export interface Toggle extends EmptyBlock {
-   type: BlockNames.Toggle;
+   type: BlockTypes.Toggle;
    properties?: {
       title?: SemanticString[];
    };
@@ -150,7 +150,7 @@ export interface Toggle extends EmptyBlock {
  * Heading1 block. Editable, can't have children.
  */
 export interface Header1 extends EmptyBlock {
-   type: BlockNames.Header1;
+   type: BlockTypes.Header1;
    properties?: {
       title?: SemanticString[];
    };
@@ -160,7 +160,7 @@ export interface Header1 extends EmptyBlock {
  * Heading2 block. Editable, can't have children.
  */
 export interface Header2 extends EmptyBlock {
-   type: BlockNames.Header2;
+   type: BlockTypes.Header2;
    properties?: {
       title?: SemanticString[];
    };
@@ -170,7 +170,7 @@ export interface Header2 extends EmptyBlock {
  * Heading3 block. Editable, can't have children.
  */
 export interface Header3 extends EmptyBlock {
-   type: BlockNames.Header3;
+   type: BlockTypes.Header3;
    properties?: {
       title?: SemanticString[];
    };
@@ -180,7 +180,7 @@ export interface Header3 extends EmptyBlock {
  * Quote block. Editable, can't have children.
  */
 export interface Quote extends EmptyBlock {
-   type: BlockNames.Quote;
+   type: BlockTypes.Quote;
    properties?: {
       title?: SemanticString[];
    };
@@ -190,7 +190,7 @@ export interface Quote extends EmptyBlock {
  * Callout block. Editable, can't have children.
  */
 export interface Callout extends EmptyBlock {
-   type: BlockNames.Callout;
+   type: BlockTypes.Callout;
    properties?: {
       title?: SemanticString[];
    };
@@ -206,7 +206,7 @@ export interface Callout extends EmptyBlock {
  * Children of this block must be {@link Column}.
  */
 export interface ColumnList extends EmptyBlock {
-   type: BlockNames.ColumnList;
+   type: BlockTypes.ColumnList;
 }
 
 /**
@@ -215,25 +215,25 @@ export interface ColumnList extends EmptyBlock {
  * Parent of this block must be {@link ColumnList}.
  */
 export interface Column extends EmptyBlock {
-   type: BlockNames.Column;
+   type: BlockTypes.Column;
 }
 
 /**
  * Divider block. Not editable, can't have children.
  */
 export interface Divider extends EmptyBlock {
-   type: BlockNames.Divider;
+   type: BlockTypes.Divider;
 }
 
 export interface TableOfContents extends EmptyBlock {
-   type: BlockNames.TableOfContents;
+   type: BlockTypes.TableOfContents;
 }
 
 /**
  * Math Equation block.
  */
 export interface Equation extends EmptyBlock {
-   type: BlockNames.Equation;
+   type: BlockTypes.Equation;
    properties?: {
       /** LaTeX. */
       title?: [[string]];
@@ -244,7 +244,7 @@ export interface Equation extends EmptyBlock {
  * Template button block.
  */
 export interface TemplateButton extends EmptyBlock {
-   type: BlockNames.TemplateButton;
+   type: BlockTypes.TemplateButton;
    properties?: {
       /** Button name. */
       title?: [[string]];
@@ -252,7 +252,7 @@ export interface TemplateButton extends EmptyBlock {
 }
 
 export interface Breadcrumb extends EmptyBlock {
-   type: BlockNames.BreadCrumb;
+   type: BlockTypes.BreadCrumb;
 }
 
 export type BasicBlockUnion =
@@ -285,7 +285,7 @@ export type BasicBlockUnion =
  * Image block.
  */
 export interface Image extends EmptyBlock {
-   type: BlockNames.Image;
+   type: BlockTypes.Image;
    properties?: {
       /**
        * Normally, the same as `display_source` in {@link BlockFormat}.
@@ -302,7 +302,7 @@ export interface Image extends EmptyBlock {
  * Video block.
  */
 export interface Video extends EmptyBlock {
-   type: BlockNames.Video;
+   type: BlockTypes.Video;
    properties?: {
       /**
        * Normally, the same as `display_source` in {@link BlockFormat}.
@@ -319,7 +319,7 @@ export interface Video extends EmptyBlock {
  * Audio block.
  */
 export interface Audio extends EmptyBlock {
-   type: BlockNames.Audio;
+   type: BlockTypes.Audio;
    properties?: {
       source: [[base.NotionSecureUrl | base.PublicUrl]];
    };
@@ -331,7 +331,7 @@ export interface Audio extends EmptyBlock {
  * Web Bookmark block.
  */
 export interface Bookmark extends EmptyBlock {
-   type: BlockNames.Bookmark;
+   type: BlockTypes.Bookmark;
    properties?: {
       /** Link of the bookmarked web page. */
       link: [[string]];
@@ -346,7 +346,7 @@ export interface Bookmark extends EmptyBlock {
  * Code block.
  */
 export interface Code extends EmptyBlock {
-   type: BlockNames.Code;
+   type: BlockTypes.Code;
    properties?: {
       /** Code content. */
       title?: [[string]];
@@ -358,7 +358,7 @@ export interface Code extends EmptyBlock {
  * File block.
  */
 export interface File extends EmptyBlock {
-   type: BlockNames.File;
+   type: BlockTypes.File;
    properties?: {
       /** Filename. */
       title: [[string]];

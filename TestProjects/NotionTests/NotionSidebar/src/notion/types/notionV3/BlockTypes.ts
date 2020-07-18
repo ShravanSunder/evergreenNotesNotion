@@ -2,7 +2,7 @@
 //  * All block names.
 //  */
 
-export enum BlockNames {
+export enum BlockTypes {
    Page = 'page',
    Text = 'text',
    ButtetedList = 'bulleted_list',

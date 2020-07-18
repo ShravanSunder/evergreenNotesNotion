@@ -1,13 +1,13 @@
-import { SemanticString } from '../../notionModels';
-import { EmptyBlock } from './empty_block';
-import * as base from '../../notionBaseTypes';
-import { BlockNames } from '../../BlockEnums';
+import { SemanticString } from './semantic_string';
+import * as base from '../notionBaseTypes';
+import { BlockTypes } from '../BlockTypes';
+import { EmptyBlock } from './basic_blocks';
 
 /**
  * General purpose embed block.
  */
 export interface Embed extends EmptyBlock {
-   type: BlockNames.Embed | BlockNames.EmbedCodePen | BlockNames.EmbedInvision;
+   type: BlockTypes.Embed | BlockTypes.EmbedCodePen | BlockTypes.EmbedInvision;
    properties?: {
       /**
        * This is a normal link.
@@ -49,7 +49,7 @@ export interface Embed extends EmptyBlock {
  * PDF embed block.
  */
 export interface PDF extends EmptyBlock {
-   type: BlockNames.PDF;
+   type: BlockTypes.PDF;
    properties?: {
       source?: [[base.NotionSecureUrl | base.PublicUrl]];
    };
@@ -57,4 +57,4 @@ export interface PDF extends EmptyBlock {
    file_ids?: base.UUID[];
 }
 
-export type EmbedBlockUnion = Embed | Codepen | Invision | PDF;
+export type EmbedBlockUnion = Embed | PDF; //|// Codepen | Invision | PDF;
