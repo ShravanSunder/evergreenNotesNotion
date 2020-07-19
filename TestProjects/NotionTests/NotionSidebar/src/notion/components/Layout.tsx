@@ -4,7 +4,7 @@ import {
    cookieSelector,
    navigationSelector,
 } from 'aNotion/providers/rootReducer';
-import { UnlinkedReferences } from './references/UnlinkedReferences';
+import { ReferencesPane } from './references/ReferencesPane';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 
 //loading fonts recommended by material ui
@@ -51,7 +51,7 @@ export const Layout = () => {
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-         <UnlinkedReferences />
+         <ReferencesPane />
       </ErrorBoundary>
    );
 };

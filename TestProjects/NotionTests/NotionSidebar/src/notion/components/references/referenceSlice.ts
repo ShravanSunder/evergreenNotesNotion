@@ -15,7 +15,7 @@ import {
    initPageReference,
 } from './referenceTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { createUnlinkedReferences } from 'aNotion/services/referenceService';
+import { createReferences } from 'aNotion/services/referenceService';
 
 const initialState: ReferenceState = {
    pageReferences: initPageReference(),
@@ -32,7 +32,7 @@ const fetchRefsBasedOnTitle = createAsyncThunk(
          SearchSort.Relevance,
          thunkApi.signal
       );
-      return createUnlinkedReferences(query, result1, thunkApi.signal);
+      return createReferences(query, result1, thunkApi.signal);
    }
 );
 

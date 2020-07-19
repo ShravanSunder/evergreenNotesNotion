@@ -10,12 +10,10 @@ import { NotionBlock, NotionBlockModel } from 'aNotion/types/NotionBlock';
 //    CollectionView,
 // } from 'aNotion/types/notionV3/notionBlockTypes';
 
-export const getPageRecordFromChunk = (
+export const getBlockFromPageChunk = (
    page: PageChunk,
    pageId: string
 ): NotionBlockModel => {
    let m = new NotionBlock(page.recordMap, pageId).toSerializable();
    return m;
 };
-
-export const getTitleForPageRecord = (record: NotionBlock) => {};

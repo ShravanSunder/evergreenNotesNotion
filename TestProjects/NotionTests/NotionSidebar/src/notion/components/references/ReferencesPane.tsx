@@ -3,7 +3,14 @@ import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { Skeleton } from '@material-ui/lab';
 
-import { Button, Dialog } from '@material-ui/core';
+import {
+   Button,
+   Dialog,
+   List,
+   ListItem,
+   ListItemText,
+   Typography,
+} from '@material-ui/core';
 import {
    currentRecordSelector,
    referenceSelector,
@@ -15,9 +22,10 @@ import {
 } from 'aNotion/api/v3/SearchApiTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
+import { Reference } from './Reference';
 
 // comment
-export const UnlinkedReferences = ({ status, data }: any) => {
+export const ReferencesPane = ({ status, data }: any) => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const record = useSelector(currentRecordSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
@@ -40,24 +48,30 @@ export const UnlinkedReferences = ({ status, data }: any) => {
       return () => {};
    }, [record.status, dispatch, record.pageRecord, pageName]);
 
-   // useEffect(() => {
-   //    console.log(unlinkedReferences.results);
-   // }, [unlinkedReferences.status, dispatch, unlinkedReferences.results]);
-
-   const handleClick = (e: MouseEvent) => {
-      //searchApi.searchForTitle();
-   };
-
    return (
-      <div style={{ width: 250, height: 1000 }}>
-         {references.status === thunkStatus.fulfilled &&
-            references.pageReferences.direct.map((u) => {
-               return (
-                  <div key={u.reference.id}>
-                     {u.reference.highlight.pureText}
-                  </div>
-               );
-            })}
+      <div style={{ height: 1000 }}>
+         <List>
+            {references.status === thunkStatus.fulfilled &&
+               references.pageReferences.direct.map((u) => {
+                  return (
+                     <ListItem key={u.searchRecord.id}>
+                        <Reference refData={u}></Reference>
+                     </ListItem>
+                  );
+               })}
+         </List>
+         <List>
+            {references.status === thunkStatus.fulfilled &&
+               references.pageReferences.fullTitle.map((u) => {
+                  return <ListItem key={u.searchRecord.id}></ListItem>;
+               })}
+         </List>
+         <List>
+            {references.status === thunkStatus.fulfilled &&
+               references.pageReferences.related.map((u) => {
+                  return <ListItem key={u.searchRecord.id}></ListItem>;
+               })}
+         </List>
          {references.status === thunkStatus.pending && (
             <div>
                <Skeleton />

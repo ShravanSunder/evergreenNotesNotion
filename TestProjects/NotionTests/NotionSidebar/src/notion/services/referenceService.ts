@@ -3,19 +3,19 @@ import { SearchRecord, SearchRecordModel } from 'aNotion/types/SearchRecord';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import {
    PageReferences,
-   Reference,
+   RefData,
    ResultTypeEnum,
 } from 'aNotion/components/references/referenceTypes';
 //import { BlockRecord } from 'aNotion/types/PageRecord';
 
-export const createUnlinkedReferences = (
+export const createReferences = (
    query: string,
    searchResults: SearchResultsType,
    signal?: AbortSignal
 ): PageReferences => {
-   let direct: Reference[] = [];
-   let fullTitle: Reference[] = [];
-   let related: Reference[] = [];
+   let direct: RefData[] = [];
+   let fullTitle: RefData[] = [];
+   let related: RefData[] = [];
 
    for (let s of searchResults.results) {
       try {
@@ -30,10 +30,11 @@ export const createUnlinkedReferences = (
    }
 
    related = related
-      .sort((x, y) => y.reference.score - x.reference.score)
+      .sort((x, y) => y.searchRecord.score - x.searchRecord.score)
       .slice(0, 10);
-   direct = direct.sort((x, y) => y.reference.score - x.reference.score);
+   direct = direct.sort((x, y) => y.searchRecord.score - x.searchRecord.score);
 
+   console.log(direct);
    return {
       direct: direct,
       related: related,
@@ -44,34 +45,34 @@ export const createUnlinkedReferences = (
 const filterResults = (
    data: SearchRecord,
    query: string,
-   directResults: Reference[],
-   fullTitle: Reference[],
-   relatedResults: Reference[]
+   directResults: RefData[],
+   fullTitle: RefData[],
+   relatedResults: RefData[]
 ) => {
    let full = new RegExp(query, 'i');
    let backlink = new RegExp('[[' + query + ']]', 'i');
-   if (backlink.test(data.highlight.pureText!)) {
-      if (!directResults.find((x) => x.reference.id === data.id)) {
+   if (backlink.test(data.text!)) {
+      if (!directResults.find((x) => x.searchRecord.id === data.id)) {
          directResults.push({
-            reference: data,
+            searchRecord: data.toSerializable(),
             type: ResultTypeEnum.DirectMatch,
          });
       }
-   } else if (full.test(data.highlight.pureText!)) {
-      if (!fullTitle.find((x) => x.reference.id === data.id)) {
+   } else if (full.test(data.text!)) {
+      if (!fullTitle.find((x) => x.searchRecord.id === data.id)) {
          fullTitle.push({
-            reference: data,
+            searchRecord: data.toSerializable(),
             type: ResultTypeEnum.FullTitleMatch,
          });
       }
    } else {
       if (
-         !directResults.find((x) => x.reference.id === data.id) &&
-         !fullTitle.find((x) => x.reference.id === data.id) &&
-         !relatedResults.find((x) => x.reference.id === data.id)
+         !directResults.find((x) => x.searchRecord.id === data.id) &&
+         !fullTitle.find((x) => x.searchRecord.id === data.id) &&
+         !relatedResults.find((x) => x.searchRecord.id === data.id)
       ) {
          relatedResults.push({
-            reference: data,
+            searchRecord: data.toSerializable(),
             type: ResultTypeEnum.RelatedSearch,
          });
       }

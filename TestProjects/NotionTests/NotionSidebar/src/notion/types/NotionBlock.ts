@@ -1,6 +1,7 @@
-import { RecordMap } from './notionV3/notionRecordTypes';
+import { RecordMap, Record } from './notionV3/notionRecordTypes';
 import * as blockTypes from './notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from './notionV3/BlockTypes';
+import TreeModel from 'tree-model';
 
 export interface NotionBlockModel {
    block: blockTypes.Block;
@@ -11,6 +12,12 @@ export interface NotionBlockModel {
    title?: string;
    blockId: string;
 }
+export interface TreeNode {
+   id: number;
+}
+export interface TreeType extends TreeNode {
+   children: [TreeNode];
+}
 
 export class NotionBlock implements NotionBlockModel {
    block: blockTypes.Block;
@@ -20,6 +27,8 @@ export class NotionBlock implements NotionBlockModel {
    type: BlockTypes;
    title: string | undefined;
    blockId: string = '';
+   parentNodes?: NotionBlock[] = undefined;
+   children?: NotionBlock[] = undefined;
 
    constructor(data: RecordMap, blockId: string) {
       this.recordMapData = data;
@@ -75,6 +84,48 @@ export class NotionBlock implements NotionBlockModel {
             break;
       }
    };
+
+   getParents = (refresh: boolean = false): any => {
+      if (!refresh || this.parentNodes == null) {
+         let parents: NotionBlock[] = [];
+         let node = this.recordMapData.block[this.blockId];
+         this.traversUp(node, parents);
+         this.parentNodes = parents;
+         return parents;
+      }
+      return this.parentNodes;
+   };
+
+   private traversUp(node: Record<blockTypes.Block>, parents: NotionBlock[]) {
+      if (node.value?.parent_id != null) {
+         var pBlock = new NotionBlock(this.recordMapData, node.value.parent_id);
+         parents.splice(0, 0, pBlock);
+         this.traversUp(this.recordMapData.block[pBlock.blockId], parents);
+      }
+   }
+
+   getChildren = (refresh: boolean = false) => {
+      if (!refresh || this.children == null) {
+         let children: [] = [];
+         let node = this.recordMapData.block[this.blockId];
+         this.traverseDown(node, children);
+         this.children = children;
+         return children;
+      }
+      return this.children;
+   };
+
+   private traverseDown(
+      node: Record<blockTypes.Block>,
+      children: NotionBlock[]
+   ) {
+      for (var childId of node.value!.content ?? []) {
+         if (childId != null) {
+            var cBlock = new NotionBlock(this.recordMapData, childId);
+            children.push(cBlock);
+         }
+      }
+   }
 
    toSerializable = (): NotionBlockModel => {
       this.title = this.getName();

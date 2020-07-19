@@ -11,6 +11,8 @@ import { registerTabUpdateListener } from 'aNotion/services/notionListeners';
 import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
+import { ThemeProvider } from '@material-ui/core';
+import { theme } from 'aNotion/components/Theme';
 
 console.log('App loading...');
 
@@ -21,11 +23,17 @@ export const App = () => {
    }, []);
 
    return (
-      <Provider store={reduxStore}>
+      <React.StrictMode>
          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Layout />
+            <Provider store={reduxStore}>
+               <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <ThemeProvider theme={theme}>
+                     <Layout />
+                  </ThemeProvider>
+               </ErrorBoundary>
+            </Provider>
          </ErrorBoundary>
-      </Provider>
+      </React.StrictMode>
    );
 };
 

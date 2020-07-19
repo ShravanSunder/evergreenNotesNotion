@@ -6,14 +6,14 @@ export type ReferenceState = {
    status: thunkStatus;
 };
 
-export type Reference = {
-   reference: SearchRecordModel;
+export type RefData = {
+   searchRecord: SearchRecordModel;
    type: ResultTypeEnum;
 };
 export type PageReferences = {
-   direct: Reference[];
-   fullTitle: Reference[];
-   related: Reference[];
+   direct: RefData[];
+   fullTitle: RefData[];
+   related: RefData[];
 };
 
 export const initPageReference = (): PageReferences => {
