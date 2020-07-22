@@ -34,9 +34,6 @@ export class SearchRecord implements SearchRecordModel {
    }
 
    cleanHighlight(highlight: { text: string; pathText: string }) {
-      if (highlight.pathText == null) {
-         console.log(highlight);
-      }
       this.decoratedText = highlight.text.split('gzkNfoUU').join('b');
       this.text = highlight.text.split('<gzkNfoUU>').join('');
       this.text = this.text.split('</gzkNfoUU>').join('');

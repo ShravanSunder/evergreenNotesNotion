@@ -5,6 +5,37 @@ import { Collection } from './collection';
 import { BlockTypes } from '../BlockTypes';
 
 /**
+ * Everything about how to layout a block.
+ */
+export interface BlockFormat {
+   block_locked?: boolean;
+   /** User ID. */
+   block_locked_by?: base.UUID;
+   block_color?: base.NotionColor;
+   block_width?: number;
+   block_height?: number;
+   /** Full viewport width. */
+   block_full_width?: boolean;
+   /** The same width as the parent page. */
+   block_page_width?: boolean;
+   /** Height divided by width. */
+   block_aspect_ratio?: number;
+   /** Whether to force isotropic [scaling](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale). */
+   block_preserve_scale?: boolean;
+   /** Icon URL of the bookmarked web page. */
+   bookmark_icon?: base.PublicUrl;
+   /** Cover URL of the bookmarked web page. */
+   bookmark_cover?: base.PublicUrl;
+   column_ratio?: base.Proportion;
+   code_wrap?: boolean;
+   display_source?: base.NotionSecureUrl | base.PublicUrl;
+   page_icon?: base.Emoji | base.NotionSecureUrl | base.PublicUrl;
+   page_cover?: base.NotionRelativePath | base.NotionSecureUrl | base.PublicUrl;
+   page_full_width?: boolean;
+   page_cover_position?: base.Proportion;
+}
+
+/**
  * An abstract block, used to hold common properties of all blocks.
  *
  * Doesn't actually exist in Notion.
@@ -35,35 +66,10 @@ export interface EmptyBlock {
    copied_from?: base.UUID;
 }
 
-/**
- * Everything about how to layout a block.
- */
-export interface BlockFormat {
-   block_locked?: boolean;
-   /** User ID. */
-   block_locked_by?: base.UUID;
-   block_color?: base.NotionColor;
-   block_width?: number;
-   block_height?: number;
-   /** Full viewport width. */
-   block_full_width?: boolean;
-   /** The same width as the parent page. */
-   block_page_width?: boolean;
-   /** Height divided by width. */
-   block_aspect_ratio?: number;
-   /** Whether to force isotropic [scaling](https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale). */
-   block_preserve_scale?: boolean;
-   /** Icon URL of the bookmarked web page. */
-   bookmark_icon?: base.PublicUrl;
-   /** Cover URL of the bookmarked web page. */
-   bookmark_cover?: base.PublicUrl;
-   column_ratio?: base.Proportion;
-   code_wrap?: boolean;
-   display_source?: base.NotionSecureUrl | base.PublicUrl;
-   page_icon?: base.Emoji | base.NotionSecureUrl | base.PublicUrl;
-   page_cover?: base.NotionRelativePath | base.NotionSecureUrl | base.PublicUrl;
-   page_full_width?: boolean;
-   page_cover_position?: base.Proportion;
+export interface BaseTextBlock extends EmptyBlock {
+   properties?: {
+      title: SemanticString[];
+   };
 }
 
 /**
@@ -98,40 +104,40 @@ export interface Page extends EmptyBlock {
 /**
  * Text block. Editable, can have children.
  */
-export interface Text extends EmptyBlock {
+export interface Text extends BaseTextBlock {
    type: BlockTypes.Text;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
 }
 
 /**
  * Bulleted List block. Editable, can have children.
  */
-export interface BulletedList extends EmptyBlock {
+export interface BulletedList extends BaseTextBlock {
    type: BlockTypes.ButtetedList;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
 }
 
 /**
  * Numbered List block. Editable, can have children.
  */
-export interface NumberedList extends EmptyBlock {
+export interface NumberedList extends BaseTextBlock {
    type: BlockTypes.NumberedList;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
 }
 
 /**
  * To Do block. Editable, can have children.
  */
-export interface ToDo extends EmptyBlock {
+export interface ToDo extends BaseTextBlock {
    type: BlockTypes.ToDo;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
       checked?: [['Yes' | 'No']];
    };
 }
@@ -139,60 +145,60 @@ export interface ToDo extends EmptyBlock {
 /**
  * Toggle block. Editable, can have children.
  */
-export interface Toggle extends EmptyBlock {
+export interface Toggle extends BaseTextBlock {
    type: BlockTypes.Toggle;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
 }
 
 /**
  * Heading1 block. Editable, can't have children.
  */
-export interface Header1 extends EmptyBlock {
+export interface Header1 extends BaseTextBlock {
    type: BlockTypes.Header1;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
 }
 
 /**
  * Heading2 block. Editable, can't have children.
  */
-export interface Header2 extends EmptyBlock {
+export interface Header2 extends BaseTextBlock {
    type: BlockTypes.Header2;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
 }
 
 /**
  * Heading3 block. Editable, can't have children.
  */
-export interface Header3 extends EmptyBlock {
+export interface Header3 extends BaseTextBlock {
    type: BlockTypes.Header3;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
 }
 
 /**
  * Quote block. Editable, can't have children.
  */
-export interface Quote extends EmptyBlock {
+export interface Quote extends BaseTextBlock {
    type: BlockTypes.Quote;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
 }
 
 /**
  * Callout block. Editable, can't have children.
  */
-export interface Callout extends EmptyBlock {
+export interface Callout extends BaseTextBlock {
    type: BlockTypes.Callout;
    properties?: {
-      title?: SemanticString[];
+      title: SemanticString[];
    };
    /** Defined if the user uploaded an image for icon. */
    file_ids?: base.UUID[];
@@ -232,7 +238,7 @@ export interface TableOfContents extends EmptyBlock {
 /**
  * Math Equation block.
  */
-export interface Equation extends EmptyBlock {
+export interface Equation extends BaseTextBlock {
    type: BlockTypes.Equation;
    properties?: {
       /** LaTeX. */
@@ -243,7 +249,7 @@ export interface Equation extends EmptyBlock {
 /**
  * Template button block.
  */
-export interface TemplateButton extends EmptyBlock {
+export interface TemplateButton extends BaseTextBlock {
    type: BlockTypes.TemplateButton;
    properties?: {
       /** Button name. */
@@ -345,7 +351,7 @@ export interface Bookmark extends EmptyBlock {
 /**
  * Code block.
  */
-export interface Code extends EmptyBlock {
+export interface Code extends BaseTextBlock {
    type: BlockTypes.Code;
    properties?: {
       /** Code content. */

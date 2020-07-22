@@ -8,7 +8,7 @@ import {
    SearchSort,
    SearchResultsType,
 } from './SearchApiTypes';
-import { addAbortSignal } from 'aUtilities/restApi';
+import { addAbortSignal } from 'aUtilities/apiHelper';
 
 export const searchByRelevance = async (
    query: string,
@@ -21,13 +21,18 @@ export const searchByRelevance = async (
    let filters = defaultFilters();
    filters.isNavigableOnly = pageTitlesOnly;
 
-   let req = superagent
-      .post('https://www.notion.so/api/v3/search')
-      .send(createParam(userData, query, filters, sort, limit));
+   try {
+      let req = superagent
+         .post('https://www.notion.so/api/v3/search')
+         .send(createParam(userData, query, filters, sort, limit));
 
-   addAbortSignal(req, abort);
+      addAbortSignal(req, abort);
 
-   return (await req).body;
+      return (await req).body;
+   } catch (err) {
+      console.log(err);
+      throw err;
+   }
 };
 
 const createParam = (

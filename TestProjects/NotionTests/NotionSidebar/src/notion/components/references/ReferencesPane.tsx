@@ -54,16 +54,22 @@ export const ReferencesPane = ({ status, data }: any) => {
          <React.Fragment>
             {references.status === thunkStatus.fulfilled &&
                references.pageReferences.direct.map((u) => {
-                  return <Reference refData={u}></Reference>;
+                  return (
+                     <Reference key={u.searchRecord.id} refData={u}></Reference>
+                  );
                })}
          </React.Fragment>
          {references.status === thunkStatus.fulfilled &&
             references.pageReferences.fullTitle.map((u) => {
-               return <Reference refData={u}></Reference>;
+               return (
+                  <Reference key={u.searchRecord.id} refData={u}></Reference>
+               );
             })}
          {references.status === thunkStatus.fulfilled &&
             references.pageReferences.related.map((u) => {
-               return <Reference refData={u}></Reference>;
+               return (
+                  <Reference key={u.searchRecord.id} refData={u}></Reference>
+               );
             })}
          {references.status === thunkStatus.pending && (
             <div>

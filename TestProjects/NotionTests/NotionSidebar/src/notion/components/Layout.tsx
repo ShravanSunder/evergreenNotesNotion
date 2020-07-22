@@ -8,10 +8,10 @@ import { ReferencesPane } from './references/ReferencesPane';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 
 //loading fonts recommended by material ui
-import 'fontsource-roboto/latin-300.css';
-import 'fontsource-roboto/latin-400.css';
-import 'fontsource-roboto/latin-500.css';
-import 'fontsource-roboto/latin-700.css';
+// import 'fontsource-roboto/latin-300.css';
+// import 'fontsource-roboto/latin-400.css';
+// import 'fontsource-roboto/latin-500.css';
+// import 'fontsource-roboto/latin-700.css';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { notionSiteActions } from './notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
@@ -29,7 +29,7 @@ export const Layout = () => {
    }, [dispatch]);
 
    useEffect(() => {
-      if (cookie.status !== thunkStatus.fulfilled) {
+      if (cookie.status === thunkStatus.fulfilled) {
          updateCurrentPageId();
       }
    }, [cookie.status, updateCurrentPageId]);

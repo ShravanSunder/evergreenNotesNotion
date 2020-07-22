@@ -2,6 +2,7 @@ import { RecordMap, Record } from './notionV3/notionRecordTypes';
 import * as blockTypes from './notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from './notionV3/BlockTypes';
 import TreeModel from 'tree-model';
+import { BaseTextBlock } from './notionV3/typings/basic_blocks';
 
 export interface NotionBlockModel {
    block: blockTypes.Block;
@@ -60,17 +61,19 @@ export class NotionBlock implements NotionBlockModel {
             this.type === BlockTypes.CollectionViewPage ||
             this.type === BlockTypes.CollectionViewInline
          ) {
-            return this.collection!.name![0][0];
+            if (this.collection?.name != null)
+               return this.collection.name[0][0];
          } else if (this.type === BlockTypes.Page) {
             let page = this.block as blockTypes.Page;
             return page.properties[BlockProps.Title][0][0];
          } else {
-            let u = this.block as any;
-            let title = u.page.properties[BlockProps.Title][0][0];
+            let u = this.block as BaseTextBlock;
+            let title = u.properties?.title[0][0];
             return title;
          }
-      } catch {
+      } catch (err) {
          console.log('Log: unkown block type: ' + this.type);
+         console.log(err);
       }
       return undefined;
    };

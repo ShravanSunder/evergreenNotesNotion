@@ -14,6 +14,11 @@ export const getBlockFromPageChunk = (
    page: PageChunk,
    pageId: string
 ): NotionBlockModel => {
-   let m = new NotionBlock(page.recordMap, pageId).toSerializable();
-   return m;
+   try {
+      let m = new NotionBlock(page.recordMap, pageId).toSerializable();
+      return m;
+   } catch (err) {
+      console.log(err);
+      throw err;
+   }
 };

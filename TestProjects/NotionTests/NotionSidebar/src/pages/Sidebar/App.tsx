@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root';
 import React, { useEffect } from 'react';
 import { render } from 'react-dom';
 import { Provider, useSelector, useDispatch } from 'react-redux';
@@ -13,10 +14,14 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { ThemeProvider } from '@material-ui/core';
 import { theme } from 'aNotion/components/Theme';
+import logger from 'redux-logger';
 
-console.log('App loading...');
+import Debug from 'debug';
+export const debug = Debug('NS');
 
-export const App = () => {
+debug('App loading...');
+
+const App = () => {
    setTabId();
    useEffect(() => {
       setTabId();
@@ -55,8 +60,13 @@ const fetchCookies = async (tabId: number) => {
    });
 };
 
-render(<App />, window.document.querySelector('#app-container'));
+const hotApp = hot(App);
+export default hotApp;
+const renderApp = (Component: React.FC) =>
+   render(<Component />, window.document.querySelector('#app-container'));
 console.log('App loaded!');
+
+renderApp(hotApp);
 
 registerCookiesListener();
 registerTabUpdateListener();
