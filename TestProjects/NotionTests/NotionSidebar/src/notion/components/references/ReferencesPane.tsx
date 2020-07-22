@@ -10,6 +10,7 @@ import {
    ListItem,
    ListItemText,
    Typography,
+   withStyles,
 } from '@material-ui/core';
 import {
    currentRecordSelector,
@@ -49,29 +50,21 @@ export const ReferencesPane = ({ status, data }: any) => {
    }, [record.status, dispatch, record.pageRecord, pageName]);
 
    return (
-      <div style={{ height: 1000 }}>
-         <List>
+      <div style={{ height: '100%', width: '100%' }}>
+         <React.Fragment>
             {references.status === thunkStatus.fulfilled &&
                references.pageReferences.direct.map((u) => {
-                  return (
-                     <ListItem key={u.searchRecord.id}>
-                        <Reference refData={u}></Reference>
-                     </ListItem>
-                  );
+                  return <Reference refData={u}></Reference>;
                })}
-         </List>
-         <List>
-            {references.status === thunkStatus.fulfilled &&
-               references.pageReferences.fullTitle.map((u) => {
-                  return <ListItem key={u.searchRecord.id}></ListItem>;
-               })}
-         </List>
-         <List>
-            {references.status === thunkStatus.fulfilled &&
-               references.pageReferences.related.map((u) => {
-                  return <ListItem key={u.searchRecord.id}></ListItem>;
-               })}
-         </List>
+         </React.Fragment>
+         {references.status === thunkStatus.fulfilled &&
+            references.pageReferences.fullTitle.map((u) => {
+               return <Reference refData={u}></Reference>;
+            })}
+         {references.status === thunkStatus.fulfilled &&
+            references.pageReferences.related.map((u) => {
+               return <Reference refData={u}></Reference>;
+            })}
          {references.status === thunkStatus.pending && (
             <div>
                <Skeleton />
