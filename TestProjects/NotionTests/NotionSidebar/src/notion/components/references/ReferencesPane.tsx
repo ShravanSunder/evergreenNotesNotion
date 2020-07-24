@@ -11,6 +11,9 @@ import {
    ListItemText,
    Typography,
    withStyles,
+   makeStyles,
+   createStyles,
+   Theme,
 } from '@material-ui/core';
 import {
    currentRecordSelector,
@@ -24,6 +27,17 @@ import {
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { Reference } from './Reference';
+import { ReferenceState } from './referenceTypes';
+
+const useStyles = makeStyles((theme: Theme) =>
+   createStyles({
+      sections: {
+         marginLeft: 6,
+         marginTop: 12,
+         marginBottom: 6,
+      },
+   })
+);
 
 // comment
 export const ReferencesPane = ({ status, data }: any) => {
@@ -32,6 +46,7 @@ export const ReferencesPane = ({ status, data }: any) => {
    const references = useSelector(referenceSelector, shallowEqual);
    const pageName = record.pageRecord?.title;
 
+   let refeStyles = useStyles();
    useEffect(() => {
       if (record.status === thunkStatus.fulfilled && pageName != null) {
          let p: FetchTitleRefsParams = {
@@ -51,36 +66,64 @@ export const ReferencesPane = ({ status, data }: any) => {
 
    return (
       <div style={{ height: '100%', width: '100%' }}>
-         <React.Fragment>
-            {references.status === thunkStatus.fulfilled &&
-               references.pageReferences.direct.map((u) => {
-                  return (
-                     <Reference key={u.searchRecord.id} refData={u}></Reference>
-                  );
-               })}
-         </React.Fragment>
+         <FullReferences references={references}></FullReferences>
+         <RelatedReferences references={references}></RelatedReferences>
+         {references.status === thunkStatus.rejected && <div>error!</div>}
+      </div>
+   );
+};
+
+const FullReferences = ({ references }: { references: ReferenceState }) => {
+   let refeStyles = useStyles();
+
+   return (
+      <React.Fragment>
+         <Typography className={refeStyles.sections} variant="h6">
+            <b>References</b>
+         </Typography>
+         {references.status === thunkStatus.pending && (
+            <div>
+               <Skeleton />
+               <Skeleton />
+               <Skeleton />
+            </div>
+         )}
+         {references.status === thunkStatus.fulfilled &&
+            references.pageReferences.direct.map((u) => {
+               return (
+                  <Reference key={u.searchRecord.id} refData={u}></Reference>
+               );
+            })}
          {references.status === thunkStatus.fulfilled &&
             references.pageReferences.fullTitle.map((u) => {
                return (
                   <Reference key={u.searchRecord.id} refData={u}></Reference>
                );
             })}
+      </React.Fragment>
+   );
+};
+
+const RelatedReferences = ({ references }: { references: ReferenceState }) => {
+   let refeStyles = useStyles();
+   return (
+      <React.Fragment>
+         <Typography className={refeStyles.sections} variant="h6">
+            <b>Related Searches</b>
+         </Typography>
+         {references.status === thunkStatus.pending && (
+            <div>
+               <Skeleton />
+               <Skeleton />
+               <Skeleton />
+            </div>
+         )}
          {references.status === thunkStatus.fulfilled &&
             references.pageReferences.related.map((u) => {
                return (
                   <Reference key={u.searchRecord.id} refData={u}></Reference>
                );
             })}
-         {references.status === thunkStatus.pending && (
-            <div>
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-            </div>
-         )}
-         {references.status === thunkStatus.rejected && <div>error!</div>}
-      </div>
+      </React.Fragment>
    );
 };
