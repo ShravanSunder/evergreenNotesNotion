@@ -13,6 +13,7 @@ export interface SearchRecordModel {
    highlight: { text: string; pathText: string };
    notionBlock: NotionBlockModel;
    text: string;
+   textByContext: string[];
 }
 
 export class SearchRecord implements SearchRecordModel {
@@ -21,7 +22,7 @@ export class SearchRecord implements SearchRecordModel {
    score: number;
    highlight: { text: string; pathText: string };
    notionBlock: NotionBlockModel;
-   decoratedText: string = '';
+   textByContext: string[] = [];
    text: string = '';
 
    constructor(data: RecordMap, searchResult: SearchResultType) {
@@ -34,7 +35,9 @@ export class SearchRecord implements SearchRecordModel {
    }
 
    cleanHighlight(highlight: { text: string; pathText: string }) {
-      this.decoratedText = highlight.text.split('gzkNfoUU').join('b');
+      this.textByContext = highlight.text
+         .split(/(<gzkNfoUU>|<\/gzkNfoUU>)/)
+         .filter((x) => !x.includes('gzkNfoUU'));
       this.text = highlight.text.split('<gzkNfoUU>').join('');
       this.text = this.text.split('</gzkNfoUU>').join('');
    }
@@ -45,6 +48,7 @@ export class SearchRecord implements SearchRecordModel {
          isNavigable: this.isNavigable,
          score: this.score,
          highlight: this.highlight,
+         textByContext: this.textByContext,
          text: this.text,
          notionBlock: (this.notionBlock as NotionBlock).toSerializable(),
       };

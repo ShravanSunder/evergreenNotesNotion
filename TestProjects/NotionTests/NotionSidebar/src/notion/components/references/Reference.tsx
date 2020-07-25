@@ -1,6 +1,8 @@
 import React, { useEffect, MouseEvent, useState } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
+import ReactHtmlParser from 'react-html-parser';
+
 import { Skeleton } from '@material-ui/lab';
 
 import {
@@ -77,12 +79,26 @@ export const Reference = ({ refData }: { refData: RefData }) => {
             <Grid container>
                <Grid item xs>
                   <Typography variant="body1">
-                     {refData.searchRecord.text}
+                     {parse(refData.searchRecord.textByContext)}
                   </Typography>
                </Grid>
             </Grid>
          </AccordionSummary>
          <AccordionDetails></AccordionDetails>
       </Accordion>
+   );
+};
+
+const parse = (textByContext: string[]) => {
+   return (
+      <React.Fragment>
+         {textByContext.map((f, i) => {
+            if (i % 2 === 1) {
+               return <strong key={i}>{f}</strong>;
+            } else {
+               return <React.Fragment key={i}>{f}</React.Fragment>;
+            }
+         })}
+      </React.Fragment>
    );
 };

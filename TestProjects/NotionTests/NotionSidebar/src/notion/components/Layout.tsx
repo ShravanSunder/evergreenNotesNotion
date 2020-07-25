@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader/root';
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
@@ -18,7 +19,7 @@ import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import Box from '@material-ui/core/Box/Box';
 
-export const Layout = () => {
+const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
@@ -56,3 +57,5 @@ export const Layout = () => {
       </ErrorBoundary>
    );
 };
+
+export default hot(Layout);
