@@ -6,12 +6,14 @@ import {
    RefData,
    ResultTypeEnum,
 } from 'aNotion/components/references/referenceTypes';
+import { current } from '@reduxjs/toolkit';
 //import { BlockRecord } from 'aNotion/types/PageRecord';
 
 export const createReferences = (
    query: string,
    searchResults: SearchResultsType,
-   signal?: AbortSignal
+   pageId: string | undefined
+   //signal?: AbortSignal
 ): PageReferences => {
    let direct: RefData[] = [];
    let fullTitle: RefData[] = [];
@@ -19,7 +21,12 @@ export const createReferences = (
 
    for (let s of searchResults.results) {
       try {
-         if (s.score > 10 && s.highlight != null && s.highlight.text != null) {
+         if (
+            s.score > 10 &&
+            s.highlight != null &&
+            s.highlight.text != null &&
+            s.id != pageId
+         ) {
             let data = new SearchRecord(searchResults.recordMap, s);
             filterResults(data, query, direct, fullTitle, related);
          }

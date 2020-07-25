@@ -5,10 +5,7 @@ import {
    PayloadAction,
 } from '@reduxjs/toolkit';
 import * as searchApi from 'aNotion/api/v3/searchApi';
-import {
-   FetchTitleRefsParams,
-   SearchSort,
-} from 'aNotion/api/v3/SearchApiTypes';
+import { SearchSort } from 'aNotion/api/v3/SearchApiTypes';
 import {
    ReferenceState,
    PageReferences,
@@ -22,9 +19,12 @@ const initialState: ReferenceState = {
    status: thunkStatus.pending,
 };
 
-const fetchRefsBasedOnTitle = createAsyncThunk(
+const fetchTitleRefs = createAsyncThunk(
    'notion/reference/current',
-   async ({ query }: FetchTitleRefsParams, thunkApi) => {
+   async (
+      { query, pageId }: { query: string; pageId: string | undefined },
+      thunkApi
+   ) => {
       let result1 = await searchApi.searchByRelevance(
          query,
          false,
@@ -32,7 +32,7 @@ const fetchRefsBasedOnTitle = createAsyncThunk(
          SearchSort.Relevance,
          thunkApi.signal
       );
-      return createReferences(query, result1, thunkApi.signal);
+      return createReferences(query, result1, pageId);
    }
 );
 
@@ -50,18 +50,18 @@ const referenceSlice = createSlice({
       unloadReferences: unloadReferences,
    },
    extraReducers: {
-      [fetchRefsBasedOnTitle.fulfilled.toString()]: (
+      [fetchTitleRefs.fulfilled.toString()]: (
          state,
          action: PayloadAction<PageReferences>
       ) => {
          state.pageReferences = action.payload;
          state.status = thunkStatus.fulfilled;
       },
-      [fetchRefsBasedOnTitle.pending.toString()]: (state) => {
+      [fetchTitleRefs.pending.toString()]: (state) => {
          state.status = thunkStatus.pending;
          state.pageReferences = initPageReference();
       },
-      [fetchRefsBasedOnTitle.rejected.toString()]: (state) => {
+      [fetchTitleRefs.rejected.toString()]: (state) => {
          state.status = thunkStatus.rejected;
          state.pageReferences = initPageReference();
       },
@@ -70,7 +70,7 @@ const referenceSlice = createSlice({
 
 export const referenceActions = {
    ...referenceSlice.actions,
-   fetchTitleRefs: fetchRefsBasedOnTitle,
+   fetchTitleRefs: fetchTitleRefs,
    //processTitleRefs,
 };
 export const referenceReducers = referenceSlice.reducer;

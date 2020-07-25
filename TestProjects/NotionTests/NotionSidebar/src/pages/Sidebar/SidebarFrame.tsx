@@ -13,7 +13,7 @@ export const LoadSidebarFrame = () => {
 
    return (
       <iframe
-         style={{ flexGrow: 1 }}
+         style={{ flexGrow: 1, zIndex: 10000 }}
          title="Notion Sidebar Extension"
          src={url}></iframe>
    );

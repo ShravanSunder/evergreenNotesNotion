@@ -20,10 +20,7 @@ import {
    referenceSelector,
 } from 'aNotion/providers/rootReducer';
 import { referenceActions } from './referenceSlice';
-import {
-   FetchTitleRefsParams,
-   SearchSort,
-} from 'aNotion/api/v3/SearchApiTypes';
+import { SearchSort } from 'aNotion/api/v3/SearchApiTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { Reference } from './Reference';
@@ -45,17 +42,14 @@ export const ReferencesPane = ({ status, data }: any) => {
    const record = useSelector(currentRecordSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
    const pageName = record.pageRecord?.title;
+   const pageId = record.pageRecord?.blockId as string;
 
    let refeStyles = useStyles();
    useEffect(() => {
       if (record.status === thunkStatus.fulfilled && pageName != null) {
-         let p: FetchTitleRefsParams = {
-            query: pageName,
-            pageTitlesOnly: false,
-            limit: 50,
-            sort: SearchSort.Relevance,
-         };
-         const pr = dispatch(referenceActions.fetchTitleRefs(p));
+         const pr = dispatch(
+            referenceActions.fetchTitleRefs({ query: pageName, pageId })
+         );
          return () => {
             pr.abort();
          };
