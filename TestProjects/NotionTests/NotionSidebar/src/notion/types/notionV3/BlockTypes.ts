@@ -3,6 +3,7 @@
 //  */
 
 export enum BlockTypes {
+   Unknown = 'unknown',
    Page = 'page',
    Text = 'text',
    ButtetedList = 'bulleted_list',

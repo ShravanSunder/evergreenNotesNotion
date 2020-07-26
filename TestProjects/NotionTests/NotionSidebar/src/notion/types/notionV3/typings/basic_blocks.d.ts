@@ -238,7 +238,7 @@ export interface TableOfContents extends EmptyBlock {
 /**
  * Math Equation block.
  */
-export interface Equation extends BaseTextBlock {
+export interface Equation extends EmptyBlock {
    type: BlockTypes.Equation;
    properties?: {
       /** LaTeX. */
@@ -249,7 +249,7 @@ export interface Equation extends BaseTextBlock {
 /**
  * Template button block.
  */
-export interface TemplateButton extends BaseTextBlock {
+export interface TemplateButton extends EmptyBlock {
    type: BlockTypes.TemplateButton;
    properties?: {
       /** Button name. */
@@ -262,7 +262,6 @@ export interface Breadcrumb extends EmptyBlock {
 }
 
 export type BasicBlockUnion =
-   | Page
    | Text
    | BulletedList
    | NumberedList
@@ -351,7 +350,7 @@ export interface Bookmark extends EmptyBlock {
 /**
  * Code block.
  */
-export interface Code extends BaseTextBlock {
+export interface Code extends EmptyBlock {
    type: BlockTypes.Code;
    properties?: {
       /** Code content. */

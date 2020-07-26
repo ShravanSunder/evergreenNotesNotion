@@ -48,7 +48,7 @@ export const ReferencesPane = ({ status, data }: any) => {
    useEffect(() => {
       if (record.status === thunkStatus.fulfilled && pageName != null) {
          const pr = dispatch(
-            referenceActions.fetchTitleRefs({ query: pageName, pageId })
+            referenceActions.fetchRefsForPage({ query: pageName, pageId })
          );
          return () => {
             pr.abort();
@@ -56,7 +56,7 @@ export const ReferencesPane = ({ status, data }: any) => {
       } else if (record.status === thunkStatus.pending) {
       }
       return () => {};
-   }, [record.status, dispatch, record.pageRecord, pageName]);
+   }, [record.status, dispatch, record.pageRecord, pageName, pageId]);
 
    return (
       <div style={{ height: '100%', width: '100%' }}>
@@ -72,7 +72,7 @@ const FullReferences = ({ references }: { references: ReferenceState }) => {
 
    return (
       <React.Fragment>
-         <Typography className={refeStyles.sections} variant="h6">
+         <Typography className={refeStyles.sections} variant="h5">
             <b>References</b>
          </Typography>
          {references.status === thunkStatus.pending && (
@@ -102,7 +102,7 @@ const RelatedReferences = ({ references }: { references: ReferenceState }) => {
    let refeStyles = useStyles();
    return (
       <React.Fragment>
-         <Typography className={refeStyles.sections} variant="h6">
+         <Typography className={refeStyles.sections} variant="h5">
             <b>Related Searches</b>
          </Typography>
          {references.status === thunkStatus.pending && (

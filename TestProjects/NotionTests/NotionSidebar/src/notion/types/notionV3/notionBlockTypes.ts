@@ -12,14 +12,17 @@ import { Permission } from './typings/permission';
 
 ////////////////////////////////////////////////
 // All types of blocks.
-import * as BasicBlock from './typings/basic_blocks';
+import * as BasicBlocks from './typings/basic_blocks';
 import * as DatabaseBlock from './typings/database';
-import * as EmbedBlock from './typings/embed_blocks';
+import * as EmbedBlocks from './typings/embed_blocks';
+
+export type NavigatableBlocks = Page | DatabaseBlock.CollectionViewPage;
 
 export type Block =
-   | BasicBlock.BasicBlockUnion
+   | NavigatableBlocks
+   | BasicBlocks.BasicBlockUnion
    | DatabaseBlock.DatabaseBlockUnion
-   | EmbedBlock.EmbedBlockUnion;
+   | EmbedBlocks.EmbedBlockUnion;
 
 export {
    Collection,
@@ -35,37 +38,37 @@ export {
    // UserSettings,
 };
 
-export type Breadcrumb = BasicBlock.Breadcrumb;
-export type Equation = BasicBlock.Equation;
-export type Factory = BasicBlock.TemplateButton;
-export type TableOfContents = BasicBlock.TableOfContents;
+export type Breadcrumb = BasicBlocks.Breadcrumb;
+export type Equation = BasicBlocks.Equation;
+export type Factory = BasicBlocks.TemplateButton;
+export type TableOfContents = BasicBlocks.TableOfContents;
 
-export type BulletedList = BasicBlock.BulletedList;
-export type Callout = BasicBlock.Callout;
-export type Column = BasicBlock.Column;
-export type ColumnList = BasicBlock.ColumnList;
-export type Divider = BasicBlock.Divider;
-export type Header = BasicBlock.Header1;
-export type NumberedList = BasicBlock.NumberedList;
-export type Page = BasicBlock.Page;
-export type Quote = BasicBlock.Quote;
-export type SubHeader = BasicBlock.Header2;
-export type SubSubHeader = BasicBlock.Header3;
-export type Text = BasicBlock.Text;
-export type ToDo = BasicBlock.ToDo;
-export type Toggle = BasicBlock.Toggle;
+export type BulletedList = BasicBlocks.BulletedList;
+export type Callout = BasicBlocks.Callout;
+export type Column = BasicBlocks.Column;
+export type ColumnList = BasicBlocks.ColumnList;
+export type Divider = BasicBlocks.Divider;
+export type Header = BasicBlocks.Header1;
+export type NumberedList = BasicBlocks.NumberedList;
+export type Page = BasicBlocks.Page;
+export type Quote = BasicBlocks.Quote;
+export type SubHeader = BasicBlocks.Header2;
+export type SubSubHeader = BasicBlocks.Header3;
+export type Text = BasicBlocks.Text;
+export type ToDo = BasicBlocks.ToDo;
+export type Toggle = BasicBlocks.Toggle;
 
 export type CollectionViewInline = DatabaseBlock.CollectionViewInline;
 export type CollectionViewPage = DatabaseBlock.CollectionViewPage;
 
 //export type Codepen = EmbedBlock.Codepen;
-export type Embed = EmbedBlock.Embed;
+export type Embed = EmbedBlocks.Embed;
 //export type Invision = EmbedBlock.Invision;
-export type PDF = EmbedBlock.PDF;
+export type PDF = EmbedBlocks.PDF;
 
-export type Audio = BasicBlock.Audio;
-export type Bookmark = BasicBlock.Bookmark;
-export type Code = BasicBlock.Code;
-export type File = BasicBlock.File;
-export type Image = BasicBlock.Image;
-export type Video = BasicBlock.Video;
+export type Audio = BasicBlocks.Audio;
+export type Bookmark = BasicBlocks.Bookmark;
+export type Code = BasicBlocks.Code;
+export type File = BasicBlocks.File;
+export type Image = BasicBlocks.Image;
+export type Video = BasicBlocks.Video;

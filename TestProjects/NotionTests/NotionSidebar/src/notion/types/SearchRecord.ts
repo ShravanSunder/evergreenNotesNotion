@@ -5,6 +5,7 @@ import { BlockTypes, BlockProps } from './notionV3/BlockTypes';
 import { NotionBlockModel, NotionBlock } from './NotionBlock';
 import { SearchResultType } from 'aNotion/api/v3/SearchApiTypes';
 import { createSearchContext } from 'aNotion/components/references/SearchContext';
+import { NavigatableBlocks } from 'aNotion/types/notionV3/notionBlockTypes';
 
 export interface SearchRecordModel {
    id: string;
@@ -14,6 +15,7 @@ export interface SearchRecordModel {
    notionBlock: NotionBlockModel;
    text: string;
    textByContext: string[];
+   path: NotionBlockModel[];
 }
 
 export class SearchRecord implements SearchRecordModel {
@@ -24,6 +26,7 @@ export class SearchRecord implements SearchRecordModel {
    notionBlock: NotionBlockModel;
    textByContext: string[] = [];
    text: string = '';
+   path: NotionBlockModel[] = [];
 
    constructor(data: RecordMap, searchResult: SearchResultType) {
       this.id = searchResult.id;
@@ -31,15 +34,24 @@ export class SearchRecord implements SearchRecordModel {
       this.highlight = searchResult.highlight;
       this.score = searchResult.score;
       this.notionBlock = new NotionBlock(data, this.id);
-      this.cleanHighlight(this.highlight);
+      this.cleanHighlight();
+      this.createPath();
    }
 
-   cleanHighlight(highlight: { text: string; pathText: string }) {
-      this.textByContext = highlight.text
+   cleanHighlight() {
+      this.textByContext = this.highlight.text
          .split(/(<gzkNfoUU>|<\/gzkNfoUU>)/)
          .filter((x) => !x.includes('gzkNfoUU'));
-      this.text = highlight.text.split('<gzkNfoUU>').join('');
+      this.text = this.highlight.text.split('<gzkNfoUU>').join('');
       this.text = this.text.split('</gzkNfoUU>').join('');
+   }
+
+   createPath() {
+      let path = (this.notionBlock as NotionBlock).getParents();
+
+      this.path = path.filter(
+         (x) => x.title != null && x.title.length > 0 && x.isNavigatable()
+      );
    }
 
    toSerializable = (): SearchRecordModel => {
@@ -50,6 +62,7 @@ export class SearchRecord implements SearchRecordModel {
          highlight: this.highlight,
          textByContext: this.textByContext,
          text: this.text,
+         path: this.path.map((p) => (p as NotionBlock).toSerializable()),
          notionBlock: (this.notionBlock as NotionBlock).toSerializable(),
       };
       return model;

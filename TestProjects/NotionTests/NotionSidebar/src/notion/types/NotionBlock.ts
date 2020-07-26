@@ -5,12 +5,12 @@ import TreeModel from 'tree-model';
 import { BaseTextBlock } from './notionV3/typings/basic_blocks';
 
 export interface NotionBlockModel {
-   block: blockTypes.Block;
+   block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined;
    recordMapData: RecordMap;
    type: BlockTypes;
-   title?: string;
+   title: string;
    blockId: string;
 }
 export interface TreeNode {
@@ -21,26 +21,35 @@ export interface TreeType extends TreeNode {
 }
 
 export class NotionBlock implements NotionBlockModel {
-   block: blockTypes.Block;
+   block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined = [];
    recordMapData: RecordMap;
-   type: BlockTypes;
-   title: string | undefined;
+   type: BlockTypes = BlockTypes.Unknown;
+   title: string;
    blockId: string = '';
    parentNodes?: NotionBlock[] = undefined;
    children?: NotionBlock[] = undefined;
 
    constructor(data: RecordMap, blockId: string) {
       this.recordMapData = data;
-      this.block = data.block[blockId].value!;
-      this.type = this.block.type;
-      this.blockId = blockId;
+      this.setupBlockData(data, blockId);
+      this.setupCollectionData(data, blockId);
+      this.setupType(data, blockId);
 
-      if (this.block.type === BlockTypes.CollectionViewPage) {
+      this.title = this.fetchTitle();
+   }
+
+   setupBlockData(data: RecordMap, blockId: string) {
+      this.block = data.block[blockId]?.value;
+      this.blockId = blockId;
+   }
+
+   setupCollectionData(data: RecordMap, blockId: string) {
+      if (this.block?.type === BlockTypes.CollectionViewPage) {
          let cId = this.block.collection_id;
          this.collection = data.collection![cId].value!;
-      } else if (this.block.type === BlockTypes.CollectionViewInline) {
+      } else if (this.block?.type === BlockTypes.CollectionViewInline) {
          let cId = this.block.collection_id;
          this.collection = data.collection![cId].value!;
          let viewIds = this.block.view_ids;
@@ -52,10 +61,20 @@ export class NotionBlock implements NotionBlockModel {
                }
             }
          }
+      } else if (this.block == null && data.collection != null) {
+         this.collection = data.collection[blockId]?.value;
       }
    }
 
-   getName = (): string | undefined => {
+   setupType(data: RecordMap, blockId: string) {
+      if (this.block != null) {
+         this.type = this.block.type;
+      } else if (this.collection != null) {
+         this.type = BlockTypes.CollectionViewPage;
+      }
+   }
+
+   fetchTitle = (): string => {
       try {
          if (
             this.type === BlockTypes.CollectionViewPage ||
@@ -66,16 +85,16 @@ export class NotionBlock implements NotionBlockModel {
          } else if (this.type === BlockTypes.Page) {
             let page = this.block as blockTypes.Page;
             return page.properties[BlockProps.Title][0][0];
-         } else {
+         } else if (this.type !== BlockTypes.Unknown) {
             let u = this.block as BaseTextBlock;
             let title = u.properties?.title[0][0];
-            return title;
+            return title ?? '';
          }
       } catch (err) {
          console.log('Log: unkown block type: ' + this.type);
          console.log(err);
       }
-      return undefined;
+      return '';
    };
 
    asType = () => {
@@ -88,22 +107,43 @@ export class NotionBlock implements NotionBlockModel {
       }
    };
 
-   getParents = (refresh: boolean = false): any => {
+   isNavigatable = () => {
+      return (
+         this.type === BlockTypes.Page ||
+         this.type === BlockTypes.CollectionViewPage
+      );
+   };
+
+   getParentId() {
+      if (this.block != null) {
+         return this.block.parent_id;
+      } else if (this.collection != null) {
+         return this.collection.parent_id;
+      }
+      return undefined;
+   }
+
+   getParents = (refresh: boolean = false): NotionBlock[] => {
       if (!refresh || this.parentNodes == null) {
          let parents: NotionBlock[] = [];
-         let node = this.recordMapData.block[this.blockId];
-         this.traversUp(node, parents);
+         this.traversUp(this.getParentId(), parents);
          this.parentNodes = parents;
          return parents;
       }
       return this.parentNodes;
    };
 
-   private traversUp(node: Record<blockTypes.Block>, parents: NotionBlock[]) {
-      if (node.value?.parent_id != null) {
-         var pBlock = new NotionBlock(this.recordMapData, node.value.parent_id);
-         parents.splice(0, 0, pBlock);
-         this.traversUp(this.recordMapData.block[pBlock.blockId], parents);
+   private traversUp(parentId: string | undefined, parents: NotionBlock[]) {
+      try {
+         if (parentId != null) {
+            var pBlock = new NotionBlock(this.recordMapData, parentId);
+            if (pBlock.type !== BlockTypes.Unknown) {
+               parents.splice(0, 0, pBlock);
+               this.traversUp(pBlock.getParentId(), parents);
+            }
+         }
+      } catch (err) {
+         console.warn('Parent Not Found: ' + err);
       }
    }
 
@@ -131,7 +171,6 @@ export class NotionBlock implements NotionBlockModel {
    }
 
    toSerializable = (): NotionBlockModel => {
-      this.title = this.getName();
       let model: NotionBlockModel = {
          block: this.block,
          collection: this.collection,

@@ -11,6 +11,7 @@ import {
    List,
    ListItem,
    ListItemText,
+   Breadcrumbs,
    Typography,
    Grid,
    withStyles,
@@ -76,11 +77,20 @@ export const Reference = ({ refData }: { refData: RefData }) => {
    return (
       <Accordion TransitionProps={{ unmountOnExit: true }}>
          <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-            <Grid container>
-               <Grid item xs>
+            <Grid container spacing={1}>
+               <Grid item xs={12}>
                   <Typography variant="body1">
                      {parse(refData.searchRecord.textByContext)}
                   </Typography>
+               </Grid>
+               <Grid item xs>
+                  <Breadcrumbs>
+                     {refData.searchRecord.path.map((p) => (
+                        <Typography variant="caption" key={p.blockId}>
+                           {p.title}
+                        </Typography>
+                     ))}
+                  </Breadcrumbs>
                </Grid>
             </Grid>
          </AccordionSummary>

@@ -19,7 +19,7 @@ const initialState: ReferenceState = {
    status: thunkStatus.pending,
 };
 
-const fetchTitleRefs = createAsyncThunk(
+const feathRefsForPage = createAsyncThunk(
    'notion/reference/current',
    async (
       { query, pageId }: { query: string; pageId: string | undefined },
@@ -50,18 +50,18 @@ const referenceSlice = createSlice({
       unloadReferences: unloadReferences,
    },
    extraReducers: {
-      [fetchTitleRefs.fulfilled.toString()]: (
+      [feathRefsForPage.fulfilled.toString()]: (
          state,
          action: PayloadAction<PageReferences>
       ) => {
          state.pageReferences = action.payload;
          state.status = thunkStatus.fulfilled;
       },
-      [fetchTitleRefs.pending.toString()]: (state) => {
+      [feathRefsForPage.pending.toString()]: (state) => {
          state.status = thunkStatus.pending;
          state.pageReferences = initPageReference();
       },
-      [fetchTitleRefs.rejected.toString()]: (state) => {
+      [feathRefsForPage.rejected.toString()]: (state) => {
          state.status = thunkStatus.rejected;
          state.pageReferences = initPageReference();
       },
@@ -70,7 +70,7 @@ const referenceSlice = createSlice({
 
 export const referenceActions = {
    ...referenceSlice.actions,
-   fetchTitleRefs: fetchTitleRefs,
+   fetchRefsForPage: feathRefsForPage,
    //processTitleRefs,
 };
 export const referenceReducers = referenceSlice.reducer;
