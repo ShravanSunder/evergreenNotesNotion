@@ -73,20 +73,6 @@ const AccordionDetails = withStyles((theme) => ({
    },
 }))(MuiAccordionDetails);
 
-// comment
-
-const Path = ({ path }: { path: NotionBlockModel[] }) => {
-   return (
-      <Breadcrumbs maxItems={4}>
-         {path.map((p) => (
-            <Typography variant="caption" key={p.blockId}>
-               {getTitle(p.title)}
-            </Typography>
-         ))}
-      </Breadcrumbs>
-   );
-};
-
 export const Reference = ({ refData }: { refData: RefData }) => {
    return (
       <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -102,7 +88,13 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                </Grid>
             </Grid>
          </AccordionSummary>
-         <AccordionDetails></AccordionDetails>
+         <AccordionDetails>
+            <Grid container spacing={1}>
+               <Grid item xs={12}>
+                  <Path path={refData.searchRecord.content}></Path>
+               </Grid>
+            </Grid>
+         </AccordionDetails>
       </Accordion>
    );
 };
@@ -124,4 +116,28 @@ const parse = (textByContext: string[]) => {
 const getTitle = (title: string) => {
    if (title.length > 30) return title.substring(0, 30) + '...';
    else return title;
+};
+
+const Path = ({ path }: { path: NotionBlockModel[] }) => {
+   return (
+      <Breadcrumbs maxItems={4}>
+         {path.map((p) => (
+            <Typography variant="caption" key={p.blockId}>
+               {getTitle(p.title)}
+            </Typography>
+         ))}
+      </Breadcrumbs>
+   );
+};
+
+const Content = ({ content }: { content: NotionBlockModel[] }) => {
+   return (
+      <React.Fragment>
+         {content.map((p) => (
+            <Typography variant="body2" key={p.blockId}>
+               {getTitle(p.title)}
+            </Typography>
+         ))}
+      </React.Fragment>
+   );
 };
