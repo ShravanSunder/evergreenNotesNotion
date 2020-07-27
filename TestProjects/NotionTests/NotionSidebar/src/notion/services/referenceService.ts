@@ -1,5 +1,5 @@
 import { SearchResultsType } from 'aNotion/api/v3/SearchApiTypes';
-import { SearchRecord, SearchRecordModel } from 'aNotion/types/SearchRecord';
+import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import {
    PageReferences,

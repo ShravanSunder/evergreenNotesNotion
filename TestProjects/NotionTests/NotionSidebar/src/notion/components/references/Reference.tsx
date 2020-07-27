@@ -25,7 +25,7 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { RefData } from './referenceTypes';
 import { ExpandMoreSharp } from '@material-ui/icons';
-import { NotionBlockModel } from 'aNotion/types/NotionBlock';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 const Accordion = withStyles({
    root: {

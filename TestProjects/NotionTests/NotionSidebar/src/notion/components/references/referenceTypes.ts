@@ -1,5 +1,5 @@
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { SearchRecordModel } from 'aNotion/types/SearchRecord';
+import { SearchRecordModel } from 'aNotion/models/SearchRecord';
 
 export type ReferenceState = {
    pageReferences: PageReferences;

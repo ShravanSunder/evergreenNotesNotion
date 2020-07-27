@@ -1,6 +1,6 @@
 import { mountSidebar } from '../Sidebar/SidebarFrame';
 import 'chrome-extension-async';
-import { reduceNotionContentPadding } from 'aNotion/services/styleFixes';
+import { reduceNotionContentPadding } from 'src/pages/Content/styleFixes';
 import {
    toggleSidebar,
    createNewRootElement,

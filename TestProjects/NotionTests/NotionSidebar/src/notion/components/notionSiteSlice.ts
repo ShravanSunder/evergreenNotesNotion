@@ -14,7 +14,7 @@ import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { getBlockFromPageChunk } from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
-import { NotionBlockModel } from 'aNotion/types/NotionBlock';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },

@@ -3,7 +3,7 @@
 // get title, properties etc.  using blocks as reference
 
 import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
-import { NotionBlock, NotionBlockModel } from 'aNotion/types/NotionBlock';
+import { NotionBlock, NotionBlockModel } from 'aNotion/models/NotionBlock';
 // import {
 //    Page,
 //    Collection,

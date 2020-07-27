@@ -5,7 +5,7 @@ import {
    Collection,
    CollectionView,
 } from 'aNotion/types/notionV3/notionBlockTypes';
-import { NotionBlockModel } from 'aNotion/types/NotionBlock';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 export type CookieData = {
    userId: string;

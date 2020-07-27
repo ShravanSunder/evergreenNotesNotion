@@ -1,7 +1,11 @@
-import { RecordMap, Record, BlockRecord } from './notionV3/notionRecordTypes';
-import { Map } from './notionV3/Map';
-import * as blockTypes from './notionV3/notionBlockTypes';
-import { BlockTypes, BlockProps } from './notionV3/BlockTypes';
+import {
+   RecordMap,
+   Record,
+   BlockRecord,
+} from '../types/notionV3/notionRecordTypes';
+import { Map } from '../types/notionV3/Map';
+import * as blockTypes from '../types/notionV3/notionBlockTypes';
+import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
 import { NotionBlockModel, NotionBlock } from './NotionBlock';
 import { SearchResultType } from 'aNotion/api/v3/SearchApiTypes';
 import { createSearchContext } from 'aNotion/components/references/SearchContext';

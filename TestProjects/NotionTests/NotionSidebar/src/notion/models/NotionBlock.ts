@@ -1,8 +1,9 @@
-import { RecordMap, Record } from './notionV3/notionRecordTypes';
-import * as blockTypes from './notionV3/notionBlockTypes';
-import { BlockTypes, BlockProps } from './notionV3/BlockTypes';
+import { RecordMap, Record } from 'aNotion/types/notionV3/notionRecordTypes';
+import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
+import { BlockTypes, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
 import TreeModel from 'tree-model';
-import { BaseTextBlock } from './notionV3/typings/basic_blocks';
+import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
+import * as recordService from 'aNotion/services/recordService';
 
 export interface NotionBlockModel {
    block?: blockTypes.Block;
@@ -158,24 +159,16 @@ export class NotionBlock implements NotionBlockModel {
    getChildren = (refresh: boolean = false) => {
       if (!refresh || this.children == null) {
          let children: [] = [];
-         let node = this.recordMapData.block[this.blockId];
-         this.traverseDown(node, children);
+         this.traverseDown(this.blockId, children);
          this.children = children;
          return children;
       }
       return this.children;
    };
 
-   private traverseDown(
-      node: Record<blockTypes.Block>,
-      children: NotionBlock[]
-   ) {
-      for (var childId of node.value!.content ?? []) {
-         if (childId != null) {
-            var cBlock = new NotionBlock(this.recordMapData, childId);
-            children.push(cBlock);
-         }
-      }
+   private traverseDown(id: string, children: NotionBlock[]) {
+      //maybe later we might need a way to traverse down the tree?
+      children.concat(recordService.getContent(this.recordMapData, id));
    }
 
    toSerializable = (): NotionBlockModel => {
