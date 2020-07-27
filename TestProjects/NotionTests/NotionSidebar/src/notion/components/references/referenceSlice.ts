@@ -32,7 +32,11 @@ const feathRefsForPage = createAsyncThunk(
          SearchSort.Relevance,
          thunkApi.signal
       );
-      return createReferences(query, result1, pageId);
+      if (result1 != null && !thunkApi.signal.aborted) {
+         return createReferences(query, result1, pageId);
+      }
+
+      return result1;
    }
 );
 

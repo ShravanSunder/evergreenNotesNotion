@@ -32,7 +32,7 @@ const fetchCurrentPage = createAsyncThunk(
          thunkApi.signal
       )) as LoadPageChunk.PageChunk;
 
-      if (chunk != null) {
+      if (chunk != null && !thunkApi.signal.aborted) {
          thunkApi.dispatch(
             notionSiteSlice.actions.processChunkToBlock({ chunk, pageId })
          );
