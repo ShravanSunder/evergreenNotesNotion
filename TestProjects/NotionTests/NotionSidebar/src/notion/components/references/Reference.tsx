@@ -25,6 +25,7 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { RefData } from './referenceTypes';
 import { ExpandMoreSharp } from '@material-ui/icons';
+import { NotionBlockModel } from 'aNotion/types/NotionBlock';
 
 const Accordion = withStyles({
    root: {
@@ -73,6 +74,19 @@ const AccordionDetails = withStyles((theme) => ({
 }))(MuiAccordionDetails);
 
 // comment
+
+const Path = ({ path }: { path: NotionBlockModel[] }) => {
+   return (
+      <Breadcrumbs maxItems={4}>
+         {path.map((p) => (
+            <Typography variant="caption" key={p.blockId}>
+               {getTitle(p.title)}
+            </Typography>
+         ))}
+      </Breadcrumbs>
+   );
+};
+
 export const Reference = ({ refData }: { refData: RefData }) => {
    return (
       <Accordion TransitionProps={{ unmountOnExit: true }}>
@@ -84,13 +98,7 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                   </Typography>
                </Grid>
                <Grid item xs>
-                  <Breadcrumbs maxItems={4}>
-                     {refData.searchRecord.path.map((p) => (
-                        <Typography variant="caption" key={p.blockId}>
-                           {getTitle(p.title)}
-                        </Typography>
-                     ))}
-                  </Breadcrumbs>
+                  <Path path={refData.searchRecord.path}></Path>
                </Grid>
             </Grid>
          </AccordionSummary>
@@ -114,6 +122,6 @@ const parse = (textByContext: string[]) => {
 };
 
 const getTitle = (title: string) => {
-   if (title.length > 20) return title.substring(0, 20) + '...';
-   else return title.length;
+   if (title.length > 30) return title.substring(0, 30) + '...';
+   else return title;
 };

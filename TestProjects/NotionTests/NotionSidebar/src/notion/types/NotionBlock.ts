@@ -126,20 +126,28 @@ export class NotionBlock implements NotionBlockModel {
    getParents = (refresh: boolean = false): NotionBlock[] => {
       if (!refresh || this.parentNodes == null) {
          let parents: NotionBlock[] = [];
-         this.traversUp(this.getParentId(), parents);
+         this.traversUp(this.getParentId(), this.blockId, parents);
          this.parentNodes = parents;
          return parents;
       }
       return this.parentNodes;
    };
 
-   private traversUp(parentId: string | undefined, parents: NotionBlock[]) {
+   private traversUp(
+      parentId: string | undefined,
+      id: string,
+      parents: NotionBlock[]
+   ) {
       try {
          if (parentId != null) {
             var pBlock = new NotionBlock(this.recordMapData, parentId);
-            if (pBlock.type !== BlockTypes.Unknown) {
+            if (pBlock.block == null) {
+               //if the block is empty, just skip saving it to array
+               //its probably a collection and repeated as we traverse
+               this.traversUp(pBlock.getParentId(), pBlock.blockId, parents);
+            } else if (pBlock.type !== BlockTypes.Unknown) {
                parents.splice(0, 0, pBlock);
-               this.traversUp(pBlock.getParentId(), parents);
+               this.traversUp(pBlock.getParentId(), pBlock.blockId, parents);
             }
          }
       } catch (err) {
