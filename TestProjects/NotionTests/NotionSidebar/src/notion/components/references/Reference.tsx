@@ -84,10 +84,10 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                   </Typography>
                </Grid>
                <Grid item xs>
-                  <Breadcrumbs>
+                  <Breadcrumbs maxItems={4}>
                      {refData.searchRecord.path.map((p) => (
                         <Typography variant="caption" key={p.blockId}>
-                           {p.title}
+                           {getTitle(p.title)}
                         </Typography>
                      ))}
                   </Breadcrumbs>
@@ -111,4 +111,9 @@ const parse = (textByContext: string[]) => {
          })}
       </React.Fragment>
    );
+};
+
+const getTitle = (title: string) => {
+   if (title.length > 20) return title.substring(0, 20) + '...';
+   else return title.length;
 };
