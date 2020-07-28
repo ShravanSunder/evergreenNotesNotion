@@ -4,7 +4,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
    navigationSelector,
-} from 'aNotion/providers/rootReducer';
+} from 'aNotion/providers/storeSelectors';
 import { ReferencesPane } from './references/ReferencesPane';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 

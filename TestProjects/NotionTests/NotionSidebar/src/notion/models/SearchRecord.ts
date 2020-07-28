@@ -20,7 +20,6 @@ export interface SearchRecordModel {
    text: string;
    textByContext: string[];
    path: NotionBlockModel[];
-   content: NotionBlockModel[];
 }
 
 export class SearchRecord implements SearchRecordModel {
@@ -28,11 +27,10 @@ export class SearchRecord implements SearchRecordModel {
    isNavigable: boolean;
    score: number;
    highlight: { text: string; pathText: string };
-   notionBlock: NotionBlockModel;
+   notionBlock: NotionBlock;
    textByContext: string[] = [];
    text: string = '';
-   path: NotionBlockModel[] = [];
-   content: NotionBlockModel[] = [];
+   path: NotionBlock[] = [];
 
    constructor(data: RecordMap, searchResult: SearchResultType) {
       this.id = searchResult.id;
@@ -42,7 +40,6 @@ export class SearchRecord implements SearchRecordModel {
       this.notionBlock = new NotionBlock(data, this.id);
       this.cleanHighlight();
       this.fetchPath();
-      this.fetchContent();
    }
 
    cleanHighlight() {
@@ -61,13 +58,6 @@ export class SearchRecord implements SearchRecordModel {
       );
    }
 
-   fetchContent() {
-      let content = (this.notionBlock as NotionBlock).getChildren();
-      this.content = content.filter(
-         (x) => x.title != null && x.title.length > 0
-      );
-   }
-
    toSerializable = (): SearchRecordModel => {
       let model: SearchRecordModel = {
          id: this.id,
@@ -77,7 +67,6 @@ export class SearchRecord implements SearchRecordModel {
          textByContext: this.textByContext,
          text: this.text,
          path: this.path.map((p) => (p as NotionBlock).toSerializable()),
-         content: this.content.map((p) => (p as NotionBlock).toSerializable()),
          notionBlock: (this.notionBlock as NotionBlock).toSerializable(),
       };
       return model;

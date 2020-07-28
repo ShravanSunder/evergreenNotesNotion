@@ -90,9 +90,7 @@ export const Reference = ({ refData }: { refData: RefData }) => {
          </AccordionSummary>
          <AccordionDetails>
             <Grid container spacing={1}>
-               <Grid item xs={12}>
-                  <Path path={refData.searchRecord.content}></Path>
-               </Grid>
+               <Grid item xs={12}></Grid>
             </Grid>
          </AccordionDetails>
       </Accordion>

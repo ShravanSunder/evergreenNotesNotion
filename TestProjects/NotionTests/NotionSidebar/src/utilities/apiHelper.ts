@@ -5,7 +5,7 @@ export const addAbortSignal = (
    abort: AbortSignal
 ) =>
    req.on('progress', () => {
-      if (abort.aborted) {
+      if (abort != null && abort.aborted) {
          req.abort();
          console.log('abort');
       }

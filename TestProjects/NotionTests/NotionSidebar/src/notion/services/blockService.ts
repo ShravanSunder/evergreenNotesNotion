@@ -13,9 +13,9 @@ import { NotionBlock, NotionBlockModel } from 'aNotion/models/NotionBlock';
 export const getBlockFromPageChunk = (
    page: PageChunk,
    pageId: string
-): NotionBlockModel => {
+): NotionBlock => {
    try {
-      let m = new NotionBlock(page.recordMap, pageId).toSerializable();
+      let m = new NotionBlock(page.recordMap, pageId);
       return m;
    } catch (err) {
       console.log(err);

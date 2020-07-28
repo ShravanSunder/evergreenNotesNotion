@@ -12,7 +12,8 @@ export const getContent = (
    let node = record.block[blockId];
    let content: NotionBlock[] = [];
    if (node != null && node.value?.content != null) {
-      content.concat(getNotionBlocksFromContent(node.value.content, record));
+      let c = getNotionBlocksFromContent(node.value.content, record);
+      content = content.concat(c);
    }
 
    if (node != null && node.value?.type === BlockTypes.CollectionViewPage) {
@@ -24,12 +25,11 @@ export const getContent = (
             parentId != null &&
             record.block[parentId].value?.content != null
          ) {
-            content.concat(
-               getNotionBlocksFromContent(
-                  record.block[parentId].value?.content!,
-                  record
-               )
+            let c = getNotionBlocksFromContent(
+               record.block[parentId].value?.content!,
+               record
             );
+            content = content.concat(c);
          }
       }
    }
@@ -45,7 +45,9 @@ const getNotionBlocksFromContent = (
    for (let childId of contentIds) {
       if (childId != null) {
          let cBlock = new NotionBlock(record, childId);
-         content.push(cBlock);
+         if (cBlock.type !== BlockTypes.Unknown) {
+            content.push(cBlock);
+         }
       }
    }
    return content;

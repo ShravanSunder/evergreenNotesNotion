@@ -18,7 +18,7 @@ import {
 import {
    currentRecordSelector,
    referenceSelector,
-} from 'aNotion/providers/rootReducer';
+} from 'aNotion/providers/storeSelectors';
 import { referenceActions } from './referenceSlice';
 import { SearchSort } from 'aNotion/api/v3/SearchApiTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';

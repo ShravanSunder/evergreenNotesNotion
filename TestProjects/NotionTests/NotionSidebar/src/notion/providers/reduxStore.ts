@@ -25,7 +25,7 @@ export const reduxStore = configureStore({
    middleware: middleware,
    devTools: true, //process.env.NODE_ENV !== 'production',
    //preloadedState: preloadedState,
-   //enhancers: [composeEnhancers()],
+   enhancers: [composeEnhancers()],
 });
 
 export default reduxStore;

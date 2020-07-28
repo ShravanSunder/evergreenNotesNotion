@@ -9,7 +9,7 @@ export interface NotionBlockModel {
    block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined;
-   recordMapData: RecordMap;
+   //recordMapData: RecordMap;
    type: BlockTypes;
    title: string;
    blockId: string;
@@ -99,6 +99,7 @@ export class NotionBlock implements NotionBlockModel {
    };
 
    asType = () => {
+      //not finished
       switch (this.type) {
          case BlockTypes.Page:
             break;
@@ -168,7 +169,9 @@ export class NotionBlock implements NotionBlockModel {
 
    private traverseDown(id: string, children: NotionBlock[]) {
       //maybe later we might need a way to traverse down the tree?
-      children.concat(recordService.getContent(this.recordMapData, id));
+      children = children.concat(
+         recordService.getContent(this.recordMapData, id)
+      );
    }
 
    toSerializable = (): NotionBlockModel => {
@@ -176,7 +179,7 @@ export class NotionBlock implements NotionBlockModel {
          block: this.block,
          collection: this.collection,
          collection_views: this.collection_views,
-         recordMapData: this.recordMapData,
+         //recordMapData: this.recordMapData,
          type: this.type,
          title: this.title,
          blockId: this.blockId,

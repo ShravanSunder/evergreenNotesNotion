@@ -76,7 +76,10 @@ const processChunkToBlock = {
       state.currentPageRecord.pageRecord = action.payload;
    },
    prepare: (payload: processChunkToBlockType) => ({
-      payload: getBlockFromPageChunk(payload.chunk, payload.pageId),
+      payload: getBlockFromPageChunk(
+         payload.chunk,
+         payload.pageId
+      ).toSerializable(),
    }),
 };
 
