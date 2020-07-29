@@ -8,9 +8,9 @@ import {
    Avatar,
 } from '@material-ui/core';
 import {
-   ExpansionPanel,
-   ExpansionPanelSummary,
-   ExpansionPanelDetails,
+   Accordion,
+   AccordionSummary,
+   AccordionDetails,
 } from '@material-ui/core';
 
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -28,21 +28,21 @@ export const ErrorFallback = ({ error, componentStack }: FallbackProps) => {
       <React.Fragment>
          {!showDetails && <Typography>{msg}</Typography>}
          {showDetails && (
-            <ExpansionPanel>
-               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="h6">
+            <Accordion>
+               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography variant="body1">
                      <IconButton color="secondary">
                         <ErrorOutlineIcon></ErrorOutlineIcon>
                      </IconButton>
                      {msg}
                   </Typography>
-               </ExpansionPanelSummary>
-               <ExpansionPanelDetails>
+               </AccordionSummary>
+               <AccordionDetails>
                   <Typography variant="caption">
                      <pre style={{ fontFamily: 'inherit' }}>{msgDetails}</pre>
                   </Typography>
-               </ExpansionPanelDetails>
-            </ExpansionPanel>
+               </AccordionDetails>
+            </Accordion>
          )}
       </React.Fragment>
    );
@@ -50,12 +50,9 @@ export const ErrorFallback = ({ error, componentStack }: FallbackProps) => {
 export { ErrorBoundary };
 
 function componentMessages(error: any) {
-   const IsDev = true;
+   let msg = 'Uhoh! There was an error!';
+   let showDetails = true; // dev flag needed //todo
 
-   let msg = '';
-   let showDetails = true;
-   //    if (name == null || name == '') msg = 'A react component had an error';
-   //    else msg = `The ${name} component had an error`;
    let msgDetails = error.stack.slice(0, 400);
    msgDetails += '\n\r...\n\r';
    if (error.stack.length > 600)
@@ -63,11 +60,6 @@ function componentMessages(error: any) {
          error.stack.length - 600,
          error.stack.length
       );
-
-   if (!IsDev) {
-      msg = 'There was an error.  Please contact support.';
-      showDetails = false;
-   }
 
    return { msg, showDetails, msgDetails };
 }

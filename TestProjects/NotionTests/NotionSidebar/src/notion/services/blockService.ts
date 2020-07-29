@@ -4,6 +4,7 @@
 
 import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
 import { NotionBlock, NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 // import {
 //    Page,
 //    Collection,
@@ -21,4 +22,11 @@ export const getBlockFromPageChunk = (
       console.log(err);
       throw err;
    }
+};
+
+export const isNavigable = (block: NotionBlockModel): boolean => {
+   return (
+      block.type === BlockTypes.Page ||
+      block.type === BlockTypes.CollectionViewPage
+   );
 };

@@ -24,26 +24,46 @@ import { Satellite } from '@material-ui/icons';
 const initialState: ContentState = {};
 
 const fetchContent = createAsyncThunk(
-   'notion/reference/current',
+   'notion/content',
    async ({ blockId }: { blockId: string }, thunkApi) => {
       let state = contentSelector(
          thunkApi.getState() as RootState
       ) as ContentState;
-      if (state[blockId] != null) {
-         return state[blockId];
-      } else {
-         let result = await loadPageChunk(blockId, 1, thunkApi.signal);
-         if (result != null && !thunkApi.signal.aborted) {
-            let block = getBlockFromPageChunk(result, blockId);
-            return block.getChildren();
-         }
-      }
-      return [];
+
+      return fetchContentIfNotInStore(state, blockId, thunkApi);
    }
 );
+const fetchContentIfNotInStore = async (
+   state: ContentState,
+   blockId: string,
+   thunkApi: any
+) => {
+   let data = checkStateForContent(state, blockId);
+
+   if (data?.status !== thunkStatus.fulfilled) {
+      let result = await loadPageChunk(blockId, 10, thunkApi.signal);
+      if (result != null && !thunkApi.signal.aborted) {
+         let block = getBlockFromPageChunk(result, blockId);
+         return block.getChildren();
+      }
+   } else {
+      return data.content;
+   }
+   return [];
+};
+
+const checkStateForContent = (state: ContentState, blockId: string) => {
+   if (
+      state[blockId] != null &&
+      state[blockId].status === thunkStatus.fulfilled
+   ) {
+      return state[blockId];
+   }
+   return undefined;
+};
 
 const contentSlice = createSlice({
-   name: 'referenceSlice',
+   name: 'contentSlice',
    initialState: initialState,
    reducers: {},
    extraReducers: {
@@ -56,23 +76,29 @@ const contentSlice = createSlice({
       },
       [fetchContent.pending.toString()]: (state, action) => {
          const { blockId } = action.meta.arg;
-         if (
-            state[blockId] == null ||
-            state[blockId].status !== thunkStatus.fulfilled
-         ) {
+         let data = checkStateForContent(state, blockId);
+         if (data?.status !== thunkStatus.fulfilled) {
             state[blockId] = {
                content: [],
                status: thunkStatus.pending,
             };
          }
       },
-      [fetchContent.rejected.toString()]: (state) => {},
+      [fetchContent.rejected.toString()]: (state, action) => {
+         const { blockId } = action.meta.arg;
+         let data = checkStateForContent(state, blockId);
+         if (data?.status !== thunkStatus.fulfilled) {
+            state[blockId] = {
+               content: [],
+               status: thunkStatus.rejected,
+            };
+         }
+      },
    },
 });
 
 export const contentActions = {
    ...contentSlice.actions,
    fetchContent: fetchContent,
-   //processTitleRefs,
 };
 export const contentReducers = contentSlice.reducer;

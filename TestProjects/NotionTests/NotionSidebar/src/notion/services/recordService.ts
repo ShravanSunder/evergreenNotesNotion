@@ -3,14 +3,14 @@ import * as blockTypes from '../types/notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
 import TreeModel from 'tree-model';
 import { BaseTextBlock } from '../types/notionV3/typings/basic_blocks';
-import { NotionBlock } from 'aNotion/models/NotionBlock';
+import { NotionBlock, NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 export const getContent = (
    record: RecordMap,
    blockId: string
-): NotionBlock[] => {
+): NotionBlockModel[] => {
    let node = record.block[blockId];
-   let content: NotionBlock[] = [];
+   let content: NotionBlockModel[] = [];
    if (node != null && node.value?.content != null) {
       let c = getNotionBlocksFromContent(node.value.content, record);
       content = content.concat(c);
@@ -41,12 +41,12 @@ const getNotionBlocksFromContent = (
    contentIds: string[],
    record: RecordMap
 ) => {
-   let content: NotionBlock[] = [];
+   let content: NotionBlockModel[] = [];
    for (let childId of contentIds) {
       if (childId != null) {
          let cBlock = new NotionBlock(record, childId);
          if (cBlock.type !== BlockTypes.Unknown) {
-            content.push(cBlock);
+            content.push(cBlock.toSerializable());
          }
       }
    }

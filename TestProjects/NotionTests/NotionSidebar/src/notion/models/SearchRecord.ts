@@ -10,6 +10,7 @@ import { NotionBlockModel, NotionBlock } from './NotionBlock';
 import { SearchResultType } from 'aNotion/api/v3/SearchApiTypes';
 import { createSearchContext } from 'aNotion/components/references/SearchContext';
 import { NavigatableBlocks } from 'aNotion/types/notionV3/notionBlockTypes';
+import * as blockService from 'aNotion/services/blockService';
 
 export interface SearchRecordModel {
    id: string;
@@ -30,7 +31,7 @@ export class SearchRecord implements SearchRecordModel {
    notionBlock: NotionBlock;
    textByContext: string[] = [];
    text: string = '';
-   path: NotionBlock[] = [];
+   path: NotionBlockModel[] = [];
 
    constructor(data: RecordMap, searchResult: SearchResultType) {
       this.id = searchResult.id;
@@ -54,7 +55,8 @@ export class SearchRecord implements SearchRecordModel {
       let path = (this.notionBlock as NotionBlock).getParents();
 
       this.path = path.filter(
-         (x) => x.title != null && x.title.length > 0 && x.isNavigatable()
+         (x) =>
+            x.title != null && x.title.length > 0 && blockService.isNavigable(x)
       );
    }
 
