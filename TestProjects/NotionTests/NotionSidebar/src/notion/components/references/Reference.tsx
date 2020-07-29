@@ -1,5 +1,5 @@
-import React, { useEffect, MouseEvent, useState } from 'react';
-import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import React, { MouseEvent, useState } from 'react';
+import { shallowEqual } from 'react-redux';
 
 import ReactHtmlParser from 'react-html-parser';
 
@@ -21,14 +21,11 @@ import {
    AccordionSummary as MuiAccordionSummary,
    AccordionDetails as MuiAccordionDetails,
 } from '@material-ui/core';
-import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { RefData } from './referenceTypes';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { contentSelector } from 'aNotion/providers/storeSelectors';
-import { contentActions } from 'aNotion/components/blocks/contentSlice';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
+import { Content } from '../blocks/Content';
 
 const Accordion = withStyles({
    root: {
@@ -132,31 +129,5 @@ const Path = ({ path }: { path: NotionBlockModel[] }) => {
             </Typography>
          ))}
       </Breadcrumbs>
-   );
-};
-
-const Content = ({ blockId }: { blockId: string }) => {
-   const contentData = useSelector(contentSelector);
-   const dispatch: AppPromiseDispatch<any> = useDispatch();
-
-   useEffect(() => {
-      dispatch(contentActions.fetchContent({ blockId }));
-   }, [blockId, dispatch]);
-
-   let content = contentData?.[blockId]?.content;
-   let status = contentData?.[blockId]?.status;
-
-   return (
-      <React.Fragment>
-         {status === thunkStatus.fulfilled && (
-            <React.Fragment>
-               {content.map((p) => (
-                  <Typography variant="body2" key={p.blockId}>
-                     {p.title}
-                  </Typography>
-               ))}
-            </React.Fragment>
-         )}
-      </React.Fragment>
    );
 };
