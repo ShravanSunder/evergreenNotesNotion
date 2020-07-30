@@ -41,7 +41,7 @@ const fetchContentIfNotInStore = async (
    let data = checkStateForContent(state, blockId);
 
    if (data?.status !== thunkStatus.fulfilled) {
-      let result = await loadPageChunk(blockId, 10, thunkApi.signal);
+      let result = await loadPageChunk(blockId, 50, thunkApi.signal);
       if (result != null && !thunkApi.signal.aborted) {
          let block = getBlockFromPageChunk(result, blockId);
          return block.getChildren();
