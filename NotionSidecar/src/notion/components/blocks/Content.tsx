@@ -21,8 +21,8 @@ export const Content = ({ blockId }: { blockId: string }) => {
       <React.Fragment>
          {status === thunkStatus.fulfilled && (
             <React.Fragment>
-               {content.map((p) => (
-                  <BlockUi key={p.blockId} block={p}></BlockUi>
+               {content.map((p, i) => (
+                  <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
                ))}
             </React.Fragment>
          )}

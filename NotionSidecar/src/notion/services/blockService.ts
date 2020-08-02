@@ -8,6 +8,11 @@ import {
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
+import {
+   SemanticString,
+   Bold,
+   BasicStringFormatting,
+} from 'aNotion/types/notionV3/typings/semantic_string';
 // import {
 //    Page,
 //    Collection,
@@ -33,3 +38,24 @@ export const isNavigable = (block: NotionBlockModel): boolean => {
       block.type === BlockTypes.CollectionViewPage
    );
 };
+
+export const flattenTitle = (titleArray: SemanticString[]) => {
+   if (titleArray != null) {
+      titleArray.map((ss) => {
+         if (ss[1] == null) {
+            return ss[0];
+         } else {
+            return '';
+         }
+      });
+   }
+   return '';
+};
+
+const isBold = (title: BasicStringFormatting[]) =>
+   title.find((x) => {
+      if ((x as Bold) != null) {
+         return true;
+      }
+      return false;
+   });

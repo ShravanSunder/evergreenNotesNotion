@@ -4,7 +4,10 @@ import { BlockTypes, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
 import TreeModel from 'tree-model';
 import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
 import * as recordService from 'aNotion/services/recordService';
-import { SemanticString, BasicString } from 'aNotion/types/notionV3/typings/semantic_string';
+import {
+   SemanticString,
+   BasicString,
+} from 'aNotion/types/notionV3/typings/semantic_string';
 
 export interface NotionBlockModel {
    block?: blockTypes.Block;
@@ -99,14 +102,6 @@ export class NotionBlockFactory implements NotionBlockModel {
          console.log(err);
       }
       return '';
-   };
-
-   protected extractTitle = (titleArray: SemanticString[]) => {
-      if (titleArray != null) {
-         titleArray.map((value) => {
-            if (typeof value === BasicString)
-         });
-      }
    };
 
    getParentId() {
