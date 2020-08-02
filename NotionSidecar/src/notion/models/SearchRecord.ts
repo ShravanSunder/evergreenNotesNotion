@@ -7,7 +7,7 @@ import { Map } from '../types/notionV3/Map';
 import * as blockTypes from '../types/notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
 import { NotionBlockModel, NotionBlockFactory } from './NotionBlock';
-import { SearchResultType } from 'aNotion/api/v3/SearchApiTypes';
+import { SearchResultType } from 'aNotion/api/v3/apiReqTypes';
 import { createSearchContext } from 'aNotion/components/references/SearchContext';
 import { NavigatableBlocks } from 'aNotion/types/notionV3/notionBlockTypes';
 import * as blockService from 'aNotion/services/blockService';
@@ -52,7 +52,7 @@ export class SearchRecord implements SearchRecordModel {
    }
 
    fetchPath() {
-      let path = (this.notionBlock as NotionBlockFactory).getParents();
+      let path = (this.notionBlock as NotionBlockFactory).getParentsNodes();
 
       this.path = path.filter(
          (x) =>

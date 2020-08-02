@@ -25,11 +25,15 @@ const initialState: ContentState = {};
 
 const fetchContent = createAsyncThunk(
    'notion/content',
-   async ({ blockId }: { blockId: string }, thunkApi) => {
+   async (
+      { blockId, contentIds }: { blockId: string; contentIds: string[] },
+      thunkApi
+   ) => {
       let state = contentSelector(
          thunkApi.getState() as RootState
       ) as ContentState;
 
+      //if it gets inefficient, we can use contentIds and syncRecordValues
       return fetchContentIfNotInStore(state, blockId, thunkApi);
    }
 );
@@ -41,10 +45,10 @@ const fetchContentIfNotInStore = async (
    let data = checkStateForContent(state, blockId);
 
    if (data?.status !== thunkStatus.fulfilled) {
-      let result = await loadPageChunk(blockId, 50, thunkApi.signal);
+      let result = await blockApi.loadPageChunk(blockId, 100, thunkApi.signal);
       if (result != null && !thunkApi.signal.aborted) {
          let block = getBlockFromPageChunk(result, blockId);
-         return block.getChildren();
+         return block.getContentNodes();
       }
    } else {
       return data.content;

@@ -20,7 +20,7 @@ import {
    referenceSelector,
 } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from './referenceSlice';
-import { SearchSort } from 'aNotion/api/v3/SearchApiTypes';
+import { SearchSort } from 'aNotion/api/v3/apiReqTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { Reference } from './Reference';

@@ -1,4 +1,4 @@
-import { SearchResultsType } from 'aNotion/api/v3/SearchApiTypes';
+import { SearchResultsType } from 'aNotion/api/v3/apiReqTypes';
 import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import {

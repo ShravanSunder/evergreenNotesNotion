@@ -26,9 +26,8 @@ type fetchCurrentPageRequest = { pageId: string; limit: number };
 const fetchCurrentPage = createAsyncThunk(
    'notion/page/current',
    async ({ pageId, limit }: fetchCurrentPageRequest, thunkApi) => {
-      let chunk = (await blockApi.loadPageChunk(
-         pageId,
-         limit,
+      let chunk = (await blockApi.syncRecordValues(
+         [pageId],
          thunkApi.signal
       )) as LoadPageChunk.PageChunk;
 

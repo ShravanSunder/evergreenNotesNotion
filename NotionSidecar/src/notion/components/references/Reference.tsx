@@ -92,7 +92,11 @@ export const Reference = ({ refData }: { refData: RefData }) => {
             <AccordionDetails>
                <Grid container spacing={1}>
                   <Grid item xs={12}>
-                     <Content blockId={refData.searchRecord.id}></Content>
+                     <Content
+                        blockId={refData.searchRecord.id}
+                        contentIds={
+                           refData.searchRecord.notionBlock.contentIds
+                        }></Content>
                   </Grid>
                </Grid>
             </AccordionDetails>

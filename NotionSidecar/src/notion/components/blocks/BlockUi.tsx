@@ -21,7 +21,7 @@ import {
    pink,
    red,
 } from '@material-ui/core/colors';
-import { Callout, ToDo } from 'aNotion/types/notionV3/notionBlockTypes';
+import { Callout, ToDo, Page } from 'aNotion/types/notionV3/notionBlockTypes';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -63,7 +63,28 @@ export const BlockUi = ({
          {block.type === BlockTypes.ButtetedList && <BulletUi block={block} />}
          {block.type === BlockTypes.NumberedList && <NumberUi block={block} />}
          {block.type === BlockTypes.ToDo && <TodoUi block={block} />}
+         {block.type === BlockTypes.Page && <PageUi block={block} />}
       </div>
+   );
+};
+
+const PageUi = ({ block }: { block: NotionBlockModel }) => {
+   let classes = useStyles();
+   let page = block.block as Page;
+   let icon = page.properties?.COXj?.[0]?.[0] ?? '';
+
+   return (
+      <React.Fragment>
+         <Typography display={'inline'} variant={'subtitle1'}>
+            {' 🔗 '}
+         </Typography>
+         <Typography
+            display={'inline'}
+            variant={'subtitle1'}
+            className={classes.typography}>
+            {block.simpleTitle}
+         </Typography>
+      </React.Fragment>
    );
 };
 
@@ -216,7 +237,6 @@ function useVariant(block: NotionBlockModel) {
          variant = 'body1';
          break;
       case BlockTypes.Header1:
-      case BlockTypes.Page:
       case BlockTypes.CollectionViewPage:
          variant = 'h4';
          break;

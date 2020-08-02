@@ -39,3 +39,11 @@ export interface SearchResultsType {
    results: SearchResultType[];
    total: number;
 }
+
+export interface syncRecordType {
+   recordVersionMap: {
+      block: {
+         [key: string]: number;
+      };
+   };
+}

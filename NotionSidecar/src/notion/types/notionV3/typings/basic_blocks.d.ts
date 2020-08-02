@@ -92,7 +92,8 @@ export interface Page extends EmptyBlock {
     * ```
     */
    properties: {
-      [key in Collection.ColumnID]: SemanticString[];
+      title: SemanticString[];
+      COXj?: SemanticString[];
    };
    permissions?: Permission[];
    /**

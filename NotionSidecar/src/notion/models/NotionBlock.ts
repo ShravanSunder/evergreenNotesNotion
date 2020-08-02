@@ -18,6 +18,7 @@ export interface NotionBlockModel {
    simpleTitle: string;
    semanticTitle: SemanticString[];
    blockId: string;
+   contentIds: string[];
 }
 export interface TreeNode {
    id: number;
@@ -36,7 +37,8 @@ export class NotionBlockFactory implements NotionBlockModel {
    semanticTitle: SemanticString[] = [];
    blockId: string = '';
    parentNodes?: NotionBlockModel[] = undefined;
-   children?: NotionBlockModel[] = undefined;
+   contentNodes?: NotionBlockModel[] = undefined;
+   contentIds: string[] = [];
 
    constructor(data: RecordMap, blockId: string) {
       this.recordMapData = data;
@@ -45,6 +47,7 @@ export class NotionBlockFactory implements NotionBlockModel {
       this.setupType(data, blockId);
 
       this.simpleTitle = this.createSimpleTitle();
+      this.contentIds = this.getContentIds();
    }
 
    protected setupBlockData(data: RecordMap, blockId: string) {
@@ -113,7 +116,14 @@ export class NotionBlockFactory implements NotionBlockModel {
       return undefined;
    }
 
-   getParents = (refresh: boolean = false): NotionBlockModel[] => {
+   getContentIds() {
+      if (this.block != null) {
+         return this.block.content ?? [];
+      }
+      return [];
+   }
+
+   getParentsNodes = (refresh: boolean = false): NotionBlockModel[] => {
       if (!refresh || this.parentNodes == null) {
          let parents: NotionBlockModel[] = [];
          this.traversUp(this.getParentId(), this.blockId, parents);
@@ -145,13 +155,13 @@ export class NotionBlockFactory implements NotionBlockModel {
       }
    }
 
-   getChildren = (refresh: boolean = false) => {
-      if (!refresh || this.children == null) {
+   getContentNodes = (refresh: boolean = false) => {
+      if (!refresh || this.contentNodes == null) {
          let children: [] = [];
-         this.children = this.traverseDown(this.blockId, children);
-         return this.children;
+         this.contentNodes = this.traverseDown(this.blockId, children);
+         return this.contentNodes;
       }
-      return this.children;
+      return this.contentNodes;
    };
 
    protected traverseDown(
@@ -167,6 +177,7 @@ export class NotionBlockFactory implements NotionBlockModel {
          block: this.block,
          collection: this.collection,
          collection_views: this.collection_views,
+         contentIds: this.contentIds,
          //recordMapData: this.recordMapData,
          type: this.type,
          simpleTitle: this.simpleTitle,
