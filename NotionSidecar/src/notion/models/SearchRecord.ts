@@ -6,7 +6,7 @@ import {
 import { Map } from '../types/notionV3/Map';
 import * as blockTypes from '../types/notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
-import { NotionBlockModel, NotionBlock } from './NotionBlock';
+import { NotionBlockModel, NotionBlockFactory } from './NotionBlock';
 import { SearchResultType } from 'aNotion/api/v3/SearchApiTypes';
 import { createSearchContext } from 'aNotion/components/references/SearchContext';
 import { NavigatableBlocks } from 'aNotion/types/notionV3/notionBlockTypes';
@@ -28,7 +28,7 @@ export class SearchRecord implements SearchRecordModel {
    isNavigable: boolean;
    score: number;
    highlight: { text: string; pathText: string };
-   notionBlock: NotionBlock;
+   notionBlock: NotionBlockFactory;
    textByContext: string[] = [];
    text: string = '';
    path: NotionBlockModel[] = [];
@@ -38,7 +38,7 @@ export class SearchRecord implements SearchRecordModel {
       this.isNavigable = searchResult.isNavigable;
       this.highlight = searchResult.highlight;
       this.score = searchResult.score;
-      this.notionBlock = new NotionBlock(data, this.id);
+      this.notionBlock = new NotionBlockFactory(data, this.id);
       this.cleanHighlight();
       this.fetchPath();
    }
@@ -52,11 +52,13 @@ export class SearchRecord implements SearchRecordModel {
    }
 
    fetchPath() {
-      let path = (this.notionBlock as NotionBlock).getParents();
+      let path = (this.notionBlock as NotionBlockFactory).getParents();
 
       this.path = path.filter(
          (x) =>
-            x.title != null && x.title.length > 0 && blockService.isNavigable(x)
+            x.simpleTitle != null &&
+            x.simpleTitle.length > 0 &&
+            blockService.isNavigable(x)
       );
    }
 
@@ -68,8 +70,8 @@ export class SearchRecord implements SearchRecordModel {
          highlight: this.highlight,
          textByContext: this.textByContext,
          text: this.text,
-         path: this.path.map((p) => (p as NotionBlock).toSerializable()),
-         notionBlock: (this.notionBlock as NotionBlock).toSerializable(),
+         path: this.path.map((p) => (p as NotionBlockFactory).toSerializable()),
+         notionBlock: (this.notionBlock as NotionBlockFactory).toSerializable(),
       };
       return model;
    };

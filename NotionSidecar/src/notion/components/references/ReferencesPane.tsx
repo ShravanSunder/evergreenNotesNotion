@@ -41,7 +41,7 @@ export const ReferencesPane = ({ status, data }: any) => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const record = useSelector(currentRecordSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
-   const pageName = record.pageRecord?.title;
+   const pageName = record.pageRecord?.simpleTitle;
    const pageId = record.pageRecord?.blockId as string;
 
    let refeStyles = useStyles();

@@ -5,7 +5,7 @@ import { CollectionView } from './collection_view';
 export interface Collection {
    id: base.UUID;
    /** `name[0][0]` is the collection's name. */
-   name?: [[string]];
+   name?: SemanticString[];
    icon?: base.Emoji | base.NotionSecureUrl | base.PublicUrl;
    cover?: base.NotionRelativePath | base.NotionSecureUrl | base.PublicUrl;
    description?: SemanticString[];

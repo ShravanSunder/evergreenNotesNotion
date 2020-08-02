@@ -3,7 +3,10 @@
 // get title, properties etc.  using blocks as reference
 
 import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
-import { NotionBlock, NotionBlockModel } from 'aNotion/models/NotionBlock';
+import {
+   NotionBlockFactory,
+   NotionBlockModel,
+} from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 // import {
 //    Page,
@@ -14,9 +17,9 @@ import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 export const getBlockFromPageChunk = (
    page: PageChunk,
    pageId: string
-): NotionBlock => {
+): NotionBlockFactory => {
    try {
-      let m = new NotionBlock(page.recordMap, pageId);
+      let m = new NotionBlockFactory(page.recordMap, pageId);
       return m;
    } catch (err) {
       console.log(err);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Divider, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
@@ -31,10 +31,10 @@ export const BlockUi = ({ block }: { block: NotionBlockModel }) => {
          break;
    }
    return (
-      <React.Fragment>
+      <div>
          {variant != null && (
             <Typography variant={variant} key={block.blockId}>
-               {block.title}
+               {block.simpleTitle}
             </Typography>
          )}
          {block.type === BlockTypes.Divider && <Divider></Divider>}
@@ -43,22 +43,22 @@ export const BlockUi = ({ block }: { block: NotionBlockModel }) => {
          )}
          {block.type === BlockTypes.ButtetedList && (
             <Typography variant={'body1'} style={{ paddingLeft: 6 }}>
-               {' •    ' + block.title}{' '}
+               {' •    ' + block.simpleTitle}{' '}
             </Typography>
          )}
          {block.type === BlockTypes.NumberedList && (
             <Typography variant={'body1'} style={{ paddingLeft: 6 }}>
-               {' #    ' + block.title}
+               {' #    ' + block.simpleTitle}
             </Typography>
          )}
-      </React.Fragment>
+      </div>
    );
 };
 
 const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
    var callout = block.block as Callout;
    return (
-      <Grid container style={{ padding: 12, backgroundColor: grey[200] }}>
+      <Grid container style={{ padding: 12 }}>
          <Grid item>
             <Typography
                variant={'body1'}
@@ -68,9 +68,16 @@ const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
          </Grid>
          <Grid item xs alignItems="flex-start">
             <Typography variant={'body1'} style={{ whiteSpace: 'pre-line' }}>
-               {block.title}
+               {block.simpleTitle}
             </Typography>
          </Grid>
       </Grid>
    );
+};
+
+const useBlockColor = (block: NotionBlockModel) => {
+   const [color, setColor] = useState('');
+
+   if (block.block?.format?.block_color != null) {
+   }
 };

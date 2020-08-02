@@ -4,6 +4,7 @@ import { BlockTypes, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
 import TreeModel from 'tree-model';
 import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
 import * as recordService from 'aNotion/services/recordService';
+import { SemanticString, BasicString } from 'aNotion/types/notionV3/typings/semantic_string';
 
 export interface NotionBlockModel {
    block?: blockTypes.Block;
@@ -11,7 +12,8 @@ export interface NotionBlockModel {
    collection_views?: blockTypes.CollectionView[] | undefined;
    //recordMapData: RecordMap;
    type: BlockTypes;
-   title: string;
+   simpleTitle: string;
+   semanticTitle: SemanticString[];
    blockId: string;
 }
 export interface TreeNode {
@@ -21,13 +23,14 @@ export interface TreeType extends TreeNode {
    children: [TreeNode];
 }
 
-export class NotionBlock implements NotionBlockModel {
+export class NotionBlockFactory implements NotionBlockModel {
    block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined = [];
    recordMapData: RecordMap;
    type: BlockTypes = BlockTypes.Unknown;
-   title: string;
+   simpleTitle: string;
+   semanticTitle: SemanticString[] = [];
    blockId: string = '';
    parentNodes?: NotionBlockModel[] = undefined;
    children?: NotionBlockModel[] = undefined;
@@ -38,15 +41,15 @@ export class NotionBlock implements NotionBlockModel {
       this.setupCollectionData(data, blockId);
       this.setupType(data, blockId);
 
-      this.title = this.fetchTitle();
+      this.simpleTitle = this.createSimpleTitle();
    }
 
-   setupBlockData(data: RecordMap, blockId: string) {
+   protected setupBlockData(data: RecordMap, blockId: string) {
       this.block = data.block?.[blockId]?.value;
       this.blockId = blockId;
    }
 
-   setupCollectionData(data: RecordMap, blockId: string) {
+   protected setupCollectionData(data: RecordMap, blockId: string) {
       if (this.block?.type === BlockTypes.CollectionViewPage) {
          let cId = this.block.collection_id;
          this.collection = data.collection![cId].value!;
@@ -67,7 +70,7 @@ export class NotionBlock implements NotionBlockModel {
       }
    }
 
-   setupType(data: RecordMap, blockId: string) {
+   protected setupType(data: RecordMap, blockId: string) {
       if (this.block != null) {
          this.type = this.block.type;
       } else if (this.collection != null) {
@@ -75,7 +78,7 @@ export class NotionBlock implements NotionBlockModel {
       }
    }
 
-   fetchTitle = (): string => {
+   protected createSimpleTitle = (): string => {
       try {
          if (
             this.type === BlockTypes.CollectionViewPage ||
@@ -98,14 +101,11 @@ export class NotionBlock implements NotionBlockModel {
       return '';
    };
 
-   asType = () => {
-      //not finished
-      switch (this.type) {
-         case BlockTypes.Page:
-            break;
-
-         default:
-            break;
+   protected extractTitle = (titleArray: SemanticString[]) => {
+      if (titleArray != null) {
+         titleArray.map((value) => {
+            if (typeof value === BasicString)
+         });
       }
    };
 
@@ -128,14 +128,14 @@ export class NotionBlock implements NotionBlockModel {
       return this.parentNodes;
    };
 
-   private traversUp(
+   protected traversUp(
       parentId: string | undefined,
       id: string,
       parents: NotionBlockModel[]
    ) {
       try {
          if (parentId != null) {
-            var pBlock = new NotionBlock(this.recordMapData, parentId);
+            var pBlock = new NotionBlockFactory(this.recordMapData, parentId);
             if (pBlock.block == null) {
                //if the block is empty, just skip saving it to array
                //its probably a collection and repeated as we traverse
@@ -159,7 +159,7 @@ export class NotionBlock implements NotionBlockModel {
       return this.children;
    };
 
-   private traverseDown(
+   protected traverseDown(
       id: string,
       children: NotionBlockModel[]
    ): NotionBlockModel[] {
@@ -174,7 +174,8 @@ export class NotionBlock implements NotionBlockModel {
          collection_views: this.collection_views,
          //recordMapData: this.recordMapData,
          type: this.type,
-         title: this.title,
+         simpleTitle: this.simpleTitle,
+         semanticTitle: [],
          blockId: this.blockId,
       };
       return model;

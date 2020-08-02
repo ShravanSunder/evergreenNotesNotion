@@ -125,7 +125,7 @@ const Path = ({ path }: { path: NotionBlockModel[] }) => {
       <Breadcrumbs maxItems={4}>
          {path.map((p) => (
             <Typography variant="caption" key={p.blockId}>
-               {getTitle(p.title)}
+               {getTitle(p.simpleTitle)}
             </Typography>
          ))}
       </Breadcrumbs>
