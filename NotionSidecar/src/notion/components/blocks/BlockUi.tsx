@@ -21,7 +21,7 @@ import {
    pink,
    red,
 } from '@material-ui/core/colors';
-import { Callout } from 'aNotion/types/notionV3/notionBlockTypes';
+import { Callout, ToDo } from 'aNotion/types/notionV3/notionBlockTypes';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -62,6 +62,7 @@ export const BlockUi = ({
          {block.type === BlockTypes.Quote && <QuoteUi block={block} />}
          {block.type === BlockTypes.ButtetedList && <BulletUi block={block} />}
          {block.type === BlockTypes.NumberedList && <NumberUi block={block} />}
+         {block.type === BlockTypes.ToDo && <TodoUi block={block} />}
       </div>
    );
 };
@@ -75,7 +76,7 @@ const BulletUi = ({ block }: { block: NotionBlockModel }) => {
                {' •  '}
             </Typography>
          </Grid>
-         <Grid item xs={11} alignItems="flex-start">
+         <Grid item xs={11}>
             <Typography
                display={'inline'}
                variant={'body1'}
@@ -96,15 +97,44 @@ const NumberUi = ({ block }: { block: NotionBlockModel }) => {
                {' #  '}
             </Typography>
          </Grid>
-         <Grid item xs={11} alignItems="flex-start">
-            <div>
-               <Typography
-                  display={'inline'}
-                  variant={'body1'}
-                  className={classes.typography}>
-                  {block.simpleTitle}
+         <Grid item xs={11}>
+            <Typography
+               display={'inline'}
+               variant={'body1'}
+               className={classes.typography}>
+               {block.simpleTitle}
+            </Typography>
+         </Grid>
+      </Grid>
+   );
+};
+
+const TodoUi = ({ block }: { block: NotionBlockModel }) => {
+   let classes = useStyles();
+   let todo = block.block as ToDo;
+   let checked = todo.properties?.checked?.[0]?.[0] === 'Yes' ?? false;
+   return (
+      <Grid container>
+         <Grid item xs={1} style={{ paddingLeft: 3, paddingRight: 6 }}>
+            {!checked && (
+               <Typography display={'inline'} variant={'body1'}>
+                  {' ☐ '}
                </Typography>
-            </div>
+            )}
+            {checked && (
+               <Typography display={'inline'} variant={'body1'}>
+                  {' ☑ '}
+               </Typography>
+            )}
+         </Grid>
+         <Grid item xs={11}>
+            <Typography
+               display={'inline'}
+               variant={'body1'}
+               style={{ textDecoration: checked ? 'line-through' : '' }}
+               className={classes.typography}>
+               {block.simpleTitle}
+            </Typography>
          </Grid>
       </Grid>
    );
@@ -119,15 +149,13 @@ const QuoteUi = ({ block }: { block: NotionBlockModel }) => {
                orientation="vertical"
                style={{ backgroundColor: '#262626', width: 2 }}></Divider>
          </Grid>
-         <Grid item xs={11} alignItems="flex-start">
-            <div>
-               <Typography
-                  display={'inline'}
-                  variant={'body1'}
-                  className={classes.typography}>
-                  {block.simpleTitle}
-               </Typography>
-            </div>
+         <Grid item xs={11}>
+            <Typography
+               display={'inline'}
+               variant={'body1'}
+               className={classes.typography}>
+               {block.simpleTitle}
+            </Typography>
          </Grid>
       </Grid>
    );
@@ -143,7 +171,7 @@ const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
                {block.block?.format?.page_icon}
             </Typography>
          </Grid>
-         <Grid item xs={10} alignItems="flex-start">
+         <Grid item xs={10}>
             <Typography variant={'body1'} className={classes.typography}>
                {block.simpleTitle}
             </Typography>
@@ -151,7 +179,6 @@ const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
       </Grid>
    );
 };
-
 const useBackgroundColor = (block: NotionBlockModel) => {
    if (block.block?.format?.block_color != null) {
       switch (block.block?.format?.block_color) {
