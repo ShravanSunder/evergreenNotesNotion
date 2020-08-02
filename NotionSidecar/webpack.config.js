@@ -8,11 +8,11 @@ var webpack = require('webpack'),
    HtmlWebpackPlugin = require('html-webpack-plugin'),
    WriteFilePlugin = require('write-file-webpack-plugin');
 const ReactDevToolsIFramePlugin = require('react-dev-tools-iframe-webpack-plugin');
-var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+//var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 // load the secrets
 var alias = {
-   'react-dom': '@hot-loader/react-dom',
+   //'react-dom': '@hot-loader/react-dom',
    aSidebar: path.resolve(__dirname, 'src/pages/sidebar/'),
    aNotion: path.resolve(__dirname, 'src/notion/'),
    aCommon: path.resolve(__dirname, 'src/pages/common'),
@@ -38,8 +38,10 @@ if (fileSystem.existsSync(secretsPath)) {
    alias['secrets'] = secretsPath;
 }
 
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 var options = {
-   mode: process.env.NODE_ENV || 'development',
+   mode: isDevelopment ? 'development' : 'production',
    entry: {
       options: path.join(__dirname, 'src', 'pages', 'Options', 'index.tsx'),
       background: path.join(
@@ -212,6 +214,7 @@ var options = {
          chunks: ['background'],
       }),
       new WriteFilePlugin(),
+      isDevelopment && new ReactRefreshWebpackPlugin(),
    ],
 };
 

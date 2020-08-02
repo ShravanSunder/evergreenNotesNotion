@@ -1,4 +1,4 @@
-import { hot } from 'react-hot-loader/root';
+//import { hot } from 'react-hot-loader/root';
 import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
@@ -58,4 +58,5 @@ const Layout = () => {
    );
 };
 
-export default hot(Layout);
+export default Layout;
+//export default hot(Layout);
