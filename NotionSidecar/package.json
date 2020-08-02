@@ -14,7 +14,6 @@
       "prettier": "prettier --write '**/*.{js,jsx,css,html}'"
    },
    "dependencies": {
-      "@hot-loader/react-dom": "^16.13.0",
       "@material-ui/core": "^4.11.0",
       "@material-ui/icons": "^4.9.1",
       "@material-ui/lab": "^4.0.0-alpha.56",
@@ -33,7 +32,6 @@
       "react": "^16.13.1",
       "react-dom": "^16.13.1",
       "react-error-boundary": "^2.3.1",
-      "react-hot-loader": "^4.12.21",
       "react-html-parser": "^2.0.2",
       "react-redux": "^7.2.1",
       "redux": "^4.0.5",
