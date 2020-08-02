@@ -12,13 +12,15 @@ export const Content = ({
    contentIds,
 }: {
    blockId: string;
-   contentIds: string[];
+   contentIds?: string[];
 }) => {
    const contentData = useSelector(contentSelector);
    const dispatch: AppPromiseDispatch<any> = useDispatch();
 
    useEffect(() => {
-      dispatch(contentActions.fetchContent({ blockId, contentIds }));
+      dispatch(
+         contentActions.fetchContent({ blockId, contentIds: contentIds ?? [] })
+      );
    }, [blockId, contentIds, dispatch]);
 
    let content = contentData?.[blockId]?.content;

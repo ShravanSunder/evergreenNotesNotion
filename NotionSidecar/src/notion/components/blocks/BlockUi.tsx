@@ -6,6 +6,7 @@ import {
    makeStyles,
    createStyles,
    Theme,
+   IconButton,
 } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
@@ -21,7 +22,14 @@ import {
    pink,
    red,
 } from '@material-ui/core/colors';
-import { Callout, ToDo, Page } from 'aNotion/types/notionV3/notionBlockTypes';
+import {
+   Callout,
+   ToDo,
+   Page,
+   Toggle,
+} from 'aNotion/types/notionV3/notionBlockTypes';
+import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
+import { Content } from './Content';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -64,6 +72,8 @@ export const BlockUi = ({
          {block.type === BlockTypes.NumberedList && <NumberUi block={block} />}
          {block.type === BlockTypes.ToDo && <TodoUi block={block} />}
          {block.type === BlockTypes.Page && <PageUi block={block} />}
+         {block.type === BlockTypes.Toggle && <ToggleUi block={block} />}
+         {block.type === BlockTypes.Code && <CodeUi block={block} />}
       </div>
    );
 };
@@ -88,11 +98,42 @@ const PageUi = ({ block }: { block: NotionBlockModel }) => {
    );
 };
 
+const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
+   let classes = useStyles();
+   let toggle = block.block as Toggle;
+
+   const [expanded, setExpanded] = useState(false);
+   const handleClick = (e: React.SyntheticEvent) => {
+      e.stopPropagation();
+      setExpanded(!expanded);
+   };
+
+   return (
+      <Grid container>
+         <Grid item xs={1} style={{ paddingRight: 9 }}>
+            <IconButton size="small" onClick={handleClick}>
+               {expanded && <ArrowDropDown fontSize="inherit" />}
+               {!expanded && <ArrowRight fontSize="inherit" />}
+            </IconButton>
+         </Grid>
+         <Grid item xs={11}>
+            <Typography
+               display={'inline'}
+               variant={'body1'}
+               className={classes.typography}>
+               {block.simpleTitle}
+            </Typography>
+            {expanded && <Content blockId={block.blockId}></Content>}
+         </Grid>
+      </Grid>
+   );
+};
+
 const BulletUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useStyles();
    return (
       <Grid container>
-         <Grid item style={{ paddingLeft: 9, paddingRight: 9 }}>
+         <Grid item xs={1} style={{ paddingLeft: 9, paddingRight: 9 }}>
             <Typography display={'inline'} variant={'body1'}>
                {' •  '}
             </Typography>
@@ -113,7 +154,7 @@ const NumberUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useStyles();
    return (
       <Grid container>
-         <Grid item style={{ paddingLeft: 9, paddingRight: 9 }}>
+         <Grid item xs={1} style={{ paddingLeft: 9, paddingRight: 9 }}>
             <Typography display={'inline'} variant={'body1'}>
                {' #  '}
             </Typography>
@@ -182,6 +223,22 @@ const QuoteUi = ({ block }: { block: NotionBlockModel }) => {
    );
 };
 
+const CodeUi = ({ block }: { block: NotionBlockModel }) => {
+   let classes = useStyles();
+   return (
+      <Grid container style={{ padding: 12 }}>
+         <Grid item xs>
+            <Typography
+               variant={'body2'}
+               className={classes.typography}
+               style={{ fontFamily: 'Consolas' }}>
+               {block.simpleTitle}
+            </Typography>
+         </Grid>
+      </Grid>
+   );
+};
+
 const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useStyles();
    var callout = block.block as Callout;
@@ -201,8 +258,13 @@ const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
    );
 };
 const useBackgroundColor = (block: NotionBlockModel) => {
-   if (block.block?.format?.block_color != null) {
-      switch (block.block?.format?.block_color) {
+   let bgColor = block.block?.format?.block_color;
+   if (block.type === BlockTypes.Code) {
+      bgColor = 'gray_background';
+   }
+
+   if (bgColor != null) {
+      switch (bgColor) {
          case 'gray_background':
             return grey[200];
          case 'brown_background':
@@ -233,7 +295,6 @@ function useVariant(block: NotionBlockModel) {
       case BlockTypes.Text:
       case BlockTypes.Date:
       case BlockTypes.Bookmark:
-      case BlockTypes.Equation:
          variant = 'body1';
          break;
       case BlockTypes.Header1:
@@ -245,9 +306,6 @@ function useVariant(block: NotionBlockModel) {
          break;
       case BlockTypes.Header3:
          variant = 'h6';
-         break;
-      case BlockTypes.Code:
-         variant = 'caption';
          break;
    }
    return variant;
