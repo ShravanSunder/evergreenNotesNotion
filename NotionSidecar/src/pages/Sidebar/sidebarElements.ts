@@ -14,8 +14,8 @@ export const createNewRootElement = (notionApp: HTMLElement) => {
 
    let sidebarRoot = document.createElement('div');
    sidebarRoot.setAttribute('id', notionSidebarRootId);
-   newRoot.appendChild(notionApp);
    newRoot.appendChild(sidebarRoot);
+   newRoot.appendChild(notionApp);
    newRoot.setAttribute(
       'style',
       `display:inline-flex; flex-wrap: nowrap; justify-content: flex-start;`
@@ -48,8 +48,9 @@ export function adjustSidebarWidth(notionApp: HTMLElement) {
    ) {
       let wWidth = window.innerWidth;
       let nNavWidth = Math.round(notionNav.getBoundingClientRect().width);
+      let nNavHeight = Math.round(notionNav.getBoundingClientRect().height);
 
-      let sidebarWidth = Math.round(wWidth * 0.25) - 10;
+      let sidebarWidth = Math.max(Math.round(wWidth * 0.25) - 10, 315);
       let newFrameWidth = wWidth - nNavWidth - sidebarWidth;
       let newAppWidth = newFrameWidth + nNavWidth + 10;
 
@@ -61,7 +62,7 @@ export function adjustSidebarWidth(notionApp: HTMLElement) {
       //    e.style.maxWidth = `${newAppWidth}px`;
       // });
       notionApp.style.maxWidth = `${newAppWidth}px`;
-
+      sidebarRoot.style.height = `${nNavHeight}px`;
       sidebarRoot.style.width = `${sidebarWidth}px`;
       sidebarRoot.style.maxWidth = `${sidebarWidth}px`;
       sidebarRoot.style.display = 'flex';

@@ -9,7 +9,7 @@ import Layout from 'aNotion/components/Layout';
 import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
-import { ThemeProvider } from '@material-ui/core';
+import { ThemeProvider, Paper, Box } from '@material-ui/core';
 import { theme } from 'aNotion/components/Theme';
 
 console.log('App loading...');
@@ -24,7 +24,16 @@ export const SidebarApp = () => {
             <Provider store={reduxStore}>
                <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <ThemeProvider theme={theme}>
-                     <Layout />
+                     <Box height="100%" width="99%">
+                        <Paper
+                           elevation={1}
+                           style={{
+                              padding: 6,
+                              margin: 6,
+                           }}>
+                           <Layout />
+                        </Paper>
+                     </Box>
                   </ThemeProvider>
                </ErrorBoundary>
             </Provider>
