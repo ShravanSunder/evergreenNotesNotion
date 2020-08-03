@@ -19,6 +19,7 @@ import {
    Theme,
    createStyles,
    AccordionActions,
+   Tooltip,
 } from '@material-ui/core';
 import {
    Accordion as MuiAccordion,
@@ -31,6 +32,14 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { Content } from '../blocks/Content';
 import { navigationSelector } from 'aNotion/providers/storeSelectors';
+import {
+   Launch,
+   FileCopyOutlined,
+   WidgetsOutlined,
+   OpenInBrowserOutlined,
+} from '@material-ui/icons';
+import { copyToClipboard } from 'aCommon/extensionHelpers';
+import { LightTooltip } from '../Styles';
 
 const Accordion = withStyles({
    root: {
@@ -83,22 +92,35 @@ const useStyles = makeStyles((theme: Theme) =>
       typography: {
          overflowWrap: 'break-word',
       },
+      button: {
+         fontSize: '0.65rem',
+      },
    })
 );
 
 export const Reference = ({ refData }: { refData: RefData }) => {
    const navigation = useSelector(navigationSelector, shallowEqual);
 
-   const handleOpen = (e: SyntheticEvent) => {
+   const handleCopy = (e: SyntheticEvent) => {
       e.stopPropagation();
       if (navigation.notionSite != null) {
          let url =
-            navigation.notionSite + refData.searchRecord.id.replace('-', '');
-         window.open(url, '_blank');
+            navigation.notionSite + refData.searchRecord.id.replace(/-/g, '');
+         let success = copyToClipboard(url);
+         console.log('copied to clipboard');
       }
    };
 
-   const handleMiddleOpen = (e: SyntheticEvent) => {
+   const handleNewTab = (e: SyntheticEvent) => {
+      // e.stopPropagation();
+      // if (navigation.notionSite != null) {
+      //    let url =
+      //       navigation.notionSite + refData.searchRecord.id.replace(/-/g, '');
+      //    window.open(url, '_blank');
+      // }
+   };
+
+   const handleNewTabMiddleClick = (e: SyntheticEvent) => {
       //e.stopPropagation();
       e.preventDefault();
       if (navigation.notionSite != null) {
@@ -109,7 +131,7 @@ export const Reference = ({ refData }: { refData: RefData }) => {
       return false;
    };
 
-   const handlePreventMiddelScroll = (e: SyntheticEvent) => {
+   const handleNewTabPreventMiddelScroll = (e: SyntheticEvent) => {
       e.preventDefault();
       return false;
    };
@@ -130,6 +152,34 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                   </Grid>
                </Grid>
             </AccordionSummary>
+            <AccordionActions>
+               <LightTooltip
+                  title="Copy a global embed block"
+                  placement="bottom">
+                  <Button
+                     className={classes.button}
+                     size="small"
+                     color="secondary"
+                     variant="outlined"
+                     onClick={handleCopy}
+                     startIcon={<WidgetsOutlined />}>
+                     Copy Embed
+                  </Button>
+               </LightTooltip>
+               <LightTooltip title="Open in a new tab" placement="bottom">
+                  <Button
+                     className={classes.button}
+                     size="small"
+                     color="secondary"
+                     variant="outlined"
+                     onClick={handleNewTab}
+                     onMouseDown={handleNewTabPreventMiddelScroll}
+                     onMouseUp={handleNewTabMiddleClick}
+                     startIcon={<OpenInBrowserOutlined />}>
+                     Open
+                  </Button>
+               </LightTooltip>
+            </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
                   <Grid item xs={12}>
@@ -141,17 +191,6 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                   </Grid>
                </Grid>
             </AccordionDetails>
-            <AccordionActions>
-               <Button
-                  size="small"
-                  color="secondary"
-                  variant="outlined"
-                  onClick={handleOpen}
-                  onMouseDown={handlePreventMiddelScroll}
-                  onMouseUp={handleMiddleOpen}>
-                  Open in a new tab
-               </Button>
-            </AccordionActions>
          </Accordion>
       </ErrorBoundary>
    );

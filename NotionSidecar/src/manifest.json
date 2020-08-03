@@ -17,7 +17,8 @@
       "*://*.notion.so/*",
       "https://notion.so/*",
       "cookies",
-      "webRequest"
+      "webRequest",
+      "clipboardWrite"
    ],
    "content_scripts": [
       {

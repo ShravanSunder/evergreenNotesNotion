@@ -35,3 +35,17 @@ export const toGuid = (guid: string): string => {
       str.slice(20, str.length + 1)
    );
 };
+
+export const copyToClipboard = (url: string): boolean => {
+   try {
+      var textField = document.createElement('textarea');
+      textField.innerText = url;
+      document.body.appendChild(textField);
+      textField.select();
+      document.execCommand('copy');
+      textField.remove();
+      return true;
+   } catch {
+      return false;
+   }
+};
