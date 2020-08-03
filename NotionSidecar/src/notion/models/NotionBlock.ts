@@ -58,10 +58,10 @@ export class NotionBlockFactory implements NotionBlockModel {
    protected setupCollectionData(data: RecordMap, blockId: string) {
       if (this.block?.type === BlockTypes.CollectionViewPage) {
          let cId = this.block.collection_id;
-         this.collection = data.collection![cId].value!;
+         this.collection = data.collection?.[cId].value;
       } else if (this.block?.type === BlockTypes.CollectionViewInline) {
          let cId = this.block.collection_id;
-         this.collection = data.collection![cId].value!;
+         this.collection = data.collection?.[cId].value;
          let viewIds = this.block.view_ids;
          for (let vId of viewIds) {
             if (data.collection_view != null) {

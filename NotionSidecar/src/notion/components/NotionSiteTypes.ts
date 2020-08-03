@@ -22,7 +22,6 @@ export type NavigationState = {
    url?: string;
 };
 export type PageRecordState = {
-   pageChunk?: PageChunk;
    status: ThunkStatus;
    pageRecord?: NotionBlockModel;
 };

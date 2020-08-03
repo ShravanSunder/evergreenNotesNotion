@@ -17,7 +17,6 @@ module.exports = (api) => {
       ],
       plugins: [
          // "@babel/plugin-proposal-class-properties",
-         'react-hot-loader/babel',
          !api.env('production') && 'react-refresh/babel',
       ].filter(Boolean),
    };

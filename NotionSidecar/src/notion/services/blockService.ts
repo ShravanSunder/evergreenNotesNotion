@@ -13,11 +13,45 @@ import {
    Bold,
    BasicStringFormatting,
 } from 'aNotion/types/notionV3/typings/semantic_string';
-// import {
-//    Page,
-//    Collection,
-//    CollectionView,
-// } from 'aNotion/types/notionV3/notionBlockTypes';
+import { appDispatch } from 'aNotion/providers/reduxStore';
+import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
+import * as blockApi from 'aNotion/api/v3/blockApi';
+import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
+
+export const getCurrentPageData = async (
+   pageId: string,
+   signal: AbortSignal
+): Promise<NotionBlockModel | undefined> => {
+   let chunk: LoadPageChunk.PageChunk;
+   let block: NotionBlockModel | undefined = undefined;
+
+   let sycRecordPromise = blockApi.syncRecordValues([pageId], signal);
+   let loadChunkPromise = blockApi.loadPageChunk(pageId, 1, signal);
+
+   try {
+      // this method is much faster, but doesn't work for collection pages
+      chunk = (await sycRecordPromise) as LoadPageChunk.PageChunk;
+
+      if (chunk != null && !signal.aborted) {
+         block = getBlockFromPageChunk(chunk, pageId);
+         if (block.type === BlockTypes.CollectionViewPage) {
+            block = undefined;
+         }
+      }
+   } catch {
+      // try again with full page data
+   }
+
+   if (block == null && !signal.aborted) {
+      chunk = (await loadChunkPromise) as LoadPageChunk.PageChunk;
+
+      if (chunk != null && !signal.aborted) {
+         block = getBlockFromPageChunk(chunk, pageId);
+      }
+   }
+
+   return (block as NotionBlockFactory).toSerializable();
+};
 
 export const getBlockFromPageChunk = (
    page: PageChunk,

@@ -5,10 +5,10 @@ import green from '@material-ui/core/colors/green';
 export const theme = createMuiTheme({
    palette: {
       primary: {
-         main: '#fafafa',
+         main: '#f2f2f2',
       },
       secondary: {
-         main: '#e0e0e0',
+         main: '#9c9c9c',
       },
    },
    typography: {

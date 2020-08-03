@@ -17,7 +17,6 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { notionSiteActions } from './notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
-import Box from '@material-ui/core/Box/Box';
 
 const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
@@ -40,7 +39,6 @@ const Layout = () => {
          let promise = dispatch(
             notionSiteActions.fetchCurrentPage({
                pageId: navigation.pageId,
-               limit: 1,
             })
          );
 

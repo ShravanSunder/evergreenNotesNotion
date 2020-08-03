@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useState, SyntheticEvent } from 'react';
 import { shallowEqual } from 'react-redux';
 
 import ReactHtmlParser from 'react-html-parser';
@@ -15,6 +15,10 @@ import {
    Typography,
    Grid,
    withStyles,
+   makeStyles,
+   Theme,
+   createStyles,
+   AccordionActions,
 } from '@material-ui/core';
 import {
    Accordion as MuiAccordion,
@@ -68,19 +72,32 @@ const AccordionDetails = withStyles((theme) => ({
    root: {
       padding: theme.spacing(2),
       '&$expanded': {
-         minHeight: 51,
+         minHeight: 42,
       },
    },
 }))(MuiAccordionDetails);
 
+const useStyles = makeStyles((theme: Theme) =>
+   createStyles({
+      typography: {
+         overflowWrap: 'break-word',
+      },
+   })
+);
+
 export const Reference = ({ refData }: { refData: RefData }) => {
+   const handleOpen = (e: SyntheticEvent) => {
+      //window.open(, '_blank ');
+   };
+
+   let classes = useStyles();
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Accordion TransitionProps={{ unmountOnExit: true }}>
             <AccordionSummary expandIcon={<ExpandMoreSharp />}>
                <Grid container spacing={1}>
                   <Grid item xs={12}>
-                     <Typography variant="body1">
+                     <Typography variant="body1" className={classes.typography}>
                         {parse(refData.searchRecord.textByContext)}
                      </Typography>
                   </Grid>
@@ -100,6 +117,15 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                   </Grid>
                </Grid>
             </AccordionDetails>
+            <AccordionActions>
+               <Button
+                  size="small"
+                  color="secondary"
+                  variant="outlined"
+                  onClick={handleOpen}>
+                  Open in a new tab
+               </Button>
+            </AccordionActions>
          </Accordion>
       </ErrorBoundary>
    );
