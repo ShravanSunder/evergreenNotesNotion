@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(
             break;
          }
       }
-      return emptyResponse(sendResponse);
+      return true; //emptyResponse(sendResponse);
    }
 );
 

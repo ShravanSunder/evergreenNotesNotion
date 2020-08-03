@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
          await fetchCookies(request.tabId);
          break;
    }
-   return emptyResponse(sendResponse);
+   return true;
 });
 
 // When the browser-action button is clicked...

@@ -15,7 +15,8 @@ export const registerListener = () => {
                break;
             }
          }
-         return emptyResponse(sendResponse);
+         //return emptyResponse(sendResponse);
+         return true;
       }
    );
 };
