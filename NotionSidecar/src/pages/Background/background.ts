@@ -7,8 +7,9 @@ import {
    contentCommands,
    contentCommandRequest,
 } from '../Content/contentMessaging';
+import { emptyResponse } from 'aCommon/extensionHelpers';
 
-console.log('Loaded background page.');
+console.log('Loading background page...');
 
 // Regex-pattern to check URLs against.
 // It matches URLs like: http[s]://[...]stackoverflow.com[...]
@@ -24,22 +25,24 @@ const isNotionTab = (tab: chrome.tabs.Tab) => {
    return false;
 };
 
-chrome.runtime.onMessage.addListener(async function (request) {
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
    switch (request.command) {
       case commands.fetchCookies:
          await fetchCookies(request.tabId);
          break;
    }
-   return true;
+   return emptyResponse(sendResponse);
 });
 
 // When the browser-action button is clicked...
-chrome.browserAction.onClicked.addListener(async function (tab) {
+chrome.browserAction.onClicked.addListener(async (tab) => {
    if (isNotionTab(tab)) {
-      chrome.tabs.sendMessage(tab.id!, {
+      let req = {
          command: contentCommands.extensionOnClick,
          tabId: tab.id!,
-      } as contentCommandRequest);
+      } as contentCommandRequest;
+      console.log('send extensionOnClick');
+      chrome.tabs.sendMessage(tab.id!, req);
    }
    return true;
 });
@@ -51,5 +54,8 @@ const fetchCookies = async (tabId: number) => {
       payload: cookies,
    } as payloadRequest;
 
+   console.log('send receivedCookies');
    chrome.tabs.sendMessage(tabId, req);
 };
+
+console.log('Loaded background page');

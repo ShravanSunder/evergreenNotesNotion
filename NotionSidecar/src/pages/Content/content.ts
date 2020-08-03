@@ -7,27 +7,25 @@ import {
    adjustSidebarWidth,
 } from '../Sidebar/sidebarElements';
 import { contentCommands, contentCommandRequest } from './contentMessaging';
-console.log('Content script loaded!');
+console.log('Content script loading...');
 
 const emptyResponse = (sendResponse: (response: any) => void) => {
    sendResponse({});
    return true;
 };
 
-chrome.runtime.onMessage.addListener(async function (
-   request: contentCommandRequest,
-   sender,
-   sendResponse
-) {
-   switch (request.command) {
-      case contentCommands.extensionOnClick: {
-         initalize(request.tabId);
-         toggleSidebar();
-         break;
+chrome.runtime.onMessage.addListener(
+   async (request: contentCommandRequest, sender, sendResponse) => {
+      switch (request.command) {
+         case contentCommands.extensionOnClick: {
+            initalize(request.tabId);
+            toggleSidebar();
+            break;
+         }
       }
+      return emptyResponse(sendResponse);
    }
-   return emptyResponse(sendResponse);
-});
+);
 
 const notionAppId = 'notion-app';
 export const notionSidebarRootId = 'notion-sidebar-root-987384';
@@ -59,3 +57,5 @@ const error = (str: string) => {
    console.log(str);
    //add more logging
 };
+
+console.log('Content script loaded');

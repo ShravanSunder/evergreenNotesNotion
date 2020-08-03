@@ -14,7 +14,6 @@ import { theme } from 'aNotion/components/Theme';
 
 console.log('App loading...');
 export const SidebarApp = () => {
-   setTabId();
    useEffect(() => {
       setTabId();
    }, []);
@@ -43,11 +42,15 @@ const setTabId = async () => {
       appDispatch(notionSiteActions.currentPage(tab.url!));
    }
 };
-const fetchCookies = async (tabId: number) => {
-   chrome.runtime.sendMessage({
-      command: commands.fetchCookies,
-      tabId: tabId,
-   });
+const fetchCookies = (tabId: number) => {
+   console.log('send fetchCookies');
+   chrome.runtime.sendMessage(
+      {
+         command: commands.fetchCookies,
+         tabId: tabId,
+      },
+      () => {}
+   );
 };
 
 export default SidebarApp;

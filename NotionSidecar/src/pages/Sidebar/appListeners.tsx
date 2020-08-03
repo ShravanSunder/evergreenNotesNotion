@@ -4,22 +4,18 @@ import { payloadRequest } from 'aCommon/commands';
 import { extractUserData } from 'aNotion/services/notionSiteService';
 
 export const registerListener = () => {
-   chrome.runtime.onMessage.addListener(receiveCookiesListener);
-};
-
-const receiveCookiesListener = async (
-   request: payloadRequest,
-   sender: any,
-   sendResponse: any
-) => {
-   switch (request.command) {
-      case commands.receivedCookies: {
-         let cookie = request.payload as chrome.cookies.Cookie[];
-         if (cookie != null) {
-            extractUserData(cookie);
+   chrome.runtime.onMessage.addListener(
+      async (request: payloadRequest, sender: any, sendResponse: any) => {
+         switch (request.command) {
+            case commands.receivedCookies: {
+               let cookie = request.payload as chrome.cookies.Cookie[];
+               if (cookie != null) {
+                  extractUserData(cookie);
+               }
+               break;
+            }
          }
-         break;
+         return emptyResponse(sendResponse);
       }
-   }
-   return emptyResponse(sendResponse);
+   );
 };

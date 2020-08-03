@@ -4,7 +4,7 @@ import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 
 export const registerTabUpdateListener = () => {
-   chrome.tabs.onUpdated.addListener(async function (tabId, changeInfo, tab) {
+   chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       if (changeInfo.status === 'loading') {
          if (isNotionTab(tab!) && tab.id === getCurrentTabId()) {
             console.log('debug unload');
@@ -17,6 +17,8 @@ export const registerTabUpdateListener = () => {
             appDispatch(notionSiteActions.currentPage(tab.url!));
          }
       }
+
+      return true;
    });
 };
 
