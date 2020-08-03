@@ -26,7 +26,7 @@ export const getContent = (
          let parentId = record.collection[colId].value?.parent_id;
          if (
             parentId != null &&
-            record.block[parentId].value?.content != null
+            record?.block?.[parentId].value?.content != null
          ) {
             let c = getNotionBlocksFromContent(
                record.block[parentId].value?.content!,

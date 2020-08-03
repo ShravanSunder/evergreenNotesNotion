@@ -25,7 +25,7 @@ export const createReferences = (
             s.score > 10 &&
             s.highlight != null &&
             s.highlight.text != null &&
-            s.id != pageId
+            s.id !== pageId
          ) {
             let data = new SearchRecord(searchResults.recordMap, s);
             filterResults(data, query, direct, fullTitle, related);
@@ -41,7 +41,6 @@ export const createReferences = (
       .slice(0, 10);
    direct = direct.sort((x, y) => y.searchRecord.score - x.searchRecord.score);
 
-   console.log(direct);
    return {
       direct: direct,
       related: related,

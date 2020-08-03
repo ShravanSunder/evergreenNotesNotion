@@ -1,5 +1,5 @@
 import React, { MouseEvent, useState, SyntheticEvent } from 'react';
-import { shallowEqual } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux';
 
 import ReactHtmlParser from 'react-html-parser';
 
@@ -26,10 +26,11 @@ import {
    AccordionDetails as MuiAccordionDetails,
 } from '@material-ui/core';
 import { RefData } from './referenceTypes';
-import { ExpandMoreSharp } from '@material-ui/icons';
+import { ExpandMoreSharp, SystemUpdate } from '@material-ui/icons';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { Content } from '../blocks/Content';
+import { navigationSelector } from 'aNotion/providers/storeSelectors';
 
 const Accordion = withStyles({
    root: {
@@ -86,8 +87,31 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Reference = ({ refData }: { refData: RefData }) => {
+   const navigation = useSelector(navigationSelector, shallowEqual);
+
    const handleOpen = (e: SyntheticEvent) => {
-      //window.open(, '_blank ');
+      e.stopPropagation();
+      if (navigation.notionSite != null) {
+         let url =
+            navigation.notionSite + refData.searchRecord.id.replace('-', '');
+         window.open(url, '_blank');
+      }
+   };
+
+   const handleMiddleOpen = (e: SyntheticEvent) => {
+      //e.stopPropagation();
+      e.preventDefault();
+      if (navigation.notionSite != null) {
+         let url =
+            navigation.notionSite + refData.searchRecord.id.replace('-', '');
+         window.open(url);
+      }
+      return false;
+   };
+
+   const handlePreventMiddelScroll = (e: SyntheticEvent) => {
+      e.preventDefault();
+      return false;
    };
 
    let classes = useStyles();
@@ -122,7 +146,9 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                   size="small"
                   color="secondary"
                   variant="outlined"
-                  onClick={handleOpen}>
+                  onClick={handleOpen}
+                  onMouseDown={handlePreventMiddelScroll}
+                  onMouseUp={handleMiddleOpen}>
                   Open in a new tab
                </Button>
             </AccordionActions>

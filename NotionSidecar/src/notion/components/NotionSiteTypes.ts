@@ -20,6 +20,7 @@ export type NavigationState = {
    locationId?: string;
    backgroundId?: string;
    url?: string;
+   notionSite?: string;
 };
 export type PageRecordState = {
    status: ThunkStatus;

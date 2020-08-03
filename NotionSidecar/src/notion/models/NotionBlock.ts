@@ -101,7 +101,7 @@ export class NotionBlockFactory implements NotionBlockModel {
             return title ?? '';
          }
       } catch (err) {
-         console.log('Log: unkown block type: ' + this.type);
+         //ignore this error, this wil be improved
          console.log(err);
       }
       return '';

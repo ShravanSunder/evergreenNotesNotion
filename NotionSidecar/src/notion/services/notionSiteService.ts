@@ -48,10 +48,26 @@ export const extractNavigationData = (
          result.backgroundId = undefined;
       }
       result.url = url;
+      result.notionSite = getNotionSiteUrl(url);
    } else {
       console.log('error: not notion page');
    }
    return result;
+};
+
+const getNotionSiteUrl = (url: string): string => {
+   let segments = url.split('/');
+   let length = segments.length;
+   let result = segments.reduce(
+      (accumulator: string, value: string, index: number) => {
+         if (index < length - 1 && value !== 'https') {
+            return accumulator + '/' + value;
+         }
+         return accumulator;
+      }
+   );
+
+   return result.trim() + '/';
 };
 
 const getGuidFromUrl = (url: string): string => {
