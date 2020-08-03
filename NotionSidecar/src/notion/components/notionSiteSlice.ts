@@ -22,9 +22,10 @@ const initialState: SiteState = {
    currentPageRecord: { status: thunkStatus.pending },
 };
 
+type fetchCurrentPageRequest = { pageId: string; limit: number };
 const fetchCurrentPage = createAsyncThunk(
    'notion/page/current',
-   async ({ pageId }: { pageId: string }, thunkApi) => {
+   async ({ pageId, limit }: fetchCurrentPageRequest, thunkApi) => {
       let chunk = (await blockApi.syncRecordValues(
          [pageId],
          thunkApi.signal
