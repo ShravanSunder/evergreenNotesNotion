@@ -1,5 +1,5 @@
 //import { hot } from 'react-hot-loader/root';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
@@ -24,23 +24,29 @@ const Layout = () => {
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
 
+   const [retry, setRetry] = useState(0);
+
    const updateCurrentPageId = useCallback(async () => {
+      setRetry(retry + 1);
       let url = await getCurrentUrl();
       dispatch(notionSiteActions.currentPage(url));
-   }, [dispatch]);
+   }, [retry, dispatch]);
 
    useEffect(() => {
       if (cookie.status === thunkStatus.fulfilled) {
+         setRetry(0);
          updateCurrentPageId();
       }
-   }, [cookie.status, updateCurrentPageId]);
+      if (cookie.status === thunkStatus.rejected && retry < 3) {
+         updateCurrentPageId();
+      }
+   }, [cookie.status, retry, updateCurrentPageId]);
 
    useEffect(() => {
       if (navigation.pageId != null) {
          let promise = dispatch(
             notionSiteActions.fetchCurrentPage({
                pageId: navigation.pageId,
-               limit: 1,
             })
          );
 
@@ -49,7 +55,7 @@ const Layout = () => {
          };
       }
       return () => {};
-   }, [navigation.pageId, navigation.url, dispatch]);
+   }, [navigation.pageId, retry, navigation.url, dispatch]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
