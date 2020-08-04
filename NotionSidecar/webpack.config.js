@@ -17,6 +17,7 @@ var alias = {
    aNotion: path.resolve(__dirname, 'src/notion/'),
    aCommon: path.resolve(__dirname, 'src/pages/common'),
    aUtilities: path.resolve(__dirname, 'src/utilities/'),
+   aAssets: path.resolve(__dirname, 'src/assets/'),
 };
 
 var secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');

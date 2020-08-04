@@ -45,7 +45,8 @@
       // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
       "typeRoots": [
          "./typings",
-         "./node_modules/@types"
+         "./node_modules/@types",
+         "/src/utilities/svg.d.ts"
       ] /* List of folders to include type definitions from. */,
       // "types": [],                           /* Type declaration files to be included in compilation. */
       "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
@@ -75,4 +76,5 @@
       }
    },
    "exclude": ["node_modules", "dist", "build"]
+   //"include": ["/src", "/src/utilities/svg.d.ts"]
 }

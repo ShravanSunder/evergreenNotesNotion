@@ -1,11 +1,18 @@
 import React, { useState, SyntheticEvent } from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
-import { Fab, ThemeProvider } from '@material-ui/core';
+import {
+   Fab,
+   ThemeProvider,
+   makeStyles,
+   Icon,
+   SvgIcon,
+} from '@material-ui/core';
 import EcoIcon from '@material-ui/icons/Eco';
 import { useWindowSize } from '@react-hook/window-size';
 import { theme } from 'aNotion/components/Theme';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
+import MenuBookTwoToneIcon from '@material-ui/icons/MenuBookTwoTone';
 import {
    appPositionTop,
    appPositionLeft,
@@ -20,8 +27,18 @@ export const mountSidebar = (sidebar: HTMLElement) => {
    ReactDOM.render(<LoadSidebarFrame />, sidebar);
 };
 
+const useStyles = makeStyles({
+   imageIcon: {
+      height: '100%',
+   },
+   iconRoot: {
+      textAlign: 'center',
+   },
+});
+
 export const LoadSidebarFrame = () => {
    let url = chrome.extension.getURL('sidebar.html');
+   let classes = useStyles();
 
    const [wWidth, wHeight] = useWindowSize();
    const [showFrame, setShowFrame] = useState(false);
@@ -53,10 +70,10 @@ export const LoadSidebarFrame = () => {
                      style={{
                         position: 'absolute',
                         top: 51,
-                        left: wWidth - 60,
-                        color: showFrame ? grey[500] : lightGreen[700],
+                        left: wWidth - 70,
+                        color: showFrame ? lightGreen[200] : lightGreen[800],
                         backgroundColor: showFrame
-                           ? '#00000000'
+                           ? 'rgb(244, 252, 233, 0.5)'
                            : lightGreen[50],
                         zIndex: 1100,
                      }}
@@ -66,7 +83,7 @@ export const LoadSidebarFrame = () => {
                      color="primary"
                      onClick={handleClick}
                      aria-label="add">
-                     <EcoIcon />
+                     <MenuBookTwoToneIcon />
                   </Fab>
                </Draggable>
             </div>
