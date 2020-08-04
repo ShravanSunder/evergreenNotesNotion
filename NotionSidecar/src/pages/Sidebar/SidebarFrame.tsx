@@ -5,7 +5,7 @@ import { Fab, ThemeProvider } from '@material-ui/core';
 import EcoIcon from '@material-ui/icons/Eco';
 import { useWindowSize } from '@react-hook/window-size';
 import { theme } from 'aNotion/components/Theme';
-import { green, lightGreen } from '@material-ui/core/colors';
+import { green, lightGreen, grey } from '@material-ui/core/colors';
 import {
    appPositionTop,
    appPositionLeft,
@@ -26,27 +26,40 @@ export const LoadSidebarFrame = () => {
    const [wWidth, wHeight] = useWindowSize();
    const [showFrame, setShowFrame] = useState(false);
 
+   const [wasDragging, setWasDragging] = useState(false);
+
    const handleClick = (e: SyntheticEvent) => {
       e.stopPropagation();
-      setShowFrame(!showFrame);
+      if (!wasDragging) {
+         setShowFrame(!showFrame);
+      }
+      setWasDragging(false);
+   };
+   const handleDrag = () => {
+      setWasDragging(true);
    };
 
    return (
       <div>
          <ThemeProvider theme={theme}>
-            <div style={{ zIndex: 4000 }}>
+            <div style={{ zIndex: 1100, backgroundColor: '#00000000' }}>
                <Draggable
-                  axis="y"
+                  axis="both"
+                  bounds={{ left: 100, top: 0, right: 0, bottom: wHeight }}
                   handle=".handle"
                   position={undefined}
+                  onDrag={handleDrag}
                   scale={1}>
                   <Fab
                      style={{
                         position: 'absolute',
                         top: 51,
                         left: wWidth - 60,
-                        color: lightGreen[700],
-                        backgroundColor: lightGreen[50],
+                        color: showFrame ? grey[400] : lightGreen[700],
+                        backgroundColor: showFrame
+                           ? '#00000000'
+                           : lightGreen[50],
+                        zIndex: 1100,
                      }}
                      className="handle"
                      variant="extended"
@@ -59,21 +72,22 @@ export const LoadSidebarFrame = () => {
                </Draggable>
             </div>
          </ThemeProvider>
-         {showFrame && (
-            <iframe
-               style={{
-                  position: 'absolute',
-                  top: appPositionTop(),
-                  left: appPositionLeft(wWidth),
-                  width: appWidth(wWidth),
-                  height: appHeight(wHeight),
-                  border: 0,
-                  overflow: 'hidden',
-                  // boxShadow: '-2px 0px 6px grey',
-               }}
-               title="Notion Sidecar"
-               src={url}></iframe>
-         )}
+         (
+         <iframe
+            style={{
+               visibility: showFrame ? 'visible' : 'hidden',
+               position: 'absolute',
+               top: appPositionTop(),
+               left: appPositionLeft(wWidth),
+               width: appWidth(wWidth),
+               height: appHeight(wHeight),
+               border: 0,
+               overflow: 'hidden',
+               // boxShadow: '-2px 0px 6px grey',
+            }}
+            title="Notion Sidecar"
+            src={url}></iframe>
+         )
       </div>
    );
 };
