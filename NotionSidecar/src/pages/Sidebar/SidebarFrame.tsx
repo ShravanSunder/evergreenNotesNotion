@@ -44,8 +44,7 @@ export const LoadSidebarFrame = () => {
          <ThemeProvider theme={theme}>
             <div style={{ zIndex: 1100, backgroundColor: '#00000000' }}>
                <Draggable
-                  axis="both"
-                  bounds={{ left: 100, top: 0, right: 0, bottom: wHeight }}
+                  axis="y"
                   handle=".handle"
                   position={undefined}
                   onDrag={handleDrag}
@@ -55,7 +54,7 @@ export const LoadSidebarFrame = () => {
                         position: 'absolute',
                         top: 51,
                         left: wWidth - 60,
-                        color: showFrame ? grey[400] : lightGreen[700],
+                        color: showFrame ? grey[500] : lightGreen[700],
                         backgroundColor: showFrame
                            ? '#00000000'
                            : lightGreen[50],
@@ -91,3 +90,5 @@ export const LoadSidebarFrame = () => {
       </div>
    );
 };
+
+//Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
