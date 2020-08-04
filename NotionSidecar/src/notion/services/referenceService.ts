@@ -58,29 +58,45 @@ const filterResults = (
    let full = new RegExp(query, 'i');
    let backlink = new RegExp('[[' + query + ']]', 'i');
    if (backlink.test(data.text!)) {
-      if (!directResults.find((x) => x.searchRecord.id === data.id)) {
-         directResults.push({
-            searchRecord: data.toSerializable(),
-            type: ResultTypeEnum.DirectMatch,
-         });
-      }
+      pushDirectResults(directResults, data);
    } else if (full.test(data.text!)) {
-      if (!fullTitle.find((x) => x.searchRecord.id === data.id)) {
-         fullTitle.push({
-            searchRecord: data.toSerializable(),
-            type: ResultTypeEnum.FullTitleMatch,
-         });
-      }
+      pushFullTextResults(fullTitle, data);
    } else {
-      if (
-         !directResults.find((x) => x.searchRecord.id === data.id) &&
-         !fullTitle.find((x) => x.searchRecord.id === data.id) &&
-         !relatedResults.find((x) => x.searchRecord.id === data.id)
-      ) {
-         relatedResults.push({
-            searchRecord: data.toSerializable(),
-            type: ResultTypeEnum.RelatedSearch,
-         });
-      }
+      pushRelatedResults(directResults, data, fullTitle, relatedResults);
+   }
+};
+const pushRelatedResults = (
+   directResults: RefData[],
+   data: SearchRecord,
+   fullTitle: RefData[],
+   relatedResults: RefData[]
+) => {
+   if (
+      !directResults.find((x) => x.searchRecord.id === data.id) &&
+      !fullTitle.find((x) => x.searchRecord.id === data.id) &&
+      !relatedResults.find((x) => x.searchRecord.id === data.id)
+   ) {
+      relatedResults.push({
+         searchRecord: data.toSerializable(),
+         type: ResultTypeEnum.RelatedSearch,
+      });
+   }
+};
+
+const pushFullTextResults = (fullTitle: RefData[], data: SearchRecord) => {
+   if (!fullTitle.find((x) => x.searchRecord.id === data.id)) {
+      fullTitle.push({
+         searchRecord: data.toSerializable(),
+         type: ResultTypeEnum.FullTitleMatch,
+      });
+   }
+};
+
+const pushDirectResults = (directResults: RefData[], data: SearchRecord) => {
+   if (!directResults.find((x) => x.searchRecord.id === data.id)) {
+      directResults.push({
+         searchRecord: data.toSerializable(),
+         type: ResultTypeEnum.DirectMatch,
+      });
    }
 };

@@ -11,6 +11,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { ThemeProvider, Paper, Box } from '@material-ui/core';
 import { theme } from 'aNotion/components/Theme';
+import { useWindowSize } from '@react-hook/window-size';
 
 console.log('App loading...');
 export const SidebarApp = () => {
@@ -18,18 +19,28 @@ export const SidebarApp = () => {
       setTabId();
    }, []);
 
+   const [wWidth, wHeight] = useWindowSize();
+
    return (
       <React.StrictMode>
          <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Provider store={reduxStore}>
                <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <ThemeProvider theme={theme}>
-                     <Box height="100%" width="99%">
+                     <Box
+                        height={wHeight - 9}
+                        width={wWidth - 9}
+                        style={{ overflow: 'visible' }}>
                         <Paper
-                           elevation={1}
+                           elevation={3}
                            style={{
                               padding: 6,
                               margin: 6,
+                              height: wHeight - 30,
+                              width: wWidth - 30,
+                              overflowY: 'auto',
+                              overflowX: 'visible',
+                              scrollbarWidth: 'thin',
                            }}>
                            <Layout />
                         </Paper>

@@ -6,8 +6,14 @@ import EcoIcon from '@material-ui/icons/Eco';
 import { useWindowSize } from '@react-hook/window-size';
 import { theme } from 'aNotion/components/Theme';
 import { green, lightGreen } from '@material-ui/core/colors';
+import {
+   appPositionTop,
+   appPositionLeft,
+   appWidth,
+   appHeight,
+} from './appFrame';
 
-export const mountSidebar = (sidebar: HTMLElement, tabId: number) => {
+export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render');
    chrome.extension.getURL('sidebar.html');
 
@@ -28,7 +34,7 @@ export const LoadSidebarFrame = () => {
    return (
       <div>
          <ThemeProvider theme={theme}>
-            <div style={{ zIndex: 5020 }}>
+            <div style={{ zIndex: 4000 }}>
                <Draggable
                   axis="y"
                   handle=".handle"
@@ -37,7 +43,7 @@ export const LoadSidebarFrame = () => {
                   <Fab
                      style={{
                         position: 'absolute',
-                        top: 39,
+                        top: 51,
                         left: wWidth - 60,
                         color: lightGreen[700],
                         backgroundColor: lightGreen[50],
@@ -57,20 +63,17 @@ export const LoadSidebarFrame = () => {
             <iframe
                style={{
                   position: 'absolute',
-                  top: 56,
-                  left: wWidth - wWidth * 0.25,
-                  width: wWidth * 0.25 - 21,
-                  height: wHeight - 51 - 9,
+                  top: appPositionTop(),
+                  left: appPositionLeft(wWidth),
+                  width: appWidth(wWidth),
+                  height: appHeight(wHeight),
                   border: 0,
-                  boxShadow: '-2px 0px 6px grey',
+                  overflow: 'hidden',
+                  // boxShadow: '-2px 0px 6px grey',
                }}
-               title="Notion Sidebar Extension"
+               title="Notion Sidecar"
                src={url}></iframe>
          )}
       </div>
    );
 };
-
-//Icons made by <a href="https://www.flaticon.com/free-icon/contract_2942912" title="surang">surang</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-// Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
-//Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>

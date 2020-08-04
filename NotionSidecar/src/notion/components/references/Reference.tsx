@@ -90,7 +90,8 @@ const AccordionDetails = withStyles((theme) => ({
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
       typography: {
-         overflowWrap: 'break-word',
+         overflowWrap: 'anywhere',
+         textAlign: 'justify',
       },
       button: {
          fontSize: '0.65rem',
@@ -109,15 +110,6 @@ export const Reference = ({ refData }: { refData: RefData }) => {
          let success = copyToClipboard(url);
          console.log('copied to clipboard');
       }
-   };
-
-   const handleNewTab = (e: SyntheticEvent) => {
-      // e.stopPropagation();
-      // if (navigation.notionSite != null) {
-      //    let url =
-      //       navigation.notionSite + refData.searchRecord.id.replace(/-/g, '');
-      //    window.open(url, '_blank');
-      // }
    };
 
    const handleNewTabMiddleClick = (e: SyntheticEvent) => {
@@ -172,7 +164,6 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                      size="small"
                      color="secondary"
                      variant="outlined"
-                     onClick={handleNewTab}
                      onMouseDown={handleNewTabPreventMiddelScroll}
                      onMouseUp={handleNewTabMiddleClick}
                      startIcon={<OpenInBrowserOutlined />}>

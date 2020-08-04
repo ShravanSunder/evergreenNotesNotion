@@ -1,11 +1,7 @@
 import { mountSidebar } from '../Sidebar/SidebarFrame';
 import 'chrome-extension-async';
 import { reduceNotionContentPadding } from 'src/pages/Content/styleFixes';
-import {
-   toggleSidebar,
-   createNewRootElement,
-   adjustSidebarWidth,
-} from '../Sidebar/sidebarElements';
+import { createNewRootElement } from '../Sidebar/sidebarElements';
 import { contentCommands, contentCommandRequest } from './contentMessaging';
 console.log('Content script loading...');
 
@@ -18,8 +14,7 @@ chrome.runtime.onMessage.addListener(
    async (request: contentCommandRequest, sender, sendResponse) => {
       switch (request.command) {
          case contentCommands.extensionOnClick: {
-            initalize(request.tabId);
-            toggleSidebar();
+            initalize();
             break;
          }
       }
@@ -30,16 +25,14 @@ chrome.runtime.onMessage.addListener(
 const notionAppId = 'notion-app';
 export const notionSidebarRootId = 'notion-sidebar-root-987384';
 var initalized = false;
-var contentTabId: number | undefined = undefined;
 
-const initalize = (tabId: number) => {
+const initalize = () => {
    let notionApp = document.getElementById(notionAppId) as HTMLElement;
 
    if (!notionApp) {
       error('could not find notion elements');
    } else if (!initalized) {
       initalized = true;
-      contentTabId = tabId;
 
       if (!document.getElementById(notionSidebarRootId)) {
          createNewRootElement(notionApp);
@@ -50,8 +43,9 @@ const initalize = (tabId: number) => {
    }
 
    let sidebarRoot = document.getElementById(notionSidebarRootId);
-   if (sidebarRoot) mountSidebar(sidebarRoot, tabId);
+   if (sidebarRoot) mountSidebar(sidebarRoot);
 };
+initalize();
 
 const error = (str: string) => {
    console.log(str);

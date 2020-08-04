@@ -59,11 +59,11 @@ export const ReferencesPane = ({ status, data }: any) => {
    }, [record.status, dispatch, record.pageRecord, pageName, pageId]);
 
    return (
-      <div style={{ height: '100%', width: '100%', scrollbarWidth: 'thin' }}>
+      <React.Fragment>
          <FullReferences references={references}></FullReferences>
          <RelatedReferences references={references}></RelatedReferences>
          {references.status === thunkStatus.rejected && <div>error!</div>}
-      </div>
+      </React.Fragment>
    );
 };
 
@@ -77,6 +77,9 @@ const FullReferences = ({ references }: { references: ReferenceState }) => {
          </Typography>
          {references.status === thunkStatus.pending && (
             <div>
+               <Skeleton />
+               <Skeleton />
+               <Skeleton />
                <Skeleton />
                <Skeleton />
                <Skeleton />
@@ -107,6 +110,9 @@ const RelatedReferences = ({ references }: { references: ReferenceState }) => {
          </Typography>
          {references.status === thunkStatus.pending && (
             <div>
+               <Skeleton />
+               <Skeleton />
+               <Skeleton />
                <Skeleton />
                <Skeleton />
                <Skeleton />
