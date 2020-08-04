@@ -59,7 +59,7 @@ export const ReferencesPane = ({ status, data }: any) => {
    }, [record.status, dispatch, record.pageRecord, pageName, pageId]);
 
    return (
-      <div style={{ height: '100%', width: '100%' }}>
+      <div style={{ height: '100%', width: '100%', scrollbarWidth: 'thin' }}>
          <FullReferences references={references}></FullReferences>
          <RelatedReferences references={references}></RelatedReferences>
          {references.status === thunkStatus.rejected && <div>error!</div>}
