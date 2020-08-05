@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
    Typography,
    Divider,
@@ -35,6 +35,11 @@ import {
    StringFormat,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
+import { useSelector, useDispatch } from 'react-redux';
+import { blockSelector } from 'aNotion/providers/storeSelectors';
+import { getColor, getBackgroundColor } from 'aNotion/services/blockService';
+import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
+import { blockActions } from './blockSlice';
 
 export const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -57,7 +62,7 @@ export const BlockUi = ({
 }) => {
    let classes = useStyles();
    let variant = useVariant(block);
-   let backgroundColor = useBackgroundColor(block);
+   let backgroundColor = getBackgroundColor(block);
 
    return (
       <div
@@ -86,6 +91,7 @@ export const BlockUi = ({
 
 const TextUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useStyles();
+
    let bb = block.block as BaseTextBlock;
    let title = bb.properties?.title;
 
@@ -105,11 +111,43 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
    let classes = useStyles();
    let text = segment[0];
    let format = segment[1] ?? [];
+   const dispatch: AppPromiseDispatch<any> = useDispatch();
 
+   const blockData = useSelector(blockSelector);
+   let { textStyle, textType, textId } = useSegmentData(format);
+
+   useEffect(() => {
+      if (textId != null) {
+         dispatch(blockActions.fetchBlock({ blockId: textId }));
+      }
+   }, [textId]);
+
+   // if (isPageMention) {
+   //    blockData[textId]?.content;
+   // }
+
+   return (
+      <Typography
+         display="inline"
+         className={classes.typography}
+         variant={'body1'}
+         style={textStyle}>
+         {text}
+      </Typography>
+   );
+};
+
+function useSegmentData(
+   format: SemanticFormat[]
+): {
+   textStyle: React.CSSProperties;
+   textId: string | undefined;
+   textType: string | undefined;
+} {
    let textStyle: React.CSSProperties = {};
-   let hasLink = false;
-   let isUserMention = false;
-   let isPageMention = false;
+   let textId: string | undefined = undefined;
+   let textType: StringFormat | undefined = undefined;
+
    format.forEach((d) => {
       switch (d[0]) {
          case StringFormat.Bold:
@@ -127,12 +165,18 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
             textStyle.textDecoration = 'line-through';
             break;
          case StringFormat.User:
-            isUserMention = true;
+            if (d[1] != null) {
+               textId = d[1];
+               textType = d[0];
+            }
             break;
          case StringFormat.Page:
             textStyle.color = grey[700];
             textStyle.fontWeight = 'bold';
-            isPageMention = true;
+            if (d[1] != null) {
+               textId = d[1];
+               textType = d[0];
+            }
             break;
          case StringFormat.InlineCode:
             textStyle.fontFamily = 'Consolas';
@@ -142,78 +186,8 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
       }
    });
 
-   return (
-      <Typography
-         display="inline"
-         className={classes.typography}
-         variant={'body1'}
-         style={textStyle}>
-         {text}
-      </Typography>
-   );
-};
-
-const getColor = (bgColor: string) => {
-   if (bgColor != null) {
-      switch (bgColor) {
-         case NotionColor.GreyBg:
-         case NotionColor.Grey:
-            return grey[200];
-         case NotionColor.Brown:
-            return brown[100];
-         case NotionColor.Orange:
-            return deepOrange[50];
-         case NotionColor.Yellow:
-            return yellow[50];
-         case NotionColor.Teal:
-            return teal[50];
-         case NotionColor.Blue:
-            return blue[50];
-         case NotionColor.Purple:
-            return purple[50];
-         case NotionColor.Pink:
-            return pink[50];
-         case NotionColor.Red:
-            return red[50];
-      }
-   }
-
-   //transparent
-   return undefined;
-};
-
-const useBackgroundColor = (block: NotionBlockModel) => {
-   let bgColor = block.block?.format?.block_color;
-   if (block.type === BlockTypes.Code) {
-      bgColor = NotionColor.GreyBg;
-   }
-
-   if (bgColor != null) {
-      switch (bgColor) {
-         case NotionColor.GreyBg:
-            return grey[200];
-         case NotionColor.BrownBg:
-            return brown[100];
-         case NotionColor.OrangeBg:
-            return deepOrange[50];
-         case NotionColor.YellowBg:
-            return yellow[50];
-         case NotionColor.TealBg:
-            return teal[50];
-         case NotionColor.BlueBg:
-            return blue[50];
-         case NotionColor.PurpleBg:
-            return purple[50];
-         case NotionColor.PinkBg:
-            return pink[50];
-         case NotionColor.RedBg:
-            return red[50];
-      }
-   }
-
-   //transparent
-   return '#FFFFFF';
-};
+   return { textStyle, textType, textId };
+}
 
 function useVariant(block: NotionBlockModel) {
    let variant: Variant | undefined;

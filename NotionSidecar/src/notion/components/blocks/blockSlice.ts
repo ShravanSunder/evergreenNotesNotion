@@ -18,7 +18,10 @@ import {
 } from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { RecordState } from 'aNotion/components/blocks/contentTypes';
+import {
+   ContentState,
+   RecordState,
+} from 'aNotion/components/blocks/contentTypes';
 import {
    contentSelector,
    blockSelector,
@@ -31,10 +34,7 @@ const initialState: RecordState = {};
 
 const fetchBlock = createAsyncThunk(
    'notion/block/',
-   async (
-      { blockId, contentIds }: { blockId: string; contentIds: string[] },
-      thunkApi
-   ) => {
+   async ({ blockId }: { blockId: string }, thunkApi) => {
       let state = blockSelector(
          thunkApi.getState() as RootState
       ) as RecordState;
@@ -56,7 +56,7 @@ const fetchBlockIfNotInStore = async (
          return result;
       }
    } else {
-      return data.record;
+      return data.block;
    }
    return [];
 };
@@ -79,7 +79,7 @@ const blockSlice = createSlice({
       [fetchBlock.fulfilled.toString()]: (state, action) => {
          const { blockId } = action.meta.arg;
          state[blockId] = {
-            record: action.payload,
+            block: action.payload,
             status: thunkStatus.fulfilled,
          }; // = action.payload;
       },
@@ -88,7 +88,7 @@ const blockSlice = createSlice({
          let data = checkStateForBlock(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
             state[blockId] = {
-               record: [],
+               block: undefined,
                status: thunkStatus.pending,
             };
          }
@@ -98,7 +98,7 @@ const blockSlice = createSlice({
          let data = checkStateForBlock(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
             state[blockId] = {
-               record: [],
+               block: undefined,
                status: thunkStatus.rejected,
             };
          }
@@ -108,6 +108,6 @@ const blockSlice = createSlice({
 
 export const blockActions = {
    ...blockSlice.actions,
-   fetchblock: fetchBlock,
+   fetchBlock: fetchBlock,
 };
 export const blockReducers = blockSlice.reducer;

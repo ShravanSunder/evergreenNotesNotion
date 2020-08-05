@@ -13,6 +13,18 @@ import { appDispatch } from 'aNotion/providers/reduxStore';
 import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
+import {
+   grey,
+   brown,
+   purple,
+   deepOrange,
+   yellow,
+   teal,
+   blue,
+   pink,
+   red,
+} from '@material-ui/core/colors';
+import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
 
 export const fetchPageData = async (
    pageId: string,
@@ -80,4 +92,65 @@ export const reduceTitle = (title?: SemanticString[]) => {
          });
    }
    return '';
+};
+
+export const getColor = (bgColor: string): string | undefined => {
+   if (bgColor != null) {
+      switch (bgColor) {
+         case NotionColor.Grey:
+            return grey[200];
+         case NotionColor.Brown:
+            return brown[100];
+         case NotionColor.Orange:
+            return deepOrange[50];
+         case NotionColor.Yellow:
+            return yellow[50];
+         case NotionColor.Teal:
+            return teal[50];
+         case NotionColor.Blue:
+            return blue[50];
+         case NotionColor.Purple:
+            return purple[50];
+         case NotionColor.Pink:
+            return pink[50];
+         case NotionColor.Red:
+            return red[50];
+         case NotionColor.GreyBg:
+            return grey[200];
+         case NotionColor.BrownBg:
+            return brown[100];
+         case NotionColor.OrangeBg:
+            return deepOrange[50];
+         case NotionColor.YellowBg:
+            return yellow[50];
+         case NotionColor.TealBg:
+            return teal[50];
+         case NotionColor.BlueBg:
+            return blue[50];
+         case NotionColor.PurpleBg:
+            return purple[50];
+         case NotionColor.PinkBg:
+            return pink[50];
+         case NotionColor.RedBg:
+            return red[50];
+      }
+   }
+
+   //transparent
+   return undefined;
+};
+
+export const getBackgroundColor = (block: NotionBlockModel) => {
+   let bgColor = block.block?.format?.block_color;
+   if (block.type === BlockTypes.Code) {
+      bgColor = NotionColor.GreyBg;
+   }
+
+   let color: string | undefined = undefined;
+   if (bgColor) {
+      color = getColor(bgColor);
+   }
+
+   //transparent
+   return color ?? '#FFFFFF';
 };

@@ -15,13 +15,13 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { getBlockFromPageChunk } from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { RecordState } from 'aNotion/components/blocks/contentTypes';
+import { ContentState } from 'aNotion/components/blocks/contentTypes';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 import { loadPageChunk } from 'aNotion/api/v3/blockApi';
 import { Satellite } from '@material-ui/icons';
 
-const initialState: RecordState = {};
+const initialState: ContentState = {};
 
 const fetchContent = createAsyncThunk(
    'notion/content',
@@ -31,14 +31,14 @@ const fetchContent = createAsyncThunk(
    ) => {
       let state = contentSelector(
          thunkApi.getState() as RootState
-      ) as RecordState;
+      ) as ContentState;
 
       //if it gets inefficient, we can use contentIds and syncRecordValues
       return fetchContentIfNotInStore(state, blockId, thunkApi);
    }
 );
 const fetchContentIfNotInStore = async (
-   state: RecordState,
+   state: ContentState,
    blockId: string,
    thunkApi: any
 ) => {
@@ -51,12 +51,12 @@ const fetchContentIfNotInStore = async (
          return block.getContentNodes();
       }
    } else {
-      return data.record;
+      return data.content;
    }
    return [];
 };
 
-const checkStateForContent = (state: RecordState, blockId: string) => {
+const checkStateForContent = (state: ContentState, blockId: string) => {
    if (
       state[blockId] != null &&
       state[blockId].status === thunkStatus.fulfilled
@@ -74,7 +74,7 @@ const contentSlice = createSlice({
       [fetchContent.fulfilled.toString()]: (state, action) => {
          const { blockId } = action.meta.arg;
          state[blockId] = {
-            record: action.payload,
+            content: action.payload,
             status: thunkStatus.fulfilled,
          }; // = action.payload;
       },
@@ -83,7 +83,7 @@ const contentSlice = createSlice({
          let data = checkStateForContent(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
             state[blockId] = {
-               record: [],
+               content: [],
                status: thunkStatus.pending,
             };
          }
@@ -93,7 +93,7 @@ const contentSlice = createSlice({
          let data = checkStateForContent(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
             state[blockId] = {
-               record: [],
+               content: [],
                status: thunkStatus.rejected,
             };
          }

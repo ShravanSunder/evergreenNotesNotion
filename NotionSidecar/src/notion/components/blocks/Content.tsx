@@ -15,7 +15,7 @@ export const Content = ({
    contentIds?: string[];
 }) => {
    const contentData = useSelector(contentSelector);
-   const content = contentData?.[blockId]?.record;
+   const content = contentData?.[blockId]?.content;
    const status = contentData?.[blockId]?.status;
    const dispatch: AppPromiseDispatch<any> = useDispatch();
 
