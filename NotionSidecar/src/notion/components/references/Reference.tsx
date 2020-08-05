@@ -53,8 +53,8 @@ const Accordion = withStyles({
       },
       '&$expanded': {
          margin: 'auto',
-         marginTop: '12px',
-         marginBottom: '12px',
+         marginTop: '18px',
+         marginBottom: '18px',
       },
    },
    expanded: {},

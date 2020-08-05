@@ -38,6 +38,8 @@ export const Content = ({
             <React.Fragment>
                <Skeleton />
                <Skeleton />
+               <Skeleton />
+               <Skeleton />
             </React.Fragment>
          )}
       </React.Fragment>

@@ -2,7 +2,7 @@ import { SearchResultsType } from 'aNotion/api/v3/apiReqTypes';
 import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import {
-   PageReferences,
+   searchReferences,
    RefData,
    ResultTypeEnum,
 } from 'aNotion/components/references/referenceTypes';
@@ -12,9 +12,10 @@ import { current } from '@reduxjs/toolkit';
 export const createReferences = (
    query: string,
    searchResults: SearchResultsType,
-   pageId: string | undefined
+   pageId: string | undefined,
+   searchLimit: number = 20
    //signal?: AbortSignal
-): PageReferences => {
+): searchReferences => {
    let direct: RefData[] = [];
    let fullTitle: RefData[] = [];
    let related: RefData[] = [];
@@ -38,7 +39,7 @@ export const createReferences = (
 
    related = related
       .sort((x, y) => y.searchRecord.score - x.searchRecord.score)
-      .slice(0, 10);
+      .slice(0, searchLimit);
    direct = direct.sort((x, y) => y.searchRecord.score - x.searchRecord.score);
 
    return {

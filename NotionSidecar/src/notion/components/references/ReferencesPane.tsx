@@ -62,7 +62,9 @@ export const ReferencesPane = ({ status, data }: any) => {
       <React.Fragment>
          <FullReferences references={references}></FullReferences>
          <RelatedReferences references={references}></RelatedReferences>
-         {references.status === thunkStatus.rejected && <div>error!</div>}
+         {references.pageReferencesStatus === thunkStatus.rejected && (
+            <div>error!</div>
+         )}
       </React.Fragment>
    );
 };
@@ -75,7 +77,7 @@ const FullReferences = ({ references }: { references: ReferenceState }) => {
          <Typography className={refeStyles.sections} variant="h5">
             <b>References</b>
          </Typography>
-         {references.status === thunkStatus.pending && (
+         {references.pageReferencesStatus === thunkStatus.pending && (
             <div>
                <Skeleton />
                <Skeleton />
@@ -85,13 +87,13 @@ const FullReferences = ({ references }: { references: ReferenceState }) => {
                <Skeleton />
             </div>
          )}
-         {references.status === thunkStatus.fulfilled &&
+         {references.pageReferencesStatus === thunkStatus.fulfilled &&
             references.pageReferences.direct.map((u) => {
                return (
                   <Reference key={u.searchRecord.id} refData={u}></Reference>
                );
             })}
-         {references.status === thunkStatus.fulfilled &&
+         {references.pageReferencesStatus === thunkStatus.fulfilled &&
             references.pageReferences.fullTitle.map((u) => {
                return (
                   <Reference key={u.searchRecord.id} refData={u}></Reference>
@@ -108,7 +110,7 @@ const RelatedReferences = ({ references }: { references: ReferenceState }) => {
          <Typography className={refeStyles.sections} variant="h5">
             <b>Related Searches</b>
          </Typography>
-         {references.status === thunkStatus.pending && (
+         {references.pageReferencesStatus === thunkStatus.pending && (
             <div>
                <Skeleton />
                <Skeleton />
@@ -118,7 +120,7 @@ const RelatedReferences = ({ references }: { references: ReferenceState }) => {
                <Skeleton />
             </div>
          )}
-         {references.status === thunkStatus.fulfilled &&
+         {references.pageReferencesStatus === thunkStatus.fulfilled &&
             references.pageReferences.related.map((u) => {
                return (
                   <Reference key={u.searchRecord.id} refData={u}></Reference>

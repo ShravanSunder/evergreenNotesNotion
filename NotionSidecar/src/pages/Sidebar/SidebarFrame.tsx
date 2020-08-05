@@ -94,16 +94,17 @@ const AppFab = (props: any) => (
             axis="y"
             handle=".handle"
             position={undefined}
+            bounds={{ top: -50, bottom: props.wHeight - 100 }}
             onDrag={props.handleDrag}
             scale={1}>
             <Fab
                style={{
                   position: 'absolute',
                   top: 54,
-                  left: props.wWidth - 74,
-                  color: props.showFrame ? grey[500] : lightGreen[800],
+                  left: props.wWidth - 78,
+                  color: props.showFrame ? grey[400] : lightGreen[800],
                   backgroundColor: props.showFrame
-                     ? 'rgb(244, 252, 233, 0.6)'
+                     ? 'rgb(244, 252, 233, 0.5)'
                      : lightGreen[50],
                   zIndex: 1100,
                }}

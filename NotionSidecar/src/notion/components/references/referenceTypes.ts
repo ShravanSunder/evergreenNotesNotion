@@ -3,21 +3,23 @@ import { SearchRecordModel } from 'aNotion/models/SearchRecord';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 export type ReferenceState = {
-   pageReferences: PageReferences;
-   status: thunkStatus;
+   pageReferences: searchReferences;
+   pageReferencesStatus: thunkStatus;
+   searchResults: searchReferences;
+   resultResultsStatus: thunkStatus;
 };
 
 export type RefData = {
    searchRecord: SearchRecordModel;
    type: ResultTypeEnum;
 };
-export type PageReferences = {
+export type searchReferences = {
    direct: RefData[];
    fullTitle: RefData[];
    related: RefData[];
 };
 
-export const initPageReference = (): PageReferences => {
+export const initReferences = (): searchReferences => {
    return {
       direct: [],
       fullTitle: [],

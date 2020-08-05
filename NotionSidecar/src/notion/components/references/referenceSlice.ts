@@ -8,15 +8,17 @@ import * as searchApi from 'aNotion/api/v3/searchApi';
 import { SearchSort } from 'aNotion/api/v3/apiReqTypes';
 import {
    ReferenceState,
-   PageReferences,
-   initPageReference,
+   searchReferences,
+   initReferences,
 } from './referenceTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { createReferences } from 'aNotion/services/referenceService';
 
 const initialState: ReferenceState = {
-   pageReferences: initPageReference(),
-   status: thunkStatus.pending,
+   pageReferences: initReferences(),
+   pageReferencesStatus: thunkStatus.idle,
+   searchResults: initReferences(),
+   resultResultsStatus: thunkStatus.idle,
 };
 
 const fetchRefsForPage = createAsyncThunk(
@@ -40,11 +42,29 @@ const fetchRefsForPage = createAsyncThunk(
    }
 );
 
+const fetchSearchResults = createAsyncThunk(
+   'notion/reference/serch',
+   async ({ query }: { query: string }, thunkApi) => {
+      let result1 = await searchApi.searchByRelevance(
+         query,
+         false,
+         50,
+         SearchSort.Relevance,
+         thunkApi.signal
+      );
+      if (result1 != null && !thunkApi.signal.aborted) {
+         return createReferences(query, result1, undefined);
+      }
+
+      return result1;
+   }
+);
+
 const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
    state
 ) => {
-   state.pageReferences = initPageReference();
-   state.status = thunkStatus.pending;
+   state.pageReferences = initReferences();
+   state.pageReferencesStatus = thunkStatus.pending;
 };
 
 const referenceSlice = createSlice({
@@ -56,18 +76,33 @@ const referenceSlice = createSlice({
    extraReducers: {
       [fetchRefsForPage.fulfilled.toString()]: (
          state,
-         action: PayloadAction<PageReferences>
+         action: PayloadAction<searchReferences>
       ) => {
          state.pageReferences = action.payload;
-         state.status = thunkStatus.fulfilled;
+         state.pageReferencesStatus = thunkStatus.fulfilled;
       },
       [fetchRefsForPage.pending.toString()]: (state) => {
-         state.status = thunkStatus.pending;
-         state.pageReferences = initPageReference();
+         state.pageReferencesStatus = thunkStatus.pending;
+         state.pageReferences = initReferences();
       },
       [fetchRefsForPage.rejected.toString()]: (state) => {
-         state.status = thunkStatus.rejected;
-         state.pageReferences = initPageReference();
+         state.pageReferencesStatus = thunkStatus.rejected;
+         state.pageReferences = initReferences();
+      },
+      [fetchSearchResults.fulfilled.toString()]: (
+         state,
+         action: PayloadAction<searchReferences>
+      ) => {
+         state.searchResults = action.payload;
+         state.resultResultsStatus = thunkStatus.fulfilled;
+      },
+      [fetchSearchResults.pending.toString()]: (state) => {
+         state.resultResultsStatus = thunkStatus.pending;
+         state.searchResults = initReferences();
+      },
+      [fetchRefsForPage.rejected.toString()]: (state) => {
+         state.resultResultsStatus = thunkStatus.rejected;
+         state.searchResults = initReferences();
       },
    },
 });
@@ -75,6 +110,7 @@ const referenceSlice = createSlice({
 export const referenceActions = {
    ...referenceSlice.actions,
    fetchRefsForPage: fetchRefsForPage,
+   fetchSearchResults: fetchSearchResults,
    //processTitleRefs,
 };
 export const referenceReducers = referenceSlice.reducer;
