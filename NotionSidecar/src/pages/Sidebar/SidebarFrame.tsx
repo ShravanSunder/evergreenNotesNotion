@@ -7,6 +7,9 @@ import {
    makeStyles,
    Icon,
    SvgIcon,
+   Zoom,
+   Fade,
+   Slide,
 } from '@material-ui/core';
 import EcoIcon from '@material-ui/icons/Eco';
 import { useWindowSize } from '@react-hook/window-size';
@@ -64,20 +67,22 @@ export const LoadSidebarFrame = () => {
             handleClick={handleClick}
             handleDrag={handleDrag}></AppFab>
          (
-         <iframe
-            style={{
-               visibility: showFrame ? 'visible' : 'hidden',
-               position: 'absolute',
-               top: appPositionTop(),
-               left: appPositionLeft(wWidth),
-               width: appWidth(wWidth),
-               height: appHeight(wHeight),
-               border: 0,
-               overflow: 'hidden',
-               // boxShadow: '-2px 0px 6px grey',
-            }}
-            title="Notion Sidecar"
-            src={url}></iframe>
+         <Slide in={showFrame} direction={'left'}>
+            <iframe
+               style={{
+                  visibility: showFrame ? 'visible' : 'hidden',
+                  position: 'absolute',
+                  top: appPositionTop(),
+                  left: appPositionLeft(wWidth),
+                  width: appWidth(wWidth),
+                  height: appHeight(wHeight),
+                  border: 0,
+                  overflow: 'hidden',
+                  // boxShadow: '-2px 0px 6px grey',
+               }}
+               title="Notion Sidecar"
+               src={url}></iframe>
+         </Slide>
          )
       </div>
    );
@@ -100,9 +105,9 @@ const AppFab = (props: any) => (
             <Fab
                style={{
                   position: 'absolute',
-                  top: 54,
-                  left: props.wWidth - 78,
-                  color: props.showFrame ? grey[400] : lightGreen[800],
+                  top: 60,
+                  left: props.wWidth - 80,
+                  color: props.showFrame ? grey[700] : lightGreen[800],
                   backgroundColor: props.showFrame
                      ? 'rgb(244, 252, 233, 0.5)'
                      : lightGreen[50],

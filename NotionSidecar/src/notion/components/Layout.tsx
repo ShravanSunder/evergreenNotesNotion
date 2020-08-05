@@ -19,7 +19,13 @@ import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
-import { FindInPageTwoTone, BookTwoTone } from '@material-ui/icons/';
+import {
+   FindInPageTwoTone,
+   BookTwoTone,
+   SubjectTwoTone,
+   AssignmentTurnedInTwoTone,
+   EventTwoTone,
+} from '@material-ui/icons/';
 import { lightGreen } from '@material-ui/core/colors';
 import { makeStyles, Theme, createStyles } from '@material-ui/core';
 
@@ -105,8 +111,17 @@ const Layout = () => {
                <ToggleButton value="search" className={classes.toggleButton}>
                   <FindInPageTwoTone></FindInPageTwoTone>
                </ToggleButton>
-               <ToggleButton></ToggleButton>
-               <ToggleButton></ToggleButton>
+               <ToggleButton
+                  value="hightlights"
+                  className={classes.toggleButton}>
+                  <SubjectTwoTone></SubjectTwoTone>
+               </ToggleButton>
+               <ToggleButton value="todo" className={classes.toggleButton}>
+                  <AssignmentTurnedInTwoTone></AssignmentTurnedInTwoTone>
+               </ToggleButton>
+               <ToggleButton value="events" className={classes.toggleButton}>
+                  <EventTwoTone></EventTwoTone>
+               </ToggleButton>
             </ToggleButtonGroup>
             <ReferencesPane />
          </React.Fragment>

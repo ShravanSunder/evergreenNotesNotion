@@ -27,7 +27,11 @@ import {
    AccordionDetails as MuiAccordionDetails,
 } from '@material-ui/core';
 import { RefData } from './referenceTypes';
-import { ExpandMoreSharp, SystemUpdate } from '@material-ui/icons';
+import {
+   ExpandMoreSharp,
+   SystemUpdate,
+   FileCopyTwoTone,
+} from '@material-ui/icons';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { Content } from '../blocks/Content';
@@ -35,16 +39,20 @@ import { navigationSelector } from 'aNotion/providers/storeSelectors';
 import {
    Launch,
    FileCopyOutlined,
-   WidgetsOutlined,
+   WidgetsTwoTone,
    OpenInBrowserOutlined,
 } from '@material-ui/icons';
 import { copyToClipboard } from 'aCommon/extensionHelpers';
 import { LightTooltip } from '../Styles';
+import { grey } from '@material-ui/core/colors';
 
 const Accordion = withStyles({
    root: {
       border: '1px solid rgba(0, 0, 0, .125)',
       boxShadow: 'none',
+
+      marginTop: '6px',
+      marginBottom: '6px',
       // '&:not(:last-child)': {
       //    borderBottom: 0,
       // },
@@ -53,8 +61,8 @@ const Accordion = withStyles({
       },
       '&$expanded': {
          margin: 'auto',
-         marginTop: '18px',
-         marginBottom: '18px',
+         marginTop: '21px',
+         marginBottom: '21px',
       },
    },
    expanded: {},
@@ -62,7 +70,7 @@ const Accordion = withStyles({
 
 const AccordionSummary = withStyles((theme) => ({
    root: {
-      backgroundColor: theme.palette.secondary.dark,
+      backgroundColor: grey[50],
       borderBottom: '1px solid rgba(0, 0, 0, .125)',
       marginBottom: -1,
       minHeight: 42,
@@ -91,7 +99,7 @@ const useStyles = makeStyles((theme: Theme) =>
    createStyles({
       typography: {
          overflowWrap: 'anywhere',
-         textAlign: 'justify',
+         textAlign: 'left',
       },
       button: {
          fontSize: '0.65rem',
@@ -145,31 +153,50 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                </Grid>
             </AccordionSummary>
             <AccordionActions>
-               <LightTooltip
-                  title="Copy a global embed block"
-                  placement="bottom">
-                  <Button
-                     className={classes.button}
-                     size="small"
-                     color="secondary"
-                     variant="outlined"
-                     onClick={handleCopy}
-                     startIcon={<WidgetsOutlined />}>
-                     Embedded copy
-                  </Button>
-               </LightTooltip>
-               <LightTooltip title="Open in a new tab" placement="bottom">
-                  <Button
-                     className={classes.button}
-                     size="small"
-                     color="secondary"
-                     variant="outlined"
-                     onMouseDown={handleNewTabPreventMiddelScroll}
-                     onMouseUp={handleNewTabMiddleClick}
-                     startIcon={<OpenInBrowserOutlined />}>
-                     Open
-                  </Button>
-               </LightTooltip>
+               <Grid container spacing={1} alignItems="center">
+                  <Grid item>
+                     <LightTooltip
+                        title="Copy a global embed block link"
+                        placement="bottom">
+                        <Button
+                           className={classes.button}
+                           size="small"
+                           color="secondary"
+                           variant="outlined"
+                           onClick={handleCopy}
+                           startIcon={<WidgetsTwoTone />}>
+                           embed link
+                        </Button>
+                     </LightTooltip>
+                  </Grid>
+                  <Grid item>
+                     <LightTooltip title="Open in a new tab" placement="bottom">
+                        <Button
+                           className={classes.button}
+                           size="small"
+                           color="secondary"
+                           variant="outlined"
+                           onMouseDown={handleNewTabPreventMiddelScroll}
+                           onMouseUp={handleNewTabMiddleClick}
+                           startIcon={<OpenInBrowserOutlined />}>
+                           Open
+                        </Button>
+                     </LightTooltip>
+                  </Grid>
+                  <Grid item>
+                     <LightTooltip title="Copy text" placement="bottom">
+                        <Button
+                           className={classes.button}
+                           size="small"
+                           color="secondary"
+                           variant="outlined"
+                           onClick={handleCopy}
+                           startIcon={<FileCopyTwoTone />}>
+                           Copy
+                        </Button>
+                     </LightTooltip>
+                  </Grid>
+               </Grid>
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
