@@ -68,14 +68,14 @@ export interface EmptyBlock {
 
 export interface BaseTextBlock extends EmptyBlock {
    properties?: {
-      title: SemanticString[];
+      title?: SemanticString[];
    };
 }
 
 /**
  * Embedded Sub-Page block or Link To Page block.
  */
-export interface Page extends EmptyBlock {
+export interface Page extends BaseTextBlock {
    type: BlockTypes.Page;
    /**
     * In a database, every record is a page. Properties set in a database
@@ -239,22 +239,22 @@ export interface TableOfContents extends EmptyBlock {
 /**
  * Math Equation block.
  */
-export interface Equation extends EmptyBlock {
+export interface Equation extends BaseTextBlock {
    type: BlockTypes.Equation;
    properties?: {
       /** LaTeX. */
-      title?: [[string]];
+      title?: SemanticString[];
    };
 }
 
 /**
  * Template button block.
  */
-export interface TemplateButton extends EmptyBlock {
+export interface TemplateButton extends BaseTextBlock {
    type: BlockTypes.TemplateButton;
    properties?: {
       /** Button name. */
-      title?: [[string]];
+      title?: SemanticString[];
    };
 }
 
@@ -336,13 +336,13 @@ export interface Audio extends EmptyBlock {
 /**
  * Web Bookmark block.
  */
-export interface Bookmark extends EmptyBlock {
+export interface Bookmark extends BaseTextBlock {
    type: BlockTypes.Bookmark;
    properties?: {
       /** Link of the bookmarked web page. */
       link: [[string]];
       /** Title of the bookmarked web page, auto detected. */
-      title?: [[string]];
+      title?: SemanticString[];
       /** Description of the bookmarked web page, auto detected. */
       description?: [[string]];
    };
@@ -351,11 +351,11 @@ export interface Bookmark extends EmptyBlock {
 /**
  * Code block.
  */
-export interface Code extends EmptyBlock {
+export interface Code extends BaseTextBlock {
    type: BlockTypes.Code;
    properties?: {
       /** Code content. */
-      title?: [[string]];
+      title?: SemanticString[];
       language?: [[string]];
    };
 }

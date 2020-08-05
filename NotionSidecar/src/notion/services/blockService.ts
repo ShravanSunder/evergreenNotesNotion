@@ -8,17 +8,13 @@ import {
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
-import {
-   SemanticString,
-   Bold,
-   BasicStringFormatting,
-} from 'aNotion/types/notionV3/typings/semantic_string';
+import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import { appDispatch } from 'aNotion/providers/reduxStore';
 import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
 
-export const getCurrentPageData = async (
+export const fetchPageData = async (
    pageId: string,
    signal: AbortSignal
 ): Promise<NotionBlockModel | undefined> => {
@@ -73,23 +69,15 @@ export const isNavigable = (block: NotionBlockModel): boolean => {
    );
 };
 
-export const flattenTitle = (titleArray: SemanticString[]) => {
-   if (titleArray != null) {
-      titleArray.map((ss) => {
-         if (ss[1] == null) {
-            return ss[0];
-         } else {
-            return '';
-         }
-      });
+export const reduceTitle = (title?: SemanticString[]) => {
+   if (title != null) {
+      return title
+         .map((segment) => {
+            return segment[0];
+         })
+         .reduce((acuumulator, value) => {
+            return acuumulator + ' ' + value;
+         });
    }
    return '';
 };
-
-const isBold = (title: BasicStringFormatting[]) =>
-   title.find((x) => {
-      if ((x as Bold) != null) {
-         return true;
-      }
-      return false;
-   });

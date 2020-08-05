@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
    Typography,
    Divider,
-   Grid,
    makeStyles,
    createStyles,
    Theme,
-   IconButton,
 } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
@@ -22,16 +20,23 @@ import {
    pink,
    red,
 } from '@material-ui/core/colors';
+import { PageUi } from './PageUi';
+import { BulletUi } from './BulletUi';
+import { TodoUi } from './TodoUi';
+import { QuoteUi } from './QuoteUi';
+import { CalloutUi } from './CalloutUi';
+import { CodeUi } from './CodeUi';
+import { ToggleUi } from './ToggleUi';
+import { NumberUi } from './NumberUi';
+import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
 import {
-   Callout,
-   ToDo,
-   Page,
-   Toggle,
-} from 'aNotion/types/notionV3/notionBlockTypes';
-import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
-import { Content } from './Content';
+   SemanticString,
+   SemanticFormat,
+   StringFormat,
+} from 'aNotion/types/notionV3/semanticStringTypes';
+import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
 
-const useStyles = makeStyles((theme: Theme) =>
+export const useStyles = makeStyles((theme: Theme) =>
    createStyles({
       block: {
          margin: 6,
@@ -58,11 +63,12 @@ export const BlockUi = ({
       <div
          className={classes.block}
          style={{ backgroundColor: backgroundColor }}>
-         {variant != null && (
+         {variant != null && block.type !== BlockTypes.Text && (
             <Typography className={classes.typography} variant={variant}>
                {block.simpleTitle}
             </Typography>
          )}
+         {block.type === BlockTypes.Text && <TextUi block={block}></TextUi>}
          {block.type === BlockTypes.Divider && <Divider></Divider>}
          {block.type === BlockTypes.Callout && (
             <CalloutUi block={block}></CalloutUi>
@@ -78,210 +84,129 @@ export const BlockUi = ({
    );
 };
 
-const PageUi = ({ block }: { block: NotionBlockModel }) => {
+const TextUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useStyles();
-   let page = block.block as Page;
-   let icon = page.properties?.COXj?.[0]?.[0] ?? '';
+   let bb = block.block as BaseTextBlock;
+   let title = bb.properties?.title;
+
+   if (title != null) {
+      return (
+         <React.Fragment>
+            {title.map((segment, i) => {
+               return <TextSegment key={i} segment={segment}></TextSegment>;
+            })}
+         </React.Fragment>
+      );
+   }
+   return null;
+};
+
+const TextSegment = ({ segment }: { segment: SemanticString }) => {
+   let classes = useStyles();
+   let text = segment[0];
+   let format = segment[1] ?? [];
+
+   let textStyle: React.CSSProperties = {};
+   let hasLink = false;
+   let isUserMention = false;
+   let isPageMention = false;
+   format.forEach((d) => {
+      switch (d[0]) {
+         case StringFormat.Bold:
+            textStyle.fontWeight = 'bold';
+            break;
+         case StringFormat.Italic:
+            textStyle.fontStyle = 'italic';
+            break;
+         case StringFormat.Colored:
+            if (d[1] != null && getColor(d[1]) != null) {
+               textStyle.color = getColor(d[1]);
+            }
+            break;
+         case StringFormat.Strike:
+            textStyle.textDecoration = 'line-through';
+            break;
+         case StringFormat.User:
+            isUserMention = true;
+            break;
+         case StringFormat.Page:
+            textStyle.color = grey[700];
+            textStyle.fontWeight = 'bold';
+            isPageMention = true;
+            break;
+         case StringFormat.InlineCode:
+            textStyle.fontFamily = 'Consolas';
+            textStyle.background = grey[200];
+            textStyle.color = red[500];
+            break;
+      }
+   });
 
    return (
-      <React.Fragment>
-         <Typography display={'inline'} variant={'subtitle1'}>
-            {' 🔗 '}
-         </Typography>
-         <Typography
-            display={'inline'}
-            variant={'subtitle1'}
-            className={classes.typography}>
-            {block.simpleTitle}
-         </Typography>
-      </React.Fragment>
+      <Typography
+         display="inline"
+         className={classes.typography}
+         variant={'body1'}
+         style={textStyle}>
+         {text}
+      </Typography>
    );
 };
 
-const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
-   let toggle = block.block as Toggle;
+const getColor = (bgColor: string) => {
+   if (bgColor != null) {
+      switch (bgColor) {
+         case NotionColor.GreyBg:
+         case NotionColor.Grey:
+            return grey[200];
+         case NotionColor.Brown:
+            return brown[100];
+         case NotionColor.Orange:
+            return deepOrange[50];
+         case NotionColor.Yellow:
+            return yellow[50];
+         case NotionColor.Teal:
+            return teal[50];
+         case NotionColor.Blue:
+            return blue[50];
+         case NotionColor.Purple:
+            return purple[50];
+         case NotionColor.Pink:
+            return pink[50];
+         case NotionColor.Red:
+            return red[50];
+      }
+   }
 
-   const [expanded, setExpanded] = useState(false);
-   const handleClick = (e: React.SyntheticEvent) => {
-      e.stopPropagation();
-      setExpanded(!expanded);
-   };
-
-   return (
-      <Grid container>
-         <Grid item xs={1} style={{ paddingRight: 9 }}>
-            <IconButton size="small" onClick={handleClick}>
-               {expanded && <ArrowDropDown fontSize="inherit" />}
-               {!expanded && <ArrowRight fontSize="inherit" />}
-            </IconButton>
-         </Grid>
-         <Grid item xs={11}>
-            <Typography
-               display={'inline'}
-               variant={'body1'}
-               className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
-            {expanded && <Content blockId={block.blockId}></Content>}
-         </Grid>
-      </Grid>
-   );
+   //transparent
+   return undefined;
 };
 
-const BulletUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
-   return (
-      <Grid container>
-         <Grid item xs={1} style={{ paddingLeft: 9, paddingRight: 9 }}>
-            <Typography display={'inline'} variant={'body1'}>
-               {' •  '}
-            </Typography>
-         </Grid>
-         <Grid item xs={11}>
-            <Typography
-               display={'inline'}
-               variant={'body1'}
-               className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
-         </Grid>
-      </Grid>
-   );
-};
-
-const NumberUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
-   return (
-      <Grid container>
-         <Grid item xs={1} style={{ paddingLeft: 9, paddingRight: 9 }}>
-            <Typography display={'inline'} variant={'body1'}>
-               {' #  '}
-            </Typography>
-         </Grid>
-         <Grid item xs={11}>
-            <Typography
-               display={'inline'}
-               variant={'body1'}
-               className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
-         </Grid>
-      </Grid>
-   );
-};
-
-const TodoUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
-   let todo = block.block as ToDo;
-   let checked = todo.properties?.checked?.[0]?.[0] === 'Yes' ?? false;
-   return (
-      <Grid container>
-         <Grid item xs={1} style={{ paddingLeft: 3, paddingRight: 6 }}>
-            {!checked && (
-               <Typography display={'inline'} variant={'body1'}>
-                  {' ☐ '}
-               </Typography>
-            )}
-            {checked && (
-               <Typography display={'inline'} variant={'body1'}>
-                  {' ☑ '}
-               </Typography>
-            )}
-         </Grid>
-         <Grid item xs={11}>
-            <Typography
-               display={'inline'}
-               variant={'body1'}
-               style={{ textDecoration: checked ? 'line-through' : '' }}
-               className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
-         </Grid>
-      </Grid>
-   );
-};
-
-const QuoteUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
-   return (
-      <Grid container>
-         <Grid item style={{ paddingRight: 9 }}>
-            <Divider
-               orientation="vertical"
-               style={{ backgroundColor: '#262626', width: 2 }}></Divider>
-         </Grid>
-         <Grid item xs={11}>
-            <Typography
-               display={'inline'}
-               variant={'body1'}
-               className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
-         </Grid>
-      </Grid>
-   );
-};
-
-const CodeUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
-   return (
-      <Grid container style={{ padding: 12 }}>
-         <Grid item xs>
-            <Typography
-               variant={'body2'}
-               className={classes.typography}
-               style={{ fontFamily: 'Consolas' }}>
-               {block.simpleTitle}
-            </Typography>
-         </Grid>
-      </Grid>
-   );
-};
-
-const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
-   var callout = block.block as Callout;
-   return (
-      <Grid container style={{ padding: 6 }}>
-         <Grid item style={{ paddingLeft: 9, paddingRight: 9 }}>
-            <Typography variant={'body1'}>
-               {block.block?.format?.page_icon}
-            </Typography>
-         </Grid>
-         <Grid item xs={10}>
-            <Typography variant={'body1'} className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
-         </Grid>
-      </Grid>
-   );
-};
 const useBackgroundColor = (block: NotionBlockModel) => {
    let bgColor = block.block?.format?.block_color;
    if (block.type === BlockTypes.Code) {
-      bgColor = 'gray_background';
+      bgColor = NotionColor.GreyBg;
    }
 
    if (bgColor != null) {
       switch (bgColor) {
-         case 'gray_background':
+         case NotionColor.GreyBg:
             return grey[200];
-         case 'brown_background':
+         case NotionColor.BrownBg:
             return brown[100];
-         case 'orange_background':
+         case NotionColor.OrangeBg:
             return deepOrange[50];
-         case 'yellow_background':
+         case NotionColor.YellowBg:
             return yellow[50];
-         case 'teal_background':
+         case NotionColor.TealBg:
             return teal[50];
-         case 'blue_background':
+         case NotionColor.BlueBg:
             return blue[50];
-         case 'purple_background':
+         case NotionColor.PurpleBg:
             return purple[50];
-         case 'pink_background':
+         case NotionColor.PinkBg:
             return pink[50];
-         case 'red_background':
+         case NotionColor.RedBg:
             return red[50];
       }
    }
@@ -289,6 +214,7 @@ const useBackgroundColor = (block: NotionBlockModel) => {
    //transparent
    return '#FFFFFF';
 };
+
 function useVariant(block: NotionBlockModel) {
    let variant: Variant | undefined;
    switch (block.type) {

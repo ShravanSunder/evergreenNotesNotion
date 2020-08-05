@@ -5,3 +5,4 @@ export const currentRecordSelector = (state: RootState) =>
    state.site.currentPageRecord;
 export const referenceSelector = (state: RootState) => state.references;
 export const contentSelector = (state: RootState) => state.content;
+export const blockSelector = (state: RootState) => state.blocks;

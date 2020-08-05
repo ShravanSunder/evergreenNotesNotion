@@ -18,7 +18,7 @@ import {
    appPositionLeft,
    appWidth,
    appHeight,
-} from './appFrame';
+} from './frameProperties';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render');
@@ -58,36 +58,11 @@ export const LoadSidebarFrame = () => {
 
    return (
       <div>
-         <ThemeProvider theme={theme}>
-            <div style={{ zIndex: 1100, backgroundColor: '#00000000' }}>
-               <Draggable
-                  axis="y"
-                  handle=".handle"
-                  position={undefined}
-                  onDrag={handleDrag}
-                  scale={1}>
-                  <Fab
-                     style={{
-                        position: 'absolute',
-                        top: 51,
-                        left: wWidth - 70,
-                        color: showFrame ? lightGreen[200] : lightGreen[800],
-                        backgroundColor: showFrame
-                           ? 'rgb(244, 252, 233, 0.5)'
-                           : lightGreen[50],
-                        zIndex: 1100,
-                     }}
-                     className="handle"
-                     variant="extended"
-                     size="small"
-                     color="primary"
-                     onClick={handleClick}
-                     aria-label="add">
-                     <MenuBookTwoToneIcon />
-                  </Fab>
-               </Draggable>
-            </div>
-         </ThemeProvider>
+         <AppFab
+            wWidth={wWidth}
+            showFrame={showFrame}
+            handleClick={handleClick}
+            handleDrag={handleDrag}></AppFab>
          (
          <iframe
             style={{
@@ -107,5 +82,42 @@ export const LoadSidebarFrame = () => {
       </div>
    );
 };
+
+const AppFab = (props: any) => (
+   <ThemeProvider theme={theme}>
+      <div
+         style={{
+            zIndex: 1100,
+            backgroundColor: '#00000000',
+         }}>
+         <Draggable
+            axis="y"
+            handle=".handle"
+            position={undefined}
+            onDrag={props.handleDrag}
+            scale={1}>
+            <Fab
+               style={{
+                  position: 'absolute',
+                  top: 52,
+                  left: props.wWidth - 74,
+                  color: props.showFrame ? grey[500] : lightGreen[800],
+                  backgroundColor: props.showFrame
+                     ? 'rgb(244, 252, 233, 0.6)'
+                     : lightGreen[50],
+                  zIndex: 1100,
+               }}
+               className="handle"
+               variant="extended"
+               size="small"
+               color="primary"
+               onClick={props.handleClick}
+               aria-label="add">
+               <MenuBookTwoToneIcon />
+            </Fab>
+         </Draggable>
+      </div>
+   </ThemeProvider>
+);
 
 //Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>

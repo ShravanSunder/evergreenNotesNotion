@@ -155,7 +155,7 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                      variant="outlined"
                      onClick={handleCopy}
                      startIcon={<WidgetsOutlined />}>
-                     Copy Embed Block
+                     Embedded copy
                   </Button>
                </LightTooltip>
                <LightTooltip title="Open in a new tab" placement="bottom">

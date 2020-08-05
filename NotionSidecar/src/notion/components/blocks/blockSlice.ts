@@ -12,43 +12,48 @@ import {
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { getBlockFromPageChunk } from 'aNotion/services/blockService';
+import {
+   getBlockFromPageChunk,
+   fetchPageData,
+} from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { RecordState } from 'aNotion/components/blocks/contentTypes';
-import { contentSelector } from 'aNotion/providers/storeSelectors';
+import {
+   contentSelector,
+   blockSelector,
+} from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 import { loadPageChunk } from 'aNotion/api/v3/blockApi';
 import { Satellite } from '@material-ui/icons';
 
 const initialState: RecordState = {};
 
-const fetchContent = createAsyncThunk(
-   'notion/content',
+const fetchBlock = createAsyncThunk(
+   'notion/block/',
    async (
       { blockId, contentIds }: { blockId: string; contentIds: string[] },
       thunkApi
    ) => {
-      let state = contentSelector(
+      let state = blockSelector(
          thunkApi.getState() as RootState
       ) as RecordState;
 
       //if it gets inefficient, we can use contentIds and syncRecordValues
-      return fetchContentIfNotInStore(state, blockId, thunkApi);
+      return fetchBlockIfNotInStore(state, blockId, thunkApi);
    }
 );
-const fetchContentIfNotInStore = async (
+const fetchBlockIfNotInStore = async (
    state: RecordState,
    blockId: string,
    thunkApi: any
 ) => {
-   let data = checkStateForContent(state, blockId);
+   let data = checkStateForBlock(state, blockId);
 
    if (data?.status !== thunkStatus.fulfilled) {
-      let result = await blockApi.loadPageChunk(blockId, 100, thunkApi.signal);
-      if (result != null && !thunkApi.signal.aborted) {
-         let block = getBlockFromPageChunk(result, blockId);
-         return block.getContentNodes();
+      let result = fetchPageData(blockId, thunkApi.signal);
+      if (result != null) {
+         return result;
       }
    } else {
       return data.record;
@@ -56,7 +61,7 @@ const fetchContentIfNotInStore = async (
    return [];
 };
 
-const checkStateForContent = (state: RecordState, blockId: string) => {
+const checkStateForBlock = (state: RecordState, blockId: string) => {
    if (
       state[blockId] != null &&
       state[blockId].status === thunkStatus.fulfilled
@@ -66,21 +71,21 @@ const checkStateForContent = (state: RecordState, blockId: string) => {
    return undefined;
 };
 
-const contentSlice = createSlice({
-   name: 'contentSlice',
+const blockSlice = createSlice({
+   name: 'blockSlice',
    initialState: initialState,
    reducers: {},
    extraReducers: {
-      [fetchContent.fulfilled.toString()]: (state, action) => {
+      [fetchBlock.fulfilled.toString()]: (state, action) => {
          const { blockId } = action.meta.arg;
          state[blockId] = {
             record: action.payload,
             status: thunkStatus.fulfilled,
          }; // = action.payload;
       },
-      [fetchContent.pending.toString()]: (state, action) => {
+      [fetchBlock.pending.toString()]: (state, action) => {
          const { blockId } = action.meta.arg;
-         let data = checkStateForContent(state, blockId);
+         let data = checkStateForBlock(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
             state[blockId] = {
                record: [],
@@ -88,9 +93,9 @@ const contentSlice = createSlice({
             };
          }
       },
-      [fetchContent.rejected.toString()]: (state, action) => {
+      [fetchBlock.rejected.toString()]: (state, action) => {
          const { blockId } = action.meta.arg;
-         let data = checkStateForContent(state, blockId);
+         let data = checkStateForBlock(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
             state[blockId] = {
                record: [],
@@ -101,8 +106,8 @@ const contentSlice = createSlice({
    },
 });
 
-export const contentActions = {
-   ...contentSlice.actions,
-   fetchContent: fetchContent,
+export const blockActions = {
+   ...blockSlice.actions,
+   fetchblock: fetchBlock,
 };
-export const contentReducers = contentSlice.reducer;
+export const blockReducers = blockSlice.reducer;

@@ -21,25 +21,26 @@ export type NotionSecureUrl = string;
 // A string containing exactly one emoji character.
 export type Emoji = string;
 //
-export type NotionColor =
-   | 'gray'
-   | 'brown'
-   | 'orange'
-   | 'yellow'
-   | 'teal'
-   | 'blue'
-   | 'purple'
-   | 'pink'
-   | 'red'
-   | 'gray_background'
-   | 'brown_background'
-   | 'orange_background'
-   | 'yellow_background'
-   | 'teal_background'
-   | 'blue_background'
-   | 'purple_background'
-   | 'pink_background'
-   | 'red_background';
+export enum NotionColor {
+   Grey = 'gray',
+   Brown = 'brown',
+   Orange = 'orange',
+   Yellow = 'yellow',
+   Teal = 'teal',
+   Blue = 'blue',
+   Purple = 'purple',
+   Pink = 'pink',
+   Red = 'red',
+   GreyBg = 'gray_background',
+   BrownBg = 'brown_background',
+   OrangeBg = 'orange_background',
+   YellowBg = 'yellow_background',
+   TealBg = 'teal_background',
+   BlueBg = 'blue_background',
+   PurpleBg = 'purple_background',
+   PinkBg = 'pink_background',
+   RedBg = 'red_background',
+}
 // Record table names.
 export type Table =
    | 'block'

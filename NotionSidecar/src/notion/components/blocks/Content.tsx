@@ -15,6 +15,8 @@ export const Content = ({
    contentIds?: string[];
 }) => {
    const contentData = useSelector(contentSelector);
+   const content = contentData?.[blockId]?.record;
+   const status = contentData?.[blockId]?.status;
    const dispatch: AppPromiseDispatch<any> = useDispatch();
 
    useEffect(() => {
@@ -22,9 +24,6 @@ export const Content = ({
          contentActions.fetchContent({ blockId, contentIds: contentIds ?? [] })
       );
    }, [blockId, contentIds, dispatch]);
-
-   let content = contentData?.[blockId]?.content;
-   let status = contentData?.[blockId]?.status;
 
    return (
       <React.Fragment>
