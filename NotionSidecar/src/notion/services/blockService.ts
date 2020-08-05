@@ -94,27 +94,27 @@ export const reduceTitle = (title?: SemanticString[]) => {
    return '';
 };
 
-export const getColor = (bgColor: string): string | undefined => {
-   if (bgColor != null) {
-      switch (bgColor) {
+export const getColor = (color: string): string | undefined => {
+   if (color != null) {
+      switch (color) {
          case NotionColor.Grey:
-            return grey[200];
+            return grey[600];
          case NotionColor.Brown:
-            return brown[100];
+            return brown[400];
          case NotionColor.Orange:
-            return deepOrange[50];
+            return deepOrange[400];
          case NotionColor.Yellow:
-            return yellow[50];
+            return yellow[400];
          case NotionColor.Teal:
-            return teal[50];
+            return teal[400];
          case NotionColor.Blue:
-            return blue[50];
+            return blue[400];
          case NotionColor.Purple:
-            return purple[50];
+            return purple[400];
          case NotionColor.Pink:
-            return pink[50];
+            return pink[400];
          case NotionColor.Red:
-            return red[50];
+            return red[400];
          case NotionColor.GreyBg:
             return grey[200];
          case NotionColor.BrownBg:

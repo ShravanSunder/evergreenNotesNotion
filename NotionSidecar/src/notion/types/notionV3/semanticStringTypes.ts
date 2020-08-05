@@ -5,7 +5,7 @@ export type SemanticString = BasicString;
 // | InlineMentionPage
 // | InlineMentionDate;
 
-export enum StringFormat {
+export enum StringFormats {
    Bold = 'b',
    Italic = 'i',
    Strike = 's',
@@ -18,7 +18,7 @@ export enum StringFormat {
    DateTime = 'd',
 }
 
-export type SemanticFormat = [StringFormat, string?];
+export type SemanticFormat = [StringFormats, string?];
 export type BasicString = [string, SemanticFormat[]?];
 
 // export type InlineMentionUser = ['‣', SemanticFormat[]];

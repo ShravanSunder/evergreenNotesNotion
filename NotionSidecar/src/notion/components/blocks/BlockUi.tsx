@@ -5,6 +5,8 @@ import {
    makeStyles,
    createStyles,
    Theme,
+   Link,
+   Icon,
 } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
@@ -32,14 +34,19 @@ import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
 import {
    SemanticString,
    SemanticFormat,
-   StringFormat,
+   StringFormats,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
-import { useSelector, useDispatch } from 'react-redux';
-import { blockSelector } from 'aNotion/providers/storeSelectors';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import {
+   blockSelector,
+   navigationSelector,
+} from 'aNotion/providers/storeSelectors';
 import { getColor, getBackgroundColor } from 'aNotion/services/blockService';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { blockActions } from './blockSlice';
+import { getPageUrl } from 'aNotion/services/notionSiteService';
+import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
 
 export const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -49,6 +56,12 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
       typography: {
          overflowWrap: 'break-word',
+      },
+      inlineIcon: {
+         position: 'relative',
+         top: theme.spacing(),
+         width: theme.typography.caption.fontSize,
+         height: theme.typography.caption.fontSize,
       },
    })
 );
@@ -114,26 +127,61 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
 
    const blockData = useSelector(blockSelector);
-   let { textStyle, textType, textId } = useSegmentData(format);
+   let { textStyle, textDetails, textType } = useSegmentData(format);
+   let link: string | undefined = undefined;
 
    useEffect(() => {
-      if (textId != null) {
-         dispatch(blockActions.fetchBlock({ blockId: textId }));
+      if (textDetails != null && textType === StringFormats.Page) {
+         dispatch(blockActions.fetchBlock({ blockId: textDetails }));
       }
-   }, [textId]);
+   }, [dispatch, textDetails, textType]);
 
-   // if (isPageMention) {
-   //    blockData[textId]?.content;
-   // }
+   if (textDetails != null && textType === StringFormats.Page) {
+      text = blockData[textDetails]?.block?.simpleTitle ?? '';
+      link = getPageUrl(textDetails);
+   } else if (textDetails != null && textType === StringFormats.Link) {
+      link = textDetails;
+   } else if (textDetails != null && textType === StringFormats.User) {
+      text = '';
+   }
 
    return (
-      <Typography
-         display="inline"
-         className={classes.typography}
-         variant={'body1'}
-         style={textStyle}>
-         {text}
-      </Typography>
+      <React.Fragment>
+         {link == null && (
+            <Typography
+               display="inline"
+               className={classes.typography}
+               variant={'body1'}
+               style={textStyle}>
+               {text}
+            </Typography>
+         )}
+         {link != null && textType === StringFormats.Page && (
+            <Link
+               display="inline"
+               className={classes.typography}
+               variant={'body1'}
+               href={link}
+               target="_blank"
+               style={{ ...textStyle }}>
+               <Icon fontSize="small" className={classes.inlineIcon}>
+                  <OpenInNewOutlinedIcon />
+               </Icon>
+               {text}
+            </Link>
+         )}
+         {link != null && textType === StringFormats.Link && (
+            <Link
+               display="inline"
+               className={classes.typography}
+               variant={'body1'}
+               href={link}
+               target="_blank"
+               style={{ ...textStyle, textDecoration: 'underline' }}>
+               {text}
+            </Link>
+         )}
+      </React.Fragment>
    );
 };
 
@@ -141,52 +189,62 @@ function useSegmentData(
    format: SemanticFormat[]
 ): {
    textStyle: React.CSSProperties;
-   textId: string | undefined;
+   textDetails: string | undefined;
    textType: string | undefined;
 } {
    let textStyle: React.CSSProperties = {};
-   let textId: string | undefined = undefined;
-   let textType: StringFormat | undefined = undefined;
+   let textDetails: string | undefined = undefined;
+   let textType: StringFormats | undefined = undefined;
 
    format.forEach((d) => {
       switch (d[0]) {
-         case StringFormat.Bold:
+         case StringFormats.Bold:
             textStyle.fontWeight = 'bold';
             break;
-         case StringFormat.Italic:
+         case StringFormats.Italic:
             textStyle.fontStyle = 'italic';
             break;
-         case StringFormat.Colored:
+         case StringFormats.Colored:
             if (d[1] != null && getColor(d[1]) != null) {
-               textStyle.color = getColor(d[1]);
+               if (d[1].includes('background')) {
+                  textStyle.backgroundColor = getColor(d[1]);
+               } else {
+                  textStyle.color = getColor(d[1]);
+               }
             }
             break;
-         case StringFormat.Strike:
+         case StringFormats.Strike:
             textStyle.textDecoration = 'line-through';
             break;
-         case StringFormat.User:
+         case StringFormats.User:
             if (d[1] != null) {
-               textId = d[1];
+               textDetails = d[1];
                textType = d[0];
             }
             break;
-         case StringFormat.Page:
-            textStyle.color = grey[700];
+         case StringFormats.Link:
+            if (d[1] != null) {
+               textDetails = d[1];
+               textType = d[0];
+            }
+            break;
+         case StringFormats.Page:
+            textStyle.color = grey[800];
             textStyle.fontWeight = 'bold';
             if (d[1] != null) {
-               textId = d[1];
+               textDetails = d[1];
                textType = d[0];
             }
             break;
-         case StringFormat.InlineCode:
+         case StringFormats.InlineCode:
             textStyle.fontFamily = 'Consolas';
-            textStyle.background = grey[200];
-            textStyle.color = red[500];
+            textStyle.background = grey[300];
+            textStyle.color = red[700];
             break;
       }
    });
 
-   return { textStyle, textType, textId };
+   return { textStyle: { ...textStyle }, textType, textDetails };
 }
 
 function useVariant(block: NotionBlockModel) {

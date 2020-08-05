@@ -3,9 +3,10 @@ import {
    CookieData,
    NavigationState,
 } from 'aNotion/components/NotionSiteTypes';
-import { appDispatch } from 'aNotion/providers/reduxStore';
+import { appDispatch, getAppState } from 'aNotion/providers/reduxStore';
 import { toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
+import { navigationSelector } from 'aNotion/providers/storeSelectors';
 
 export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
    let spaceId = cleanValue(
@@ -83,4 +84,9 @@ const isNotionUrl = (url: string) => {
       }
    }
    return false;
+};
+
+export const getPageUrl = (pageId: string) => {
+   const navigation = getAppState(navigationSelector);
+   return navigation.notionSite + pageId.replace(/-/g, '');
 };
