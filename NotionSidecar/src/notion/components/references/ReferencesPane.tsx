@@ -27,7 +27,7 @@ import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { Reference } from './Reference';
 import { ReferenceState } from './referenceTypes';
 import Layout from '../Layout';
-import { Loading, NothingToFind } from '../Loading';
+import { LoadingTab, NothingToFind } from '../Loading';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -82,7 +82,7 @@ const FullReferences = ({ references }: { references: ReferenceState }) => {
    return (
       <React.Fragment>
          {references.pageReferencesStatus === thunkStatus.pending && (
-            <Loading></Loading>
+            <LoadingTab></LoadingTab>
          )}
          {references.pageReferencesStatus === thunkStatus.fulfilled && (
             <React.Fragment>
@@ -116,7 +116,7 @@ const RelatedReferences = ({ references }: { references: ReferenceState }) => {
    return (
       <React.Fragment>
          {references.pageReferencesStatus === thunkStatus.pending && (
-            <Loading></Loading>
+            <LoadingTab></LoadingTab>
          )}
          {references.pageReferencesStatus === thunkStatus.fulfilled && (
             <React.Fragment>

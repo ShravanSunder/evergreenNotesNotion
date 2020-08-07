@@ -93,9 +93,9 @@ const AccordionSummary = withStyles((theme) => ({
 const AccordionDetails = withStyles((theme) => ({
    root: {
       padding: theme.spacing(2),
-      '&$expanded': {
-         minHeight: 32,
-      },
+      // '&$expanded': {
+      //    minHeight: 21,
+      // },
    },
 }))(MuiAccordionDetails);
 

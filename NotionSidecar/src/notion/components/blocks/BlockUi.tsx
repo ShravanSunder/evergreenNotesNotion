@@ -85,8 +85,9 @@ export const BlockUi = ({
       </div>
    );
 };
+export default BlockUi;
 
-function useVariant(block: NotionBlockModel) {
+const useVariant = (block: NotionBlockModel) => {
    let variant: Variant | undefined;
    switch (block.type) {
       case BlockTypes.Text:
@@ -106,4 +107,4 @@ function useVariant(block: NotionBlockModel) {
          break;
    }
    return variant;
-}
+};

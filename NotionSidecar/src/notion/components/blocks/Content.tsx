@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { contentActions } from 'aNotion/components/blocks/contentSlice';
-import { BlockUi } from './BlockUi';
-import { Skeleton } from '@material-ui/lab';
+import { LoadingSection } from '../Loading';
+import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
+
+const BlockUi = React.lazy(() => import('./BlockUi'));
 
 export const Content = ({
    blockId,
@@ -26,22 +28,17 @@ export const Content = ({
    }, [blockId, contentIds, dispatch]);
 
    return (
-      <React.Fragment>
-         {status === thunkStatus.fulfilled && (
-            <React.Fragment>
-               {content.map((p, i) => (
-                  <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
-               ))}
-            </React.Fragment>
-         )}
-         {status === thunkStatus.pending && (
-            <React.Fragment>
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-            </React.Fragment>
-         )}
-      </React.Fragment>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+         <Suspense fallback={<LoadingSection />}>
+            {status === thunkStatus.fulfilled && (
+               <React.Fragment>
+                  {content.map((p, i) => (
+                     <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+                  ))}
+               </React.Fragment>
+            )}
+            {status === thunkStatus.pending && <LoadingSection />}
+         </Suspense>
+      </ErrorBoundary>
    );
 };

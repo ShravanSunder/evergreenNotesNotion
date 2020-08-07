@@ -59,6 +59,10 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
       text = '';
    }
 
+   if (text == null || (text.trim().length === 0 && textDetails == null)) {
+      return null;
+   }
+
    return (
       <React.Fragment>
          {link == null && (
@@ -101,13 +105,13 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
       </React.Fragment>
    );
 };
-function useSegmentData(
+const useSegmentData = (
    format: SemanticFormat[]
 ): {
    textStyle: React.CSSProperties;
    textDetails: string | undefined;
    textType: string | undefined;
-} {
+} => {
    let textStyle: React.CSSProperties = {};
    let textDetails: string | undefined = undefined;
    let textType: StringFormats | undefined = undefined;
@@ -161,4 +165,4 @@ function useSegmentData(
    });
 
    return { textStyle: { ...textStyle }, textType, textDetails };
-}
+};

@@ -28,7 +28,7 @@ export interface TreeType extends TreeNode {
    children: [TreeNode];
 }
 
-export class NotionBlockFactory implements NotionBlockModel {
+export class NotionBlockRecord implements NotionBlockModel {
    block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined = [];
@@ -140,7 +140,7 @@ export class NotionBlockFactory implements NotionBlockModel {
    ) {
       try {
          if (parentId != null) {
-            var pBlock = new NotionBlockFactory(this.recordMapData, parentId);
+            var pBlock = new NotionBlockRecord(this.recordMapData, parentId);
             if (pBlock.block == null) {
                //if the block is empty, just skip saving it to array
                //its probably a collection and repeated as we traverse

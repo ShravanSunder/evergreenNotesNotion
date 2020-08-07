@@ -27,7 +27,7 @@ import {
 } from '@material-ui/icons/';
 import { lightGreen, grey } from '@material-ui/core/colors';
 import { makeStyles, Theme, createStyles, Box, Grid } from '@material-ui/core';
-import { Loading } from './Loading';
+import { LoadingTab } from './Loading';
 
 const ReferencesPane = React.lazy(() => import('./references/ReferencesPane'));
 const HighlightsPane = React.lazy(() => import('./highlights/HighlightsPane'));
@@ -166,7 +166,7 @@ const Layout = () => {
          <React.Fragment>
             <MenuBar tab={tab} setTab={setTab}></MenuBar>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-               <Suspense fallback={<Loading />}>
+               <Suspense fallback={<LoadingTab />}>
                   <div
                      style={{
                         visibility:

@@ -4,7 +4,7 @@
 
 import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
 import {
-   NotionBlockFactory,
+   NotionBlockRecord,
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
@@ -25,29 +25,33 @@ import {
    red,
 } from '@material-ui/core/colors';
 import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
+import { NotionPage } from 'aNotion/models/NotionPage';
 
 export const fetchPageData = async (
    pageId: string,
-   signal: AbortSignal
-): Promise<NotionBlockModel | undefined> => {
+   signal: AbortSignal,
+   liteApi: boolean = false
+): Promise<NotionBlockRecord | undefined> => {
    let chunk: LoadPageChunk.PageChunk;
-   let block: NotionBlockModel | undefined = undefined;
+   let block: NotionBlockRecord | undefined = undefined;
 
    let sycRecordPromise = blockApi.syncRecordValues([pageId], signal);
    let loadChunkPromise = blockApi.loadPageChunk(pageId, 1, signal);
 
-   try {
-      // this method is much faster, but doesn't work for collection pages
-      chunk = (await sycRecordPromise) as LoadPageChunk.PageChunk;
+   if (liteApi) {
+      try {
+         // this method is much faster, but doesn't work for collection pages
+         chunk = (await sycRecordPromise) as LoadPageChunk.PageChunk;
 
-      if (chunk != null && !signal.aborted) {
-         block = getBlockFromPageChunk(chunk, pageId);
-         if (block.type === BlockTypes.CollectionViewPage) {
-            block = undefined;
+         if (chunk != null && !signal.aborted) {
+            block = getBlockFromPageChunk(chunk, pageId);
+            if (block.type === BlockTypes.CollectionViewPage) {
+               block = undefined;
+            }
          }
+      } catch {
+         // try again with full page data
       }
-   } catch {
-      // try again with full page data
    }
 
    if (block == null && !signal.aborted) {
@@ -58,15 +62,22 @@ export const fetchPageData = async (
       }
    }
 
-   return (block as NotionBlockFactory).toSerializable();
+   return block;
+};
+
+export const processHighlights = (
+   pageId: string,
+   record: NotionBlockRecord
+): NotionPage => {
+   throw 'fdsfsdf';
 };
 
 export const getBlockFromPageChunk = (
    page: PageChunk,
    pageId: string
-): NotionBlockFactory => {
+): NotionBlockRecord => {
    try {
-      let m = new NotionBlockFactory(page.recordMap, pageId);
+      let m = new NotionBlockRecord(page.recordMap, pageId);
       return m;
    } catch (err) {
       console.log(err);

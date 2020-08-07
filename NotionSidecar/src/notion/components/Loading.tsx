@@ -3,28 +3,40 @@ import React from 'react';
 import { Skeleton } from '@material-ui/lab';
 import { Typography, Grid, Box } from '@material-ui/core';
 //export default hot(Layout);
-export const Loading = () => {
+export const LoadingTab = () => {
    return (
       <Box style={{ padding: 6 }}>
          <Typography variant="h2">
             <Skeleton></Skeleton>
          </Typography>
 
-         <LoadingSection />
-         <LoadingSection />
-         <LoadingSection />
+         <LoadingDetails />
+         <LoadingDetails />
+         <LoadingDetails />
       </Box>
    );
 };
 
-const LoadingSection = () => {
+export const LoadingSection = () => {
+   return (
+      <Box style={{ padding: 6 }}>
+         <Typography variant="h4">
+            <Skeleton></Skeleton>
+         </Typography>
+
+         <LoadingDetails />
+         <LoadingDetails />
+      </Box>
+   );
+};
+
+const LoadingDetails = () => {
    return (
       <React.Fragment>
          <Typography variant="h6">
             <Skeleton></Skeleton>
          </Typography>
          <Typography variant="body2">
-            <Skeleton></Skeleton>
             <Skeleton></Skeleton>
             <Skeleton></Skeleton>
             <Skeleton></Skeleton>

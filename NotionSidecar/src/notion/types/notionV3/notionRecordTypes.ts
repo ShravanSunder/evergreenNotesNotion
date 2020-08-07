@@ -14,7 +14,7 @@ export type CollectionViewRecord = Record<blockTypes.CollectionView>;
 export type SpaceRecord = Record<blockTypes.Space>;
 export type SpaceViewRecord = Record<blockTypes.SpaceView>;
 export type ActivityRecord = Record<blockTypes.Activity>;
-// export type NotionUserRecord = Record<NotionUser>;
+export type NotionUserRecord = Record<blockTypes.NotionUser>;
 // export type UserRootRecord = Record<UserRoot>;
 // export type UserSettingsRecord = Record<UserSettings>;
 // export type FollowRecord = Record<Follow>;
@@ -34,7 +34,7 @@ export interface RecordMap {
    block: Map<Record<blockTypes.Block>>;
    collection?: Map<Record<blockTypes.Collection>>;
    collection_view?: Map<Record<blockTypes.CollectionView>>;
-   notion_user?: Map<unknown>;
+   notion_user?: Map<blockTypes.NotionUser>;
    space: Map<Record<blockTypes.Space>>;
 }
 

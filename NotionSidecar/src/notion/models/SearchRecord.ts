@@ -6,7 +6,7 @@ import {
 import { Map } from '../types/notionV3/Map';
 import * as blockTypes from '../types/notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
-import { NotionBlockModel, NotionBlockFactory } from './NotionBlock';
+import { NotionBlockModel, NotionBlockRecord } from './NotionBlock';
 import { SearchResultType } from 'aNotion/api/v3/apiReqTypes';
 import { createSearchContext } from 'aNotion/components/references/SearchContext';
 import { NavigatableBlocks } from 'aNotion/types/notionV3/notionBlockTypes';
@@ -28,7 +28,7 @@ export class SearchRecord implements SearchRecordModel {
    isNavigable: boolean;
    score: number;
    highlight: { text: string; pathText: string };
-   notionBlock: NotionBlockFactory;
+   notionBlock: NotionBlockRecord;
    textByContext: string[] = [];
    text: string = '';
    path: NotionBlockModel[] = [];
@@ -38,7 +38,7 @@ export class SearchRecord implements SearchRecordModel {
       this.isNavigable = searchResult.isNavigable;
       this.highlight = searchResult.highlight;
       this.score = searchResult.score;
-      this.notionBlock = new NotionBlockFactory(data, this.id);
+      this.notionBlock = new NotionBlockRecord(data, this.id);
       this.cleanHighlight();
       this.fetchPath();
    }
@@ -52,7 +52,7 @@ export class SearchRecord implements SearchRecordModel {
    }
 
    fetchPath() {
-      let path = (this.notionBlock as NotionBlockFactory).getParentsNodes();
+      let path = (this.notionBlock as NotionBlockRecord).getParentsNodes();
 
       this.path = path.filter(
          (x) =>
@@ -70,8 +70,8 @@ export class SearchRecord implements SearchRecordModel {
          highlight: this.highlight,
          textByContext: this.textByContext,
          text: this.text,
-         path: this.path.map((p) => (p as NotionBlockFactory).toSerializable()),
-         notionBlock: (this.notionBlock as NotionBlockFactory).toSerializable(),
+         path: this.path.map((p) => (p as NotionBlockRecord).toSerializable()),
+         notionBlock: (this.notionBlock as NotionBlockRecord).toSerializable(),
       };
       return model;
    };

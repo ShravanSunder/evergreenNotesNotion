@@ -6,7 +6,7 @@ import { Activity } from './typings/activity';
 // import { Follow } from "./follow"
 // import { SlackIntegration } from "./slack_integration"
 import { Permission } from './typings/permission';
-// import { NotionUser } from "./notion_user"
+import { NotionUser } from './typings/notion_user';
 // import { UserRoot } from "./user_root"
 // import { UserSettings } from "./user_settings"
 
@@ -33,7 +33,7 @@ export {
    // Follow,
    // SlackIntegration,
    Permission,
-   // NotionUser,
+   NotionUser,
    // UserRoot,
    // UserSettings,
 };

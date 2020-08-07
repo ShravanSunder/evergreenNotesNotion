@@ -4,7 +4,7 @@ import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
 import TreeModel from 'tree-model';
 import { BaseTextBlock } from '../types/notionV3/typings/basic_blocks';
 import {
-   NotionBlockFactory,
+   NotionBlockRecord,
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 
@@ -47,7 +47,7 @@ const getNotionBlocksFromContent = (
    let content: NotionBlockModel[] = [];
    for (let childId of contentIds) {
       if (childId != null) {
-         let cBlock = new NotionBlockFactory(record, childId);
+         let cBlock = new NotionBlockRecord(record, childId);
          if (cBlock.type !== BlockTypes.Unknown) {
             content.push(cBlock.toSerializable());
          }
