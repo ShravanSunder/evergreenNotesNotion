@@ -17,6 +17,7 @@ import { getPageUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
 import { useBlockStyles } from './BlockUi';
 import { LinkOutlined } from '@material-ui/icons';
+
 export const TextUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
 
@@ -91,7 +92,7 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
          {link != null && textType === StringFormats.Link && (
             <Link
                display="inline"
-               className={classes.typography}
+               className={classes.link}
                variant={'body1'}
                href={link}
                target="_blank"

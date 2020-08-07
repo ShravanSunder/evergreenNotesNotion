@@ -17,6 +17,7 @@ import {
    teal,
    blue,
    pink,
+   grey,
 } from '@material-ui/core/colors';
 import { PageUi } from './PageUi';
 import { BulletUi } from './BulletUi';
@@ -47,6 +48,10 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
          width: theme.typography.caption.fontSize,
          height: theme.typography.caption.fontSize,
       },
+      link: {
+         overflowWrap: 'break-word',
+         color: grey[600],
+      },
    })
 );
 
@@ -55,7 +60,7 @@ export const BlockUi = ({
    index,
 }: {
    block: NotionBlockModel;
-   index: number;
+   index: number | undefined;
 }) => {
    let classes = useBlockStyles();
    let variant = useVariant(block);
