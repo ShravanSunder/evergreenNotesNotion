@@ -21,6 +21,7 @@ import {
    AccordionActions,
    Tooltip,
    IconButton,
+   Link,
 } from '@material-ui/core';
 import {
    Accordion as MuiAccordion,
@@ -32,6 +33,7 @@ import {
    ExpandMoreSharp,
    SystemUpdate,
    FileCopyTwoTone,
+   LinkOutlined,
 } from '@material-ui/icons';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
@@ -124,7 +126,7 @@ const ReferenceActions = ({ refData }: { refData: RefData }) => {
          console.log('copied to clipboard');
          if (success) {
             console.log('copied to clipboard');
-            enqueueSnackbar('Copied to clipboard', { variant: 'error' });
+            enqueueSnackbar('Copied embed block', { variant: 'info' });
          }
       }
    };
@@ -139,8 +141,18 @@ const ReferenceActions = ({ refData }: { refData: RefData }) => {
             refData.searchRecord.id.replace(/-/g, '');
          let success = copyToClipboard(url);
          if (success) {
-            console.log('Copied to clipboard');
-            enqueueSnackbar('Copied to clipboard', { variant: 'info' });
+            enqueueSnackbar('Copied link to clipboard', { variant: 'info' });
+         }
+      }
+   };
+
+   const handleCopyText = (e: SyntheticEvent) => {
+      e.stopPropagation();
+      let text = refData.searchRecord.text;
+      if (navigation.notionSite != null && text != null) {
+         let success = copyToClipboard(text);
+         if (success) {
+            enqueueSnackbar('Copied text to clipboard', { variant: 'info' });
          }
       }
    };
@@ -182,14 +194,13 @@ const ReferenceActions = ({ refData }: { refData: RefData }) => {
          </Grid>
          <Grid xs item container justify="flex-end">
             <Grid item>
-               <LightTooltip title="Open in a new tab" placement="bottom">
+               <LightTooltip title="Copy link" placement="bottom">
                   <IconButton
                      className={classes.button}
                      color="secondary"
                      size="small"
-                     onMouseDown={handleNewTabPreventMiddelScroll}
-                     onMouseUp={handleNewTabMiddleClick}>
-                     <Launch></Launch>
+                     onMouseDown={handleCopyLink}>
+                     <LinkOutlined></LinkOutlined>
                   </IconButton>
                </LightTooltip>
             </Grid>
@@ -199,8 +210,20 @@ const ReferenceActions = ({ refData }: { refData: RefData }) => {
                      className={classes.button}
                      size="small"
                      color="secondary"
-                     onClick={handleEmbedBlock}>
-                     <FileCopyTwoTone />
+                     onClick={handleCopyText}>
+                     <FileCopyOutlined />
+                  </IconButton>
+               </LightTooltip>
+            </Grid>
+            <Grid item>
+               <LightTooltip title="Open in a new tab" placement="bottom">
+                  <IconButton
+                     className={classes.button}
+                     color="secondary"
+                     size="small"
+                     onMouseDown={handleNewTabPreventMiddelScroll}
+                     onMouseUp={handleNewTabMiddleClick}>
+                     <Launch></Launch>
                   </IconButton>
                </LightTooltip>
             </Grid>

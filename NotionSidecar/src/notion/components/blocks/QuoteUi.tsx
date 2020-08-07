@@ -1,9 +1,9 @@
 import React from 'react';
 import { Typography, Divider, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { useStyles } from './BlockUi';
+import { useBlockStyles } from './BlockUi';
 export const QuoteUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
+   let classes = useBlockStyles();
    return (
       <Grid container>
          <Grid item style={{ paddingRight: 9 }}>

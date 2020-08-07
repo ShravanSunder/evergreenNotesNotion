@@ -1,5 +1,5 @@
 //import { hot } from 'react-hot-loader/root';
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, SyntheticEvent } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
@@ -26,8 +26,8 @@ import {
    AssignmentTurnedInTwoTone,
    EventTwoTone,
 } from '@material-ui/icons/';
-import { lightGreen } from '@material-ui/core/colors';
-import { makeStyles, Theme, createStyles } from '@material-ui/core';
+import { lightGreen, grey } from '@material-ui/core/colors';
+import { makeStyles, Theme, createStyles, Box, Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -51,6 +51,65 @@ const useStyles = makeStyles((theme: Theme) =>
       },
    })
 );
+
+const MenuBar = ({
+   tab,
+   setTab,
+}: {
+   tab: string;
+   setTab: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+   const classes = useStyles();
+
+   const handleTab = (
+      event: React.MouseEvent<HTMLElement>,
+      newTab: string | null
+   ) => {
+      if (newTab != null) {
+         setTab(newTab);
+      }
+   };
+
+   return (
+      <div
+         style={{
+            backgroundColor: lightGreen[50],
+            borderRadius: 9,
+            padding: 6,
+         }}>
+         <Grid container spacing={1} justify="center">
+            <Grid item>
+               <ToggleButtonGroup
+                  className={classes.grouped}
+                  size="small"
+                  value={tab}
+                  exclusive
+                  onChange={handleTab}>
+                  <ToggleButton
+                     value="references"
+                     className={classes.toggleButton}>
+                     <BookTwoTone></BookTwoTone>
+                  </ToggleButton>
+                  <ToggleButton value="search" className={classes.toggleButton}>
+                     <FindInPageTwoTone></FindInPageTwoTone>
+                  </ToggleButton>
+                  <ToggleButton
+                     value="hightlights"
+                     className={classes.toggleButton}>
+                     <SubjectTwoTone></SubjectTwoTone>
+                  </ToggleButton>
+                  <ToggleButton value="todo" className={classes.toggleButton}>
+                     <AssignmentTurnedInTwoTone></AssignmentTurnedInTwoTone>
+                  </ToggleButton>
+                  <ToggleButton value="events" className={classes.toggleButton}>
+                     <EventTwoTone></EventTwoTone>
+                  </ToggleButton>
+               </ToggleButtonGroup>
+            </Grid>
+         </Grid>
+      </div>
+   );
+};
 
 const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
@@ -87,42 +146,10 @@ const Layout = () => {
 
    const [tab, setTab] = useState('references');
 
-   const handleTab = (
-      event: React.MouseEvent<HTMLElement>,
-      newTab: string | null
-   ) => {
-      if (newTab != null) setTab(newTab);
-   };
-
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <React.Fragment>
-            <ToggleButtonGroup
-               className={classes.grouped}
-               size="small"
-               value={tab}
-               exclusive
-               onChange={handleTab}>
-               <ToggleButton
-                  value="references"
-                  className={classes.toggleButton}>
-                  <BookTwoTone></BookTwoTone>
-               </ToggleButton>
-               <ToggleButton value="search" className={classes.toggleButton}>
-                  <FindInPageTwoTone></FindInPageTwoTone>
-               </ToggleButton>
-               <ToggleButton
-                  value="hightlights"
-                  className={classes.toggleButton}>
-                  <SubjectTwoTone></SubjectTwoTone>
-               </ToggleButton>
-               <ToggleButton value="todo" className={classes.toggleButton}>
-                  <AssignmentTurnedInTwoTone></AssignmentTurnedInTwoTone>
-               </ToggleButton>
-               <ToggleButton value="events" className={classes.toggleButton}>
-                  <EventTwoTone></EventTwoTone>
-               </ToggleButton>
-            </ToggleButtonGroup>
+            <MenuBar tab={tab} setTab={setTab}></MenuBar>
             <ReferencesPane />
          </React.Fragment>
       </ErrorBoundary>

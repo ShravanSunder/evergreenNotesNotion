@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
    createStyles({
       info: { backgroundColor: grey[100], ...snackbarRoot },
       success: { backgroundColor: green[50], ...snackbarRoot },
-      error: { backgroundColor: red[50], ...snackbarRoot },
+      error: { backgroundColor: red[100], ...snackbarRoot },
       warning: {
          backgroundColor: yellow[50],
          ...snackbarRoot,

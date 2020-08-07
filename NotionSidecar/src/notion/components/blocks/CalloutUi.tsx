@@ -2,9 +2,9 @@ import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Callout } from 'aNotion/types/notionV3/notionBlockTypes';
-import { useStyles } from './BlockUi';
+import { useBlockStyles } from './BlockUi';
 export const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
+   let classes = useBlockStyles();
    var callout = block.block as Callout;
    return (
       <Grid container style={{ padding: 6 }}>

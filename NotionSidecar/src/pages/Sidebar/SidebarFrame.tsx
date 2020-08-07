@@ -105,8 +105,8 @@ const AppFab = (props: any) => (
             <Fab
                style={{
                   position: 'absolute',
-                  top: 60,
-                  left: props.wWidth - 80,
+                  top: 66,
+                  left: props.wWidth - 87,
                   color: props.showFrame ? grey[700] : lightGreen[800],
                   backgroundColor: props.showFrame
                      ? 'rgb(244, 252, 233, 0.5)'

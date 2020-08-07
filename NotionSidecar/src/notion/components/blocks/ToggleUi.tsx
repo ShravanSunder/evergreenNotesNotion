@@ -4,9 +4,9 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Toggle } from 'aNotion/types/notionV3/notionBlockTypes';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
 import { Content } from './Content';
-import { useStyles } from './BlockUi';
+import { useBlockStyles } from './BlockUi';
 export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
-   let classes = useStyles();
+   let classes = useBlockStyles();
    let toggle = block.block as Toggle;
 
    const [expanded, setExpanded] = useState(false);
