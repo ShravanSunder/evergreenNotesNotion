@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useEffect, MouseEvent, useState } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
@@ -25,6 +26,8 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { Reference } from './Reference';
 import { ReferenceState } from './referenceTypes';
+import Layout from '../Layout';
+import { Loading, NothingToFind } from '../Loading';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -37,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 // comment
-export const ReferencesPane = ({ status, data }: any) => {
+export const ReferencesPane = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const record = useSelector(currentRecordSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
@@ -68,64 +71,66 @@ export const ReferencesPane = ({ status, data }: any) => {
       </React.Fragment>
    );
 };
+export default ReferencesPane;
 
 const FullReferences = ({ references }: { references: ReferenceState }) => {
-   let refeStyles = useStyles();
+   let classes = useStyles();
+
+   let fullTitle = references.pageReferences.fullTitle;
+   let direct = references.pageReferences.direct;
 
    return (
       <React.Fragment>
-         <Typography className={refeStyles.sections} variant="h5">
-            <b>References</b>
-         </Typography>
          {references.pageReferencesStatus === thunkStatus.pending && (
-            <div>
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-            </div>
+            <Loading></Loading>
          )}
-         {references.pageReferencesStatus === thunkStatus.fulfilled &&
-            references.pageReferences.direct.map((u) => {
-               return (
-                  <Reference key={u.searchRecord.id} refData={u}></Reference>
-               );
-            })}
-         {references.pageReferencesStatus === thunkStatus.fulfilled &&
-            references.pageReferences.fullTitle.map((u) => {
-               return (
-                  <Reference key={u.searchRecord.id} refData={u}></Reference>
-               );
-            })}
+         {references.pageReferencesStatus === thunkStatus.fulfilled && (
+            <React.Fragment>
+               <Typography className={classes.sections} variant="h5">
+                  <b>References</b>
+               </Typography>
+               {direct.map((u) => {
+                  return (
+                     <Reference key={u.searchRecord.id} refData={u}></Reference>
+                  );
+               })}
+               {fullTitle.map((u) => {
+                  return (
+                     <Reference key={u.searchRecord.id} refData={u}></Reference>
+                  );
+               })}
+               {fullTitle.length === 0 && direct.length === 0 && (
+                  <NothingToFind />
+               )}
+            </React.Fragment>
+         )}
       </React.Fragment>
    );
 };
 
 const RelatedReferences = ({ references }: { references: ReferenceState }) => {
-   let refeStyles = useStyles();
+   let classes = useStyles();
+
+   let data = references.pageReferences.related;
+
    return (
       <React.Fragment>
-         <Typography className={refeStyles.sections} variant="h5">
-            <b>Related Searches</b>
-         </Typography>
          {references.pageReferencesStatus === thunkStatus.pending && (
-            <div>
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-               <Skeleton />
-            </div>
+            <Loading></Loading>
          )}
-         {references.pageReferencesStatus === thunkStatus.fulfilled &&
-            references.pageReferences.related.map((u) => {
-               return (
-                  <Reference key={u.searchRecord.id} refData={u}></Reference>
-               );
-            })}
+         {references.pageReferencesStatus === thunkStatus.fulfilled && (
+            <React.Fragment>
+               <Typography className={classes.sections} variant="h5">
+                  <b>Related Searches</b>
+               </Typography>
+               {data.map((u) => {
+                  return (
+                     <Reference key={u.searchRecord.id} refData={u}></Reference>
+                  );
+               })}
+               {data.length === 0 && <NothingToFind />}
+            </React.Fragment>
+         )}
       </React.Fragment>
    );
 };

@@ -187,7 +187,7 @@ const ReferenceActions = ({ refData }: { refData: RefData }) => {
                      variant="outlined"
                      onClick={handleEmbedBlock}
                      startIcon={<WidgetsTwoTone />}>
-                     embed link
+                     embed block
                   </Button>
                </LightTooltip>
             </Grid>

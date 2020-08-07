@@ -1,18 +1,17 @@
 //import { hot } from 'react-hot-loader/root';
-import React, { useEffect, useCallback, useState, SyntheticEvent } from 'react';
+import React, {
+   useEffect,
+   useCallback,
+   useState,
+   SyntheticEvent,
+   Suspense,
+} from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
    navigationSelector,
 } from 'aNotion/providers/storeSelectors';
-import { ReferencesPane } from './references/ReferencesPane';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-
-//loading fonts recommended by material ui
-// import 'fontsource-roboto/latin-300.css';
-// import 'fontsource-roboto/latin-400.css';
-// import 'fontsource-roboto/latin-500.css';
-// import 'fontsource-roboto/latin-700.css';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { notionSiteActions } from './notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
@@ -28,6 +27,10 @@ import {
 } from '@material-ui/icons/';
 import { lightGreen, grey } from '@material-ui/core/colors';
 import { makeStyles, Theme, createStyles, Box, Grid } from '@material-ui/core';
+import { Loading } from './Loading';
+
+const ReferencesPane = React.lazy(() => import('./references/ReferencesPane'));
+const HighlightsPane = React.lazy(() => import('./highlights/HighlightsPane'));
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -51,6 +54,12 @@ const useStyles = makeStyles((theme: Theme) =>
       },
    })
 );
+
+export enum LayoutTabs {
+   References = 'references',
+   Search = 'search',
+   Highlights = 'highlights',
+}
 
 const MenuBar = ({
    tab,
@@ -86,15 +95,17 @@ const MenuBar = ({
                   exclusive
                   onChange={handleTab}>
                   <ToggleButton
-                     value="references"
+                     value={LayoutTabs.References}
                      className={classes.toggleButton}>
                      <BookTwoTone></BookTwoTone>
                   </ToggleButton>
-                  <ToggleButton value="search" className={classes.toggleButton}>
+                  <ToggleButton
+                     value={LayoutTabs.Search}
+                     className={classes.toggleButton}>
                      <FindInPageTwoTone></FindInPageTwoTone>
                   </ToggleButton>
                   <ToggleButton
-                     value="hightlights"
+                     value={LayoutTabs.Highlights}
                      className={classes.toggleButton}>
                      <SubjectTwoTone></SubjectTwoTone>
                   </ToggleButton>
@@ -123,6 +134,12 @@ const Layout = () => {
       dispatch(notionSiteActions.currentPage(url));
    }, [dispatch]);
 
+   const [tab, setTab] = useState('references');
+
+   useEffect(() => {
+      setTab(LayoutTabs.References);
+   }, []);
+
    useEffect(() => {
       if (cookie.status === thunkStatus.fulfilled) {
          updateCurrentPageId();
@@ -144,17 +161,38 @@ const Layout = () => {
       return () => {};
    }, [navigation.pageId, navigation.url, dispatch]);
 
-   const [tab, setTab] = useState('references');
-
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <React.Fragment>
             <MenuBar tab={tab} setTab={setTab}></MenuBar>
-            <ReferencesPane />
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+               <Suspense fallback={<Loading />}>
+                  <div
+                     style={{
+                        visibility:
+                           tab === LayoutTabs.References ? 'visible' : 'hidden',
+                     }}>
+                     <ReferencesPane />
+                  </div>
+                  <div
+                     style={{
+                        visibility:
+                           tab === LayoutTabs.Highlights ? 'visible' : 'hidden',
+                     }}>
+                     <HighlightsPane />
+                  </div>
+                  <div
+                     style={{
+                        visibility:
+                           tab === LayoutTabs.Search ? 'visible' : 'hidden',
+                     }}>
+                     <HighlightsPane />
+                  </div>
+               </Suspense>
+            </ErrorBoundary>
          </React.Fragment>
       </ErrorBoundary>
    );
 };
 
 export default Layout;
-//export default hot(Layout);
