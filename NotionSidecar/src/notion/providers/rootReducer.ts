@@ -10,5 +10,7 @@ export const rootReducer = combineReducers({
    references: referenceReducers,
    content: contentReducers,
    blocks: blockReducers,
+   // page: pageReducers,
+   // view: viewReducer
 });
 export type RootState = ReturnType<typeof rootReducer>;

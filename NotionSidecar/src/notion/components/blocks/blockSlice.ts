@@ -47,18 +47,20 @@ const fetchBlockIfNotInStore = async (
    state: RecordState,
    blockId: string,
    thunkApi: any
-) => {
+): Promise<NotionBlockModel | undefined> => {
    let data = checkStateForBlock(state, blockId);
 
    if (data?.status !== thunkStatus.fulfilled) {
-      let result = fetchPageData(blockId, thunkApi.signal);
+      let result = (
+         await fetchPageData(blockId, thunkApi.signal, true)
+      ).toSerializable();
       if (result != null) {
          return result;
       }
    } else {
       return data.block;
    }
-   return [];
+   return undefined;
 };
 
 const checkStateForBlock = (state: RecordState, blockId: string) => {

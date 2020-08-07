@@ -37,7 +37,7 @@ const fetchCurrentPage = createAsyncThunk<
    ): Promise<NotionBlockModel | undefined> => {
       let record = await blockService.fetchPageData(pageId, thunkApi.signal);
 
-      appDispatch(processHighlights({ pageId, record }));
+      //appDispatch(processHighlights({ pageId, record }));
 
       return record?.toSerializable();
    }

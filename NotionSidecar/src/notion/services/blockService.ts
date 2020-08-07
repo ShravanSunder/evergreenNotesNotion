@@ -31,7 +31,7 @@ export const fetchPageData = async (
    pageId: string,
    signal: AbortSignal,
    liteApi: boolean = false
-): Promise<NotionBlockRecord | undefined> => {
+): Promise<NotionBlockRecord> => {
    let chunk: LoadPageChunk.PageChunk;
    let block: NotionBlockRecord | undefined = undefined;
 
@@ -62,7 +62,7 @@ export const fetchPageData = async (
       }
    }
 
-   return block;
+   return block!;
 };
 
 export const processHighlights = (
