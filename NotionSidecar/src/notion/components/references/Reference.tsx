@@ -20,6 +20,7 @@ import {
    createStyles,
    AccordionActions,
    Tooltip,
+   IconButton,
 } from '@material-ui/core';
 import {
    Accordion as MuiAccordion,
@@ -45,14 +46,15 @@ import {
 import { copyToClipboard } from 'aCommon/extensionHelpers';
 import { LightTooltip } from '../Styles';
 import { grey } from '@material-ui/core/colors';
+import { useSnackbar } from 'notistack';
 
 const Accordion = withStyles({
    root: {
       border: '1px solid rgba(0, 0, 0, .125)',
       boxShadow: 'none',
 
-      marginTop: '6px',
-      marginBottom: '6px',
+      marginTop: '12px',
+      marginBottom: '12px',
       // '&:not(:last-child)': {
       //    borderBottom: 0,
       // },
@@ -61,8 +63,8 @@ const Accordion = withStyles({
       },
       '&$expanded': {
          margin: 'auto',
-         marginTop: '21px',
-         marginBottom: '21px',
+         marginTop: '24px',
+         marginBottom: '24px',
       },
    },
    expanded: {},
@@ -90,7 +92,7 @@ const AccordionDetails = withStyles((theme) => ({
    root: {
       padding: theme.spacing(2),
       '&$expanded': {
-         minHeight: 42,
+         minHeight: 32,
       },
    },
 }))(MuiAccordionDetails);
@@ -107,16 +109,39 @@ const useStyles = makeStyles((theme: Theme) =>
    })
 );
 
-export const Reference = ({ refData }: { refData: RefData }) => {
+const ReferenceActions = ({ refData }: { refData: RefData }) => {
    const navigation = useSelector(navigationSelector, shallowEqual);
+   const { enqueueSnackbar } = useSnackbar();
 
-   const handleCopy = (e: SyntheticEvent) => {
+   let classes = useStyles();
+
+   const handleEmbedBlock = (e: SyntheticEvent) => {
       e.stopPropagation();
       if (navigation.notionSite != null) {
          let url =
             navigation.notionSite + refData.searchRecord.id.replace(/-/g, '');
          let success = copyToClipboard(url);
          console.log('copied to clipboard');
+         if (success) {
+            console.log('copied to clipboard');
+            enqueueSnackbar('Copied to clipboard', { variant: 'error' });
+         }
+      }
+   };
+   const handleCopyLink = (e: SyntheticEvent) => {
+      e.stopPropagation();
+      let page = refData.searchRecord.path.slice(-1).pop();
+      if (navigation.notionSite != null && page?.blockId != null) {
+         let url =
+            navigation.notionSite +
+            page.blockId.replace(/-/g, '') +
+            '#' +
+            refData.searchRecord.id.replace(/-/g, '');
+         let success = copyToClipboard(url);
+         if (success) {
+            console.log('Copied to clipboard');
+            enqueueSnackbar('Copied to clipboard', { variant: 'info' });
+         }
       }
    };
 
@@ -136,6 +161,55 @@ export const Reference = ({ refData }: { refData: RefData }) => {
       return false;
    };
 
+   return (
+      <Grid container spacing={1} justify="space-between">
+         <Grid xs item container justify="flex-start">
+            <Grid item>
+               <LightTooltip
+                  title="Copy a global embed block link"
+                  placement="bottom">
+                  <Button
+                     className={classes.button}
+                     size="small"
+                     color="secondary"
+                     variant="outlined"
+                     onClick={handleEmbedBlock}
+                     startIcon={<WidgetsTwoTone />}>
+                     embed link
+                  </Button>
+               </LightTooltip>
+            </Grid>
+         </Grid>
+         <Grid xs item container justify="flex-end">
+            <Grid item>
+               <LightTooltip title="Open in a new tab" placement="bottom">
+                  <IconButton
+                     className={classes.button}
+                     color="secondary"
+                     size="small"
+                     onMouseDown={handleNewTabPreventMiddelScroll}
+                     onMouseUp={handleNewTabMiddleClick}>
+                     <Launch></Launch>
+                  </IconButton>
+               </LightTooltip>
+            </Grid>
+            <Grid item>
+               <LightTooltip title="Copy text" placement="bottom">
+                  <IconButton
+                     className={classes.button}
+                     size="small"
+                     color="secondary"
+                     onClick={handleEmbedBlock}>
+                     <FileCopyTwoTone />
+                  </IconButton>
+               </LightTooltip>
+            </Grid>
+         </Grid>
+      </Grid>
+   );
+};
+
+export const Reference = ({ refData }: { refData: RefData }) => {
    let classes = useStyles();
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -153,50 +227,7 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                </Grid>
             </AccordionSummary>
             <AccordionActions>
-               <Grid container spacing={1} alignItems="center">
-                  <Grid item>
-                     <LightTooltip
-                        title="Copy a global embed block link"
-                        placement="bottom">
-                        <Button
-                           className={classes.button}
-                           size="small"
-                           color="secondary"
-                           variant="outlined"
-                           onClick={handleCopy}
-                           startIcon={<WidgetsTwoTone />}>
-                           embed link
-                        </Button>
-                     </LightTooltip>
-                  </Grid>
-                  <Grid item>
-                     <LightTooltip title="Open in a new tab" placement="bottom">
-                        <Button
-                           className={classes.button}
-                           size="small"
-                           color="secondary"
-                           variant="outlined"
-                           onMouseDown={handleNewTabPreventMiddelScroll}
-                           onMouseUp={handleNewTabMiddleClick}
-                           startIcon={<OpenInBrowserOutlined />}>
-                           Open
-                        </Button>
-                     </LightTooltip>
-                  </Grid>
-                  <Grid item>
-                     <LightTooltip title="Copy text" placement="bottom">
-                        <Button
-                           className={classes.button}
-                           size="small"
-                           color="secondary"
-                           variant="outlined"
-                           onClick={handleCopy}
-                           startIcon={<FileCopyTwoTone />}>
-                           Copy
-                        </Button>
-                     </LightTooltip>
-                  </Grid>
-               </Grid>
+               <ReferenceActions refData={refData}></ReferenceActions>
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>

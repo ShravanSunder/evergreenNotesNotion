@@ -27,6 +27,7 @@
       "debug": "^4.1.1",
       "fontsource-roboto": "^2.2.6",
       "normalizr": "^3.6.0",
+      "notistack": "^0.9.17",
       "npm": "^6.14.7",
       "query-string": "^6.13.1",
       "re-reselect": "^4.0.0",

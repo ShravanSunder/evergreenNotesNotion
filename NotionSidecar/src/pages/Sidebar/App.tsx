@@ -8,12 +8,12 @@ import { registerTabUpdateListener } from 'aNotion/services/notionListeners';
 import logger from 'redux-logger';
 
 import Debug from 'debug';
-import { SidebarApp } from './SidebarApp';
+import { Sidebar } from './Sidebar';
 export const debug = Debug('NS');
 
 const renderApp = (Component: React.FC) =>
    render(<Component />, window.document.querySelector('#app-container'));
-renderApp(SidebarApp);
+renderApp(Sidebar);
 console.log('App loaded!');
 
 registerCookiesListener();
