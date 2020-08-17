@@ -11,7 +11,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { blockSelector } from 'aNotion/providers/storeSelectors';
 import { getColor } from 'aNotion/services/blockService';
-import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
+import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { blockActions } from './blockSlice';
 import { getPageUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';

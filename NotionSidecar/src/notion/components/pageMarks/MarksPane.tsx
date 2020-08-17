@@ -7,7 +7,7 @@ import {
    pageMarksSelector,
 } from 'aNotion/providers/storeSelectors';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
+import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { LoadingSection } from '../common/Loading';

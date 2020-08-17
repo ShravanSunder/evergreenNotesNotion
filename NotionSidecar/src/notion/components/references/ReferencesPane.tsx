@@ -23,7 +23,7 @@ import {
 import { referenceActions } from './referenceSlice';
 import { SearchSort } from 'aNotion/api/v3/apiReqTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
+import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
 import { ReferenceState } from './referenceState';
 import Layout from '../layout/Layout';

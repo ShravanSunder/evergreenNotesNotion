@@ -9,7 +9,7 @@ import {
 } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
-import { appDispatch } from 'aNotion/providers/reduxStore';
+import { appDispatch } from 'aNotion/providers/appDispatch';
 import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';

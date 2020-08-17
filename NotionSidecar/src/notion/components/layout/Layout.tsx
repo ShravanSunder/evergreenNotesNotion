@@ -15,7 +15,7 @@ import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { notionSiteActions } from './notionSiteSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
-import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
+import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
 import {
@@ -30,7 +30,7 @@ import { makeStyles, Theme, createStyles, Box, Grid } from '@material-ui/core';
 import { LoadingTab } from '../common/Loading';
 
 const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
-const HighlightsPane = React.lazy(() => import('../pageMarks/MarksPane'));
+const MarksPane = React.lazy(() => import('../pageMarks/MarksPane'));
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -179,15 +179,13 @@ export const Layout = () => {
                         visibility:
                            tab === LayoutTabs.Highlights ? 'visible' : 'hidden',
                      }}>
-                     <HighlightsPane />
+                     <MarksPane />
                   </div>
                   <div
                      style={{
                         visibility:
                            tab === LayoutTabs.Search ? 'visible' : 'hidden',
-                     }}>
-                     <HighlightsPane />
-                  </div>
+                     }}></div>
                </Suspense>
             </ErrorBoundary>
          </React.Fragment>

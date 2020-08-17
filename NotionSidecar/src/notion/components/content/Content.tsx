@@ -1,7 +1,7 @@
 import React, { useEffect, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
+import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { contentActions } from 'aNotion/components/content/contentSlice';
 import { LoadingSection } from '../common/Loading';

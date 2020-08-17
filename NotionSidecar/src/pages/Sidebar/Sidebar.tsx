@@ -2,7 +2,8 @@
 
 import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import reduxStore, { appDispatch } from 'aNotion/providers/reduxStore';
+import reduxStore from 'aNotion/providers/reduxStore';
+import { appDispatch } from 'aNotion/providers/appDispatch';
 import { commands } from 'aCommon/commands';
 import { activeTab } from 'aCommon/extensionHelpers';
 import Layout from 'aNotion/components/layout/Layout';

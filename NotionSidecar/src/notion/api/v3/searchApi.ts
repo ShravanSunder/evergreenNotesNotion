@@ -1,5 +1,5 @@
-import { CookieData } from 'aNotion/components/layout/NotionSiteTypes';
-import { getAppState } from 'aNotion/providers/reduxStore';
+import { CookieData } from 'aNotion/components/layout/NotionSiteState';
+import { getAppState } from 'aNotion/providers/appDispatch';
 import { cookieSelector } from 'aNotion/providers/storeSelectors';
 import superagent from 'superagent';
 import {

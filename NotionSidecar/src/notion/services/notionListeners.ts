@@ -1,5 +1,5 @@
 import { getCurrentTabId } from 'aCommon/extensionHelpers';
-import { appDispatch } from 'aNotion/providers/reduxStore';
+import { appDispatch } from 'aNotion/providers/appDispatch';
 import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 

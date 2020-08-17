@@ -8,7 +8,7 @@ import {
    CookieData,
    SiteState,
    NavigationState,
-} from 'aNotion/components/layout/NotionSiteTypes';
+} from 'aNotion/components/layout/NotionSiteState';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import * as blockService from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
@@ -16,7 +16,6 @@ import {
    NotionBlockModel,
    NotionBlockRecord,
 } from 'aNotion/models/NotionBlock';
-import { appDispatch } from 'aNotion/providers/reduxStore';
 import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
 
 const initialState: SiteState = {
@@ -35,7 +34,9 @@ const fetchCurrentPage = createAsyncThunk<
       thunkApi
    ): Promise<NotionBlockModel | undefined> => {
       let record = await blockService.fetchPageRecord(pageId, thunkApi.signal);
-      appDispatch(pageMarkActions.processPageForMarks({ pageId, record }));
+      thunkApi.dispatch(
+         pageMarkActions.processPageForMarks({ pageId, record })
+      );
       return record?.toSerializable();
    }
 );

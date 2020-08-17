@@ -2,8 +2,8 @@ import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import {
    CookieData,
    NavigationState,
-} from 'aNotion/components/layout/NotionSiteTypes';
-import { appDispatch, getAppState } from 'aNotion/providers/reduxStore';
+} from 'aNotion/components/layout/NotionSiteState';
+import { appDispatch, getAppState } from 'aNotion/providers/appDispatch';
 import { toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
 import { navigationSelector } from 'aNotion/providers/storeSelectors';
