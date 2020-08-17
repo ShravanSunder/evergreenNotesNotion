@@ -8,9 +8,7 @@ import {
    CookieData,
    SiteState,
    NavigationState,
-} from 'aNotion/components/NotionSiteTypes';
-import * as blockApi from 'aNotion/api/v3/blockApi';
-import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
+} from 'aNotion/components/layout/NotionSiteTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import * as blockService from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
@@ -19,6 +17,7 @@ import {
    NotionBlockRecord,
 } from 'aNotion/models/NotionBlock';
 import { appDispatch } from 'aNotion/providers/reduxStore';
+import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
@@ -35,25 +34,9 @@ const fetchCurrentPage = createAsyncThunk<
       { pageId }: { pageId: string },
       thunkApi
    ): Promise<NotionBlockModel | undefined> => {
-      let record = await blockService.fetchPageData(pageId, thunkApi.signal);
-
-      //appDispatch(processHighlights({ pageId, record }));
-
+      let record = await blockService.fetchPageRecord(pageId, thunkApi.signal);
+      appDispatch(pageMarkActions.processPageForMarks({ pageId, record }));
       return record?.toSerializable();
-   }
-);
-
-const processHighlights = createAsyncThunk<
-   NotionBlockModel | undefined,
-   { pageId: string; record: NotionBlockRecord | undefined }
->(
-   'notion/page/highlights',
-   async (
-      { pageId, record },
-      thunkApi
-   ): Promise<NotionBlockModel | undefined> => {
-      //return data?.toSerializable();
-      return undefined;
    }
 );
 

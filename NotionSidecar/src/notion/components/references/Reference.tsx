@@ -1,35 +1,19 @@
 import React, { MouseEvent, useState } from 'react';
-
-import ReactHtmlParser from 'react-html-parser';
-
-import { Skeleton } from '@material-ui/lab';
-
 import {
-   Dialog,
-   List,
-   ListItem,
-   ListItemText,
    Breadcrumbs,
    Typography,
    Grid,
-   Tooltip,
-   Link,
+   withStyles,
+   makeStyles,
+   Theme,
+   createStyles,
 } from '@material-ui/core';
-import { RefData } from './referenceTypes';
-import {
-   ExpandMoreSharp,
-   SystemUpdate,
-   FileCopyTwoTone,
-} from '@material-ui/icons';
+import { RefData } from './referenceState';
+import { ExpandMoreSharp } from '@material-ui/icons';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-import { Content } from '../blocks/Content';
-import { OpenInBrowserOutlined } from '@material-ui/icons';
-import { lightGreen } from '@material-ui/core/colors';
+import { Content } from '../content/Content';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
-
-import { BlockUi } from '../blocks/BlockUi';
-import { withStyles, makeStyles, Theme, createStyles } from '@material-ui/core';
 
 import {
    Accordion as MuiAccordion,
@@ -38,6 +22,7 @@ import {
    AccordionActions as MuiAccordionActions,
 } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
+import BlockUi from 'aNotion/components/blocks/BlockUi';
 
 export const Accordion = withStyles({
    root: {

@@ -1,8 +1,6 @@
 import { RecordMap, Record } from '../types/notionV3/notionRecordTypes';
 import * as blockTypes from '../types/notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
-import TreeModel from 'tree-model';
-import { BaseTextBlock } from '../types/notionV3/typings/basic_blocks';
 import {
    NotionBlockRecord,
    NotionBlockModel,

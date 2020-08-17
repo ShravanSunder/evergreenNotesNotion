@@ -1,4 +1,4 @@
-import { CookieData } from 'aNotion/components/NotionSiteTypes';
+import { CookieData } from 'aNotion/components/layout/NotionSiteTypes';
 import { getAppState } from 'aNotion/providers/reduxStore';
 import { cookieSelector } from 'aNotion/providers/storeSelectors';
 import superagent from 'superagent';

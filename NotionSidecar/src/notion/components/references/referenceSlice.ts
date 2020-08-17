@@ -10,7 +10,7 @@ import {
    ReferenceState,
    searchReferences,
    initReferences,
-} from './referenceTypes';
+} from './referenceState';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { createReferences } from 'aNotion/services/referenceService';
 

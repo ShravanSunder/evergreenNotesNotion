@@ -25,9 +25,9 @@ import { SearchSort } from 'aNotion/api/v3/apiReqTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { Reference } from './Reference';
-import { ReferenceState } from './referenceTypes';
-import Layout from '../Layout';
-import { LoadingTab, NothingToFind } from '../Loading';
+import { ReferenceState } from './referenceState';
+import Layout from '../layout/Layout';
+import { LoadingTab, NothingToFind } from '../common/Loading';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({

@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import reduxStore, { appDispatch } from 'aNotion/providers/reduxStore';
 import { commands } from 'aCommon/commands';
 import { activeTab } from 'aCommon/extensionHelpers';
-import Layout from 'aNotion/components/Layout';
-import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
+import Layout from 'aNotion/components/layout/Layout';
+import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import {
@@ -19,7 +19,7 @@ import {
    Zoom,
    Button,
 } from '@material-ui/core';
-import { theme } from 'aNotion/components/Theme';
+import { theme } from 'aNotion/components/theme';
 import { useWindowSize } from '@react-hook/window-size';
 import { SnackbarProvider } from 'notistack';
 import { green, yellow, red, grey } from '@material-ui/core/colors';

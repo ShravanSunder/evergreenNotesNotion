@@ -1,10 +1,4 @@
-import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
 import { thunkStatus as ThunkStatus } from 'aNotion/types/thunkStatus';
-import {
-   Page,
-   Collection,
-   CollectionView,
-} from 'aNotion/types/notionV3/notionBlockTypes';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 export type CookieData = {
@@ -25,6 +19,7 @@ export type NavigationState = {
 export type PageRecordState = {
    status: ThunkStatus;
    pageRecord?: NotionBlockModel;
+   //users:
 };
 
 export type SiteState = {

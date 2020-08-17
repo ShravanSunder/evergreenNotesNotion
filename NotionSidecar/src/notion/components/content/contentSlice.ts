@@ -1,25 +1,10 @@
-import {
-   createSlice,
-   createAsyncThunk,
-   CaseReducer,
-   PayloadAction,
-} from '@reduxjs/toolkit';
-import {
-   CookieData,
-   SiteState,
-   NavigationState,
-} from 'aNotion/components/NotionSiteTypes';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as blockApi from 'aNotion/api/v3/blockApi';
-import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { getBlockFromPageChunk } from 'aNotion/services/blockService';
-import { extractNavigationData } from 'aNotion/services/notionSiteService';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { ContentState } from 'aNotion/components/blocks/contentTypes';
+import { ContentState } from 'aNotion/components/content/contentState';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
-import { loadPageChunk } from 'aNotion/api/v3/blockApi';
-import { Satellite } from '@material-ui/icons';
 
 const initialState: ContentState = {};
 

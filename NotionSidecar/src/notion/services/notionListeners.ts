@@ -1,6 +1,6 @@
 import { getCurrentTabId } from 'aCommon/extensionHelpers';
 import { appDispatch } from 'aNotion/providers/reduxStore';
-import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
+import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 
 export const registerTabUpdateListener = () => {

@@ -6,3 +6,4 @@ export const currentRecordSelector = (state: RootState) =>
 export const referenceSelector = (state: RootState) => state.references;
 export const contentSelector = (state: RootState) => state.content;
 export const blockSelector = (state: RootState) => state.blocks;
+export const pageMarksSelector = (state: RootState) => state.pageMarks;

@@ -27,10 +27,10 @@ import {
 } from '@material-ui/icons/';
 import { lightGreen, grey } from '@material-ui/core/colors';
 import { makeStyles, Theme, createStyles, Box, Grid } from '@material-ui/core';
-import { LoadingTab } from './Loading';
+import { LoadingTab } from '../common/Loading';
 
-const ReferencesPane = React.lazy(() => import('./references/ReferencesPane'));
-const HighlightsPane = React.lazy(() => import('./highlights/HighlightsPane'));
+const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
+const HighlightsPane = React.lazy(() => import('../pageMarks/MarksPane'));
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -122,7 +122,7 @@ const MenuBar = ({
    );
 };
 
-const Layout = () => {
+export const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);

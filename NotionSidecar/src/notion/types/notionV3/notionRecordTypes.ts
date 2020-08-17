@@ -31,8 +31,8 @@ export interface Cursor {
 }
 
 export interface RecordMap {
-   block: Map<Record<blockTypes.Block>>;
-   collection?: Map<Record<blockTypes.Collection>>;
+   block: { [key: string]: Record<blockTypes.Block> };
+   collection?: { [key: string]: Record<blockTypes.Collection> };
    collection_view?: Map<Record<blockTypes.CollectionView>>;
    notion_user?: Map<blockTypes.NotionUser>;
    space: Map<Record<blockTypes.Space>>;

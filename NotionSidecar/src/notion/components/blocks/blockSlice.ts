@@ -1,34 +1,16 @@
-import {
-   createSlice,
-   createAsyncThunk,
-   CaseReducer,
-   PayloadAction,
-} from '@reduxjs/toolkit';
-import {
-   CookieData,
-   SiteState,
-   NavigationState,
-} from 'aNotion/components/NotionSiteTypes';
-import * as blockApi from 'aNotion/api/v3/blockApi';
-import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
+import { fetchPageRecord } from 'aNotion/services/blockService';
 import {
-   getBlockFromPageChunk,
-   fetchPageData,
-} from 'aNotion/services/blockService';
-import { extractNavigationData } from 'aNotion/services/notionSiteService';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import {
-   ContentState,
-   RecordState,
-} from 'aNotion/components/blocks/contentTypes';
+   NotionBlockModel,
+   NotionBlockRecord,
+} from 'aNotion/models/NotionBlock';
+import { RecordState } from 'aNotion/components/blocks/blockState';
 import {
    contentSelector,
    blockSelector,
 } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
-import { loadPageChunk } from 'aNotion/api/v3/blockApi';
-import { Satellite } from '@material-ui/icons';
 
 const initialState: RecordState = {};
 
@@ -52,7 +34,7 @@ const fetchBlockIfNotInStore = async (
 
    if (data?.status !== thunkStatus.fulfilled) {
       let result = (
-         await fetchPageData(blockId, thunkApi.signal, true)
+         await fetchPageRecord(blockId, thunkApi.signal, true)
       ).toSerializable();
       if (result != null) {
          return result;
@@ -73,8 +55,8 @@ const checkStateForBlock = (state: RecordState, blockId: string) => {
    return undefined;
 };
 
-const blockSlice = createSlice({
-   name: 'blockSlice',
+const recordSlice = createSlice({
+   name: 'recordSlice',
    initialState: initialState,
    reducers: {},
    extraReducers: {
@@ -109,7 +91,7 @@ const blockSlice = createSlice({
 });
 
 export const blockActions = {
-   ...blockSlice.actions,
+   ...recordSlice.actions,
    fetchBlock: fetchBlock,
 };
-export const blockReducers = blockSlice.reducer;
+export const blockReducers = recordSlice.reducer;

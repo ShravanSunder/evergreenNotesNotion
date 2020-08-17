@@ -1,13 +1,10 @@
 import { SearchResultsType } from 'aNotion/api/v3/apiReqTypes';
 import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
-import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import {
    searchReferences,
    RefData,
    ResultTypeEnum,
-} from 'aNotion/components/references/referenceTypes';
-import { current } from '@reduxjs/toolkit';
-//import { BlockRecord } from 'aNotion/types/PageRecord';
+} from 'aNotion/components/references/referenceState';
 
 export const createReferences = (
    query: string,

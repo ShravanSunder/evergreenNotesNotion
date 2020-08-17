@@ -1,15 +1,14 @@
 import React, { SyntheticEvent } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Button, Grid, IconButton } from '@material-ui/core';
-import { RefData } from './referenceTypes';
+import { RefData } from './referenceState';
 import { LinkOutlined } from '@material-ui/icons';
 import { navigationSelector } from 'aNotion/providers/storeSelectors';
 import { Launch, FileCopyOutlined, WidgetsTwoTone } from '@material-ui/icons';
 import { copyToClipboard } from 'aCommon/extensionHelpers';
-import { LightTooltip } from '../Styles';
+import { LightTooltip } from '../common/Styles';
 import { useSnackbar } from 'notistack';
 import { useReferenceStyles } from './Reference';
-import { BlockUi } from '../blocks/BlockUi';
 
 export const ReferenceActions = ({ refData }: { refData: RefData }) => {
    const navigation = useSelector(navigationSelector, shallowEqual);

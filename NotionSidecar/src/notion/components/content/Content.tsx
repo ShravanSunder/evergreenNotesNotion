@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/reduxStore';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
-import { contentActions } from 'aNotion/components/blocks/contentSlice';
-import { LoadingSection } from '../Loading';
+import { contentActions } from 'aNotion/components/content/contentSlice';
+import { LoadingSection } from '../common/Loading';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 
-const BlockUi = React.lazy(() => import('./BlockUi'));
+const BlockUi = React.lazy(() => import('../blocks/BlockUi'));
 
 export const Content = ({
    blockId,

@@ -10,7 +10,7 @@ import {
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import { appDispatch } from 'aNotion/providers/reduxStore';
-import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
+import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
 import {
@@ -25,9 +25,8 @@ import {
    red,
 } from '@material-ui/core/colors';
 import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
-import { NotionPage } from 'aNotion/models/NotionPage';
 
-export const fetchPageData = async (
+export const fetchPageRecord = async (
    pageId: string,
    signal: AbortSignal,
    liteApi: boolean = false
@@ -50,7 +49,7 @@ export const fetchPageData = async (
             }
          }
       } catch {
-         // try again with full page data
+         // try again with full page data, when required
       }
    }
 
@@ -63,13 +62,6 @@ export const fetchPageData = async (
    }
 
    return block!;
-};
-
-export const processHighlights = (
-   pageId: string,
-   record: NotionBlockRecord
-): NotionPage => {
-   throw 'fdsfsdf';
 };
 
 export const getBlockFromPageChunk = (
@@ -105,7 +97,7 @@ export const reduceTitle = (title?: SemanticString[]) => {
    return '';
 };
 
-export const getColor = (color: string): string | undefined => {
+export const getColor = (color: NotionColor | string): string | undefined => {
    if (color != null) {
       switch (color) {
          case NotionColor.Grey:
@@ -164,4 +156,25 @@ export const getBackgroundColor = (block: NotionBlockModel) => {
 
    //transparent
    return color ?? '#FFFFFF';
+};
+
+export const isBackGroundColor = (color: NotionColor | undefined) => {
+   switch (color) {
+      case NotionColor.BlueBg:
+      case NotionColor.BrownBg:
+      case NotionColor.GreyBg:
+      case NotionColor.OrangeBg:
+      case NotionColor.PinkBg:
+      case NotionColor.PurpleBg:
+      case NotionColor.RedBg:
+      case NotionColor.TealBg:
+      case NotionColor.YellowBg:
+         return true;
+   }
+
+   return false;
+};
+export const isChild = (nb: NotionBlockRecord, pageId: string): boolean => {
+   if (nb.getParentsNodes().find((f) => f.blockId === pageId)) return true;
+   return false;
 };

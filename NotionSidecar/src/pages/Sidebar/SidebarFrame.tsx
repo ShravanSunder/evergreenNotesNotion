@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import EcoIcon from '@material-ui/icons/Eco';
 import { useWindowSize } from '@react-hook/window-size';
-import { theme } from 'aNotion/components/Theme';
+import { theme } from 'aNotion/components/theme';
 import { green, lightGreen, grey } from '@material-ui/core/colors';
 import MenuBookTwoToneIcon from '@material-ui/icons/MenuBookTwoTone';
 import {

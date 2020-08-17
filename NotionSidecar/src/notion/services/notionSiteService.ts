@@ -1,8 +1,8 @@
-import { notionSiteActions } from 'aNotion/components/notionSiteSlice';
+import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import {
    CookieData,
    NavigationState,
-} from 'aNotion/components/NotionSiteTypes';
+} from 'aNotion/components/layout/NotionSiteTypes';
 import { appDispatch, getAppState } from 'aNotion/providers/reduxStore';
 import { toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';

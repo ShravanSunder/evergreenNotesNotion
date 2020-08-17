@@ -16,4 +16,16 @@ export const theme = createMuiTheme({
       fontSize: 12,
    },
    spacing: 6,
+   overrides: {
+      MuiTooltip: {
+         tooltipPlacementTop: {
+            position: 'relative',
+            top: 9,
+         },
+         tooltipPlacementBottom: {
+            position: 'relative',
+            top: -9,
+         },
+      },
+   },
 });
