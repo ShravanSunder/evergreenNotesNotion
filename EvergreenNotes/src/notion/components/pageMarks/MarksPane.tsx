@@ -1,7 +1,7 @@
 import React, { useEffect, MouseEvent, useState, Suspense } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
-import { makeStyles, createStyles, Theme } from '@material-ui/core';
+import { makeStyles, createStyles, Theme, Typography } from '@material-ui/core';
 import {
    currentRecordSelector,
    pageMarksSelector,
@@ -31,18 +31,23 @@ export const MarksPane = () => {
    const pageName = record.pageRecord?.simpleTitle;
    const pageId = record.pageRecord?.blockId as string;
 
-   let refeStyles = useStyles();
+   let classes = useStyles();
+
+   let highlights = (
+      <>
+         <Typography className={classes.sections} variant="h5">
+            <b>Highlights</b>
+         </Typography>
+         {pageMarks?.highlights?.map((p, i) => (
+            <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+         ))}
+      </>
+   );
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
-            {status === thunkStatus.fulfilled && (
-               <React.Fragment>
-                  {pageMarks?.highlights?.map((p, i) => (
-                     <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
-                  ))}
-               </React.Fragment>
-            )}
+            {status === thunkStatus.fulfilled && highlights}
             {status === thunkStatus.pending && <LoadingSection />}
          </Suspense>
       </ErrorBoundary>
