@@ -5,7 +5,7 @@ import * as base from './notionBaseTypes';
 // | InlineMentionPage
 // | InlineMentionDate;
 
-export enum StringFormats {
+export enum StringFormatting {
    Bold = 'b',
    Italic = 'i',
    Strike = 's',
@@ -18,7 +18,7 @@ export enum StringFormats {
    DateTime = 'd',
 }
 
-export type SemanticFormat = [StringFormats, string?];
+export type SemanticFormat = [StringFormatting, string?];
 export type SemanticString = [string, SemanticFormat[]?];
 
 // export type InlineMentionUser = ['‣', SemanticFormat[]];

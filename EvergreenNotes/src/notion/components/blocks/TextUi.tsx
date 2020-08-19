@@ -6,7 +6,7 @@ import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
 import {
    SemanticString,
    SemanticFormat,
-   StringFormats,
+   StringFormatting,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import { useSelector, useDispatch } from 'react-redux';
 import { blockSelector } from 'aNotion/providers/storeSelectors';
@@ -46,17 +46,17 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
    let link: string | undefined = undefined;
 
    useEffect(() => {
-      if (textDetails != null && textType === StringFormats.Page) {
+      if (textDetails != null && textType === StringFormatting.Page) {
          dispatch(blockActions.fetchBlock({ blockId: textDetails }));
       }
    }, [dispatch, textDetails, textType]);
 
-   if (textDetails != null && textType === StringFormats.Page) {
+   if (textDetails != null && textType === StringFormatting.Page) {
       text = blockData[textDetails]?.block?.simpleTitle ?? '';
       link = getPageUrl(textDetails);
-   } else if (textDetails != null && textType === StringFormats.Link) {
+   } else if (textDetails != null && textType === StringFormatting.Link) {
       link = textDetails;
-   } else if (textDetails != null && textType === StringFormats.User) {
+   } else if (textDetails != null && textType === StringFormatting.User) {
       text = '';
    }
 
@@ -75,7 +75,7 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
                {text}
             </Typography>
          )}
-         {link != null && textType === StringFormats.Page && (
+         {link != null && textType === StringFormatting.Page && (
             <Link
                display="inline"
                className={classes.typography}
@@ -89,7 +89,7 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
                {text}
             </Link>
          )}
-         {link != null && textType === StringFormats.Link && (
+         {link != null && textType === StringFormatting.Link && (
             <Link
                display="inline"
                className={classes.link}
@@ -115,17 +115,17 @@ const useSegmentData = (
 } => {
    let textStyle: React.CSSProperties = {};
    let textDetails: string | undefined = undefined;
-   let textType: StringFormats | undefined = undefined;
+   let textType: StringFormatting | undefined = undefined;
 
    format.forEach((d) => {
       switch (d[0]) {
-         case StringFormats.Bold:
+         case StringFormatting.Bold:
             textStyle.fontWeight = 'bold';
             break;
-         case StringFormats.Italic:
+         case StringFormatting.Italic:
             textStyle.fontStyle = 'italic';
             break;
-         case StringFormats.Colored:
+         case StringFormatting.Colored:
             if (d[1] != null && getColor(d[1]) != null) {
                if (d[1].includes('background')) {
                   textStyle.backgroundColor = getColor(d[1]);
@@ -134,22 +134,22 @@ const useSegmentData = (
                }
             }
             break;
-         case StringFormats.Strike:
+         case StringFormatting.Strike:
             textStyle.textDecoration = 'line-through';
             break;
-         case StringFormats.User:
+         case StringFormatting.User:
             if (d[1] != null) {
                textDetails = d[1];
                textType = d[0];
             }
             break;
-         case StringFormats.Link:
+         case StringFormatting.Link:
             if (d[1] != null) {
                textDetails = d[1];
                textType = d[0];
             }
             break;
-         case StringFormats.Page:
+         case StringFormatting.Page:
             textStyle.color = grey[800];
             textStyle.fontWeight = 'bold';
             if (d[1] != null) {
@@ -157,7 +157,7 @@ const useSegmentData = (
                textType = d[0];
             }
             break;
-         case StringFormats.InlineCode:
+         case StringFormatting.InlineCode:
             textStyle.fontFamily = 'Consolas';
             textStyle.background = grey[300];
             textStyle.color = red[700];

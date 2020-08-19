@@ -2,12 +2,7 @@ import { NotionBlockRecord } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { NotionPageMarks } from 'aNotion/models/NotionPage';
 import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
-import {
-   isChild,
-   isBackGroundColor,
-   fetchPageRecord,
-   getColor,
-} from './blockService';
+import { isBackGroundColor } from './blockService';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import {
    RecordMap,
@@ -15,8 +10,6 @@ import {
    BlockRecord,
 } from 'aNotion/types/notionV3/notionRecordTypes';
 import { Block } from 'aNotion/types/notionV3/notionBlockTypes';
-import { Children } from 'react';
-import { StringFormats } from 'aNotion/types/notionV3/semanticStringTypes';
 
 export const processPageForMarks = async (
    pageId: string,
@@ -124,21 +117,8 @@ const getMarksInBlock = (
       // if (isChild(nb, pageId)) {
       if (isBackGroundColor(b.format?.block_color)) {
          pageMarks.highlights.push(nb.toSerializable());
-      } else if (nb.semanticTitle.length > 0) {
-         let hasBgColor = false;
-         nb.semanticTitle.forEach((s) => {
-            if (s[0] === StringFormats.Colored) {
-               if (s[1] != null && s[1][0] != null) {
-                  if (s[1]?.[0][1]?.includes('background')) {
-                     hasBgColor = true;
-                  }
-               }
-            }
-         });
-
-         if (hasBgColor) {
-            pageMarks.highlights.push(nb.toSerializable());
-         }
+      } else if (nb.hasBgColor()) {
+         pageMarks.highlights.push(nb.toSerializable());
       }
 
       if (b.type === BlockTypes.ToDo) {

@@ -5,7 +5,11 @@ import TreeModel from 'tree-model';
 import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
 import * as recordService from 'aNotion/services/recordService';
 import * as blockService from 'aNotion/services/blockService';
-import { SemanticString } from 'aNotion/types/notionV3/SemanticStringTypes';
+import {
+   SemanticString,
+   SemanticFormat,
+   StringFormatting,
+} from 'aNotion/types/notionV3/semanticStringTypes';
 
 export interface NotionBlockModel {
    block?: blockTypes.Block;
@@ -191,6 +195,23 @@ export class NotionBlockRecord implements NotionBlockModel {
       //maybe later we might need a way to traverse down the tree?
       return children.concat(recordService.getContent(this.recordMapData, id));
    }
+
+   hasBgColor = () => {
+      return this.semanticTitle.some((s) => {
+         if (s[0] != null && s[1] != null) {
+            let format: SemanticFormat[] = s[1];
+            return format.some((f) => {
+               if (f[0] === StringFormatting.Colored) {
+                  if (f[1]?.includes('background')) {
+                     return true;
+                  }
+               }
+               return false;
+            });
+         }
+         return false;
+      });
+   };
 
    toSerializable = (): NotionBlockModel => {
       let model: NotionBlockModel = {
