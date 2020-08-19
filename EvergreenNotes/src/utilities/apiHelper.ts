@@ -2,10 +2,10 @@ import superagent from 'superagent';
 
 export const addAbortSignal = (
    req: superagent.SuperAgentRequest,
-   abort: AbortSignal
+   signal: AbortSignal
 ) =>
    req.on('progress', () => {
-      if (abort != null && abort.aborted) {
+      if (signal != null && signal.aborted) {
          req.abort();
          console.log('abort');
       }

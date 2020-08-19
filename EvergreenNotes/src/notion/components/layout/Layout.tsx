@@ -25,7 +25,7 @@ import {
    AssignmentTurnedInTwoTone,
    EventTwoTone,
 } from '@material-ui/icons/';
-import { lightGreen, grey } from '@material-ui/core/colors';
+import { lightGreen } from '@material-ui/core/colors';
 import { makeStyles, Theme, createStyles, Box, Grid } from '@material-ui/core';
 import { LoadingTab } from '../common/Loading';
 
@@ -167,25 +167,9 @@ export const Layout = () => {
             <MenuBar tab={tab} setTab={setTab}></MenuBar>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
                <Suspense fallback={<LoadingTab />}>
-                  <div
-                     style={{
-                        visibility:
-                           tab === LayoutTabs.References ? 'visible' : 'hidden',
-                     }}>
-                     <ReferencesPane />
-                  </div>
-                  <div
-                     style={{
-                        visibility:
-                           tab === LayoutTabs.Highlights ? 'visible' : 'hidden',
-                     }}>
-                     <MarksPane />
-                  </div>
-                  <div
-                     style={{
-                        visibility:
-                           tab === LayoutTabs.Search ? 'visible' : 'hidden',
-                     }}></div>
+                  {tab === LayoutTabs.References && <ReferencesPane />}
+                  {tab === LayoutTabs.Highlights && <MarksPane />}
+                  {tab === LayoutTabs.Search && <div>not implemented</div>}
                </Suspense>
             </ErrorBoundary>
          </React.Fragment>

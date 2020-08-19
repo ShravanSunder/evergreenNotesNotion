@@ -2,31 +2,16 @@
 import React, { useEffect, MouseEvent, useState } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
-import { Skeleton } from '@material-ui/lab';
-
-import {
-   Button,
-   Dialog,
-   List,
-   ListItem,
-   ListItemText,
-   Typography,
-   withStyles,
-   makeStyles,
-   createStyles,
-   Theme,
-} from '@material-ui/core';
+import { Typography, makeStyles, createStyles, Theme } from '@material-ui/core';
 import {
    currentRecordSelector,
    referenceSelector,
 } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from './referenceSlice';
-import { SearchSort } from 'aNotion/api/v3/apiReqTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
 import { ReferenceState } from './referenceState';
-import Layout from '../layout/Layout';
 import { LoadingTab, NothingToFind } from '../common/Loading';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,7 +32,6 @@ export const ReferencesPane = () => {
    const pageName = record.pageRecord?.simpleTitle;
    const pageId = record.pageRecord?.blockId as string;
 
-   let refeStyles = useStyles();
    useEffect(() => {
       if (record.status === thunkStatus.fulfilled && pageName != null) {
          const pr = dispatch(

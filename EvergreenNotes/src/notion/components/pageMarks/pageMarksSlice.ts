@@ -16,11 +16,11 @@ const initialState: PageMarkState = {
 
 const processPageForMarks = createAsyncThunk<
    NotionPageMarks,
-   { pageId: string; record: NotionBlockRecord }
+   { pageId: string; record: NotionBlockRecord; signal: AbortSignal }
 >(
    'notion/page/processPage',
-   async ({ pageId, record }, thunkApi): Promise<NotionPageMarks> => {
-      let marks = await pageService.processPageForMarks(pageId, record);
+   async ({ pageId, record, signal }, thunkApi): Promise<NotionPageMarks> => {
+      let marks = await pageService.processPageForMarks(pageId, record, signal);
       return marks;
    }
 );
@@ -34,21 +34,22 @@ const pageMarkSlice = createSlice({
          state,
          action: PayloadAction<NotionPageMarks>
       ) => {
-         //state.currentPageRecord. = action.payload;
-         //state.currentPageRecord.status = thunkStatus.fulfilled;
+         state.pageMarks = action.payload;
+         state.status = thunkStatus.fulfilled;
       },
       [processPageForMarks.pending.toString()]: (
          state,
          action: PayloadAction<NotionPageMarks>
       ) => {
-         //state.currentPageRecord.status = thunkStatus.pending;
-         //state.currentPageRecord.pageRecord = undefined;
+         state.pageMarks = undefined;
+         state.status = thunkStatus.pending;
       },
       [processPageForMarks.rejected.toString()]: (
          state,
          action: PayloadAction<NotionPageMarks>
       ) => {
-         //state.currentPageRecord.status = thunkStatus.rejected;
+         state.pageMarks = undefined;
+         state.status = thunkStatus.rejected;
       },
    },
 });

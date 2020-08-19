@@ -12,7 +12,7 @@ import { RefData } from './referenceState';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-import { Content } from '../content/Content';
+import { Content } from '../contents/Content';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
 
 import {
@@ -114,7 +114,7 @@ export const Reference = ({ refData }: { refData: RefData }) => {
                <ReferenceActions refData={refData}></ReferenceActions>
             </AccordionActions>
             <AccordionDetails>
-               <Grid xs={12} container spacing={1}>
+               <Grid container spacing={1}>
                   <Grid item xs={12} className={classes.reference}>
                      <BlockUi
                         block={refData.searchRecord.notionBlock}

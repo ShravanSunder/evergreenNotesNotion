@@ -35,7 +35,11 @@ const fetchCurrentPage = createAsyncThunk<
    ): Promise<NotionBlockModel | undefined> => {
       let record = await blockService.fetchPageRecord(pageId, thunkApi.signal);
       thunkApi.dispatch(
-         pageMarkActions.processPageForMarks({ pageId, record })
+         pageMarkActions.processPageForMarks({
+            pageId,
+            record,
+            signal: thunkApi.signal,
+         })
       );
       return record?.toSerializable();
    }

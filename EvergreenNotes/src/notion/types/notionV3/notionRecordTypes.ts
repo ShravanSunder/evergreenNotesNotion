@@ -31,11 +31,11 @@ export interface Cursor {
 }
 
 export interface RecordMap {
-   block: { [key: string]: Record<blockTypes.Block> };
-   collection?: { [key: string]: Record<blockTypes.Collection> };
-   collection_view?: Map<Record<blockTypes.CollectionView>>;
-   notion_user?: Map<blockTypes.NotionUser>;
-   space: Map<Record<blockTypes.Space>>;
+   block: { [key: string]: BlockRecord };
+   collection?: { [key: string]: CollectionRecord };
+   collection_view?: { [key: string]: CollectionViewRecord };
+   notion_user?: { [key: string]: NotionUserRecord };
+   space: { [key: string]: SpaceRecord };
 }
 
 export interface PageChunk {

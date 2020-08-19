@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
-import { contentActions } from 'aNotion/components/content/contentSlice';
+import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { LoadingSection } from '../common/Loading';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 

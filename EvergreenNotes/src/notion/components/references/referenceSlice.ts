@@ -5,7 +5,7 @@ import {
    PayloadAction,
 } from '@reduxjs/toolkit';
 import * as searchApi from 'aNotion/api/v3/searchApi';
-import { SearchSort } from 'aNotion/api/v3/apiReqTypes';
+import { SearchSort } from 'aNotion/api/v3/apiRequestTypes';
 import {
    ReferenceState,
    searchReferences,

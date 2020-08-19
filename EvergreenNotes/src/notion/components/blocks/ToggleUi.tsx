@@ -3,7 +3,7 @@ import { Typography, Grid, IconButton } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Toggle } from 'aNotion/types/notionV3/notionBlockTypes';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
-import { Content } from '../content/Content';
+import { Content } from '../contents/Content';
 import { useBlockStyles } from './BlockUi';
 export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();

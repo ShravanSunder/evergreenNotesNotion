@@ -1,4 +1,4 @@
-import { SearchResultsType } from 'aNotion/api/v3/apiReqTypes';
+import { SearchResultsType } from 'aNotion/api/v3/apiRequestTypes';
 import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
 import {
    searchReferences,

@@ -7,7 +7,7 @@ import {
    Type,
    SearchSort,
    SearchResultsType,
-} from './apiReqTypes';
+} from './apiRequestTypes';
 import { addAbortSignal } from 'aUtilities/apiHelper';
 
 export const searchByRelevance = async (

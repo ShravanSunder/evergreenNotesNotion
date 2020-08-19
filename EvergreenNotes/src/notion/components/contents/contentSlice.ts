@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { getBlockFromPageChunk } from 'aNotion/services/blockService';
-import { ContentState } from 'aNotion/components/content/contentState';
+import { ContentState } from 'aNotion/components/contents/contentState';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 

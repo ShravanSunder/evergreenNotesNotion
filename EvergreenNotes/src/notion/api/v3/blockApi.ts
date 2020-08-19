@@ -3,7 +3,7 @@ import * as LoadPageChunk from 'aNotion/types/notionV3/notionRecordTypes';
 import { addAbortSignal } from 'aUtilities/apiHelper';
 import { superagentCache } from 'aUtilities/apiCache';
 import 'superagent-cache-plugin';
-import { syncRecordType } from './apiReqTypes';
+import { syncRecordType } from './apiRequestTypes';
 
 export const loadPageChunk = async (
    pageId: string,
