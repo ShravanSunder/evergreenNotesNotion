@@ -2,7 +2,12 @@ import { NotionBlockRecord } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { NotionPageMarks } from 'aNotion/models/NotionPage';
 import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
-import { isChild, isBackGroundColor, fetchPageRecord } from './blockService';
+import {
+   isChild,
+   isBackGroundColor,
+   fetchPageRecord,
+   getColor,
+} from './blockService';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import {
    RecordMap,
@@ -11,6 +16,7 @@ import {
 } from 'aNotion/types/notionV3/notionRecordTypes';
 import { Block } from 'aNotion/types/notionV3/notionBlockTypes';
 import { Children } from 'react';
+import { StringFormats } from 'aNotion/types/notionV3/semanticStringTypes';
 
 export const processPageForMarks = async (
    pageId: string,
@@ -62,19 +68,18 @@ const buildPageRecords = async (
          .map(([blockId, block]) => (content[blockId] = block));
    }
 
-   let promises: Promise<void>[] = [];
+   let subContentIds: string[] = [];
    Object.entries(content).forEach(([blockId, block]) => {
-      let subContentIds = block.value?.content ?? [];
+      let checkSubContents =
+         block.value?.type !== BlockTypes.Page &&
+         block.value?.type !== BlockTypes.CollectionViewPage;
 
-      if (subContentIds.length > 0) {
-         promises.push(
-            buildPageRecords(recordMapData, pageId, subContentIds, signal)
-         );
-      }
+      if (checkSubContents)
+         subContentIds = subContentIds.concat(block.value?.content ?? []);
    });
 
-   if (!signal.aborted) {
-      await Promise.all(promises);
+   if (subContentIds.length > 0 && !signal.aborted) {
+      await buildPageRecords(recordMapData, pageId, subContentIds, signal);
    }
 };
 
@@ -116,21 +121,36 @@ const getMarksInBlock = (
    try {
       let b = block.value as BaseTextBlock;
       let nb = new NotionBlockRecord(recordMapData, b.id);
-      if (isChild(nb, pageId)) {
-         if (isBackGroundColor(b.format?.block_color)) {
+      // if (isChild(nb, pageId)) {
+      if (isBackGroundColor(b.format?.block_color)) {
+         pageMarks.highlights.push(nb.toSerializable());
+      } else if (nb.semanticTitle.length > 0) {
+         let hasBgColor = false;
+         nb.semanticTitle.forEach((s) => {
+            if (s[0] === StringFormats.Colored) {
+               if (s[1] != null && s[1][0] != null) {
+                  if (s[1]?.[0][1]?.includes('background')) {
+                     hasBgColor = true;
+                  }
+               }
+            }
+         });
+
+         if (hasBgColor) {
             pageMarks.highlights.push(nb.toSerializable());
          }
-
-         if (b.type === BlockTypes.ToDo) {
-            let nb = new NotionBlockRecord(recordMapData, b.id);
-            pageMarks.todos.push(nb.toSerializable());
-         }
-
-         if (b.type === BlockTypes.Quote) {
-            let nb = new NotionBlockRecord(recordMapData, b.id);
-            pageMarks.quotes.push(nb.toSerializable());
-         }
       }
+
+      if (b.type === BlockTypes.ToDo) {
+         let nb = new NotionBlockRecord(recordMapData, b.id);
+         pageMarks.todos.push(nb.toSerializable());
+      }
+
+      if (b.type === BlockTypes.Quote) {
+         let nb = new NotionBlockRecord(recordMapData, b.id);
+         pageMarks.quotes.push(nb.toSerializable());
+      }
+      //}
    } catch {
       //ignore cast errors, if its not a BaseTextBlock, such as collections
    }

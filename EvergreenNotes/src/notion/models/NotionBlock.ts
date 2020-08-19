@@ -5,10 +5,7 @@ import TreeModel from 'tree-model';
 import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
 import * as recordService from 'aNotion/services/recordService';
 import * as blockService from 'aNotion/services/blockService';
-import {
-   SemanticString,
-   BasicString,
-} from 'aNotion/types/notionV3/SemanticStringTypes';
+import { SemanticString } from 'aNotion/types/notionV3/SemanticStringTypes';
 
 export interface NotionBlockModel {
    block?: blockTypes.Block;
@@ -48,6 +45,7 @@ export class NotionBlockRecord implements NotionBlockModel {
       this.setupType(data, blockId);
 
       this.simpleTitle = this.plainTextTitle();
+      this.semanticTitle = this.getTitle();
       this.contentIds = this.getContentIds();
    }
 
@@ -86,6 +84,7 @@ export class NotionBlockRecord implements NotionBlockModel {
    }
 
    protected plainTextTitle = (): string => {
+      //todo use semantic title here
       try {
          if (
             this.type === BlockTypes.CollectionViewPage ||
@@ -105,6 +104,27 @@ export class NotionBlockRecord implements NotionBlockModel {
          console.log(err);
       }
       return '';
+   };
+
+   protected getTitle = (): SemanticString[] => {
+      try {
+         if (
+            this.type === BlockTypes.CollectionViewPage ||
+            this.type === BlockTypes.CollectionViewInline
+         ) {
+            if (this.collection?.name != null) return this.collection.name;
+         } else if (this.type === BlockTypes.Page) {
+            let page = this.block as blockTypes.Page;
+            return page.properties?.title;
+         } else if (this.type !== BlockTypes.Unknown) {
+            let u = this.block as BaseTextBlock;
+            return u.properties?.title ?? [];
+         }
+      } catch (err) {
+         //ignore this error, this wil be improved
+         console.log(err);
+      }
+      return [];
    };
 
    getParentId() {

@@ -1,6 +1,6 @@
 import * as base from './notionBaseTypes';
 
-export type SemanticString = BasicString;
+//export type SemanticString = BasicString;
 // | InlineMentionUser
 // | InlineMentionPage
 // | InlineMentionDate;
@@ -19,7 +19,7 @@ export enum StringFormats {
 }
 
 export type SemanticFormat = [StringFormats, string?];
-export type BasicString = [string, SemanticFormat[]?];
+export type SemanticString = [string, SemanticFormat[]?];
 
 // export type InlineMentionUser = ['‣', SemanticFormat[]];
 // export type InlineMentionPage = ['‣', SemanticFormat[]];

@@ -28,7 +28,7 @@ export const notionSidebarRootId = 'notion-sidebar-root-987384';
 var initalized = false;
 
 const initalize = async () => {
-   await sleep(250);
+   await sleep(50);
 
    let notionApp = document.getElementById(notionAppId) as HTMLElement;
 

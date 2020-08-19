@@ -130,8 +130,9 @@ export const Layout = () => {
    const classes = useStyles();
 
    const updateCurrentPageId = useCallback(async () => {
-      let url = await getCurrentUrl();
-      dispatch(notionSiteActions.currentPage(url));
+      getCurrentUrl().then((url) =>
+         dispatch(notionSiteActions.currentPage(url))
+      );
    }, [dispatch]);
 
    const [tab, setTab] = useState('references');
