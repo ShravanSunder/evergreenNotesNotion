@@ -109,9 +109,9 @@ const MenuBar = ({
                      className={classes.toggleButton}>
                      <SubjectTwoTone></SubjectTwoTone>
                   </ToggleButton>
-                  <ToggleButton value="todo" className={classes.toggleButton}>
+                  {/* <ToggleButton value="todo" className={classes.toggleButton}>
                      <AssignmentTurnedInTwoTone></AssignmentTurnedInTwoTone>
-                  </ToggleButton>
+                  </ToggleButton> */}
                   <ToggleButton value="events" className={classes.toggleButton}>
                      <EventTwoTone></EventTwoTone>
                   </ToggleButton>

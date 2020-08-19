@@ -17,8 +17,11 @@ const useStyles = makeStyles((theme: Theme) =>
    createStyles({
       sections: {
          marginLeft: 6,
-         marginTop: 12,
+         marginTop: 15,
          marginBottom: 6,
+      },
+      spacing: {
+         marginBottom: 24,
       },
    })
 );
@@ -33,21 +36,65 @@ export const MarksPane = () => {
 
    let classes = useStyles();
 
-   let highlights = (
-      <>
-         <Typography className={classes.sections} variant="h5">
-            <b>Highlights</b>
-         </Typography>
-         {pageMarks?.highlights?.map((p, i) => (
-            <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
-         ))}
-      </>
-   );
+   let highlights =
+      pageMarks?.highlights != null && pageMarks?.highlights.length > 0 ? (
+         <>
+            <Typography className={classes.sections} variant="h5">
+               <b>Highlights</b>
+            </Typography>
+            {pageMarks?.highlights?.map((p, i) => (
+               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+            ))}
+            <div className={classes.spacing}></div>
+         </>
+      ) : null;
+
+   let quotes =
+      pageMarks?.quotes != null && pageMarks?.quotes.length > 0 ? (
+         <>
+            <Typography className={classes.sections} variant="h5">
+               <b>Quotes</b>
+            </Typography>
+            {pageMarks?.quotes?.map((p, i) => (
+               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+            ))}
+            <div className={classes.spacing}></div>
+         </>
+      ) : null;
+
+   let links =
+      pageMarks?.links != null && pageMarks?.links.length > 0 ? (
+         <>
+            <Typography className={classes.sections} variant="h5">
+               <b>Links</b>
+            </Typography>
+            {pageMarks?.links?.map((p, i) => (
+               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+            ))}
+            <div className={classes.spacing}></div>
+         </>
+      ) : null;
+
+   let code =
+      pageMarks?.code != null && pageMarks?.code.length > 0 ? (
+         <>
+            <Typography className={classes.sections} variant="h5">
+               <b>Code</b>
+            </Typography>
+            {pageMarks?.code?.map((p, i) => (
+               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+            ))}
+            <div className={classes.spacing}></div>
+         </>
+      ) : null;
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
             {status === thunkStatus.fulfilled && highlights}
+            {status === thunkStatus.fulfilled && quotes}
+            {status === thunkStatus.fulfilled && links}
+            {status === thunkStatus.fulfilled && code}
             {status === thunkStatus.pending && <LoadingSection />}
          </Suspense>
       </ErrorBoundary>

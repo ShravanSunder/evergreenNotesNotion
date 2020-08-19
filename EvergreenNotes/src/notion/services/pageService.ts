@@ -23,6 +23,9 @@ export const processPageForMarks = async (
       quotes: [],
       events: [],
       mentions: [],
+      code: [],
+      comments: [],
+      links: [],
    };
 
    let contentIds = record.recordMapData.block[pageId].value?.content ?? [];
@@ -113,24 +116,35 @@ const getMarksInBlock = (
 ) => {
    try {
       let b = block.value as BaseTextBlock;
-      let nb = new NotionBlockRecord(recordMapData, b.id);
-      // if (isChild(nb, pageId)) {
-      if (isBackGroundColor(b.format?.block_color)) {
-         pageMarks.highlights.push(nb.toSerializable());
-      } else if (nb.hasBgColor()) {
-         pageMarks.highlights.push(nb.toSerializable());
+      let blockRecord = new NotionBlockRecord(recordMapData, b.id);
+      let nb = blockRecord.toSerializable();
+
+      if (
+         isBackGroundColor(b.format?.block_color) ||
+         blockRecord.hasBgColor()
+      ) {
+         pageMarks.highlights.push(nb);
+      }
+
+      if (b.type === BlockTypes.Code || blockRecord.hasCode()) {
+         pageMarks.code.push(nb);
+      }
+
+      if (b.type === BlockTypes.Code || blockRecord.hasComments()) {
+         pageMarks.comments.push(nb);
+      }
+
+      if (b.type === BlockTypes.Code || blockRecord.hasMentions()) {
+         pageMarks.mentions.push(nb);
       }
 
       if (b.type === BlockTypes.ToDo) {
-         let nb = new NotionBlockRecord(recordMapData, b.id);
-         pageMarks.todos.push(nb.toSerializable());
+         pageMarks.todos.push(nb);
       }
 
       if (b.type === BlockTypes.Quote) {
-         let nb = new NotionBlockRecord(recordMapData, b.id);
-         pageMarks.quotes.push(nb.toSerializable());
+         pageMarks.quotes.push(nb);
       }
-      //}
    } catch {
       //ignore cast errors, if its not a BaseTextBlock, such as collections
    }

@@ -213,6 +213,66 @@ export class NotionBlockRecord implements NotionBlockModel {
       });
    };
 
+   hasLinks = () => {
+      return this.semanticTitle.some((s) => {
+         if (s[0] != null && s[1] != null) {
+            let format: SemanticFormat[] = s[1];
+            return format.some((f) => {
+               if (f[0] === StringFormatting.Link) {
+                  return true;
+               }
+               return false;
+            });
+         }
+         return false;
+      });
+   };
+
+   hasCode = () => {
+      return this.semanticTitle.some((s) => {
+         if (s[0] != null && s[1] != null) {
+            let format: SemanticFormat[] = s[1];
+            return format.some((f) => {
+               if (f[0] === StringFormatting.InlineCode) {
+                  return true;
+               }
+               return false;
+            });
+         }
+         return false;
+      });
+   };
+
+   hasComments = () => {
+      return this.semanticTitle.some((s) => {
+         if (s[0] != null && s[1] != null) {
+            let format: SemanticFormat[] = s[1];
+            return format.some((f) => {
+               if (f[0] === StringFormatting.Commented) {
+                  return true;
+               }
+               return false;
+            });
+         }
+         return false;
+      });
+   };
+
+   hasMentions = () => {
+      return this.semanticTitle.some((s) => {
+         if (s[0] != null && s[1] != null) {
+            let format: SemanticFormat[] = s[1];
+            return format.some((f) => {
+               if (f[0] === StringFormatting.User) {
+                  return true;
+               }
+               return false;
+            });
+         }
+         return false;
+      });
+   };
+
    toSerializable = (): NotionBlockModel => {
       let model: NotionBlockModel = {
          block: this.block,

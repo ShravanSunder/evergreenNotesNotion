@@ -7,4 +7,7 @@ export interface NotionPageMarks {
    todos: NotionBlockModel[];
    events: NotionBlockModel[];
    mentions: NotionBlockModel[];
+   code: NotionBlockModel[];
+   links: NotionBlockModel[];
+   comments: NotionBlockModel[];
 }
