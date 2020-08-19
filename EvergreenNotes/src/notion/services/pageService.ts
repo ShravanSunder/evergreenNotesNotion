@@ -135,7 +135,7 @@ const getMarksInBlock = (
       }
 
       if (b.type === BlockTypes.Bookmark && blockRecord.hasLinks()) {
-         pageMarks.mentions.push(nb);
+         pageMarks.links.push(nb);
       }
 
       if (blockRecord.hasMentions()) {
