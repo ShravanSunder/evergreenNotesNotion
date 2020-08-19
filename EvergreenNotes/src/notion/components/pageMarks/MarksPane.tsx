@@ -12,6 +12,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { LoadingSection } from '../common/Loading';
 import BlockUi from '../blocks/BlockUi';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -36,6 +37,7 @@ export const MarksPane = () => {
 
    let classes = useStyles();
 
+   //needs refactoring
    let highlights =
       pageMarks?.highlights != null && pageMarks?.highlights.length > 0 ? (
          <>
@@ -87,7 +89,6 @@ export const MarksPane = () => {
             <div className={classes.spacing}></div>
          </>
       ) : null;
-
    let todos =
       pageMarks?.todos != null && pageMarks?.todos.length > 0 ? (
          <>
@@ -100,10 +101,16 @@ export const MarksPane = () => {
             <div className={classes.spacing}></div>
          </>
       ) : null;
-
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
+            {/* {status === thunkStatus.fulfilled && (
+               <>
+                  <MarkSections
+                     name="Highlights"
+                     blocks={pageMarks?.highlights}></MarkSections>
+               </>
+            )} */}
             {status === thunkStatus.fulfilled && highlights}
             {status === thunkStatus.fulfilled && todos}
             {status === thunkStatus.fulfilled && code}
@@ -117,3 +124,27 @@ export const MarksPane = () => {
 };
 
 export default MarksPane;
+
+const MarkSections = ({
+   blocks,
+   name,
+}: {
+   blocks?: NotionBlockModel[];
+   name: String;
+}) => {
+   let classes = useStyles();
+
+   if (blocks != null && blocks.length > 0) return null;
+
+   return (
+      <>
+         <Typography className={classes.sections} variant="h5">
+            <b>{name}</b>
+         </Typography>
+         {blocks!.map((p, i) => (
+            <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+         ))}
+         <div className={classes.spacing}></div>
+      </>
+   );
+};
