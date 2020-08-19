@@ -88,13 +88,28 @@ export const MarksPane = () => {
          </>
       ) : null;
 
+   let todos =
+      pageMarks?.todos != null && pageMarks?.todos.length > 0 ? (
+         <>
+            <Typography className={classes.sections} variant="h5">
+               <b>Todo</b>
+            </Typography>
+            {pageMarks?.todos?.map((p, i) => (
+               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+            ))}
+            <div className={classes.spacing}></div>
+         </>
+      ) : null;
+
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
             {status === thunkStatus.fulfilled && highlights}
+            {status === thunkStatus.fulfilled && todos}
+            {status === thunkStatus.fulfilled && code}
             {status === thunkStatus.fulfilled && quotes}
             {status === thunkStatus.fulfilled && links}
-            {status === thunkStatus.fulfilled && code}
+
             {status === thunkStatus.pending && <LoadingSection />}
          </Suspense>
       </ErrorBoundary>

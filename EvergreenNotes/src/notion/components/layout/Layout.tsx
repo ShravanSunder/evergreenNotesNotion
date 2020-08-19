@@ -59,6 +59,8 @@ export enum LayoutTabs {
    References = 'references',
    Search = 'search',
    Highlights = 'highlights',
+   Events = 'events',
+   Mentions = 'mentions',
 }
 
 const MenuBar = ({
@@ -171,6 +173,7 @@ export const Layout = () => {
                   {tab === LayoutTabs.References && <ReferencesPane />}
                   {tab === LayoutTabs.Highlights && <MarksPane />}
                   {tab === LayoutTabs.Search && <div>not implemented</div>}
+                  {tab === LayoutTabs.Events && <div>not implemented</div>}
                </Suspense>
             </ErrorBoundary>
          </React.Fragment>
