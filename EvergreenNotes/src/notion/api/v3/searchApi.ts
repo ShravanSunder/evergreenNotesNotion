@@ -15,7 +15,7 @@ export const searchByRelevance = async (
    pageTitlesOnly: boolean = true,
    limit: number = 10,
    sort: SearchSort = SearchSort.Relevance,
-   abort: AbortSignal
+   abort: AbortSignal | undefined = undefined
 ): Promise<SearchResultsType> => {
    let userData = getAppState(cookieSelector).data as CookieData;
    let filters = defaultFilters();
@@ -26,7 +26,9 @@ export const searchByRelevance = async (
          .post('https://www.notion.so/api/v3/search')
          .send(createParam(userData, query, filters, sort, limit));
 
-      addAbortSignal(req, abort);
+      if (abort != null) {
+         addAbortSignal(req, abort);
+      }
 
       return (await req).body;
    } catch (err) {

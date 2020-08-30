@@ -26,6 +26,7 @@
       "chrome-extension-async": "^3.4.1",
       "debug": "^4.1.1",
       "fontsource-roboto": "^2.2.6",
+      "material-ui-popup-state": "^1.6.1",
       "normalizr": "^3.6.0",
       "notistack": "^0.9.17",
       "npm": "^6.14.7",
@@ -42,7 +43,7 @@
       "reselect": "^4.0.0",
       "superagent": "^5.3.1",
       "superagent-cache-plugin": "^3.0.0-beta.1",
-      "tree-model": "^1.0.7"
+      "use-debounce": "^3.4.3"
    },
    "devDependencies": {
       "@babel/core": "^7.10.5",

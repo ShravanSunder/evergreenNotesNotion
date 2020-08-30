@@ -18,11 +18,11 @@ const useStyles = makeStyles((theme: Theme) =>
    createStyles({
       sections: {
          marginLeft: 6,
-         marginTop: 15,
+         marginTop: 21,
          marginBottom: 6,
       },
       spacing: {
-         marginBottom: 24,
+         marginBottom: 42,
       },
    })
 );
@@ -132,6 +132,7 @@ const MarkSections = ({
    blocks?: NotionBlockModel[];
    name: String;
 }) => {
+   //refactor components above
    let classes = useStyles();
 
    if (blocks != null && blocks.length > 0) return null;

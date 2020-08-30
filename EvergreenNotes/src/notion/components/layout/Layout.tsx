@@ -28,6 +28,7 @@ import {
 import { lightGreen } from '@material-ui/core/colors';
 import { makeStyles, Theme, createStyles, Box, Grid } from '@material-ui/core';
 import { LoadingTab } from '../common/Loading';
+import SearchPane from '../references/SearchPane';
 
 const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
 const MarksPane = React.lazy(() => import('../pageMarks/MarksPane'));
@@ -172,7 +173,7 @@ export const Layout = () => {
                <Suspense fallback={<LoadingTab />}>
                   {tab === LayoutTabs.References && <ReferencesPane />}
                   {tab === LayoutTabs.Highlights && <MarksPane />}
-                  {tab === LayoutTabs.Search && <div>not implemented</div>}
+                  {tab === LayoutTabs.Search && <SearchPane />}
                   {tab === LayoutTabs.Events && <div>not implemented</div>}
                </Suspense>
             </ErrorBoundary>

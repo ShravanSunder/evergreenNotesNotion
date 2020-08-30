@@ -1,10 +1,31 @@
-import { SearchResultsType } from 'aNotion/api/v3/apiRequestTypes';
+import { SearchResultsType, SearchSort } from 'aNotion/api/v3/apiRequestTypes';
 import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
 import {
-   searchReferences,
+   SearchReferences,
    RefData,
    ResultTypeEnum,
+   defaultReferences,
 } from 'aNotion/components/references/referenceState';
+import * as searchApi from 'aNotion/api/v3/searchApi';
+
+export const searchNotion = async (
+   query: string,
+   abort: AbortController | undefined = undefined
+) => {
+   let result1 = await searchApi.searchByRelevance(
+      query,
+      false,
+      50,
+      SearchSort.Relevance,
+      abort?.signal
+   );
+   if (result1 != null) {
+      //&& !abort.signal.aborted) {
+      return createReferences(query, result1, undefined);
+   }
+
+   return defaultReferences();
+};
 
 export const createReferences = (
    query: string,
@@ -12,7 +33,7 @@ export const createReferences = (
    pageId: string | undefined,
    searchLimit: number = 20
    //signal?: AbortSignal
-): searchReferences => {
+): SearchReferences => {
    let direct: RefData[] = [];
    let fullTitle: RefData[] = [];
    let related: RefData[] = [];
