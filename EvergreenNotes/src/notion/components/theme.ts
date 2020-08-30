@@ -28,4 +28,16 @@ export const theme = createMuiTheme({
          },
       },
    },
+   props: {
+      MuiPopover: {
+         anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left',
+         },
+         transformOrigin: {
+            vertical: 'top',
+            horizontal: 'left',
+         },
+      },
+   },
 });

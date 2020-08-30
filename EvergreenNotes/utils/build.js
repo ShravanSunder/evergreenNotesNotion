@@ -7,6 +7,12 @@ var webpack = require('webpack'),
 
 delete config.chromeExtensionBoilerplate;
 
-webpack(config, function(err) {
+config.plugins.push(new webpack.SourceMapDevToolPlugin({
+  noSources: true,
+  module: false,
+  columns: false
+}))
+
+webpack(config, function (err) {
   if (err) throw err;
 });

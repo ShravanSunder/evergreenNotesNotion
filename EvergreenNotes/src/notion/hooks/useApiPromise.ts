@@ -2,27 +2,30 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 
-export type UseFetchCallbackType<T> = (
-   input: string
-) => [Promise<T>, AbortController];
+export type UseApiPromise<TResult, TInput> = (
+   input: TInput
+) => [Promise<TResult>, AbortController];
 
-export function useFetchApi<T>(
-   searchCallback: UseFetchCallbackType<T>
+export function useApi<TResult, TInput>(
+   apiCallback: UseApiPromise<TResult, TInput>
 ): [
    thunkStatus,
-   T | undefined,
-   React.Dispatch<React.SetStateAction<string | undefined>>
+   TResult | undefined,
+   React.Dispatch<React.SetStateAction<TInput | undefined>>,
+   TInput | undefined
 ] {
-   const [input, setInput] = useState<string>();
-   const [debouncedInput] = useDebounce(input, 400);
-   const [lastApiPaylod, setLastApiPayload] = useState<string>();
+   const [input, setInput] = useState<TInput>();
+   const [debouncedInput] = useDebounce(input, 333, {
+      trailing: true,
+   });
+   const [lastApiPaylod, setLastApiPayload] = useState<TInput>();
    const [apiAbortController, setAbortController] = useState<AbortController>();
-   const [result, setResult] = useState<T>();
+   const [result, setResult] = useState<TResult>();
    const [status, setStatus] = useState<thunkStatus>(thunkStatus.idle);
 
    useEffect(() => {
       (async () => {
-         if (debouncedInput != null && searchCallback != null) {
+         if (debouncedInput != null && apiCallback != null) {
             console.log(debouncedInput);
             //you can also check for max retries here
             if (
@@ -37,7 +40,7 @@ export function useFetchApi<T>(
                   apiAbortController.abort();
                }
 
-               let [resultPromise, ab] = searchCallback(debouncedInput);
+               let [resultPromise, ab] = apiCallback(debouncedInput);
                setLastApiPayload(debouncedInput);
                setAbortController(ab);
                try {
@@ -65,10 +68,10 @@ export function useFetchApi<T>(
       apiAbortController,
       debouncedInput,
       lastApiPaylod,
-      searchCallback,
+      apiCallback,
       setAbortController,
       status,
    ]);
 
-   return [status, result, setInput];
+   return [status, result, setInput, debouncedInput];
 }

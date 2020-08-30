@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, MouseEvent, useState } from 'react';
+import React, { useEffect, MouseEvent, useState, SyntheticEvent } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import {
@@ -8,19 +8,29 @@ import {
    createStyles,
    Theme,
    TextField,
+   Popover,
+   Grid,
+   IconButton,
+   ListItem,
+   List,
+   ListItemText,
 } from '@material-ui/core';
-import {
-   currentRecordSelector,
-   referenceSelector,
-} from 'aNotion/providers/storeSelectors';
+import { referenceSelector } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from './referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
 import { SearchReferences, defaultReferences } from './referenceState';
 import { LoadingTab, NothingToFind } from '../common/Loading';
-import { useFetchApi, UseFetchCallbackType } from '../../hooks/useFetchApi';
+import { useApi, UseApiPromise } from '../../hooks/useApiPromise';
 import { searchNotion } from 'aNotion/services/referenceService';
+import {
+   usePopupState,
+   bindToggle,
+   bindPopover,
+} from 'material-ui-popup-state/hooks';
+import HistoryIcon from '@material-ui/icons/History';
+import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -32,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
    })
 );
 
-const search: UseFetchCallbackType<SearchReferences> = (
+const search: UseApiPromise<SearchReferences, string> = (
    query: string | undefined
 ) => {
    const ab = new AbortController();
@@ -45,23 +55,88 @@ export const SearchPane = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const { searchQueries } = useSelector(referenceSelector, shallowEqual);
 
-   let [status, result, setSearchText] = useFetchApi<SearchReferences>(search);
+   const [text, setText] = useState<string>();
+
+   let [status, result, setSearchText, searchText] = useApi<
+      SearchReferences,
+      string
+   >(search);
+
+   const popupState = usePopupState({
+      variant: 'popper',
+      popupId: 'searchPopper',
+   });
 
    const handleTextChanged = (e: any) => {
       let text = e.target.value;
-      dispatch(referenceActions.addSearchQueries(text));
       setSearchText(text);
+      setText(text);
    };
+
+   useEffect(() => {
+      if (status === thunkStatus.fulfilled && searchText != null) {
+         dispatch(referenceActions.addSearchQueries(searchText));
+      }
+   }, [status, searchText, dispatch]);
 
    result = result ?? defaultReferences();
 
    return (
       <React.Fragment>
-         <TextField
-            fullWidth
-            size="small"
-            variant="outlined"
-            onChange={handleTextChanged}></TextField>
+         <Grid container>
+            <Grid item xs>
+               <TextField
+                  value={text}
+                  fullWidth
+                  size="small"
+                  helperText="Enter text to search"
+                  variant="outlined"
+                  onChange={handleTextChanged}></TextField>
+            </Grid>
+            <Grid item xs={1}>
+               <IconButton
+                  size="small"
+                  {...bindToggle(popupState)}
+                  style={{ marginTop: 3 }}>
+                  <HistoryIcon></HistoryIcon>
+               </IconButton>
+            </Grid>
+         </Grid>
+         <Popover
+            {...bindPopover(popupState)}
+            anchorOrigin={{
+               vertical: 'bottom',
+               horizontal: 'right',
+            }}
+            transformOrigin={{
+               vertical: 'top',
+               horizontal: 'right',
+            }}>
+            <div style={{ margin: 6, padding: 6 }}>
+               <Typography
+                  variant="subtitle1"
+                  style={{
+                     marginLeft: 3,
+                     marginRight: 3,
+                  }}>
+                  <strong>Search History</strong>
+               </Typography>
+               <List dense>
+                  {searchQueries.map((s) => {
+                     const handleHistoryClick = (e: any) => {
+                        setSearchText(s);
+                        setText(s);
+                        popupState.close();
+                     };
+                     return (
+                        <ListItem key={s} button onClick={handleHistoryClick}>
+                           <ListItemText primary={s} />
+                        </ListItem>
+                     );
+                  })}
+               </List>
+            </div>
+         </Popover>
          <FullReferences
             searchResults={result}
             status={status}></FullReferences>

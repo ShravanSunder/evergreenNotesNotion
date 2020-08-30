@@ -71,8 +71,11 @@ const addSearchQueries: CaseReducer<ReferenceState, PayloadAction<string>> = (
    state,
    action
 ) => {
-   state.searchQueries.splice(0, 0, action.payload);
-   state.searchQueries = state.searchQueries.filter((f, i) => i < 10);
+   let text = action.payload.trim();
+   state.searchQueries = state.searchQueries.filter(
+      (f, i) => i < 10 && f !== text
+   );
+   state.searchQueries.splice(0, 0, text);
 };
 
 const referenceSlice = createSlice({
