@@ -21,6 +21,6 @@ export const createNewRootElement = (notionApp: HTMLElement) => {
    newApp.appendChild(notionApp);
 
    sidebarRoot.style.position = 'absolute';
-   sidebarRoot.style.zIndex = '100';
+   sidebarRoot.style.zIndex = '1000';
    newApp.style.position = 'absolute';
 };

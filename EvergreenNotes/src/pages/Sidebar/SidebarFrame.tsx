@@ -80,7 +80,7 @@ export const LoadSidebarFrame = () => {
                   overflow: 'hidden',
                   // boxShadow: '-2px 0px 6px grey',
                }}
-               title="Notion Sidecar"
+               title="Evergreen Notes"
                src={url}></iframe>
          </Slide>
          )

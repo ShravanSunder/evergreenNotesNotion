@@ -25,8 +25,15 @@ import {
    AssignmentTurnedInTwoTone,
    EventTwoTone,
 } from '@material-ui/icons/';
-import { lightGreen } from '@material-ui/core/colors';
-import { makeStyles, Theme, createStyles, Box, Grid } from '@material-ui/core';
+import { lightGreen, grey } from '@material-ui/core/colors';
+import {
+   makeStyles,
+   Theme,
+   createStyles,
+   Box,
+   Grid,
+   Typography,
+} from '@material-ui/core';
 import { LoadingTab } from '../common/Loading';
 import SearchPane from '../references/SearchPane';
 
@@ -57,25 +64,25 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export enum LayoutTabs {
-   References = 'references',
-   Search = 'search',
-   Highlights = 'highlights',
-   Events = 'events',
-   Mentions = 'mentions',
+   References = 'References Pages',
+   Search = 'Search',
+   PageMarkups = 'Page Markups',
+   Events = 'Events',
+   Mentions = 'Mentions',
 }
 
 const MenuBar = ({
    tab,
    setTab,
 }: {
-   tab: string;
-   setTab: React.Dispatch<React.SetStateAction<string>>;
+   tab: LayoutTabs;
+   setTab: React.Dispatch<React.SetStateAction<LayoutTabs>>;
 }) => {
    const classes = useStyles();
 
    const handleTab = (
       event: React.MouseEvent<HTMLElement>,
-      newTab: string | null
+      newTab: LayoutTabs | null
    ) => {
       if (newTab != null) {
          setTab(newTab);
@@ -83,45 +90,62 @@ const MenuBar = ({
    };
 
    return (
-      <div
-         style={{
-            backgroundColor: lightGreen[50],
-            borderRadius: 9,
-            padding: 6,
-         }}>
-         <Grid container spacing={1} justify="center">
-            <Grid item>
-               <ToggleButtonGroup
-                  className={classes.grouped}
-                  size="small"
-                  value={tab}
-                  exclusive
-                  onChange={handleTab}>
-                  <ToggleButton
-                     value={LayoutTabs.References}
-                     className={classes.toggleButton}>
-                     <BookTwoTone></BookTwoTone>
-                  </ToggleButton>
-                  <ToggleButton
-                     value={LayoutTabs.Search}
-                     className={classes.toggleButton}>
-                     <FindInPageTwoTone></FindInPageTwoTone>
-                  </ToggleButton>
-                  <ToggleButton
-                     value={LayoutTabs.Highlights}
-                     className={classes.toggleButton}>
-                     <SubjectTwoTone></SubjectTwoTone>
-                  </ToggleButton>
-                  {/* <ToggleButton value="todo" className={classes.toggleButton}>
+      <>
+         <div
+            style={{
+               backgroundColor: lightGreen[50],
+               borderRadius: 9,
+               padding: 6,
+            }}>
+            <Grid container spacing={1} justify="center">
+               <Grid item>
+                  <ToggleButtonGroup
+                     className={classes.grouped}
+                     size="small"
+                     value={tab}
+                     exclusive
+                     onChange={handleTab}>
+                     <ToggleButton
+                        value={LayoutTabs.References}
+                        className={classes.toggleButton}>
+                        <BookTwoTone></BookTwoTone>
+                     </ToggleButton>
+                     <ToggleButton
+                        value={LayoutTabs.Search}
+                        className={classes.toggleButton}>
+                        <FindInPageTwoTone></FindInPageTwoTone>
+                     </ToggleButton>
+                     <ToggleButton
+                        value={LayoutTabs.PageMarkups}
+                        className={classes.toggleButton}>
+                        <SubjectTwoTone></SubjectTwoTone>
+                     </ToggleButton>
+                     {/* <ToggleButton value="todo" className={classes.toggleButton}>
                      <AssignmentTurnedInTwoTone></AssignmentTurnedInTwoTone>
                   </ToggleButton> */}
-                  <ToggleButton value="events" className={classes.toggleButton}>
+                     {/* <ToggleButton value="events" className={classes.toggleButton}>
                      <EventTwoTone></EventTwoTone>
-                  </ToggleButton>
-               </ToggleButtonGroup>
+                  </ToggleButton> */}
+                  </ToggleButtonGroup>
+               </Grid>
+            </Grid>
+         </div>
+         <Grid
+            container
+            spacing={1}
+            justify="center"
+            style={{
+               backgroundColor: grey[50],
+            }}>
+            <Grid item>
+               <Typography
+                  variant="h4"
+                  style={{ marginTop: 9, marginBottom: 9 }}>
+                  <strong>{tab}</strong>
+               </Typography>
             </Grid>
          </Grid>
-      </div>
+      </>
    );
 };
 
@@ -138,10 +162,10 @@ export const Layout = () => {
       );
    }, [dispatch]);
 
-   const [tab, setTab] = useState('references');
+   const [tab, setTab] = useState(LayoutTabs.PageMarkups);
 
    useEffect(() => {
-      setTab(LayoutTabs.References);
+      setTab(LayoutTabs.PageMarkups);
    }, []);
 
    useEffect(() => {
@@ -169,11 +193,17 @@ export const Layout = () => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <React.Fragment>
             <MenuBar tab={tab} setTab={setTab}></MenuBar>
+            <div style={{ marginTop: 12 }}></div>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
                <Suspense fallback={<LoadingTab />}>
                   {tab === LayoutTabs.References && <ReferencesPane />}
-                  {tab === LayoutTabs.Highlights && <MarksPane />}
-                  {tab === LayoutTabs.Search && <SearchPane />}
+                  {tab === LayoutTabs.PageMarkups && <MarksPane />}
+                  <div
+                     style={{
+                        display: tab === LayoutTabs.Search ? 'block' : 'none',
+                     }}>
+                     <SearchPane />
+                  </div>
                   {tab === LayoutTabs.Events && <div>not implemented</div>}
                </Suspense>
             </ErrorBoundary>
