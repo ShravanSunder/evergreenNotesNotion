@@ -3,12 +3,13 @@ var webpack = require('webpack'),
    path = require('path'),
    fileSystem = require('fs-extra'),
    env = require('./utils/env'),
-   { CleanWebpackPlugin } = require('clean-webpack-plugin'),
+   {
+      CleanWebpackPlugin
+   } = require('clean-webpack-plugin'),
    CopyWebpackPlugin = require('copy-webpack-plugin'),
    HtmlWebpackPlugin = require('html-webpack-plugin'),
    WriteFilePlugin = require('write-file-webpack-plugin');
 const ReactDevToolsIFramePlugin = require('react-dev-tools-iframe-webpack-plugin');
-//var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 // load the secrets
 var alias = {
@@ -40,6 +41,7 @@ if (fileSystem.existsSync(secretsPath)) {
 }
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+console.log(isDevelopment);
 
 var options = {
    mode: isDevelopment ? 'development' : 'production',
@@ -113,16 +115,14 @@ var options = {
          {
             test: /\.(ts|tsx)$/,
             exclude: /node_modules/,
-            use: [
-               {
-                  loader: 'ts-loader',
-                  options: {
-                     // transpileOnly: true,
-                     // happyPackMode: true,
-                     configFile: path.resolve(__dirname, 'tsconfig.json'),
-                  },
+            use: [{
+               loader: 'ts-loader',
+               options: {
+                  // transpileOnly: true,
+                  // happyPackMode: true,
+                  configFile: path.resolve(__dirname, 'tsconfig.json'),
                },
-            ],
+            }, ],
          },
       ],
    },
@@ -159,24 +159,21 @@ var options = {
       //    }
       // }),
       new CopyWebpackPlugin(
-         [
-            {
-               from: 'src/manifest.json',
-               to: path.join(__dirname, 'build'),
-               force: true,
-               transform: function (content, path) {
-                  // generates the manifest file using the package.json informations
-                  return Buffer.from(
-                     JSON.stringify({
-                        description: process.env.npm_package_description,
-                        version: process.env.npm_package_version,
-                        ...JSON.parse(content.toString()),
-                     })
-                  );
-               },
+         [{
+            from: 'src/manifest.json',
+            to: path.join(__dirname, 'build'),
+            force: true,
+            transform: function (content, path) {
+               // generates the manifest file using the package.json informations
+               return Buffer.from(
+                  JSON.stringify({
+                     description: process.env.npm_package_description,
+                     version: process.env.npm_package_version,
+                     ...JSON.parse(content.toString()),
+                  })
+               );
             },
-         ],
-         {
+         }, ], {
             logLevel: 'info',
             copyUnmodified: true,
          }
@@ -215,9 +212,12 @@ var options = {
          chunks: ['background'],
       }),
       new WriteFilePlugin(),
-      isDevelopment && new ReactRefreshWebpackPlugin(),
    ],
 };
+
+if (isDevelopment) {
+   options.plugins.push(new ReactRefreshWebpackPlugin());
+}
 
 if (env.NODE_ENV === 'development') {
    options.devtool = 'cheap-module-eval-source-map';

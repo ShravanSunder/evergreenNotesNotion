@@ -5,12 +5,12 @@ import { composeWithDevTools } from 'remote-redux-devtools';
 
 console.log('Redux store configuration loaded');
 
-const composeEnhancers = composeWithDevTools({
-   hostname: 'localhost',
-   port: 8000,
-   realtime: true,
-   shouldHotReload: true,
-});
+// const composeEnhancers = composeWithDevTools({
+//    hostname: 'localhost',
+//    port: 8000,
+//    realtime: true,
+//    shouldHotReload: true,
+// });
 
 const middleware = getDefaultMiddleware().concat(logger);
 
@@ -20,7 +20,7 @@ export const reduxStore = configureStore({
    middleware: middleware,
    devTools: true, //process.env.NODE_ENV !== 'production',
    //preloadedState: preloadedState,
-   enhancers: [composeEnhancers()],
+   //enhancers: [composeEnhancers()],
 });
 
 export default reduxStore;
