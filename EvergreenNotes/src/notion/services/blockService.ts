@@ -28,8 +28,8 @@ export const fetchPageRecord = async (
    pageId: string,
    signal: AbortSignal,
    liteApi: boolean = false
-): Promise<NotionBlockRecord> => {
-   let chunk: LoadPageChunk.PageChunk;
+): Promise<[NotionBlockRecord, LoadPageChunk.PageChunk]> => {
+   let chunk: LoadPageChunk.PageChunk | undefined = undefined;
    let block: NotionBlockRecord | undefined = undefined;
 
    let sycRecordPromise = blockApi.syncRecordValues([pageId], signal);
@@ -59,7 +59,7 @@ export const fetchPageRecord = async (
       }
    }
 
-   return block!;
+   return [block!, chunk!];
 };
 
 export const getBlockFromPageChunk = (

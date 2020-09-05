@@ -7,7 +7,7 @@
       "type": "git"
    },
    "scripts": {
-      "build": "node utils/build.js",
+      "release": "node utils/build.js",
       "start": "set PORT=3000 & node utils/webserver.js --max-old-space-size 3096",
       "remotedev": "remotedev --hostname=localhost --port=8000",
       "prettier": "prettier --write '**/*.{js,jsx,css,html}'"

@@ -1,15 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { fetchPageRecord } from 'aNotion/services/blockService';
-import {
-   NotionBlockModel,
-   NotionBlockRecord,
-} from 'aNotion/models/NotionBlock';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { RecordState } from 'aNotion/components/blocks/blockState';
-import {
-   contentSelector,
-   blockSelector,
-} from 'aNotion/providers/storeSelectors';
+import { blockSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 
 const initialState: RecordState = {};
@@ -33,9 +27,8 @@ const fetchBlockIfNotInStore = async (
    let data = checkStateForBlock(state, blockId);
 
    if (data?.status !== thunkStatus.fulfilled) {
-      let result = (
-         await fetchPageRecord(blockId, thunkApi.signal, true)
-      ).toSerializable();
+      const [record] = await fetchPageRecord(blockId, thunkApi.signal, true);
+      let result = record.toSerializable();
       if (result != null) {
          return result;
       }

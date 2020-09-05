@@ -1,20 +1,15 @@
-import React, { useEffect, MouseEvent, useState, Suspense } from 'react';
-import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import React, { Suspense } from 'react';
+import { useSelector, shallowEqual } from 'react-redux';
 
-import { makeStyles, createStyles, Theme, Typography } from '@material-ui/core';
-import {
-   currentRecordSelector,
-   pageMarksSelector,
-} from 'aNotion/providers/storeSelectors';
+import { makeStyles, createStyles, Typography } from '@material-ui/core';
+import { pageMarksSelector } from 'aNotion/providers/storeSelectors';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
-import { LoadingSection } from '../common/Loading';
+import { LoadingSection, NothingToFind } from '../common/Loading';
 import BlockUi from '../blocks/BlockUi';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
    createStyles({
       sections: {
          marginLeft: 6,
@@ -29,13 +24,19 @@ const useStyles = makeStyles((theme: Theme) =>
 
 // comment
 export const MarksPane = () => {
-   const dispatch: AppPromiseDispatch<any> = useDispatch();
-   const record = useSelector(currentRecordSelector, shallowEqual);
    const { pageMarks, status } = useSelector(pageMarksSelector, shallowEqual);
-   const pageName = record.pageRecord?.simpleTitle;
-   const pageId = record.pageRecord?.blockId as string;
 
    let classes = useStyles();
+
+   const nothingFound =
+      pageMarks?.code.length === 0 &&
+      pageMarks?.comments.length === 0 &&
+      pageMarks?.events.length === 0 &&
+      pageMarks?.highlights.length === 0 &&
+      pageMarks?.links.length === 0 &&
+      pageMarks?.mentions.length === 0 &&
+      pageMarks?.quotes.length === 0 &&
+      pageMarks?.todos.length === 0;
 
    //needs refactoring
    let highlights =
@@ -116,36 +117,13 @@ export const MarksPane = () => {
             {status === thunkStatus.fulfilled && code}
             {status === thunkStatus.fulfilled && quotes}
             {status === thunkStatus.fulfilled && links}
-
             {status === thunkStatus.pending && <LoadingSection />}
+            {status === thunkStatus.fulfilled && nothingFound && (
+               <NothingToFind></NothingToFind>
+            )}
          </Suspense>
       </ErrorBoundary>
    );
 };
 
 export default MarksPane;
-
-const MarkSections = ({
-   blocks,
-   name,
-}: {
-   blocks?: NotionBlockModel[];
-   name: String;
-}) => {
-   //refactor components above
-   let classes = useStyles();
-
-   if (blocks != null && blocks.length > 0) return null;
-
-   return (
-      <>
-         <Typography className={classes.sections} variant="h5">
-            <b>{name}</b>
-         </Typography>
-         {blocks!.map((p, i) => (
-            <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
-         ))}
-         <div className={classes.spacing}></div>
-      </>
-   );
-};

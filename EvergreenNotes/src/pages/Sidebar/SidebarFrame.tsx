@@ -66,7 +66,6 @@ export const LoadSidebarFrame = () => {
             showFrame={showFrame}
             handleClick={handleClick}
             handleDrag={handleDrag}></AppFab>
-         (
          <Slide in={showFrame} direction={'left'}>
             <iframe
                style={{
@@ -83,7 +82,6 @@ export const LoadSidebarFrame = () => {
                title="Evergreen Notes"
                src={url}></iframe>
          </Slide>
-         )
       </div>
    );
 };

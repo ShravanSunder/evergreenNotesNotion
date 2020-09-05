@@ -1,16 +1,9 @@
-import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
 import { thunkStatus as ThunkStatus } from 'aNotion/types/thunkStatus';
-import {
-   Page,
-   Collection,
-   CollectionView,
-} from 'aNotion/types/notionV3/notionBlockTypes';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { CurrentPage } from 'aNotion/models/NotionPage';
 
 export type CookieData = {
    userId: string;
    token: string;
-   spaceId: string;
    cookies: chrome.cookies.Cookie[];
 };
 
@@ -23,11 +16,11 @@ export type NavigationState = {
 };
 export type PageRecordState = {
    status: ThunkStatus;
-   pageRecord?: NotionBlockModel;
+   currentPage?: CurrentPage;
 };
 
 export type SiteState = {
    cookie: { status: string; data?: CookieData };
    navigation: NavigationState;
-   currentPageRecord: PageRecordState;
+   currentPage: PageRecordState;
 };

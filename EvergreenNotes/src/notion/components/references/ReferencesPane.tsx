@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, MouseEvent, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { Typography, makeStyles, createStyles, Theme } from '@material-ui/core';
 import {
-   currentRecordSelector,
+   currentPageSelector,
    referenceSelector,
 } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from './referenceSlice';
@@ -14,7 +14,7 @@ import { Reference } from './Reference';
 import { ReferenceState } from './referenceState';
 import { LoadingTab, NothingToFind } from '../common/Loading';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
    createStyles({
       sections: {
          marginLeft: 6,
@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
 // comment
 export const ReferencesPane = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
-   const record = useSelector(currentRecordSelector, shallowEqual);
+   const record = useSelector(currentPageSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
-   const pageName = record.pageRecord?.simpleTitle;
-   const pageId = record.pageRecord?.blockId as string;
+   const pageName = record.currentPage?.record.simpleTitle;
+   const pageId = record.currentPage?.record.blockId as string;
 
    useEffect(() => {
       if (record.status === thunkStatus.fulfilled && pageName != null) {
@@ -43,7 +43,7 @@ export const ReferencesPane = () => {
       } else if (record.status === thunkStatus.pending) {
       }
       return () => {};
-   }, [record.status, dispatch, record.pageRecord, pageName, pageId]);
+   }, [record.status, dispatch, record.currentPage, pageName, pageId]);
 
    return (
       <React.Fragment>

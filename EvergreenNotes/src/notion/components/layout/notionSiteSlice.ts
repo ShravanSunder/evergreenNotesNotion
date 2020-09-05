@@ -12,28 +12,28 @@ import {
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import * as blockService from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
-import {
-   NotionBlockModel,
-   NotionBlockRecord,
-} from 'aNotion/models/NotionBlock';
 import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
+import { CurrentPage } from 'aNotion/models/NotionPage';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
    navigation: {},
-   currentPageRecord: { status: thunkStatus.pending },
+   currentPage: { status: thunkStatus.pending },
 };
 
 const fetchCurrentPage = createAsyncThunk<
-   NotionBlockModel | undefined,
+   CurrentPage | undefined,
    { pageId: string }
 >(
    'notion/page/current',
    async (
       { pageId }: { pageId: string },
       thunkApi
-   ): Promise<NotionBlockModel | undefined> => {
-      let record = await blockService.fetchPageRecord(pageId, thunkApi.signal);
+   ): Promise<CurrentPage | undefined> => {
+      const [record, chunk] = await blockService.fetchPageRecord(
+         pageId,
+         thunkApi.signal
+      );
       thunkApi.dispatch(
          pageMarkActions.processPageForMarks({
             pageId,
@@ -41,7 +41,14 @@ const fetchCurrentPage = createAsyncThunk<
             signal: thunkApi.signal,
          })
       );
-      return record?.toSerializable();
+
+      //get the first key
+      const spaceId = Object.keys(chunk.recordMap.space)[0];
+
+      return {
+         record: record?.toSerializable(),
+         spaceId: spaceId,
+      };
    }
 );
 
@@ -53,7 +60,6 @@ const loadCookies: CaseReducer<SiteState, PayloadAction<CookieData>> = (
       state.cookie.status !== thunkStatus.fulfilled ||
       state.cookie.data == null ||
       state.cookie.data.userId == null ||
-      state.cookie.data?.spaceId == null ||
       state.cookie.data?.token == null
    ) {
       state.cookie.data = action.payload;
@@ -81,23 +87,23 @@ const notionSiteSlice = createSlice({
    extraReducers: {
       [fetchCurrentPage.fulfilled.toString()]: (
          state,
-         action: PayloadAction<NotionBlockModel>
+         action: PayloadAction<CurrentPage>
       ) => {
-         state.currentPageRecord.pageRecord = action.payload;
-         state.currentPageRecord.status = thunkStatus.fulfilled;
+         state.currentPage.currentPage = action.payload;
+         state.currentPage.status = thunkStatus.fulfilled;
       },
       [fetchCurrentPage.pending.toString()]: (
          state,
-         action: PayloadAction<NotionBlockModel>
+         action: PayloadAction<CurrentPage>
       ) => {
-         state.currentPageRecord.status = thunkStatus.pending;
-         state.currentPageRecord.pageRecord = undefined;
+         state.currentPage.status = thunkStatus.pending;
+         state.currentPage.currentPage = undefined;
       },
       [fetchCurrentPage.rejected.toString()]: (
          state,
-         action: PayloadAction<NotionBlockModel>
+         action: PayloadAction<CurrentPage>
       ) => {
-         state.currentPageRecord.status = thunkStatus.rejected;
+         state.currentPage.status = thunkStatus.rejected;
       },
    },
 });

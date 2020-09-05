@@ -1,6 +1,5 @@
-import { CookieData } from 'aNotion/components/layout/NotionSiteState';
 import { getAppState } from 'aNotion/providers/appDispatch';
-import { cookieSelector } from 'aNotion/providers/storeSelectors';
+import { currentPageSelector } from 'aNotion/providers/storeSelectors';
 import superagent from 'superagent';
 import {
    SearchFilters,
@@ -17,14 +16,14 @@ export const searchByRelevance = async (
    sort: SearchSort = SearchSort.Relevance,
    abort: AbortSignal | undefined = undefined
 ): Promise<SearchResultsType> => {
-   let userData = getAppState(cookieSelector).data as CookieData;
+   let spaceId = getAppState(currentPageSelector).currentPage?.spaceId;
    let filters = defaultFilters();
    filters.isNavigableOnly = pageTitlesOnly;
 
    try {
       let req = superagent
          .post('https://www.notion.so/api/v3/search')
-         .send(createParam(userData, query, filters, sort, limit));
+         .send(createParam(spaceId!, query, filters, sort, limit));
 
       if (abort != null) {
          addAbortSignal(req, abort);
@@ -38,7 +37,7 @@ export const searchByRelevance = async (
 };
 
 const createParam = (
-   userData: CookieData,
+   spaceId: string,
    query: string,
    filters: SearchFilters,
    sort: SearchSort,
@@ -47,7 +46,7 @@ const createParam = (
    let q = {
       query,
       type: Type.blocksInspace,
-      spaceId: userData.spaceId,
+      spaceId: spaceId,
       limit,
       filters,
       sort: SearchSort.Relevance,

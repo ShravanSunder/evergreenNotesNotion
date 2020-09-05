@@ -11,3 +11,8 @@ export interface NotionPageMarks {
    links: NotionBlockModel[];
    comments: NotionBlockModel[];
 }
+
+export interface CurrentPage {
+   record: NotionBlockModel;
+   spaceId: string;
+}
