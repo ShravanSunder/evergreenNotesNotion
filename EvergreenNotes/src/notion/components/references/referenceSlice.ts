@@ -5,6 +5,7 @@ import {
    PayloadAction,
 } from '@reduxjs/toolkit';
 import * as searchApi from 'aNotion/api/v3/searchApi';
+import * as referenceApi from 'aNotion/api/v3/referenceApi';
 import { SearchSort } from 'aNotion/api/v3/apiRequestTypes';
 import {
    ReferenceState,
@@ -22,11 +23,11 @@ const initialState: ReferenceState = {
 
 const fetchRefsForPage = createAsyncThunk<
    SearchReferences,
-   { query: string; pageId: string | undefined }
+   { query: string; pageId: string }
 >(
    'notion/reference/current',
    async ({ query, pageId }, thunkApi): Promise<SearchReferences> => {
-      let result1 = await searchApi.searchByRelevance(
+      let searchPromise = searchApi.searchByRelevance(
          query,
          false,
          50,
@@ -34,31 +35,16 @@ const fetchRefsForPage = createAsyncThunk<
          thunkApi.signal
       );
 
-      if (result1 != null && !thunkApi.signal.aborted) {
-         return createReferences(query, result1, pageId);
+      let links = await referenceApi.getBacklinks(pageId, thunkApi.signal);
+      let search = await searchPromise;
+
+      if (search != null && !thunkApi.signal.aborted) {
+         return createReferences(query, search, pageId);
       }
 
       return defaultReferences();
    }
 );
-
-// const fetchSearchResults = createAsyncThunk<
-//    SearchReferences,
-//    { query: string }
-// >('notion/reference/search', async ({ query }, thunkApi) => {
-//    let result1 = await searchApi.searchByRelevance(
-//       query,
-//       false,
-//       50,
-//       SearchSort.Relevance,
-//       thunkApi.signal
-//    );
-//    if (result1 != null && !thunkApi.signal.aborted) {
-//       return createReferences(query, result1, undefined);
-//    }
-
-//    return defaultReferences();
-// });
 
 const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
    state

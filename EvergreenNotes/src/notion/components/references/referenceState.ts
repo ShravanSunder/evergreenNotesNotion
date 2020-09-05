@@ -6,23 +6,24 @@ export type ReferenceState = {
    pageReferences: SearchReferences;
    pageReferencesStatus: thunkStatus;
    searchQueries: string[];
-   // searchResults: SearchReferences;
-   // searchResultsStatus: thunkStatus;
 };
 
 export type RefData = {
    searchRecord: SearchRecordModel;
    type: ResultTypeEnum;
 };
+export type BacklinkData = {
+   blockId: string;
+   notionBlock: NotionBlockModel;
+};
+
 export type SearchReferences = {
-   direct: RefData[];
    fullTitle: RefData[];
    related: RefData[];
 };
 
 export const defaultReferences = (): SearchReferences => {
    return {
-      direct: [],
       fullTitle: [],
       related: [],
    };

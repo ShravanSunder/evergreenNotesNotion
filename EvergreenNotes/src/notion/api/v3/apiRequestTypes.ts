@@ -47,3 +47,17 @@ export interface syncRecordType {
       };
    };
 }
+
+export interface BacklinkType {
+   block_id: string;
+   mentioned_from: {
+      type: 'property_mention';
+      block_id: string;
+      property_id: string;
+   };
+}
+
+export interface BacklinkRecordType {
+   backlinks: BacklinkType[];
+   recordMap: RecordMap;
+}

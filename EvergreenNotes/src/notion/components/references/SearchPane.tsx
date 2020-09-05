@@ -159,7 +159,6 @@ const FullReferences = ({
    let classes = useStyles();
 
    let fullTitle = searchResults.fullTitle;
-   let direct = searchResults.direct;
 
    return (
       <React.Fragment>
@@ -169,19 +168,12 @@ const FullReferences = ({
                <Typography className={classes.sections} variant="h5">
                   <b>References</b>
                </Typography>
-               {direct.map((u) => {
-                  return (
-                     <Reference key={u.searchRecord.id} refData={u}></Reference>
-                  );
-               })}
                {fullTitle.map((u) => {
                   return (
                      <Reference key={u.searchRecord.id} refData={u}></Reference>
                   );
                })}
-               {fullTitle.length === 0 && direct.length === 0 && (
-                  <NothingToFind />
-               )}
+               {fullTitle.length === 0 && <NothingToFind />}
             </React.Fragment>
          )}
       </React.Fragment>

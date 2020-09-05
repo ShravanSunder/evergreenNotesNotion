@@ -1,4 +1,8 @@
-import { SearchResultsType, SearchSort } from 'aNotion/api/v3/apiRequestTypes';
+import {
+   SearchResultsType,
+   SearchSort,
+   BacklinkRecordType,
+} from 'aNotion/api/v3/apiRequestTypes';
 import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
 import {
    SearchReferences,
@@ -21,7 +25,7 @@ export const searchNotion = async (
    );
    if (result1 != null) {
       //&& !abort.signal.aborted) {
-      return createReferences(query, result1, undefined);
+      return createReferences(query, result1, undefined, undefined);
    }
 
    return defaultReferences();
@@ -34,7 +38,6 @@ export const createReferences = (
    searchLimit: number = 20
    //signal?: AbortSignal
 ): SearchReferences => {
-   let direct: RefData[] = [];
    let fullTitle: RefData[] = [];
    let related: RefData[] = [];
 
@@ -47,7 +50,7 @@ export const createReferences = (
             s.id !== pageId
          ) {
             let data = new SearchRecord(searchResults.recordMap, s);
-            filterResults(data, query, direct, fullTitle, related);
+            filterSearchResults(data, query, fullTitle, related);
          }
       } catch (err) {
          console.log(s);
@@ -58,40 +61,35 @@ export const createReferences = (
    related = related
       .sort((x, y) => y.searchRecord.score - x.searchRecord.score)
       .slice(0, searchLimit);
-   direct = direct.sort((x, y) => y.searchRecord.score - x.searchRecord.score);
+   fullTitle = fullTitle.sort(
+      (x, y) => y.searchRecord.score - x.searchRecord.score
+   );
 
    return {
-      direct: direct,
       related: related,
       fullTitle: fullTitle,
    };
 };
 
-const filterResults = (
+const filterSearchResults = (
    data: SearchRecord,
    query: string,
-   directResults: RefData[],
    fullTitle: RefData[],
    relatedResults: RefData[]
 ) => {
    let full = new RegExp(query, 'i');
-   let backlink = new RegExp('[[' + query + ']]', 'i');
-   if (backlink.test(data.text!)) {
-      pushDirectResults(directResults, data);
-   } else if (full.test(data.text!)) {
+   if (full.test(data.text!)) {
       pushFullTextResults(fullTitle, data);
    } else {
-      pushRelatedResults(directResults, data, fullTitle, relatedResults);
+      pushRelatedResults(data, fullTitle, relatedResults);
    }
 };
 const pushRelatedResults = (
-   directResults: RefData[],
    data: SearchRecord,
    fullTitle: RefData[],
    relatedResults: RefData[]
 ) => {
    if (
-      !directResults.find((x) => x.searchRecord.id === data.id) &&
       !fullTitle.find((x) => x.searchRecord.id === data.id) &&
       !relatedResults.find((x) => x.searchRecord.id === data.id)
    ) {
@@ -107,15 +105,6 @@ const pushFullTextResults = (fullTitle: RefData[], data: SearchRecord) => {
       fullTitle.push({
          searchRecord: data.toSerializable(),
          type: ResultTypeEnum.FullTitleMatch,
-      });
-   }
-};
-
-const pushDirectResults = (directResults: RefData[], data: SearchRecord) => {
-   if (!directResults.find((x) => x.searchRecord.id === data.id)) {
-      directResults.push({
-         searchRecord: data.toSerializable(),
-         type: ResultTypeEnum.DirectMatch,
       });
    }
 };
