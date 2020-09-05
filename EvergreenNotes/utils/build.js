@@ -2,16 +2,12 @@
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
 let path = require('path');
+console.log(__dirname);
 
 var webpack = require('webpack'),
   config = require('../webpack.config');
 
 delete config.chromeExtensionBoilerplate;
-
-config.output = {
-  path: path.resolve(__dirname, 'release'),
-  filename: '[name].bundle.js',
-};
 
 config.plugins.push(new webpack.SourceMapDevToolPlugin({
   noSources: true,

@@ -41,7 +41,7 @@ if (fileSystem.existsSync(secretsPath)) {
 }
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
-console.log(isDevelopment);
+console.log('isDevelopment: ' + isDevelopment);
 
 var options = {
    mode: isDevelopment ? 'development' : 'production',
@@ -67,32 +67,11 @@ var options = {
       notHotReload: ['contentScript'],
    },
    output: {
-      path: path.resolve(__dirname, 'build'),
+      path: isDevelopment ? path.resolve(__dirname, 'build') : path.resolve(__dirname, 'release'),
       filename: '[name].bundle.js',
    },
    module: {
-      rules: [
-         // {
-         //    test: /latin-[0-9]*\.css$/,
-         //    use: [{
-         //       loader: 'css-loader',
-         //       options: {
-         //          modules: true,
-         //       },
-         //    }, ],
-         // },
-         // {
-         //    test: /roboto-latin-[0-9]*-[a-z]*\.woff(2)?$/,
-         //    use: [{
-         //       loader: 'url-loader',
-         //       options: {
-         //          limit: 10000,
-         //          name: './font/[hash].[ext]',
-         //          mimetype: 'application/font-woff',
-         //       },
-         //    }, ],
-         // },
-         {
+      rules: [{
             test: /\.css$/,
             use: ['style-loader', 'css-loader'],
             exclude: /node_modules/,
@@ -161,7 +140,7 @@ var options = {
       new CopyWebpackPlugin(
          [{
             from: 'src/manifest.json',
-            to: path.join(__dirname, 'build'),
+            to: isDevelopment ? path.join(__dirname, 'build') : path.join(__dirname, 'release'),
             force: true,
             transform: function (content, path) {
                // generates the manifest file using the package.json informations
