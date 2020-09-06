@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export enum LayoutTabs {
-   References = 'References Pages',
+   References = 'Page References',
    Search = 'Search',
    PageMarkups = 'Page Markups',
    Events = 'Events',

@@ -10,23 +10,27 @@ import { SearchSort } from 'aNotion/api/v3/apiRequestTypes';
 import {
    ReferenceState,
    SearchReferences,
-   defaultReferences,
+   defaultPageReferences,
+   PageReferences,
 } from './referenceState';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { createReferences } from 'aNotion/services/referenceService';
+import {
+   processSearchResults,
+   processBacklinks,
+} from 'aNotion/services/referenceService';
 
 const initialState: ReferenceState = {
-   pageReferences: defaultReferences(),
+   pageReferences: defaultPageReferences(),
    pageReferencesStatus: thunkStatus.idle,
    searchQueries: [],
 };
 
 const fetchRefsForPage = createAsyncThunk<
-   SearchReferences,
+   PageReferences,
    { query: string; pageId: string }
 >(
    'notion/reference/current',
-   async ({ query, pageId }, thunkApi): Promise<SearchReferences> => {
+   async ({ query, pageId }, thunkApi): Promise<PageReferences> => {
       let searchPromise = searchApi.searchByRelevance(
          query,
          false,
@@ -38,18 +42,28 @@ const fetchRefsForPage = createAsyncThunk<
       let links = await referenceApi.getBacklinks(pageId, thunkApi.signal);
       let search = await searchPromise;
 
-      if (search != null && !thunkApi.signal.aborted) {
-         return createReferences(query, search, pageId);
+      if (links != null && !thunkApi.signal.aborted && search != null) {
+         const b = processBacklinks(links);
+         const s = processSearchResults(
+            query,
+            search,
+            pageId,
+            b.map((b) => b.backlinkBlock.blockId)
+         );
+         return {
+            backlinks: b,
+            references: s,
+         };
       }
 
-      return defaultReferences();
+      return defaultPageReferences();
    }
 );
 
 const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
    state
 ) => {
-   state.pageReferences = defaultReferences();
+   state.pageReferences = defaultPageReferences();
    state.pageReferencesStatus = thunkStatus.pending;
 };
 
@@ -74,34 +88,19 @@ const referenceSlice = createSlice({
    extraReducers: {
       [fetchRefsForPage.fulfilled.toString()]: (
          state,
-         action: PayloadAction<SearchReferences>
+         action: PayloadAction<PageReferences>
       ) => {
          state.pageReferences = action.payload;
          state.pageReferencesStatus = thunkStatus.fulfilled;
       },
       [fetchRefsForPage.pending.toString()]: (state) => {
          state.pageReferencesStatus = thunkStatus.pending;
-         state.pageReferences = defaultReferences();
+         state.pageReferences = defaultPageReferences();
       },
       [fetchRefsForPage.rejected.toString()]: (state) => {
          state.pageReferencesStatus = thunkStatus.rejected;
-         state.pageReferences = defaultReferences();
+         state.pageReferences = defaultPageReferences();
       },
-      // [fetchSearchResults.fulfilled.toString()]: (
-      //    state,
-      //    action: PayloadAction<SearchReferences>
-      // ) => {
-      //    state.searchResults = action.payload;
-      //    state.searchResultsStatus = thunkStatus.fulfilled;
-      // },
-      // [fetchSearchResults.pending.toString()]: (state) => {
-      //    state.searchResultsStatus = thunkStatus.pending;
-      //    state.searchResults = defaultReferences();
-      // },
-      // [fetchSearchResults.rejected.toString()]: (state) => {
-      //    state.searchResultsStatus = thunkStatus.rejected;
-      //    state.searchResults = defaultReferences();
-      // },
    },
 });
 

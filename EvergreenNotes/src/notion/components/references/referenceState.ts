@@ -3,34 +3,36 @@ import { SearchRecordModel } from 'aNotion/models/SearchRecord';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 export type ReferenceState = {
-   pageReferences: SearchReferences;
+   pageReferences: PageReferences;
    pageReferencesStatus: thunkStatus;
    searchQueries: string[];
 };
 
-export type RefData = {
-   searchRecord: SearchRecordModel;
-   type: ResultTypeEnum;
+export type PageReferences = {
+   backlinks: BacklinkRecordModel[];
+   references: SearchReferences;
 };
-export type BacklinkData = {
-   blockId: string;
-   notionBlock: NotionBlockModel;
+
+export type BacklinkRecordModel = {
+   backlinkBlock: NotionBlockModel;
+   path: NotionBlockModel[];
 };
 
 export type SearchReferences = {
-   fullTitle: RefData[];
-   related: RefData[];
+   fullTitle: SearchRecordModel[];
+   related: SearchRecordModel[];
 };
 
-export const defaultReferences = (): SearchReferences => {
+export const defaultPageReferences = (): PageReferences => {
+   return {
+      backlinks: [],
+      references: defaultSearchReferences(),
+   };
+};
+
+export const defaultSearchReferences = (): SearchReferences => {
    return {
       fullTitle: [],
       related: [],
    };
 };
-
-export enum ResultTypeEnum {
-   FullTitleMatch = 0,
-   DirectMatch = 1,
-   RelatedSearch = 2,
-}

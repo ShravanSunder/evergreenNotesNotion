@@ -13,6 +13,7 @@ import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
 import { ReferenceState } from './referenceState';
 import { LoadingTab, NothingToFind } from '../common/Loading';
+import { Backlink } from './Backlink';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -47,8 +48,9 @@ export const ReferencesPane = () => {
 
    return (
       <React.Fragment>
-         <FullReferences references={references}></FullReferences>
-         <RelatedReferences references={references}></RelatedReferences>
+         <Backlinks refs={references}></Backlinks>
+         <FullTitle refs={references}></FullTitle>
+         <Related refs={references}></Related>
          {references.pageReferencesStatus === thunkStatus.rejected && (
             <div>error!</div>
          )}
@@ -57,25 +59,52 @@ export const ReferencesPane = () => {
 };
 export default ReferencesPane;
 
-const FullReferences = ({ references }: { references: ReferenceState }) => {
+const Backlinks = ({ refs }: { refs: ReferenceState }) => {
    let classes = useStyles();
 
-   let fullTitle = references.pageReferences.fullTitle;
+   let backlinks = refs.pageReferences.backlinks;
 
    return (
       <React.Fragment>
-         {references.pageReferencesStatus === thunkStatus.pending && (
+         {refs.pageReferencesStatus === thunkStatus.pending && (
             <LoadingTab></LoadingTab>
          )}
-         {references.pageReferencesStatus === thunkStatus.fulfilled && (
+         {refs.pageReferencesStatus === thunkStatus.fulfilled && (
+            <React.Fragment>
+               <Typography className={classes.sections} variant="h5">
+                  <b>Backlinks</b>
+               </Typography>
+               {backlinks.map((u) => {
+                  return (
+                     <Backlink
+                        key={u.backlinkBlock.blockId}
+                        backlink={u}></Backlink>
+                  );
+               })}
+               {backlinks.length === 0 && <NothingToFind />}
+            </React.Fragment>
+         )}
+      </React.Fragment>
+   );
+};
+
+const FullTitle = ({ refs }: { refs: ReferenceState }) => {
+   let classes = useStyles();
+
+   let fullTitle = refs.pageReferences.references.fullTitle;
+
+   return (
+      <React.Fragment>
+         {refs.pageReferencesStatus === thunkStatus.pending && (
+            <LoadingTab></LoadingTab>
+         )}
+         {refs.pageReferencesStatus === thunkStatus.fulfilled && (
             <React.Fragment>
                <Typography className={classes.sections} variant="h5">
                   <b>References</b>
                </Typography>
                {fullTitle.map((u) => {
-                  return (
-                     <Reference key={u.searchRecord.id} refData={u}></Reference>
-                  );
+                  return <Reference key={u.id} refData={u}></Reference>;
                })}
                {fullTitle.length === 0 && <NothingToFind />}
             </React.Fragment>
@@ -84,25 +113,23 @@ const FullReferences = ({ references }: { references: ReferenceState }) => {
    );
 };
 
-const RelatedReferences = ({ references }: { references: ReferenceState }) => {
+const Related = ({ refs }: { refs: ReferenceState }) => {
    let classes = useStyles();
 
-   let data = references.pageReferences.related;
+   let data = refs.pageReferences.references.related;
 
    return (
       <React.Fragment>
-         {references.pageReferencesStatus === thunkStatus.pending && (
+         {refs.pageReferencesStatus === thunkStatus.pending && (
             <LoadingTab></LoadingTab>
          )}
-         {references.pageReferencesStatus === thunkStatus.fulfilled && (
+         {refs.pageReferencesStatus === thunkStatus.fulfilled && (
             <React.Fragment>
                <Typography className={classes.sections} variant="h5">
                   <b>Related Searches</b>
                </Typography>
                {data.map((u) => {
-                  return (
-                     <Reference key={u.searchRecord.id} refData={u}></Reference>
-                  );
+                  return <Reference key={u.id} refData={u}></Reference>;
                })}
                {data.length === 0 && <NothingToFind />}
             </React.Fragment>

@@ -1,16 +1,25 @@
 import React, { SyntheticEvent } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Button, Grid, IconButton } from '@material-ui/core';
-import { RefData } from './referenceState';
 import { LinkOutlined } from '@material-ui/icons';
 import { navigationSelector } from 'aNotion/providers/storeSelectors';
 import { Launch, FileCopyOutlined, WidgetsTwoTone } from '@material-ui/icons';
 import { copyToClipboard } from 'aCommon/extensionHelpers';
 import { LightTooltip } from '../common/Styles';
 import { useSnackbar } from 'notistack';
-import { useReferenceStyles } from './Reference';
+import { useReferenceStyles } from './AccordionStyles';
+import { SearchRecordModel } from 'aNotion/models/SearchRecord';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
-export const ReferenceActions = ({ refData }: { refData: RefData }) => {
+export const ReferenceActions = ({
+   id,
+   text,
+   path,
+}: {
+   id: string;
+   text: string;
+   path: NotionBlockModel[];
+}) => {
    const navigation = useSelector(navigationSelector, shallowEqual);
    const { enqueueSnackbar } = useSnackbar();
 
@@ -19,8 +28,7 @@ export const ReferenceActions = ({ refData }: { refData: RefData }) => {
    const handleEmbedBlock = (e: SyntheticEvent) => {
       e.stopPropagation();
       if (navigation.notionSite != null) {
-         let url =
-            navigation.notionSite + refData.searchRecord.id.replace(/-/g, '');
+         let url = navigation.notionSite + id.replace(/-/g, '');
          let success = copyToClipboard(url);
          console.log('copied to clipboard');
          if (success) {
@@ -31,13 +39,13 @@ export const ReferenceActions = ({ refData }: { refData: RefData }) => {
    };
    const handleCopyLink = (e: SyntheticEvent) => {
       e.stopPropagation();
-      let page = refData.searchRecord.path.slice(-1).pop();
+      let page = path.slice(-1).pop();
       if (navigation.notionSite != null && page?.blockId != null) {
          let url =
             navigation.notionSite +
             page.blockId.replace(/-/g, '') +
             '#' +
-            refData.searchRecord.id.replace(/-/g, '');
+            id.replace(/-/g, '');
          let success = copyToClipboard(url);
          if (success) {
             enqueueSnackbar('Copied link to clipboard', { variant: 'info' });
@@ -47,7 +55,6 @@ export const ReferenceActions = ({ refData }: { refData: RefData }) => {
 
    const handleCopyText = (e: SyntheticEvent) => {
       e.stopPropagation();
-      let text = refData.searchRecord.text;
       if (navigation.notionSite != null && text != null) {
          let success = copyToClipboard(text);
          if (success) {
@@ -60,8 +67,7 @@ export const ReferenceActions = ({ refData }: { refData: RefData }) => {
       //e.stopPropagation();
       e.preventDefault();
       if (navigation.notionSite != null) {
-         let url =
-            navigation.notionSite + refData.searchRecord.id.replace('-', '');
+         let url = navigation.notionSite + id.replace('-', '');
          window.open(url);
       }
       return false;

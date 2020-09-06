@@ -6,11 +6,14 @@ import {
 import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
 import {
    SearchReferences,
-   RefData,
-   ResultTypeEnum,
-   defaultReferences,
+   defaultSearchReferences,
+   BacklinkRecordModel,
 } from 'aNotion/components/references/referenceState';
 import * as searchApi from 'aNotion/api/v3/searchApi';
+import {
+   NotionBlockRecord,
+   NotionBlockModel,
+} from 'aNotion/models/NotionBlock';
 
 export const searchNotion = async (
    query: string,
@@ -23,23 +26,22 @@ export const searchNotion = async (
       SearchSort.Relevance,
       abort?.signal
    );
-   if (result1 != null) {
-      //&& !abort.signal.aborted) {
-      return createReferences(query, result1, undefined, undefined);
+   if (result1 != null && abort?.signal.aborted !== true) {
+      return processSearchResults(query, result1, undefined, undefined);
    }
 
-   return defaultReferences();
+   return defaultSearchReferences();
 };
 
-export const createReferences = (
+export const processSearchResults = (
    query: string,
    searchResults: SearchResultsType,
    pageId: string | undefined,
+   excludedBlockIds: string[] = [],
    searchLimit: number = 20
-   //signal?: AbortSignal
 ): SearchReferences => {
-   let fullTitle: RefData[] = [];
-   let related: RefData[] = [];
+   let fullTitle: SearchRecordModel[] = [];
+   let related: SearchRecordModel[] = [];
 
    for (let s of searchResults.results) {
       try {
@@ -47,7 +49,8 @@ export const createReferences = (
             s.score > 10 &&
             s.highlight != null &&
             s.highlight.text != null &&
-            s.id !== pageId
+            s.id !== pageId &&
+            !excludedBlockIds.some((e) => e === s.id)
          ) {
             let data = new SearchRecord(searchResults.recordMap, s);
             filterSearchResults(data, query, fullTitle, related);
@@ -58,12 +61,8 @@ export const createReferences = (
       }
    }
 
-   related = related
-      .sort((x, y) => y.searchRecord.score - x.searchRecord.score)
-      .slice(0, searchLimit);
-   fullTitle = fullTitle.sort(
-      (x, y) => y.searchRecord.score - x.searchRecord.score
-   );
+   related = related.sort((x, y) => y.score - x.score).slice(0, searchLimit);
+   fullTitle = fullTitle.sort((x, y) => y.score - x.score);
 
    return {
       related: related,
@@ -74,8 +73,8 @@ export const createReferences = (
 const filterSearchResults = (
    data: SearchRecord,
    query: string,
-   fullTitle: RefData[],
-   relatedResults: RefData[]
+   fullTitle: SearchRecordModel[],
+   relatedResults: SearchRecordModel[]
 ) => {
    let full = new RegExp(query, 'i');
    if (full.test(data.text!)) {
@@ -86,25 +85,42 @@ const filterSearchResults = (
 };
 const pushRelatedResults = (
    data: SearchRecord,
-   fullTitle: RefData[],
-   relatedResults: RefData[]
+   fullTitle: SearchRecordModel[],
+   relatedResults: SearchRecordModel[]
 ) => {
    if (
-      !fullTitle.find((x) => x.searchRecord.id === data.id) &&
-      !relatedResults.find((x) => x.searchRecord.id === data.id)
+      !fullTitle.find((x) => x.id === data.id) &&
+      !relatedResults.find((x) => x.id === data.id)
    ) {
-      relatedResults.push({
-         searchRecord: data.toSerializable(),
-         type: ResultTypeEnum.RelatedSearch,
-      });
+      relatedResults.push(data.toSerializable());
    }
 };
 
-const pushFullTextResults = (fullTitle: RefData[], data: SearchRecord) => {
-   if (!fullTitle.find((x) => x.searchRecord.id === data.id)) {
-      fullTitle.push({
-         searchRecord: data.toSerializable(),
-         type: ResultTypeEnum.FullTitleMatch,
-      });
+const pushFullTextResults = (
+   fullTitle: SearchRecordModel[],
+   data: SearchRecord
+) => {
+   if (!fullTitle.find((x) => x.id === data.id)) {
+      fullTitle.push(data.toSerializable());
    }
+};
+
+export const processBacklinks = (
+   backlinksRecords: BacklinkRecordType
+): BacklinkRecordModel[] => {
+   let backlinkData: BacklinkRecordModel[] = [];
+
+   backlinksRecords.backlinks.forEach((b) => {
+      const block = new NotionBlockRecord(
+         backlinksRecords.recordMap,
+         b.mentioned_from.block_id
+      );
+
+      backlinkData.push({
+         backlinkBlock: block.toSerializable(),
+         path: block.getParentsNodes(),
+      });
+   });
+
+   return backlinkData;
 };

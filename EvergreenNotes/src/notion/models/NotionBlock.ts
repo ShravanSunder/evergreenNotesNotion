@@ -149,14 +149,14 @@ export class NotionBlockRecord implements NotionBlockModel {
    getParentsNodes = (refresh: boolean = false): NotionBlockModel[] => {
       if (!refresh || this.parentNodes == null) {
          let parents: NotionBlockModel[] = [];
-         this.traversUp(this.getParentId(), this.blockId, parents);
+         this.traverseUp(this.getParentId(), this.blockId, parents);
          this.parentNodes = parents;
          return parents;
       }
       return this.parentNodes;
    };
 
-   protected traversUp(
+   protected traverseUp(
       parentId: string | undefined,
       id: string,
       parents: NotionBlockModel[]
@@ -167,10 +167,10 @@ export class NotionBlockRecord implements NotionBlockModel {
             if (pBlock.block == null) {
                //if the block is empty, just skip saving it to array
                //its probably a collection and repeated as we traverse
-               this.traversUp(pBlock.getParentId(), pBlock.blockId, parents);
+               this.traverseUp(pBlock.getParentId(), pBlock.blockId, parents);
             } else if (pBlock.type !== BlockTypes.Unknown) {
                parents.splice(0, 0, pBlock);
-               this.traversUp(pBlock.getParentId(), pBlock.blockId, parents);
+               this.traverseUp(pBlock.getParentId(), pBlock.blockId, parents);
             }
          }
       } catch (err) {

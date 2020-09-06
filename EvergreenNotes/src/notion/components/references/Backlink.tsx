@@ -1,6 +1,7 @@
 import React, { MouseEvent, useState } from 'react';
-import { Typography, Grid } from '@material-ui/core';
+import { Breadcrumbs, Typography, Grid } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { Content } from '../contents/Content';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
@@ -13,10 +14,10 @@ import {
    AccordionActions,
    AccordionDetails,
 } from './AccordionStyles';
-import { SearchRecordModel } from 'aNotion/models/SearchRecord';
+import { BacklinkRecordModel } from './referenceState';
 import { Path } from './Path';
 
-export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
+export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
    let classes = useReferenceStyles();
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -25,33 +26,33 @@ export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
                <Grid container spacing={1}>
                   <Grid item xs={12}>
                      <Typography variant="body1" className={classes.typography}>
-                        {parse(refData.textByContext)}
+                        {getTitle(backlink.backlinkBlock.simpleTitle)}
                      </Typography>
                   </Grid>
                   <Grid item xs>
-                     <Path path={refData.path}></Path>
+                     <Path path={backlink.path}></Path>
                   </Grid>
                </Grid>
             </AccordionSummary>
             <AccordionActions>
                <ReferenceActions
-                  id={refData.id}
-                  path={refData.path}
-                  text={refData.text}></ReferenceActions>
+                  id={backlink.backlinkBlock.blockId}
+                  path={backlink.path}
+                  text={backlink.backlinkBlock.simpleTitle}></ReferenceActions>
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
                   <Grid item xs={12} className={classes.reference}>
                      <BlockUi
-                        block={refData.notionBlock}
+                        block={backlink.backlinkBlock}
                         index={undefined}></BlockUi>
                   </Grid>
                   <Grid item xs={12}>
                      <div style={{ paddingLeft: 12 }}>
                         <Content
-                           blockId={refData.id}
+                           blockId={backlink.backlinkBlock.blockId}
                            contentIds={
-                              refData.notionBlock.contentIds
+                              backlink.backlinkBlock.contentIds
                            }></Content>
                      </div>
                   </Grid>
@@ -62,23 +63,7 @@ export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
    );
 };
 
-const parse = (textByContext: string[]) => {
-   return (
-      <React.Fragment>
-         {textByContext.map((f, i) => {
-            if (i % 2 === 1) {
-               return <strong key={i}>{f}</strong>;
-            } else {
-               return (
-                  <React.Fragment key={i}>{getTitle(f, 100)}</React.Fragment>
-               );
-            }
-         })}
-      </React.Fragment>
-   );
-};
-
-export const getTitle = (title: string, size: number = 30) => {
+const getTitle = (title: string, size: number = 30) => {
    if (title.length > size) return title.substring(0, size) + '... ';
    else return title;
 };

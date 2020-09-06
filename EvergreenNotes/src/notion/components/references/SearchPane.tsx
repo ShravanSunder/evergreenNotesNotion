@@ -20,7 +20,7 @@ import { referenceActions } from './referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
-import { SearchReferences, defaultReferences } from './referenceState';
+import { SearchReferences, defaultSearchReferences } from './referenceState';
 import { LoadingTab, NothingToFind } from '../common/Loading';
 import { useApi, UseApiPromise } from '../../hooks/useApiPromise';
 import { searchNotion } from 'aNotion/services/referenceService';
@@ -79,7 +79,7 @@ export const SearchPane = () => {
       }
    }, [status, searchText, dispatch]);
 
-   result = result ?? defaultReferences();
+   result = result ?? defaultSearchReferences();
 
    return (
       <React.Fragment>
@@ -169,9 +169,7 @@ const FullReferences = ({
                   <b>References</b>
                </Typography>
                {fullTitle.map((u) => {
-                  return (
-                     <Reference key={u.searchRecord.id} refData={u}></Reference>
-                  );
+                  return <Reference key={u.id} refData={u}></Reference>;
                })}
                {fullTitle.length === 0 && <NothingToFind />}
             </React.Fragment>
@@ -200,9 +198,7 @@ const RelatedReferences = ({
                   <b>Related Searches</b>
                </Typography>
                {data.map((u) => {
-                  return (
-                     <Reference key={u.searchRecord.id} refData={u}></Reference>
-                  );
+                  return <Reference key={u.id} refData={u}></Reference>;
                })}
                {data.length === 0 && <NothingToFind />}
             </React.Fragment>
