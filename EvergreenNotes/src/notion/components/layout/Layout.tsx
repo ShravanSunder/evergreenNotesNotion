@@ -111,14 +111,14 @@ const MenuBar = ({
                         <BookTwoTone></BookTwoTone>
                      </ToggleButton>
                      <ToggleButton
-                        value={LayoutTabs.Search}
-                        className={classes.toggleButton}>
-                        <FindInPageTwoTone></FindInPageTwoTone>
-                     </ToggleButton>
-                     <ToggleButton
                         value={LayoutTabs.PageMarkups}
                         className={classes.toggleButton}>
                         <SubjectTwoTone></SubjectTwoTone>
+                     </ToggleButton>
+                     <ToggleButton
+                        value={LayoutTabs.Search}
+                        className={classes.toggleButton}>
+                        <FindInPageTwoTone></FindInPageTwoTone>
                      </ToggleButton>
                      {/* <ToggleButton value="todo" className={classes.toggleButton}>
                      <AssignmentTurnedInTwoTone></AssignmentTurnedInTwoTone>
@@ -162,7 +162,7 @@ export const Layout = () => {
       );
    }, [dispatch]);
 
-   const [tab, setTab] = useState(LayoutTabs.PageMarkups);
+   const [tab, setTab] = useState(LayoutTabs.References);
 
    useEffect(() => {
       setTab(LayoutTabs.PageMarkups);

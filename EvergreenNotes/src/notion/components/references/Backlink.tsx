@@ -63,7 +63,7 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
    );
 };
 
-const getTitle = (title: string, size: number = 30) => {
+const getTitle = (title: string, size: number = 100) => {
    if (title.length > size) return title.substring(0, size) + '... ';
    else return title;
 };

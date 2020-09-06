@@ -67,7 +67,7 @@ export const ReferenceActions = ({
       //e.stopPropagation();
       e.preventDefault();
       if (navigation.notionSite != null) {
-         let url = navigation.notionSite + id.replace('-', '');
+         let url = navigation.notionSite + id.replace(/-/g, '');
          window.open(url);
       }
       return false;
