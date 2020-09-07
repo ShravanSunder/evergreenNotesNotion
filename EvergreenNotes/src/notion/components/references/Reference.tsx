@@ -22,14 +22,14 @@ export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Accordion TransitionProps={{ unmountOnExit: true }}>
             <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-               <Grid container spacing={1}>
+               <Grid container spacing={2}>
+                  <Grid item xs>
+                     <Path path={refData.path}></Path>
+                  </Grid>
                   <Grid item xs={12}>
                      <Typography variant="body1" className={classes.typography}>
                         {parse(refData.textByContext)}
                      </Typography>
-                  </Grid>
-                  <Grid item xs>
-                     <Path path={refData.path}></Path>
                   </Grid>
                </Grid>
             </AccordionSummary>
@@ -70,7 +70,7 @@ const parse = (textByContext: string[]) => {
                return <strong key={i}>{f}</strong>;
             } else {
                return (
-                  <React.Fragment key={i}>{getTitle(f, 100)}</React.Fragment>
+                  <React.Fragment key={i}>{getTitle(f, 120)}</React.Fragment>
                );
             }
          })}
@@ -78,7 +78,7 @@ const parse = (textByContext: string[]) => {
    );
 };
 
-export const getTitle = (title: string, size: number = 30) => {
+export const getTitle = (title: string, size: number = 100) => {
    if (title.length > size) return title.substring(0, size) + '... ';
    else return title;
 };

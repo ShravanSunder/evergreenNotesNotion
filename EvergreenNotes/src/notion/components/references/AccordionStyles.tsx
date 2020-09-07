@@ -9,7 +9,7 @@ import { grey } from '@material-ui/core/colors';
 
 export const Accordion = withStyles({
    root: {
-      border: '1px solid rgba(0, 0, 0, .125)',
+      border: '1px solid rgba(0, 0, 0, .33)',
       boxShadow: 'none',
 
       marginTop: '12px',
@@ -19,8 +19,8 @@ export const Accordion = withStyles({
       },
       '&$expanded': {
          margin: 'auto',
-         marginTop: '24px',
-         marginBottom: '24px',
+         marginTop: '36px',
+         marginBottom: '36px',
       },
    },
    expanded: {},

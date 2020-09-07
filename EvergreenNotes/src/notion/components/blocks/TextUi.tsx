@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Typography, Link, Icon } from '@material-ui/core';
+import { Typography, Link, Icon, SvgIcon } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { grey, red } from '@material-ui/core/colors';
 import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
@@ -17,25 +17,70 @@ import { getPageUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
 import { useBlockStyles } from './BlockUi';
 import { LinkOutlined } from '@material-ui/icons';
+import { Variant } from '@material-ui/core/styles/createTypography';
 
-export const TextUi = ({ block }: { block: NotionBlockModel }) => {
+export const TextUi = ({
+   block,
+   variant,
+   interactive,
+}: {
+   block: NotionBlockModel;
+   variant?: Variant | undefined;
+   interactive?: boolean;
+}) => {
+   const bb = block.block as BaseTextBlock;
+   const title = bb.properties?.title as SemanticString[];
+
+   //using interactive as a switch to truncate text size
+   let textCount = 0;
+   const maxLen = 150;
+
    let classes = useBlockStyles();
-
-   let bb = block.block as BaseTextBlock;
-   let title = bb.properties?.title;
 
    if (title != null) {
       return (
          <React.Fragment>
             {title.map((segment, i) => {
-               return <TextSegment key={i} segment={segment}></TextSegment>;
+               if (
+                  interactive === false &&
+                  textCount < maxLen &&
+                  textCount + segment[0].length > maxLen
+               ) {
+                  return (
+                     <Typography
+                        display="inline"
+                        className={classes.typography}
+                        variant={variant}>
+                        {'...'}
+                     </Typography>
+                  );
+               }
+               textCount += segment[0].length;
+               if (interactive === false && textCount > maxLen) {
+                  return null;
+               }
+               return (
+                  <TextSegment
+                     key={i}
+                     segment={segment}
+                     variant={variant ?? 'body1'}
+                     interactive={interactive ?? true}></TextSegment>
+               );
             })}
          </React.Fragment>
       );
    }
    return null;
 };
-const TextSegment = ({ segment }: { segment: SemanticString }) => {
+const TextSegment = ({
+   segment,
+   variant,
+   interactive,
+}: {
+   segment: SemanticString;
+   variant: Variant;
+   interactive: boolean;
+}) => {
    let classes = useBlockStyles();
    let text = segment[0];
    let format = segment[1] ?? [];
@@ -70,8 +115,8 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
             <Typography
                display="inline"
                className={classes.typography}
-               variant={'body1'}
-               style={textStyle}>
+               variant={variant}
+               style={{ ...textStyle }}>
                {text}
             </Typography>
          )}
@@ -79,29 +124,39 @@ const TextSegment = ({ segment }: { segment: SemanticString }) => {
             <Link
                display="inline"
                className={classes.typography}
-               variant={'body1'}
-               href={link}
+               variant={variant}
+               href={interactive ? link : undefined}
                target="_blank"
                style={{ ...textStyle }}>
-               <Icon fontSize="small" className={classes.inlineIcon}>
+               {' '}
+               <SvgIcon
+                  fontSize="inherit"
+                  className={classes.inlineIcon}
+                  viewBox="0 0 48 48">
                   <OpenInNewOutlinedIcon />
-               </Icon>
+               </SvgIcon>
                {text}
             </Link>
          )}
          {link != null && textType === StringFormatting.Link && (
-            <Link
-               display="inline"
-               className={classes.link}
-               variant={'body1'}
-               href={link}
-               target="_blank"
-               style={{ ...textStyle, textDecoration: 'underline' }}>
-               <Icon fontSize="small" className={classes.inlineIcon}>
-                  <LinkOutlined />
-               </Icon>
-               {text}
-            </Link>
+            <>
+               <Typography
+                  display="inline"
+                  className={classes.link}
+                  variant={variant}
+                  style={{ ...textStyle }}>
+                  {' '}
+               </Typography>
+               <Link
+                  display="inline"
+                  className={classes.link}
+                  variant={variant}
+                  href={interactive ? link : undefined}
+                  target="_blank"
+                  style={{ ...textStyle, textDecoration: 'underline' }}>
+                  {text}
+               </Link>
+            </>
          )}
       </React.Fragment>
    );

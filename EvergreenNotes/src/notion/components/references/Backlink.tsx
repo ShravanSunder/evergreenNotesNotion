@@ -16,6 +16,7 @@ import {
 } from './AccordionStyles';
 import { BacklinkRecordModel } from './referenceState';
 import { Path } from './Path';
+import { TextUi } from '../blocks/TextUi';
 
 export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
    let classes = useReferenceStyles();
@@ -23,14 +24,14 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Accordion TransitionProps={{ unmountOnExit: true }}>
             <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-               <Grid container spacing={1}>
-                  <Grid item xs={12}>
-                     <Typography variant="body1" className={classes.typography}>
-                        {getTitle(backlink.backlinkBlock.simpleTitle)}
-                     </Typography>
-                  </Grid>
+               <Grid container spacing={1} alignItems="flex-start">
                   <Grid item xs>
                      <Path path={backlink.path}></Path>
+                  </Grid>
+                  <Grid item xs={12}>
+                     <TextUi
+                        block={backlink.backlinkBlock}
+                        interactive={false}></TextUi>
                   </Grid>
                </Grid>
             </AccordionSummary>

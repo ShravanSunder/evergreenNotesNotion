@@ -1,11 +1,5 @@
 //import { hot } from 'react-hot-loader/root';
-import React, {
-   useEffect,
-   useCallback,
-   useState,
-   SyntheticEvent,
-   Suspense,
-} from 'react';
+import React, { useEffect, useCallback, useState, Suspense } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
@@ -22,15 +16,12 @@ import {
    FindInPageTwoTone,
    BookTwoTone,
    SubjectTwoTone,
-   AssignmentTurnedInTwoTone,
-   EventTwoTone,
 } from '@material-ui/icons/';
 import { lightGreen, grey } from '@material-ui/core/colors';
 import {
    makeStyles,
    Theme,
    createStyles,
-   Box,
    Grid,
    Typography,
 } from '@material-ui/core';

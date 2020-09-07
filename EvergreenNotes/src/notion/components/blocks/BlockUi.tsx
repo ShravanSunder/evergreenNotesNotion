@@ -41,15 +41,16 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
       },
       typography: {
          overflowWrap: 'break-word',
+         wordBreak: 'break-word',
+         position: 'relative',
       },
       inlineIcon: {
          position: 'relative',
-         top: theme.spacing(),
-         width: theme.typography.caption.fontSize,
-         height: theme.typography.caption.fontSize,
+         top: 3,
       },
       link: {
-         overflowWrap: 'break-word',
+         overflowWrap: 'anywhere',
+         wordBreak: 'break-all',
          color: grey[600],
       },
    })
@@ -70,12 +71,7 @@ export const BlockUi = ({
       <div
          className={classes.block}
          style={{ backgroundColor: backgroundColor }}>
-         {variant != null && block.type !== BlockTypes.Text && (
-            <Typography className={classes.typography} variant={variant}>
-               {block.simpleTitle}
-            </Typography>
-         )}
-         {block.type === BlockTypes.Text && <TextUi block={block}></TextUi>}
+         {variant != null && <TextUi variant={variant} block={block}></TextUi>}
          {block.type === BlockTypes.Divider && <Divider></Divider>}
          {block.type === BlockTypes.Callout && (
             <CalloutUi block={block}></CalloutUi>
