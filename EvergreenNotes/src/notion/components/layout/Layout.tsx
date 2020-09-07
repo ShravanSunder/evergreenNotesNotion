@@ -120,22 +120,20 @@ const MenuBar = ({
                   </ToggleButtonGroup>
                </Grid>
             </Grid>
-         </div>
-         <Grid
-            container
-            spacing={1}
-            justify="center"
-            style={{
-               backgroundColor: grey[50],
-            }}>
-            <Grid item>
-               <Typography
-                  variant="h4"
-                  style={{ marginTop: 9, marginBottom: 9 }}>
-                  <strong>{tab}</strong>
-               </Typography>
+            <Grid container spacing={1} justify="center">
+               <Grid item>
+                  <Typography
+                     variant="h4"
+                     style={{
+                        marginTop: 9,
+                        marginBottom: 12,
+                        fontVariant: 'small-caps',
+                     }}>
+                     <strong>{tab}</strong>
+                  </Typography>
+               </Grid>
             </Grid>
-         </Grid>
+         </div>
       </>
    );
 };
@@ -156,7 +154,7 @@ export const Layout = () => {
    const [tab, setTab] = useState(LayoutTabs.References);
 
    useEffect(() => {
-      setTab(LayoutTabs.PageMarkups);
+      setTab(LayoutTabs.References);
    }, []);
 
    useEffect(() => {
@@ -182,7 +180,7 @@ export const Layout = () => {
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-         <React.Fragment>
+         <>
             <MenuBar tab={tab} setTab={setTab}></MenuBar>
             <div style={{ marginTop: 12 }}></div>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -198,7 +196,8 @@ export const Layout = () => {
                   {tab === LayoutTabs.Events && <div>not implemented</div>}
                </Suspense>
             </ErrorBoundary>
-         </React.Fragment>
+            <div style={{ marginTop: 12 }}></div>
+         </>
       </ErrorBoundary>
    );
 };

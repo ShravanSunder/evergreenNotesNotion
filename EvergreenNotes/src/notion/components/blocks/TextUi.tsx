@@ -128,13 +128,13 @@ const TextSegment = ({
                href={interactive ? link : undefined}
                target="_blank"
                style={{ ...textStyle }}>
-               {' '}
+               {'  '}
                <SvgIcon
                   fontSize="inherit"
                   className={classes.inlineIcon}
                   viewBox="0 0 48 48">
                   <OpenInNewOutlinedIcon />
-               </SvgIcon>
+               </SvgIcon>{' '}
                {text}
             </Link>
          )}

@@ -116,9 +116,10 @@ export const SearchPane = () => {
                <Typography
                   variant="subtitle1"
                   style={{
-                     marginLeft: 3,
-                     marginRight: 3,
+                     margin: 12,
+                     marginBottom: 3,
                   }}>
+                  {'  '}
                   <strong>Search History</strong>
                </Typography>
                <List dense>

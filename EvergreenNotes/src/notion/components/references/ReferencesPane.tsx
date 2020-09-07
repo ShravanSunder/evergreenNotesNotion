@@ -19,8 +19,9 @@ const useStyles = makeStyles(() =>
    createStyles({
       sections: {
          marginLeft: 6,
-         marginTop: 12,
-         marginBottom: 6,
+         marginTop: 36,
+         marginBottom: 12,
+         fontVariant: 'small-caps',
       },
    })
 );
