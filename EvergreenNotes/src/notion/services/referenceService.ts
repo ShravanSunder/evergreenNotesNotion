@@ -119,7 +119,9 @@ export const processBacklinks = (
       if (rec.blockId != null && rec.block != null) {
          backlinkData.push({
             backlinkBlock: rec.toSerializable(),
-            path: rec.getParentsNodes(),
+            path: rec
+               .getParentsNodes()
+               .map((m) => (m as NotionBlockRecord).toSerializable()),
          });
       }
    });

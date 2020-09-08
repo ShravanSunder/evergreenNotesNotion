@@ -6,8 +6,10 @@ export interface NotionPageMarks {
    quotes: NotionBlockModel[];
    todos: NotionBlockModel[];
    events: NotionBlockModel[];
-   mentions: NotionBlockModel[];
+
+   userMentions: NotionBlockModel[];
    code: NotionBlockModel[];
+   pageMentions: NotionBlockModel[];
    links: NotionBlockModel[];
    comments: NotionBlockModel[];
 }

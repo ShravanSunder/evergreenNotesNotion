@@ -212,56 +212,37 @@ export class NotionBlockRecord implements NotionBlockModel {
    };
 
    hasLinks = () => {
-      return this.semanticTitle.some((s) => {
-         if (s[0] != null && s[1] != null) {
-            let format: SemanticFormat[] = s[1];
-            return format.some((f) => {
-               if (f[0] === StringFormatting.Link) {
-                  return true;
-               }
-               return false;
-            });
-         }
-         return false;
-      });
+      return (
+         this.hasType(StringFormatting.Link) ||
+         this.type === BlockTypes.Bookmark
+      );
    };
 
    hasCode = () => {
-      return this.semanticTitle.some((s) => {
-         if (s[0] != null && s[1] != null) {
-            let format: SemanticFormat[] = s[1];
-            return format.some((f) => {
-               if (f[0] === StringFormatting.InlineCode) {
-                  return true;
-               }
-               return false;
-            });
-         }
-         return false;
-      });
+      return (
+         this.hasType(StringFormatting.InlineCode) ||
+         this.type === BlockTypes.Code
+      );
    };
 
    hasComments = () => {
-      return this.semanticTitle.some((s) => {
-         if (s[0] != null && s[1] != null) {
-            let format: SemanticFormat[] = s[1];
-            return format.some((f) => {
-               if (f[0] === StringFormatting.Commented) {
-                  return true;
-               }
-               return false;
-            });
-         }
-         return false;
-      });
+      return this.hasType(StringFormatting.Commented);
    };
 
-   hasMentions = () => {
+   hasUserMentions = () => {
+      return this.hasType(StringFormatting.User);
+   };
+
+   hasPageMentions = () => {
+      return this.hasType(StringFormatting.Page);
+   };
+
+   private hasType(formatType: StringFormatting) {
       return this.semanticTitle.some((s) => {
          if (s[0] != null && s[1] != null) {
             let format: SemanticFormat[] = s[1];
             return format.some((f) => {
-               if (f[0] === StringFormatting.User) {
+               if (f[0] === formatType) {
                   return true;
                }
                return false;
@@ -269,7 +250,7 @@ export class NotionBlockRecord implements NotionBlockModel {
          }
          return false;
       });
-   };
+   }
 
    toSerializable = (): NotionBlockModel => {
       let model: NotionBlockModel = {

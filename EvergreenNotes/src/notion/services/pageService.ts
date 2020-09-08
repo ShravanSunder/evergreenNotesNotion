@@ -22,7 +22,8 @@ export const processPageForMarks = async (
       todos: [],
       quotes: [],
       events: [],
-      mentions: [],
+      userMentions: [],
+      pageMentions: [],
       code: [],
       comments: [],
       links: [],
@@ -126,20 +127,23 @@ const getMarksInBlock = (
          pageMarks.highlights.push(nb);
       }
 
-      if (b.type === BlockTypes.Code || blockRecord.hasCode()) {
+      if (blockRecord.hasCode()) {
          pageMarks.code.push(nb);
       }
 
-      if (b.type === BlockTypes.Code || blockRecord.hasComments()) {
+      if (blockRecord.hasComments()) {
          pageMarks.comments.push(nb);
       }
 
-      if (b.type === BlockTypes.Bookmark || blockRecord.hasLinks()) {
+      if (blockRecord.hasLinks()) {
          pageMarks.links.push(nb);
       }
+      if (blockRecord.hasPageMentions()) {
+         pageMarks.pageMentions.push(nb);
+      }
 
-      if (blockRecord.hasMentions()) {
-         pageMarks.mentions.push(nb);
+      if (blockRecord.hasUserMentions()) {
+         pageMarks.userMentions.push(nb);
       }
 
       if (b.type === BlockTypes.ToDo) {

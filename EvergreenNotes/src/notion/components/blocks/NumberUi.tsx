@@ -12,7 +12,7 @@ export const NumberUi = ({ block }: { block: NotionBlockModel }) => {
             xs={1}
             style={{ paddingLeft: 12, paddingRight: 3, marginTop: 1 }}>
             <Typography display={'inline'} variant={'body1'}>
-               {' # '}
+               {'  # '}
             </Typography>
          </Grid>
          <Grid item xs={11}>

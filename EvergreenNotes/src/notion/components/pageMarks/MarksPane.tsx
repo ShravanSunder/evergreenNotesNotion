@@ -35,7 +35,7 @@ export const MarksPane = () => {
       pageMarks?.events.length === 0 &&
       pageMarks?.highlights.length === 0 &&
       pageMarks?.links.length === 0 &&
-      pageMarks?.mentions.length === 0 &&
+      pageMarks?.userMentions.length === 0 &&
       pageMarks?.quotes.length === 0 &&
       pageMarks?.todos.length === 0;
 
@@ -47,6 +47,22 @@ export const MarksPane = () => {
                <b>Highlights</b>
             </Typography>
             {pageMarks?.highlights?.map((p, i) => (
+               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+            ))}
+            <div className={classes.spacing}></div>
+         </>
+      ) : null;
+
+   let Mentions =
+      pageMarks?.userMentions != null && pageMarks?.userMentions.length > 0 ? (
+         <>
+            <Typography className={classes.sections} variant="h5">
+               <b>Mentions</b>
+            </Typography>
+            {pageMarks?.userMentions?.map((p, i) => (
+               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+            ))}
+            {pageMarks?.pageMentions?.map((p, i) => (
                <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
             ))}
             <div className={classes.spacing}></div>
@@ -115,6 +131,7 @@ export const MarksPane = () => {
             )} */}
             {status === thunkStatus.fulfilled && highlights}
             {status === thunkStatus.fulfilled && todos}
+            {status === thunkStatus.fulfilled && Mentions}
             {status === thunkStatus.fulfilled && code}
             {status === thunkStatus.fulfilled && quotes}
             {status === thunkStatus.fulfilled && links}
