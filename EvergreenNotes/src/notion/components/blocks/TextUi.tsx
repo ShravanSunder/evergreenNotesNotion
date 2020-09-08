@@ -9,7 +9,10 @@ import {
    StringFormatting,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import { useSelector, useDispatch } from 'react-redux';
-import { blockSelector } from 'aNotion/providers/storeSelectors';
+import {
+   blockSelector,
+   mentionSelector,
+} from 'aNotion/providers/storeSelectors';
 import { getColor } from 'aNotion/services/blockService';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { blockActions } from './blockSlice';
@@ -28,16 +31,15 @@ export const TextUi = ({
    variant?: Variant | undefined;
    interactive?: boolean;
 }) => {
-   const bb = block.block as BaseTextBlock;
-   const title = bb.properties?.title as SemanticString[];
-
-   //using interactive as a switch to truncate text size
-   let textCount = 0;
-   const maxLen = 150;
-
    let classes = useBlockStyles();
+   const bb = block.block as BaseTextBlock;
+   const title = bb?.properties?.title as SemanticString[];
 
    if (title != null) {
+      //using interactive as a switch to truncate text size
+      let textCount = 0;
+      const maxLen = 150;
+
       return (
          <React.Fragment>
             {title.map((segment, i) => {
@@ -87,25 +89,31 @@ const TextSegment = ({
    const dispatch: AppPromiseDispatch<any> = useDispatch();
 
    const blockData = useSelector(blockSelector);
-   let { textStyle, textDetails, textType } = useSegmentData(format);
+   const mentionData = useSelector(mentionSelector);
+   let { textStyle, textInfo, textType } = useSegmentData(format);
    let link: string | undefined = undefined;
 
    useEffect(() => {
-      if (textDetails != null && textType === StringFormatting.Page) {
-         dispatch(blockActions.fetchBlock({ blockId: textDetails }));
+      if (textInfo != null && textType === StringFormatting.Page) {
+         dispatch(blockActions.fetchBlock({ blockId: textInfo }));
       }
-   }, [dispatch, textDetails, textType]);
+   }, [dispatch, textInfo, textType]);
 
-   if (textDetails != null && textType === StringFormatting.Page) {
-      text = blockData[textDetails]?.block?.simpleTitle ?? '';
-      link = getPageUrl(textDetails);
-   } else if (textDetails != null && textType === StringFormatting.Link) {
-      link = textDetails;
-   } else if (textDetails != null && textType === StringFormatting.User) {
-      text = '';
+   if (textInfo != null && textType === StringFormatting.Page) {
+      text = blockData[textInfo]?.block?.simpleTitle ?? '';
+      link = getPageUrl(textInfo);
+   } else if (textInfo != null && textType === StringFormatting.Link) {
+      link = textInfo;
+   } else if (textInfo != null && textType === StringFormatting.User) {
+      text =
+         ' @' +
+         mentionData.users[textInfo]?.user?.given_name +
+         ', ' +
+         mentionData.users[textInfo]?.user?.family_name +
+         ' ';
    }
 
-   if (text == null || (text.trim().length === 0 && textDetails == null)) {
+   if (text == null || (text.trim().length === 0 && textInfo == null)) {
       return null;
    }
 
@@ -165,11 +173,11 @@ const useSegmentData = (
    format: SemanticFormat[]
 ): {
    textStyle: React.CSSProperties;
-   textDetails: string | undefined;
+   textInfo: string | undefined;
    textType: string | undefined;
 } => {
    let textStyle: React.CSSProperties = {};
-   let textDetails: string | undefined = undefined;
+   let textInfo: string | undefined = undefined;
    let textType: StringFormatting | undefined = undefined;
 
    format.forEach((d) => {
@@ -194,21 +202,27 @@ const useSegmentData = (
             break;
          case StringFormatting.User:
             if (d[1] != null) {
-               textDetails = d[1];
+               textInfo = d[1];
                textType = d[0];
+            }
+            if (textStyle.color == null) {
+               textStyle.color = grey[700];
             }
             break;
          case StringFormatting.Link:
             if (d[1] != null) {
-               textDetails = d[1];
+               textInfo = d[1];
                textType = d[0];
+            }
+            if (textStyle.color == null) {
+               textStyle.color = grey[700];
             }
             break;
          case StringFormatting.Page:
             textStyle.color = grey[800];
             textStyle.fontWeight = 'bold';
             if (d[1] != null) {
-               textDetails = d[1];
+               textInfo = d[1];
                textType = d[0];
             }
             break;
@@ -220,5 +234,5 @@ const useSegmentData = (
       }
    });
 
-   return { textStyle: { ...textStyle }, textType, textDetails };
+   return { textStyle: { ...textStyle }, textType, textInfo };
 };

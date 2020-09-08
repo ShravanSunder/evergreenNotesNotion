@@ -14,6 +14,7 @@ import * as blockService from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
 import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
 import { CurrentPage } from 'aNotion/models/NotionPage';
+import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
@@ -34,12 +35,17 @@ const fetchCurrentPage = createAsyncThunk<
          pageId,
          thunkApi.signal
       );
+
       thunkApi.dispatch(
          pageMarkActions.processPageForMarks({
             pageId,
             record,
             signal: thunkApi.signal,
          })
+      );
+
+      thunkApi.dispatch(
+         mentionsActions.saveAllUsers(chunk.recordMap.notion_user)
       );
 
       //get the first key

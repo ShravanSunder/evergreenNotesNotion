@@ -5,6 +5,7 @@ import { contentReducers } from 'aNotion/components/contents/contentSlice';
 import { blockReducers } from 'aNotion/components/blocks/blockSlice';
 import { pageMarkReducers } from 'aNotion/components/pageMarks/pageMarksSlice';
 import { notionSiteReducers } from 'aNotion/components/layout/notionSiteSlice';
+import { mentionsReducers } from 'aNotion/components/mentions/mentionsSlice';
 //import {}
 
 export const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
    content: contentReducers,
    blocks: blockReducers,
    pageMarks: pageMarkReducers,
+   mentions: mentionsReducers,
    // page: pageReducers,
    // view: viewReducer
 });

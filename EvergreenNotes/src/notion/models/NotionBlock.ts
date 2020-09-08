@@ -14,7 +14,6 @@ export interface NotionBlockModel {
    block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined;
-   //recordMapData: RecordMap;
    type: BlockTypes;
    simpleTitle: string;
    semanticTitle: SemanticString[];

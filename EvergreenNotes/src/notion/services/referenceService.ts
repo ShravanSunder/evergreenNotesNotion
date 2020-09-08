@@ -111,15 +111,17 @@ export const processBacklinks = (
    let backlinkData: BacklinkRecordModel[] = [];
 
    backlinksRecords.backlinks.forEach((b) => {
-      const block = new NotionBlockRecord(
+      const rec = new NotionBlockRecord(
          backlinksRecords.recordMap,
          b.mentioned_from.block_id
       );
 
-      backlinkData.push({
-         backlinkBlock: block.toSerializable(),
-         path: block.getParentsNodes(),
-      });
+      if (rec.blockId != null && rec.block != null) {
+         backlinkData.push({
+            backlinkBlock: rec.toSerializable(),
+            path: rec.getParentsNodes(),
+         });
+      }
    });
 
    return backlinkData;

@@ -1,24 +1,23 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, ThunkDispatch } from '@reduxjs/toolkit';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { fetchPageRecord } from 'aNotion/services/blockService';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { RecordState } from 'aNotion/components/blocks/blockState';
 import { blockSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
+import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
 
 const initialState: RecordState = {};
 
-const fetchBlock = createAsyncThunk(
-   'notion/block/',
-   async ({ blockId }: { blockId: string }, thunkApi) => {
-      let state = blockSelector(
-         thunkApi.getState() as RootState
-      ) as RecordState;
+const fetchBlock = createAsyncThunk<
+   NotionBlockModel | undefined,
+   { blockId: string }
+>('notion/block/', async ({ blockId }: { blockId: string }, thunkApi) => {
+   let state = blockSelector(thunkApi.getState() as RootState) as RecordState;
 
-      //if it gets inefficient, we can use contentIds and syncRecordValues
-      return fetchBlockIfNotInStore(state, blockId, thunkApi);
-   }
-);
+   //if it gets inefficient, we can use contentIds and syncRecordValues
+   return await fetchBlockIfNotInStore(state, blockId, thunkApi);
+});
 const fetchBlockIfNotInStore = async (
    state: RecordState,
    blockId: string,
@@ -27,9 +26,17 @@ const fetchBlockIfNotInStore = async (
    let data = checkStateForBlock(state, blockId);
 
    if (data?.status !== thunkStatus.fulfilled) {
-      const [record] = await fetchPageRecord(blockId, thunkApi.signal, true);
+      const [record, chunk] = await fetchPageRecord(
+         blockId,
+         thunkApi.signal,
+         true
+      );
       let result = record.toSerializable();
       if (result != null) {
+         thunkApi.dispatch(
+            mentionsActions.saveAllUsers(chunk.recordMap.notion_user)
+         );
+
          return result;
       }
    } else {
