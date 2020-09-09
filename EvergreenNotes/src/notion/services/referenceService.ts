@@ -110,21 +110,34 @@ export const processBacklinks = (
 ): BacklinkRecordModel[] => {
    let backlinkData: BacklinkRecordModel[] = [];
 
-   backlinksRecords.backlinks.forEach((b) => {
-      const rec = new NotionBlockRecord(
-         backlinksRecords.recordMap,
-         b.mentioned_from.block_id
-      );
+   //log unkown backlinks for now
+   backlinksRecords.backlinks
+      .filter(
+         (f) =>
+            f.mentioned_from.type !== 'collection_reference' &&
+            f.mentioned_from.type !== 'property_mention'
+      )
+      .forEach((f) => {
+         console.log(f);
+      });
 
-      if (rec.blockId != null && rec.block != null) {
-         backlinkData.push({
-            backlinkBlock: rec.toSerializable(),
-            path: rec
-               .getParentsNodes()
-               .map((m) => (m as NotionBlockRecord).toSerializable()),
-         });
-      }
-   });
+   backlinksRecords.backlinks
+      .filter((f) => f.mentioned_from.type !== 'collection_reference')
+      .forEach((b) => {
+         const rec = new NotionBlockRecord(
+            backlinksRecords.recordMap,
+            b.mentioned_from.block_id
+         );
+
+         if (rec.blockId != null && rec.block != null) {
+            backlinkData.push({
+               backlinkBlock: rec.toSerializable(),
+               path: rec
+                  .getParentsNodes()
+                  .map((m) => (m as NotionBlockRecord).toSerializable()),
+            });
+         }
+      });
 
    return backlinkData;
 };

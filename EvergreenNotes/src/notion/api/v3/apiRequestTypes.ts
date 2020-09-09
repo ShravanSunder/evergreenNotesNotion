@@ -51,7 +51,7 @@ export interface syncRecordType {
 export interface BacklinkType {
    block_id: string;
    mentioned_from: {
-      type: 'property_mention';
+      type: 'property_mention' | 'collection_reference';
       block_id: string;
       property_id: string;
    };

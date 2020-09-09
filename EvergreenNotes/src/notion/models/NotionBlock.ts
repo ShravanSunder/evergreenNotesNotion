@@ -62,13 +62,15 @@ export class NotionBlockRecord implements NotionBlockModel {
          this.collection = data.collection?.[cId].value;
       } else if (this.block?.type === BlockTypes.CollectionViewInline) {
          let cId = this.block.collection_id;
-         this.collection = data.collection?.[cId].value;
-         let viewIds = this.block.view_ids;
-         for (let vId of viewIds) {
-            if (data.collection_view != null) {
-               let cv = data.collection_view![vId].value;
-               if (cv != null) {
-                  this.collection_views?.push(cv);
+         this.collection = data.collection?.[cId]?.value;
+         if (this.collection) {
+            let viewIds = this.block.view_ids;
+            for (let vId of viewIds) {
+               if (data.collection_view != null) {
+                  let cv = data.collection_view![vId].value;
+                  if (cv != null) {
+                     this.collection_views?.push(cv);
+                  }
                }
             }
          }

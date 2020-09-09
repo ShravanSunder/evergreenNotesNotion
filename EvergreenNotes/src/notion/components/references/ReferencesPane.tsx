@@ -35,7 +35,11 @@ export const ReferencesPane = () => {
    const pageId = record.currentPage?.record.blockId as string;
 
    useEffect(() => {
-      if (record.status === thunkStatus.fulfilled && pageName != null) {
+      if (
+         record.status === thunkStatus.fulfilled &&
+         pageName != null &&
+         pageId != null
+      ) {
          const pr = dispatch(
             referenceActions.fetchRefsForPage({ query: pageName, pageId })
          );
