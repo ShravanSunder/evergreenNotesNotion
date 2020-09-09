@@ -1,5 +1,11 @@
 //import { hot } from 'react-hot-loader/root';
-import React, { useEffect, useCallback, useState, Suspense } from 'react';
+import React, {
+   useEffect,
+   useCallback,
+   useState,
+   Suspense,
+   SyntheticEvent,
+} from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
@@ -16,6 +22,7 @@ import {
    FindInPageTwoTone,
    BookTwoTone,
    SubjectTwoTone,
+   RefreshTwoTone,
 } from '@material-ui/icons/';
 import { lightGreen, grey } from '@material-ui/core/colors';
 import {
@@ -24,9 +31,11 @@ import {
    createStyles,
    Grid,
    Typography,
+   IconButton,
 } from '@material-ui/core';
 import { LoadingTab } from '../common/Loading';
 import SearchPane from '../references/SearchPane';
+import { LightTooltip } from '../common/Styles';
 
 const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
 const MarksPane = React.lazy(() => import('../pageMarks/MarksPane'));
@@ -71,12 +80,25 @@ const MenuBar = ({
 }) => {
    const classes = useStyles();
 
+   const dispatch = useDispatch();
+   const navigation = useSelector(navigationSelector, shallowEqual);
+
    const handleTab = (
       event: React.MouseEvent<HTMLElement>,
       newTab: LayoutTabs | null
    ) => {
       if (newTab != null) {
          setTab(newTab);
+      }
+   };
+
+   const handleRefresh = (e: SyntheticEvent) => {
+      if (navigation.pageId != null) {
+         dispatch(
+            notionSiteActions.fetchCurrentPage({
+               pageId: navigation.pageId,
+            })
+         );
       }
    };
 
@@ -88,45 +110,60 @@ const MenuBar = ({
                borderRadius: 9,
                padding: 6,
             }}>
-            <Grid container spacing={1} justify="center">
-               <Grid item>
-                  <ToggleButtonGroup
-                     className={classes.grouped}
-                     size="small"
-                     value={tab}
-                     exclusive
-                     onChange={handleTab}>
-                     <ToggleButton
-                        value={LayoutTabs.References}
-                        className={classes.toggleButton}>
-                        <BookTwoTone></BookTwoTone>
-                     </ToggleButton>
-                     <ToggleButton
-                        value={LayoutTabs.PageMarkups}
-                        className={classes.toggleButton}>
-                        <SubjectTwoTone></SubjectTwoTone>
-                     </ToggleButton>
-                     <ToggleButton
-                        value={LayoutTabs.Search}
-                        className={classes.toggleButton}>
-                        <FindInPageTwoTone></FindInPageTwoTone>
-                     </ToggleButton>
-                     {/* <ToggleButton value="todo" className={classes.toggleButton}>
+            <Grid container justify="flex-start">
+               <Grid xs={1} item>
+                  <div style={{ marginTop: 11 }}>
+                     <LightTooltip
+                        title="Refresh Notion Page Information"
+                        placement="top">
+                        <IconButton size="small" onClick={handleRefresh}>
+                           <RefreshTwoTone />
+                        </IconButton>
+                     </LightTooltip>
+                  </div>
+               </Grid>
+               <Grid xs item container spacing={1} justify="center">
+                  <Grid item>
+                     <ToggleButtonGroup
+                        className={classes.grouped}
+                        size="small"
+                        value={tab}
+                        exclusive
+                        onChange={handleTab}>
+                        <ToggleButton
+                           value={LayoutTabs.References}
+                           className={classes.toggleButton}>
+                           <BookTwoTone></BookTwoTone>
+                        </ToggleButton>
+                        <ToggleButton
+                           value={LayoutTabs.PageMarkups}
+                           className={classes.toggleButton}>
+                           <SubjectTwoTone></SubjectTwoTone>
+                        </ToggleButton>
+                        <ToggleButton
+                           value={LayoutTabs.Search}
+                           className={classes.toggleButton}>
+                           <FindInPageTwoTone></FindInPageTwoTone>
+                        </ToggleButton>
+                        {/* <ToggleButton value="todo" className={classes.toggleButton}>
                      <AssignmentTurnedInTwoTone></AssignmentTurnedInTwoTone>
                   </ToggleButton> */}
-                     {/* <ToggleButton value="events" className={classes.toggleButton}>
+                        {/* <ToggleButton value="events" className={classes.toggleButton}>
                      <EventTwoTone></EventTwoTone>
                   </ToggleButton> */}
-                  </ToggleButtonGroup>
+                     </ToggleButtonGroup>
+                  </Grid>
                </Grid>
+               <Grid xs={1} item></Grid>
             </Grid>
+
             <Grid container spacing={1} justify="center">
                <Grid item>
                   <Typography
                      variant="h4"
                      style={{
                         marginTop: 9,
-                        marginBottom: 12,
+                        marginBottom: 6,
                         fontVariant: 'small-caps',
                      }}>
                      <strong>{tab}</strong>

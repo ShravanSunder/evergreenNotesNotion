@@ -65,7 +65,6 @@ const loadCookies: CaseReducer<SiteState, PayloadAction<CookieData>> = (
    if (
       state.cookie.status !== thunkStatus.fulfilled ||
       state.cookie.data == null ||
-      state.cookie.data.userId == null ||
       state.cookie.data?.token == null
    ) {
       state.cookie.data = action.payload;

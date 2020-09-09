@@ -2,7 +2,6 @@ import { thunkStatus as ThunkStatus } from 'aNotion/types/thunkStatus';
 import { CurrentPage } from 'aNotion/models/NotionPage';
 
 export type CookieData = {
-   userId: string;
    token: string;
    cookies: chrome.cookies.Cookie[];
 };

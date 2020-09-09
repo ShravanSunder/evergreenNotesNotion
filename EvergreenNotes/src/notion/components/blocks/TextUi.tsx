@@ -27,10 +27,14 @@ export const TextUi = ({
    block,
    variant,
    interactive,
+   color,
+   bgColor,
 }: {
    block: NotionBlockModel;
    variant?: Variant | undefined;
    interactive?: boolean;
+   color?: string;
+   bgColor?: string;
 }) => {
    let classes = useBlockStyles();
    const bb = block.block as BaseTextBlock;
@@ -67,7 +71,9 @@ export const TextUi = ({
                      key={i}
                      segment={segment}
                      variant={variant ?? 'body1'}
-                     interactive={interactive ?? true}></TextSegment>
+                     interactive={interactive ?? true}
+                     color={color}
+                     bgColor={bgColor}></TextSegment>
                );
             })}
          </React.Fragment>
@@ -79,10 +85,14 @@ const TextSegment = ({
    segment,
    variant,
    interactive,
+   color,
+   bgColor,
 }: {
    segment: SemanticString;
    variant: Variant;
    interactive: boolean;
+   color?: string;
+   bgColor?: string;
 }) => {
    let classes = useBlockStyles();
    let text = segment[0];
@@ -178,7 +188,9 @@ const TextSegment = ({
    );
 };
 const useSegmentData = (
-   format: SemanticFormat[]
+   format: SemanticFormat[],
+   color?: string,
+   bgColor?: string
 ): {
    textStyle: React.CSSProperties;
    textInfo: string | undefined;
@@ -187,6 +199,13 @@ const useSegmentData = (
    let textStyle: React.CSSProperties = {};
    let textInfo: string | undefined = undefined;
    let textType: StringFormatting | undefined = undefined;
+
+   if (color) {
+      textStyle.color = color;
+   }
+   if (bgColor) {
+      textStyle.backgroundColor = bgColor;
+   }
 
    format.forEach((d) => {
       switch (d[0]) {
@@ -236,8 +255,12 @@ const useSegmentData = (
             break;
          case StringFormatting.InlineCode:
             textStyle.fontFamily = 'Consolas';
-            textStyle.background = grey[300];
-            textStyle.color = red[700];
+            if (textStyle.backgroundColor == null) {
+               textStyle.background = grey[300];
+            }
+            if (textStyle.color == null) {
+               textStyle.color = red[700];
+            }
             break;
          case StringFormatting.DateTime:
             if (d[1] != null) {

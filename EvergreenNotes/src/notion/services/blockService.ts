@@ -105,7 +105,7 @@ export const getColor = (color: NotionColor | string): string | undefined => {
          case NotionColor.Orange:
             return deepOrange[400];
          case NotionColor.Yellow:
-            return yellow[400];
+            return yellow[600];
          case NotionColor.Teal:
             return teal[400];
          case NotionColor.Blue:
@@ -148,12 +148,27 @@ export const getBackgroundColor = (block: NotionBlockModel) => {
    }
 
    let color: string | undefined = undefined;
-   if (bgColor) {
+   if (bgColor && isBackGroundColor(bgColor)) {
       color = getColor(bgColor);
    }
 
    //transparent
    return color ?? '#FFFFFF';
+};
+
+export const getForegroundColor = (block: NotionBlockModel) => {
+   let bgColor = block.block?.format?.block_color;
+   if (block.type === BlockTypes.Code) {
+      bgColor = NotionColor.GreyBg;
+   }
+
+   let color: string | undefined = undefined;
+   if (bgColor && !isBackGroundColor(bgColor)) {
+      color = getColor(bgColor);
+   }
+
+   //transparent
+   return color;
 };
 
 export const isBackGroundColor = (color: NotionColor | undefined) => {

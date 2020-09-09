@@ -9,14 +9,8 @@ import * as queryString from 'query-string';
 import { navigationSelector } from 'aNotion/providers/storeSelectors';
 
 export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
-   let spaceId = cleanValue(
-      cookies.find((f) => f.name === 'ajs_group_id')?.value as string
-   );
-   let userId = cleanValue(
-      cookies.find((f) => f.name === 'ajs_user_id')?.value as string
-   );
    let token = cookies.find((f) => f.name === 'token_v2')?.value;
-   let c = { spaceId, userId, token, cookies } as CookieData;
+   let c = { token, cookies } as CookieData;
 
    appDispatch(notionSiteActions.loadCookies(c));
 };

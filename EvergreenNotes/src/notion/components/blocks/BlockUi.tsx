@@ -9,16 +9,7 @@ import {
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { Variant } from '@material-ui/core/styles/createTypography';
-import {
-   brown,
-   purple,
-   deepOrange,
-   yellow,
-   teal,
-   blue,
-   pink,
-   grey,
-} from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 import { PageUi } from './PageUi';
 import { BulletUi } from './BulletUi';
 import { TodoUi } from './TodoUi';
@@ -30,7 +21,10 @@ import { NumberUi } from './NumberUi';
 import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
 import { shallowEqual } from 'react-redux';
 import { navigationSelector } from 'aNotion/providers/storeSelectors';
-import { getBackgroundColor } from 'aNotion/services/blockService';
+import {
+   getBackgroundColor,
+   getForegroundColor,
+} from 'aNotion/services/blockService';
 import { TextUi } from './TextUi';
 
 export const useBlockStyles = makeStyles((theme: Theme) =>
@@ -66,12 +60,19 @@ export const BlockUi = ({
    let classes = useBlockStyles();
    let variant = useVariant(block);
    let backgroundColor = getBackgroundColor(block);
+   let color = getForegroundColor(block);
 
    return (
       <div
          className={classes.block}
-         style={{ backgroundColor: backgroundColor }}>
-         {variant != null && <TextUi variant={variant} block={block}></TextUi>}
+         style={{ backgroundColor: backgroundColor, color: color }}>
+         {variant != null && (
+            <TextUi
+               variant={variant}
+               block={block}
+               bgColor={backgroundColor}
+               color={color}></TextUi>
+         )}
          {block.type === BlockTypes.Divider && <Divider></Divider>}
          {block.type === BlockTypes.Callout && (
             <CalloutUi block={block}></CalloutUi>
