@@ -101,7 +101,11 @@ const TextSegment = ({
 
    const blockData = useSelector(blockSelector);
    const mentionData = useSelector(mentionSelector);
-   let { textStyle, textInfo, textType } = useSegmentData(format);
+   let { textStyle, textInfo, textType } = useSegmentData(
+      format,
+      color,
+      bgColor
+   );
    let link: string | undefined = undefined;
 
    useEffect(() => {
