@@ -54,7 +54,9 @@ export const MarksPane = () => {
       ) : null;
 
    let Mentions =
-      pageMarks?.userMentions != null && pageMarks?.userMentions.length > 0 ? (
+      (pageMarks?.userMentions != null && pageMarks?.userMentions.length > 0) ||
+      (pageMarks?.pageMentions != null &&
+         pageMarks?.pageMentions.length > 0) ? (
          <>
             <Typography className={classes.sections} variant="h5">
                <b>Mentions</b>
