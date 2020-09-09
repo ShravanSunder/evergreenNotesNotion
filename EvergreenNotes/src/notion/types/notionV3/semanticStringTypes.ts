@@ -42,10 +42,7 @@ export type Reminder = {
    time?: string;
 };
 
-/**
- * A structure to represent date and time.
- */
-export type DateTime = {
+export type RelativeDateTime = {
    type: 'date' | 'daterange' | 'datetime' | 'datetimerange';
    /** e.g. "2019-05-27" */
    start_date: string;
@@ -56,13 +53,13 @@ export type DateTime = {
    /** e.g. "15:00" */
    end_time?: string;
    reminder?: Reminder;
-   date_format:
-      | 'relative'
-      | 'MM/DD/YYYY'
-      | 'MMM DD, YYYY'
-      | 'DD/MM/YYYY'
-      | 'YYYY/MM/DD';
+   date_format: 'relative';
+};
+
+export type AbsoluteDateTime = {
+   isAbsolute: true;
+   date_format: 'MM/DD/YYYY' | 'MMM DD, YYYY' | 'DD/MM/YYYY' | 'YYYY/MM/DD';
    /** 12h ("h:mm A") or 24h ("H:mm") */
    time_format?: 'h:mm A' | 'H:mm';
    time_zone?: base.TimeZone;
-};
+} & RelativeDateTime;

@@ -7,6 +7,7 @@ import {
    SemanticString,
    SemanticFormat,
    StringFormatting,
+   AbsoluteDateTime,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -111,6 +112,13 @@ const TextSegment = ({
          ', ' +
          mentionData.users[textInfo]?.user?.family_name +
          ' ';
+   } else if (textInfo != null && textType === StringFormatting.DateTime) {
+      text = '@date support added in next version';
+      if ('isAbsolute' in (textInfo as AbsoluteDateTime)) {
+         let d = textInfo as AbsoluteDateTime;
+      } else {
+         let d = textInfo as AbsoluteDateTime;
+      }
    }
 
    if (text == null || (text.trim().length === 0 && textInfo == null)) {
@@ -231,6 +239,14 @@ const useSegmentData = (
             textStyle.background = grey[300];
             textStyle.color = red[700];
             break;
+         case StringFormatting.DateTime:
+            if (d[1] != null) {
+               textInfo = d[1];
+               textType = d[0];
+            }
+            if (textStyle.color == null) {
+               textStyle.color = grey[700];
+            }
       }
    });
 
