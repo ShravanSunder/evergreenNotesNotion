@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { Typography, makeStyles, createStyles, Theme } from '@material-ui/core';
@@ -38,7 +38,8 @@ export const ReferencesPane = () => {
       if (
          record.status === thunkStatus.fulfilled &&
          pageName != null &&
-         pageId != null
+         pageId != null &&
+         pageId !== references?.pageReferences?.pageId
       ) {
          const pr = dispatch(
             referenceActions.fetchRefsForPage({ query: pageName, pageId })
@@ -49,7 +50,14 @@ export const ReferencesPane = () => {
       } else if (record.status === thunkStatus.pending) {
       }
       return () => {};
-   }, [record.status, dispatch, record.currentPage, pageName, pageId]);
+   }, [
+      record.status,
+      dispatch,
+      record.currentPage,
+      pageName,
+      pageId,
+      references,
+   ]);
 
    return (
       <React.Fragment>

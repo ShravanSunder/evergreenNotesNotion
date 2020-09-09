@@ -11,6 +11,7 @@ export type ReferenceState = {
 export type PageReferences = {
    backlinks: BacklinkRecordModel[];
    references: SearchReferences;
+   pageId?: string;
 };
 
 export type BacklinkRecordModel = {

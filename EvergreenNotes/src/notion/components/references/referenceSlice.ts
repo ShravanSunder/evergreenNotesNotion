@@ -53,6 +53,7 @@ const fetchRefsForPage = createAsyncThunk<
          return {
             backlinks: b,
             references: s,
+            pageId: pageId,
          };
       }
 
