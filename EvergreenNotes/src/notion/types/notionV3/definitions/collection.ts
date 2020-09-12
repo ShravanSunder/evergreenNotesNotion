@@ -1,8 +1,8 @@
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
-import * as base from '../notionBaseTypes';
+import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { CollectionView } from './collection_view';
 
-export interface Collection {
+export interface i_Collection {
    id: base.UUID;
    /** `name[0][0]` is the collection's name. */
    name?: SemanticString[];

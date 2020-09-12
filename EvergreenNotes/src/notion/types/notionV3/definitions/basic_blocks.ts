@@ -1,6 +1,6 @@
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
-import { Permission } from './permission';
-import * as base from '../notionBaseTypes';
+import { t_Permission as Permission } from './permission';
+import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { BlockTypes } from '../BlockTypes';
 
 /**

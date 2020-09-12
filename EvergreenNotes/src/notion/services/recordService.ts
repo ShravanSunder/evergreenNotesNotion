@@ -1,5 +1,5 @@
-import { RecordMap, Record } from '../types/notionV3/notionRecordTypes';
-import * as blockTypes from '../types/notionV3/notionBlockTypes';
+import { RecordMap, Record } from 'aNotion/types/notionV3/notionRecordTypes';
+import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
 import {
    NotionBlockRecord,

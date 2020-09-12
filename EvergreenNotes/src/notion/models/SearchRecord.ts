@@ -1,4 +1,4 @@
-import { RecordMap } from '../types/notionV3/notionRecordTypes';
+import { RecordMap } from 'aNotion/types/notionV3/notionRecordTypes';
 import { NotionBlockModel, NotionBlockRecord } from './NotionBlock';
 import { SearchResultType } from 'aNotion/api/v3/apiRequestTypes';
 import * as blockService from 'aNotion/services/blockService';

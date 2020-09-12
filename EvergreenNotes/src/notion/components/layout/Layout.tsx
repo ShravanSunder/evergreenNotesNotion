@@ -34,11 +34,11 @@ import {
    IconButton,
 } from '@material-ui/core';
 import { LoadingTab } from '../common/Loading';
-import SearchPane from '../references/SearchPane';
 import { LightTooltip } from '../common/Styles';
 
 const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
 const MarksPane = React.lazy(() => import('../pageMarks/MarksPane'));
+const SearchPane = React.lazy(() => import('../references/SearchPane'));
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({

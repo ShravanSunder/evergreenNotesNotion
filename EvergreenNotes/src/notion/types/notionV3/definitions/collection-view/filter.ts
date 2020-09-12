@@ -1,5 +1,5 @@
 import { Collection } from '../collection';
-import * as base from '../../notionBaseTypes';
+import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 
 /** Fundamental comparators. */
 export type EmptinessComparator = 'is_empty' | 'is_not_empty';

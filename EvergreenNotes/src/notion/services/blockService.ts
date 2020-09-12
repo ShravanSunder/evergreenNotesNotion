@@ -10,7 +10,7 @@ import {
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
-import * as LoadPageChunk from 'aNotion/types/notionv3/notionRecordTypes';
+import * as LoadPageChunk from 'aNotion/types/notionV3/notionRecordTypes';
 import {
    grey,
    brown,

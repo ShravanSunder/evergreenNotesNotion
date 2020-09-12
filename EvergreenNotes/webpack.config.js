@@ -92,14 +92,13 @@ var options = {
             test: /\.(js|jsx)$/,
             use: [{
                loader: 'babel-loader',
-               options: {
-                  cacheDirectory: true
-               }
-            }],
+            }, 'cache-loader'],
+            include: [path.resolve(__dirname, 'src')],
             exclude: [/node_modules\/(webpack|html-webpack-plugin)\//],
          },
          {
             test: /\.(ts|tsx)$/,
+            include: [path.resolve(__dirname, 'src')],
             exclude: /node_modules/,
             use: [{
                loader: 'ts-loader',
@@ -108,7 +107,7 @@ var options = {
                   // happyPackMode: true,
                   configFile: path.resolve(__dirname, 'tsconfig.json'),
                },
-            }, ],
+            }, 'cache-loader'],
          },
       ],
    },
@@ -129,11 +128,11 @@ var options = {
       }),
       // expose and write the allowed env vars on the compiled bundle
       new webpack.EnvironmentPlugin(['NODE_ENV']),
-      // new ForkTsCheckerWebpackPlugin({
-      //    logger: {
-      //       devServer: false
-      //    }
-      // }),
+      new ForkTsCheckerWebpackPlugin({
+         logger: {
+            devServer: false
+         }
+      }),
       new CopyWebpackPlugin(
          [{
             from: 'src/manifest.json',

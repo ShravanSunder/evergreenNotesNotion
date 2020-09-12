@@ -1,11 +1,11 @@
-import * as base from '../notionBaseTypes';
+import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { Query, Query2 } from './collection-view/query';
 import { Collection } from './collection';
 
 /**
  * Describe a view of a collection.
  */
-export interface CollectionView {
+export interface i_CollectionView {
    id: base.UUID;
    version: number;
    /** The type of view. */

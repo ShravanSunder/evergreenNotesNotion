@@ -1,6 +1,5 @@
-import { Map } from './Map';
-import { Table, UUID } from './notionBaseTypes';
-import * as blockTypes from './notionBlockTypes';
+import { Table, UUID } from 'aNotion/types/notionV3/notionBaseTypes';
+import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
 
 export type Record<T> = {
    role: unknown; //Permission.Role

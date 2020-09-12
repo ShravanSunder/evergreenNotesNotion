@@ -1,6 +1,6 @@
-import * as base from '../notionBaseTypes';
+import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 
-export type Permission =
+export type t_Permission =
    | Permission.PublicPermission
    | Permission.UserPermission
    | Permission.GroupPermission;

@@ -1,12 +1,11 @@
 //import { hot } from 'react-hot-loader';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Provider } from 'react-redux';
 import reduxStore from 'aNotion/providers/reduxStore';
 import { appDispatch } from 'aNotion/providers/appDispatch';
 import { commands } from 'aCommon/commands';
 import { activeTab } from 'aCommon/extensionHelpers';
-import Layout from 'aNotion/components/layout/Layout';
 import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
@@ -24,6 +23,9 @@ import { theme } from 'aNotion/components/theme';
 import { useWindowSize } from '@react-hook/window-size';
 import { SnackbarProvider } from 'notistack';
 import { green, yellow, red, grey } from '@material-ui/core/colors';
+import { LoadingTab } from 'aNotion/components/common/Loading';
+
+const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 
 const snackbarRoot = {
    color: grey[600],
@@ -102,7 +104,9 @@ export const Sidebar = () => {
                                  overflowX: 'visible',
                                  scrollbarWidth: 'thin',
                               }}>
-                              <Layout />
+                              <Suspense fallback={<LoadingTab />}>
+                                 <Layout />
+                              </Suspense>
                            </Paper>
                         </SnackbarProvider>
                      </Box>

@@ -49,6 +49,7 @@ export const LoadSidebarFrame = () => {
    const [wasDragging, setWasDragging] = useState(false);
 
    const handleClick = (e: SyntheticEvent) => {
+      console.log('evergreen launcher clicked');
       e.stopPropagation();
       if (!wasDragging) {
          setShowFrame(!showFrame);

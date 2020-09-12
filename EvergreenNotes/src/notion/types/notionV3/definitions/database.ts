@@ -1,4 +1,4 @@
-import * as base from '../notionBaseTypes';
+import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { EmptyBlock } from './basic_blocks';
 import { BlockTypes } from '../BlockTypes';
 

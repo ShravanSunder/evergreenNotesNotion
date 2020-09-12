@@ -1,9 +1,9 @@
-import { UUID } from '../notionBaseTypes';
+import { UUID } from 'aNotion/types/notionV3/notionBaseTypes';
 
 /**
  * Describe a Notion user.
  */
-export interface NotionUser {
+export interface i_NotionUser {
    /** User ID. */
    id: UUID;
    version: number;

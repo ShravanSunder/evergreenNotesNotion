@@ -1,12 +1,12 @@
-import { Collection } from './definitions/collection';
-import { CollectionView } from './definitions/collection_view';
-import { Space } from './definitions/space';
-import { SpaceView } from './definitions/space';
-//import { Activity } from './typings/activity';
+import { i_Collection } from './definitions/collection';
+import { i_CollectionView } from './definitions/collection_view';
+import { i_Space } from './definitions/space';
+import { i_SpaceView } from './definitions/space';
+import { i_Activity } from './definitions/activity';
 // import { Follow } from "./follow"
 // import { SlackIntegration } from "./slack_integration"
-import { Permission } from './definitions/permission';
-import { NotionUser } from './definitions/notion_user';
+import { t_Permission } from './definitions/permission';
+import { i_NotionUser } from './definitions/notion_user';
 // import { UserRoot } from "./user_root"
 // import { UserSettings } from "./user_settings"
 
@@ -24,19 +24,27 @@ export type Block =
    | DatabaseBlock.DatabaseBlockUnion
    | EmbedBlocks.EmbedBlockUnion;
 
-export {
-   Collection,
-   CollectionView,
-   Space,
-   SpaceView,
-   //Activity,
-   // Follow,
-   // SlackIntegration,
-   Permission,
-   NotionUser,
-   // UserRoot,
-   // UserSettings,
-};
+export interface Collection extends i_Collection {}
+export interface CollectionView extends i_CollectionView {}
+export interface Space extends i_Space {}
+export interface SpaceView extends i_SpaceView {}
+export interface Activity extends i_Activity {}
+export type Permission = t_Permission;
+export interface NotionUser extends i_NotionUser {}
+
+// export {
+//    //Collection,
+//    CollectionView,
+//    Space,
+//    SpaceView,
+//    //Activity,
+//    // Follow,
+//    // SlackIntegration,
+//    Permission,
+//    NotionUser,
+//    // UserRoot,
+//    // UserSettings,
+// };
 
 export type Breadcrumb = BasicBlocks.Breadcrumb;
 export type Equation = BasicBlocks.Equation;

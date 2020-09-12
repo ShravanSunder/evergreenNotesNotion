@@ -1,5 +1,5 @@
-import * as base from '../notionBaseTypes';
-import { Block } from '../notionBlockTypes';
+import * as base from 'aNotion/types/notionV3/notionBaseTypes';
+import { Block } from 'aNotion/types/notionV3/notionBlockTypes';
 import { Collection } from './collection';
 
 export type EditType =
@@ -69,7 +69,7 @@ export type Edit = BlockCreatedEdit | BlockChangedEdit;
  * If the activity is collection-related, it has additional
  * collection_id property, also all its edits are collection-related.
  */
-export interface Activity {
+export interface i_Activity {
    id: base.UUID;
    version: number;
    index: number;

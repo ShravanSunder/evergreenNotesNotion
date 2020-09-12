@@ -1,5 +1,5 @@
 import { Permission } from './permission';
-import * as base from '../notionBaseTypes';
+import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 
 export interface Group {
    id: base.UUID;
@@ -10,7 +10,7 @@ export interface Group {
 /**
  * Describe a workspace.
  */
-export interface Space {
+export interface i_Space {
    id: base.UUID;
    version: number;
    name: string;
@@ -29,7 +29,7 @@ export interface Space {
    last_edited_by_id: base.UUID;
 }
 
-export interface SpaceView {
+export interface i_SpaceView {
    id: base.UUID;
    version: number;
    space_id: base.UUID;
