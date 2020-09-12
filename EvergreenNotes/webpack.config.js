@@ -3,9 +3,7 @@ var webpack = require('webpack'),
    path = require('path'),
    fileSystem = require('fs-extra'),
    env = require('./utils/env'),
-   {
-      CleanWebpackPlugin
-   } = require('clean-webpack-plugin'),
+   { CleanWebpackPlugin } = require('clean-webpack-plugin'),
    CopyWebpackPlugin = require('copy-webpack-plugin'),
    HtmlWebpackPlugin = require('html-webpack-plugin'),
    WriteFilePlugin = require('write-file-webpack-plugin');
@@ -65,34 +63,43 @@ var options = {
       sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'App.tsx'),
    },
    output: {
-      path: isDevelopment ? path.resolve(__dirname, 'build') : path.resolve(__dirname, 'release'),
+      path: isDevelopment
+         ? path.resolve(__dirname, 'build')
+         : path.resolve(__dirname, 'release'),
       filename: '[name].bundle.js',
    },
    module: {
-      rules: [{
+      rules: [
+         {
             test: /\.css$/,
             use: ['style-loader', 'css-loader'],
             exclude: /node_modules/,
          },
          {
             test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
-            use: [{
-               loader: 'file-loader?name=[name].[ext]',
-            }],
+            use: [
+               {
+                  loader: 'file-loader?name=[name].[ext]',
+               },
+            ],
             exclude: /node_modules/,
          },
          {
             test: /\.html$/,
-            use: [{
-               loader: 'html-loader',
-            }],
+            use: [
+               {
+                  loader: 'html-loader',
+               },
+            ],
             exclude: /node_modules/,
          },
          {
             test: /\.(js|jsx)$/,
-            use: [{
-               loader: 'babel-loader',
-            }, 'cache-loader'],
+            use: [
+               {
+                  loader: 'babel-loader',
+               },
+            ],
             include: [path.resolve(__dirname, 'src')],
             exclude: [/node_modules\/(webpack|html-webpack-plugin)\//],
          },
@@ -100,14 +107,17 @@ var options = {
             test: /\.(ts|tsx)$/,
             include: [path.resolve(__dirname, 'src')],
             exclude: /node_modules/,
-            use: [{
-               loader: 'ts-loader',
-               options: {
-                  transpileOnly: true,
-                  // happyPackMode: true,
-                  configFile: path.resolve(__dirname, 'tsconfig.json'),
+            use: [
+               {
+                  loader: 'ts-loader',
+                  options: {
+                     transpileOnly: true,
+                     // happyPackMode: true,
+                     configFile: path.resolve(__dirname, 'tsconfig.json'),
+                  },
                },
-            }, 'cache-loader'],
+               'cache-loader',
+            ],
          },
       ],
    },
@@ -130,25 +140,30 @@ var options = {
       new webpack.EnvironmentPlugin(['NODE_ENV']),
       new ForkTsCheckerWebpackPlugin({
          logger: {
-            devServer: false
-         }
+            devServer: false,
+         },
       }),
       new CopyWebpackPlugin(
-         [{
-            from: 'src/manifest.json',
-            to: isDevelopment ? path.join(__dirname, 'build') : path.join(__dirname, 'release'),
-            force: true,
-            transform: function (content, path) {
-               // generates the manifest file using the package.json informations
-               return Buffer.from(
-                  JSON.stringify({
-                     description: process.env.npm_package_description,
-                     version: process.env.npm_package_version,
-                     ...JSON.parse(content.toString()),
-                  })
-               );
+         [
+            {
+               from: 'src/manifest.json',
+               to: isDevelopment
+                  ? path.join(__dirname, 'build')
+                  : path.join(__dirname, 'release'),
+               force: true,
+               transform: function (content, path) {
+                  // generates the manifest file using the package.json informations
+                  return Buffer.from(
+                     JSON.stringify({
+                        description: process.env.npm_package_description,
+                        version: process.env.npm_package_version,
+                        ...JSON.parse(content.toString()),
+                     })
+                  );
+               },
             },
-         }, ], {
+         ],
+         {
             logLevel: 'info',
             copyUnmodified: true,
          }
