@@ -8,7 +8,12 @@ var WebpackDevServer = require('webpack-dev-server'),
    env = require('./env'),
    path = require('path');
 
-var options = config.chromeExtensionBoilerplate || {};
+
+var chromeExtensionBoilerplate = {
+   notHotReload: ['contentScript'],
+};
+
+var options = chromeExtensionBoilerplate || {};
 var excludeEntriesToHotReload = options.notHotReload || [];
 
 for (var entryName in config.entry) {
@@ -24,7 +29,7 @@ config.plugins = [new webpack.HotModuleReplacementPlugin()].concat(
    config.plugins || []
 );
 
-delete config.chromeExtensionBoilerplate;
+//delete config.chromeExtensionBoilerplate;
 
 var compiler = webpack(config);
 

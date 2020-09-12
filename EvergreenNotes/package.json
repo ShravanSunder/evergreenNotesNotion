@@ -13,6 +13,7 @@
       "prettier": "prettier --write '**/*.{js,jsx,css,html}'"
    },
    "dependencies": {
+      "@babel/runtime": "^7.11.2",
       "@material-ui/core": "^4.11.0",
       "@material-ui/icons": "^4.9.1",
       "@material-ui/lab": "^4.0.0-alpha.56",
@@ -93,7 +94,7 @@
       "ts-loader": "^7.0.5",
       "typescript": "^4.0.2",
       "url-loader": "^4.1.0",
-      "webpack": "^4.44.0",
+      "webpack": "^4.44.1",
       "webpack-cli": "^3.3.12",
       "webpack-dev-server": "3.2.1",
       "write-file-webpack-plugin": "^4.5.1"

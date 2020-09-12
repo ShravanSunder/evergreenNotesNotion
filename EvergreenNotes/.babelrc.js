@@ -5,6 +5,7 @@ module.exports = (api) => {
       presets: [
          // "@babel/preset-env",
          // "@babel/preset-react"
+         '@babel/preset-react',
          'react-app',
          [
             '@babel/preset-env',

@@ -64,9 +64,6 @@ var options = {
       ),
       sidebar: path.join(__dirname, 'src', 'pages', 'Sidebar', 'App.tsx'),
    },
-   chromeExtensionBoilerplate: {
-      notHotReload: ['contentScript'],
-   },
    output: {
       path: isDevelopment ? path.resolve(__dirname, 'build') : path.resolve(__dirname, 'release'),
       filename: '[name].bundle.js',
@@ -79,17 +76,26 @@ var options = {
          },
          {
             test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
-            loader: 'file-loader?name=[name].[ext]',
+            use: [{
+               loader: 'file-loader?name=[name].[ext]',
+            }],
             exclude: /node_modules/,
          },
          {
             test: /\.html$/,
-            loader: 'html-loader',
+            use: [{
+               loader: 'html-loader',
+            }],
             exclude: /node_modules/,
          },
          {
             test: /\.(js|jsx)$/,
-            loader: 'babel-loader',
+            use: [{
+               loader: 'babel-loader',
+               options: {
+                  cacheDirectory: true
+               }
+            }],
             exclude: [/node_modules\/(webpack|html-webpack-plugin)\//],
          },
          {
@@ -190,7 +196,7 @@ if (isDevelopment) {
 }
 
 if (env.NODE_ENV === 'development') {
-   options.devtool = 'cheap-module-eval-source-map';
+   options.devtool = 'eval-cheap-module-source-map';
 }
 
 module.exports = options;

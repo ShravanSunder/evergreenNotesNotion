@@ -7,7 +7,7 @@ console.log(__dirname);
 var webpack = require('webpack'),
   config = require('../webpack.config');
 
-delete config.chromeExtensionBoilerplate;
+//delete config.chromeExtensionBoilerplate;
 
 config.plugins.push(new webpack.SourceMapDevToolPlugin({
   noSources: true,
