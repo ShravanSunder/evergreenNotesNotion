@@ -11,6 +11,7 @@ var webpack = require('webpack'),
    WriteFilePlugin = require('write-file-webpack-plugin');
 const ReactDevToolsIFramePlugin = require('react-dev-tools-iframe-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // load the secrets
 var alias = {
    //'react-dom': '@hot-loader/react-dom',
@@ -97,7 +98,7 @@ var options = {
             use: [{
                loader: 'ts-loader',
                options: {
-                  // transpileOnly: true,
+                  transpileOnly: true,
                   // happyPackMode: true,
                   configFile: path.resolve(__dirname, 'tsconfig.json'),
                },
@@ -122,21 +123,7 @@ var options = {
       }),
       // expose and write the allowed env vars on the compiled bundle
       new webpack.EnvironmentPlugin(['NODE_ENV']),
-      // new ForkTsCheckerWebpackPlugin({
-      //    eslint: {
-      //       files: './src/**/*.{ts,tsx,js,jsx}', // required - same as command `eslint ./src/**/*.{ts,tsx,js,jsx} --ext .ts,.tsx,.js,.jsx`
-      //    },
-      //    issue: {
-      //       scope: 'webpack'
-      //    },
-      //    async: true,
-      //    typescript: false,
-      //    logger: {
-      //       issues: 'silent',
-      //       infrastructure: 'webpack-infrastructure'
-
-      //    }
-      // }),
+      new ForkTsCheckerWebpackPlugin(),
       new CopyWebpackPlugin(
          [{
             from: 'src/manifest.json',

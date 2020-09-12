@@ -24,7 +24,7 @@ import {
 } from './frameProperties';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
-   console.log('render');
+   console.log('render sidebar frame');
    chrome.extension.getURL('sidebar.html');
 
    ReactDOM.render(<LoadSidebarFrame />, sidebar);
@@ -69,7 +69,7 @@ export const LoadSidebarFrame = () => {
          <Slide in={showFrame} direction={'left'}>
             <iframe
                style={{
-                  visibility: showFrame ? 'visible' : 'hidden',
+                  display: showFrame ? 'block' : 'none',
                   position: 'absolute',
                   top: appPositionTop(),
                   left: appPositionLeft(wWidth),

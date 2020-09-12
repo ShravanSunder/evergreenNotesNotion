@@ -38,8 +38,7 @@ export const ReferencesPane = () => {
       if (
          record.status === thunkStatus.fulfilled &&
          pageName != null &&
-         pageId != null &&
-         pageId !== references?.pageReferences?.pageId
+         pageId != null
       ) {
          const pr = dispatch(
             referenceActions.fetchRefsForPage({ query: pageName, pageId })
@@ -50,14 +49,7 @@ export const ReferencesPane = () => {
       } else if (record.status === thunkStatus.pending) {
       }
       return () => {};
-   }, [
-      record.status,
-      dispatch,
-      record.currentPage,
-      pageName,
-      pageId,
-      references,
-   ]);
+   }, [record.status, dispatch, record.currentPage, pageName, pageId]);
 
    return (
       <React.Fragment>
