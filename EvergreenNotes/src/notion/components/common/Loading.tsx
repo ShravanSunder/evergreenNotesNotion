@@ -1,7 +1,13 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Skeleton } from '@material-ui/lab';
-import { Typography, Grid, Box } from '@material-ui/core';
+import {
+   Typography,
+   Grid,
+   Box,
+   Fade,
+   CircularProgress,
+} from '@material-ui/core';
 //export default hot(Layout);
 export const LoadingTab = () => {
    return (
@@ -54,5 +60,33 @@ export const NothingToFind = () => {
          gutterBottom>
          🙅🏽 We didn't find anything
       </Typography>
+   );
+};
+
+export const LoadingUnknown = () => {
+   const [loading, setLoading] = useState(false);
+   useEffect(() => {
+      setLoading(true);
+   }, []);
+
+   return (
+      <>
+         <Grid
+            container
+            justify="center"
+            alignItems="center"
+            style={{ minHeight: 100, minWidth: 100 }}>
+            <Grid item>
+               <Fade
+                  in={loading}
+                  style={{
+                     transitionDelay: loading ? '800ms' : '0ms',
+                  }}
+                  unmountOnExit>
+                  <CircularProgress />
+               </Fade>
+            </Grid>
+         </Grid>
+      </>
    );
 };

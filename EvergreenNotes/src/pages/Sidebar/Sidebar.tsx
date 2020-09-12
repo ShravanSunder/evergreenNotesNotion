@@ -23,7 +23,7 @@ import { theme } from 'aNotion/components/theme';
 import { useWindowSize } from '@react-hook/window-size';
 import { SnackbarProvider } from 'notistack';
 import { green, yellow, red, grey } from '@material-ui/core/colors';
-import { LoadingTab } from 'aNotion/components/common/Loading';
+import { LoadingTab, LoadingUnknown } from 'aNotion/components/common/Loading';
 
 const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 
@@ -104,7 +104,7 @@ export const Sidebar = () => {
                                  overflowX: 'visible',
                                  scrollbarWidth: 'thin',
                               }}>
-                              <Suspense fallback={<LoadingTab />}>
+                              <Suspense fallback={<LoadingUnknown />}>
                                  <Layout />
                               </Suspense>
                            </Paper>

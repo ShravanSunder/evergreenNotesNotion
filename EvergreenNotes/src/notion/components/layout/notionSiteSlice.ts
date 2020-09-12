@@ -15,6 +15,7 @@ import { extractNavigationData } from 'aNotion/services/notionSiteService';
 import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
 import { CurrentPage } from 'aNotion/models/NotionPage';
 import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
+import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
@@ -36,25 +37,35 @@ const fetchCurrentPage = createAsyncThunk<
          thunkApi.signal
       );
 
-      thunkApi.dispatch(
-         pageMarkActions.processPageForMarks({
-            pageId,
-            record,
-            signal: thunkApi.signal,
-         })
-      );
+      if (
+         record != null &&
+         record.type !== BlockTypes.Unknown &&
+         chunk != null
+      ) {
+         thunkApi.dispatch(
+            pageMarkActions.processPageForMarks({
+               pageId,
+               record,
+               signal: thunkApi.signal,
+            })
+         );
 
-      thunkApi.dispatch(
-         mentionsActions.saveAllUsers(chunk.recordMap.notion_user)
-      );
+         thunkApi.dispatch(
+            mentionsActions.saveAllUsers(chunk.recordMap.notion_user)
+         );
 
-      //get the first key
-      const spaceId = Object.keys(chunk.recordMap.space)[0];
+         //get the first key
+         const spaceId = Object.keys(chunk.recordMap.space)[0];
 
-      return {
-         record: record?.toSerializable(),
-         spaceId: spaceId,
-      };
+         return {
+            record: record?.toSerializable(),
+            spaceId: spaceId,
+         };
+      } else if (pageId != null && !thunkApi.signal.aborted) {
+         thunkApi.dispatch(fetchCurrentPage({ pageId }));
+      }
+
+      return undefined;
    }
 );
 

@@ -116,7 +116,6 @@ var options = {
                      configFile: path.resolve(__dirname, 'tsconfig.json'),
                   },
                },
-               'cache-loader',
             ],
          },
       ],
