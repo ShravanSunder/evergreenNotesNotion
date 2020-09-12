@@ -1,7 +1,7 @@
 import { RecordMap, Record } from 'aNotion/types/notionV3/notionRecordTypes';
 import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
-import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
+import { BaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import * as recordService from 'aNotion/services/recordService';
 import * as blockService from 'aNotion/services/blockService';
 import {

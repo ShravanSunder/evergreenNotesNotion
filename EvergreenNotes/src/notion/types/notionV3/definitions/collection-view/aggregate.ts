@@ -1,4 +1,4 @@
-import { Collection } from '../../notionModels';
+import { Collection } from '../collection';
 import * as base from '../../notionBaseTypes';
 
 /** Fundamental aggregation types. */

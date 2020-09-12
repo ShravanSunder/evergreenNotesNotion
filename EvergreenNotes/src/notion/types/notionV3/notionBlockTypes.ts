@@ -1,20 +1,20 @@
-import { Collection } from './typings/collection';
-import { CollectionView } from './typings/collection_view';
-import { Space } from './typings/space';
-import { SpaceView } from './typings/space';
-import { Activity } from './typings/activity';
+import { Collection } from './definitions/collection';
+import { CollectionView } from './definitions/collection_view';
+import { Space } from './definitions/space';
+import { SpaceView } from './definitions/space';
+//import { Activity } from './typings/activity';
 // import { Follow } from "./follow"
 // import { SlackIntegration } from "./slack_integration"
-import { Permission } from './typings/permission';
-import { NotionUser } from './typings/notion_user';
+import { Permission } from './definitions/permission';
+import { NotionUser } from './definitions/notion_user';
 // import { UserRoot } from "./user_root"
 // import { UserSettings } from "./user_settings"
 
 ////////////////////////////////////////////////
 // All types of blocks.
-import * as BasicBlocks from './typings/basic_blocks';
-import * as DatabaseBlock from './typings/database';
-import * as EmbedBlocks from './typings/embed_blocks';
+import * as BasicBlocks from './definitions/basic_blocks';
+import * as DatabaseBlock from './definitions/database';
+import * as EmbedBlocks from './definitions/embed_blocks';
 
 export type NavigatableBlocks = Page | DatabaseBlock.CollectionViewPage;
 
@@ -29,7 +29,7 @@ export {
    CollectionView,
    Space,
    SpaceView,
-   Activity,
+   //Activity,
    // Follow,
    // SlackIntegration,
    Permission,

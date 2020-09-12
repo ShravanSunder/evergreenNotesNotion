@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Typography, Link, Icon, SvgIcon } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { grey, red } from '@material-ui/core/colors';
-import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
+import { BaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import {
    SemanticString,
    SemanticFormat,

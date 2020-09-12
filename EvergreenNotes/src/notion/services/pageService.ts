@@ -1,7 +1,7 @@
 import { NotionBlockRecord } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { NotionPageMarks } from 'aNotion/models/NotionPage';
-import { BaseTextBlock } from 'aNotion/types/notionV3/typings/basic_blocks';
+import { BaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import { isBackGroundColor } from './blockService';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import {

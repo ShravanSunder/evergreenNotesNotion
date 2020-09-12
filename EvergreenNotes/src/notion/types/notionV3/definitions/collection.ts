@@ -1,4 +1,4 @@
-import { SemanticString } from './semantic_string';
+import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as base from '../notionBaseTypes';
 import { CollectionView } from './collection_view';
 

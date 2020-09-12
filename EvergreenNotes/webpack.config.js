@@ -123,7 +123,11 @@ var options = {
       }),
       // expose and write the allowed env vars on the compiled bundle
       new webpack.EnvironmentPlugin(['NODE_ENV']),
-      new ForkTsCheckerWebpackPlugin(),
+      // new ForkTsCheckerWebpackPlugin({
+      //    logger: {
+      //       devServer: false
+      //    }
+      // }),
       new CopyWebpackPlugin(
          [{
             from: 'src/manifest.json',

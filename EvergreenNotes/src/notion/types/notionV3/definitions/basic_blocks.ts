@@ -1,7 +1,6 @@
-import { SemanticString } from './semantic_string';
+import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import { Permission } from './permission';
 import * as base from '../notionBaseTypes';
-import { Collection } from './collection';
 import { BlockTypes } from '../BlockTypes';
 
 /**
