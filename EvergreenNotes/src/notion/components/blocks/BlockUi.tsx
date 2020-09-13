@@ -26,6 +26,7 @@ import {
    getForegroundColor,
 } from 'aNotion/services/blockService';
 import { TextUi } from './TextUi';
+import { ImageUi } from './ImageUi';
 
 export const useBlockStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -88,6 +89,7 @@ export const BlockUi = ({
          {block.type === BlockTypeEnum.Page && <PageUi block={block} />}
          {block.type === BlockTypeEnum.Toggle && <ToggleUi block={block} />}
          {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
+         {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
       </div>
    );
 };

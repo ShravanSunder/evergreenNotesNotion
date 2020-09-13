@@ -200,7 +200,7 @@ export const getPropertiesWithSemanticFormat = (
          );
    }
 
-   return properties;
+   return [...new Set(properties)];
 };
 
 export const hasSemanticFormatType = (
