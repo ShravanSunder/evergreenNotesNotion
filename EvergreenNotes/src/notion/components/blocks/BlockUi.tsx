@@ -62,12 +62,16 @@ export const BlockUi = ({
    let variant = useVariant(block);
    let backgroundColor = getBackgroundColor(block);
    let color = getForegroundColor(block);
+   let useGeneric =
+      variant != null &&
+      block.type !== BlockTypeEnum.Page &&
+      block.type !== BlockTypeEnum.CollectionViewPage;
 
    return (
       <div
          className={classes.block}
          style={{ backgroundColor: backgroundColor, color: color }}>
-         {variant != null && (
+         {useGeneric && (
             <TextUi
                variant={variant}
                block={block}
@@ -86,7 +90,12 @@ export const BlockUi = ({
             <NumberUi block={block} />
          )}
          {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
-         {block.type === BlockTypeEnum.Page && <PageUi block={block} />}
+         {block.type === BlockTypeEnum.Page && (
+            <PageUi block={block} variant={variant} />
+         )}
+         {block.type === BlockTypeEnum.CollectionViewPage && (
+            <PageUi block={block} variant={variant} />
+         )}
          {block.type === BlockTypeEnum.Toggle && <ToggleUi block={block} />}
          {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
          {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
@@ -105,6 +114,7 @@ const useVariant = (block: NotionBlockModel) => {
          break;
       case BlockTypeEnum.Header1:
       case BlockTypeEnum.CollectionViewPage:
+      case BlockTypeEnum.Page:
          variant = 'h4';
          break;
       case BlockTypeEnum.Header2:

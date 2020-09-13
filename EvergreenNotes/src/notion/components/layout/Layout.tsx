@@ -71,7 +71,7 @@ export enum LayoutTabs {
    PageMarkups = 'Page Markups',
    Events = 'Events',
    Mentions = 'Mentions',
-   Options = 'Options',
+   Settings = 'Settings',
 }
 
 const MenuBar = ({
@@ -148,11 +148,11 @@ const MenuBar = ({
                            className={classes.toggleButton}>
                            <FindInPageTwoTone></FindInPageTwoTone>
                         </ToggleButton>
-                        {/* <ToggleButton
-                           value={LayoutTabs.Options}
+                        <ToggleButton
+                           value={LayoutTabs.Settings}
                            className={classes.toggleButton}>
                            <SettingsTwoTone></SettingsTwoTone>
-                        </ToggleButton> */}
+                        </ToggleButton>
                      </ToggleButtonGroup>
                   </Grid>
                </Grid>
@@ -233,7 +233,7 @@ export const Layout = () => {
                      <SearchPane />
                   </div>
                   {tab === LayoutTabs.Events && <div>not implemented</div>}
-                  {tab === LayoutTabs.Options && <OptionsPane />}
+                  {tab === LayoutTabs.Settings && <OptionsPane />}
                </Suspense>
             </ErrorBoundary>
             <div style={{ marginTop: 12 }}></div>

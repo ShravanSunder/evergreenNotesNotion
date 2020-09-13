@@ -9,6 +9,7 @@ import {
    Switch,
    FormGroup,
    FormControlLabel,
+   Link,
 } from '@material-ui/core';
 import { pageMarksSelector } from 'aNotion/providers/storeSelectors';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
@@ -54,7 +55,7 @@ export const OptionsPane = () => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
-            <Typography className={classes.sections} variant="h5">
+            {/* <Typography className={classes.sections} variant="h5">
                <b>General</b>
             </Typography>
             {options != null && (
@@ -74,8 +75,26 @@ export const OptionsPane = () => {
                      />
                   </FormGroup>
                </div>
-            )}
+            )} */}
             <div className={classes.spacing}></div>
+            <Typography className={classes.sections} variant="h5">
+               <b>Information and Feedback</b>
+            </Typography>
+            <Grid style={{ marginLeft: 6 }}>
+               <Link
+                  variant="subtitle1"
+                  target="_blank"
+                  href="https://www.notion.so/shravansunder/Evergreen-Notes-For-Notion-e35e6ed4dd5a45b19bf2de2bb86b1a7e">
+                  Website
+               </Link>
+               <div></div>
+               <Link
+                  variant="subtitle1"
+                  target="_blank"
+                  href="mailto:evergreen.software.dev@gmail.com">
+                  Email
+               </Link>
+            </Grid>
          </Suspense>
       </ErrorBoundary>
    );

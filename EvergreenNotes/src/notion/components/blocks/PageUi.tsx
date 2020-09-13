@@ -2,15 +2,24 @@ import React from 'react';
 import { Typography, Icon } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
-import { useBlockStyles } from './BlockUi';
-import { LinkOutlined } from '@material-ui/icons';
-import { grey } from '@material-ui/core/colors';
 import { TextUi } from './TextUi';
+import { Variant } from '@material-ui/core/styles/createTypography';
 
-export const PageUi = ({ block }: { block: NotionBlockModel }) => {
+export const PageUi = ({
+   block,
+   variant,
+}: {
+   block: NotionBlockModel;
+   variant: Variant | undefined;
+}) => {
+   const page = block.block as Page;
+   const icon = page.format?.page_icon;
    return (
       <React.Fragment>
-         <TextUi block={block}></TextUi>
+         <Typography display="inline" variant={variant}>
+            {' ' + icon + ' '}
+         </Typography>
+         <TextUi block={block} variant={variant}></TextUi>
       </React.Fragment>
    );
 };
