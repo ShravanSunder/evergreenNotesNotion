@@ -24,6 +24,7 @@ import { useWindowSize } from '@react-hook/window-size';
 import { SnackbarProvider } from 'notistack';
 import { green, yellow, red, grey } from '@material-ui/core/colors';
 import { LoadingTab, LoadingUnknown } from 'aNotion/components/common/Loading';
+import { getOptionsFromStorage } from 'aNotion/components/options/optionsService';
 
 const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 
@@ -50,6 +51,7 @@ console.log('App loading...');
 export const Sidebar = () => {
    useEffect(() => {
       setTabId();
+      getOptionsFromStorage();
    }, []);
 
    const [wWidth, wHeight] = useWindowSize();

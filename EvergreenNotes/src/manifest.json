@@ -19,7 +19,8 @@
       "https://notion.so/*",
       "cookies",
       "webRequest",
-      "clipboardWrite"
+      "clipboardWrite",
+      "storage"
    ],
    "content_scripts": [
       {

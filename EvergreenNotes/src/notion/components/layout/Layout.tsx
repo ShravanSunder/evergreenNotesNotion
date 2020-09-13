@@ -23,6 +23,7 @@ import {
    BookTwoTone,
    SubjectTwoTone,
    RefreshTwoTone,
+   SettingsTwoTone,
 } from '@material-ui/icons/';
 import { lightGreen, grey } from '@material-ui/core/colors';
 import {
@@ -39,6 +40,7 @@ import { LightTooltip } from '../common/Styles';
 const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
 const MarksPane = React.lazy(() => import('../pageMarks/MarksPane'));
 const SearchPane = React.lazy(() => import('../references/SearchPane'));
+const OptionsPane = React.lazy(() => import('../options/OptionsPane'));
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -69,6 +71,7 @@ export enum LayoutTabs {
    PageMarkups = 'Page Markups',
    Events = 'Events',
    Mentions = 'Mentions',
+   Options = 'Options',
 }
 
 const MenuBar = ({
@@ -145,12 +148,11 @@ const MenuBar = ({
                            className={classes.toggleButton}>
                            <FindInPageTwoTone></FindInPageTwoTone>
                         </ToggleButton>
-                        {/* <ToggleButton value="todo" className={classes.toggleButton}>
-                     <AssignmentTurnedInTwoTone></AssignmentTurnedInTwoTone>
-                  </ToggleButton> */}
-                        {/* <ToggleButton value="events" className={classes.toggleButton}>
-                     <EventTwoTone></EventTwoTone>
-                  </ToggleButton> */}
+                        {/* <ToggleButton
+                           value={LayoutTabs.Options}
+                           className={classes.toggleButton}>
+                           <SettingsTwoTone></SettingsTwoTone>
+                        </ToggleButton> */}
                      </ToggleButtonGroup>
                   </Grid>
                </Grid>
@@ -231,6 +233,7 @@ export const Layout = () => {
                      <SearchPane />
                   </div>
                   {tab === LayoutTabs.Events && <div>not implemented</div>}
+                  {tab === LayoutTabs.Options && <OptionsPane />}
                </Suspense>
             </ErrorBoundary>
             <div style={{ marginTop: 12 }}></div>
