@@ -1,6 +1,6 @@
 import { RecordMap, Record } from 'aNotion/types/notionV3/notionRecordTypes';
 import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
-import { BlockTypes, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
+import { BlockTypeEnum, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
 import {
    BaseTextBlock,
    Page,
@@ -21,7 +21,7 @@ export interface NotionBlockModel {
    block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined;
-   type: BlockTypes;
+   type: BlockTypeEnum;
    simpleTitle: string;
    semanticTitle: SemanticString[];
    blockId: string;
@@ -39,7 +39,7 @@ export class NotionBlockRecord implements NotionBlockModel {
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined = [];
    recordMapData: RecordMap;
-   type: BlockTypes = BlockTypes.Unknown;
+   type: BlockTypeEnum = BlockTypeEnum.Unknown;
    simpleTitle: string;
    semanticTitle: SemanticString[] = [];
    blockId: string = '';
@@ -65,10 +65,10 @@ export class NotionBlockRecord implements NotionBlockModel {
    }
 
    protected setupCollectionData(data: RecordMap, blockId: string) {
-      if (this.block?.type === BlockTypes.CollectionViewPage) {
+      if (this.block?.type === BlockTypeEnum.CollectionViewPage) {
          let cId = this.block.collection_id;
          this.collection = data.collection?.[cId].value;
-      } else if (this.block?.type === BlockTypes.CollectionViewInline) {
+      } else if (this.block?.type === BlockTypeEnum.CollectionViewInline) {
          let cId = this.block.collection_id;
          this.collection = data.collection?.[cId]?.value;
          if (this.collection) {
@@ -91,7 +91,7 @@ export class NotionBlockRecord implements NotionBlockModel {
       if (this.block != null) {
          this.type = this.block.type;
       } else if (this.collection != null) {
-         this.type = BlockTypes.CollectionViewPage;
+         this.type = BlockTypeEnum.CollectionViewPage;
       }
    }
 
@@ -99,15 +99,15 @@ export class NotionBlockRecord implements NotionBlockModel {
       //todo use semantic title here
       try {
          if (
-            this.type === BlockTypes.CollectionViewPage ||
-            this.type === BlockTypes.CollectionViewInline
+            this.type === BlockTypeEnum.CollectionViewPage ||
+            this.type === BlockTypeEnum.CollectionViewInline
          ) {
             if (this.collection?.name != null)
                return blockService.reduceTitle(this.collection.name);
-         } else if (this.type === BlockTypes.Page) {
+         } else if (this.type === BlockTypeEnum.Page) {
             let page = this.block as blockTypes.Page;
             return blockService.reduceTitle(page.properties?.title);
-         } else if (this.type !== BlockTypes.Unknown) {
+         } else if (this.type !== BlockTypeEnum.Unknown) {
             let u = this.block as BaseTextBlock;
             return blockService.reduceTitle(u.properties?.title);
          }
@@ -121,14 +121,14 @@ export class NotionBlockRecord implements NotionBlockModel {
    protected getTitle = (): SemanticString[] => {
       try {
          if (
-            this.type === BlockTypes.CollectionViewPage ||
-            this.type === BlockTypes.CollectionViewInline
+            this.type === BlockTypeEnum.CollectionViewPage ||
+            this.type === BlockTypeEnum.CollectionViewInline
          ) {
             if (this.collection?.name != null) return this.collection.name;
-         } else if (this.type === BlockTypes.Page) {
+         } else if (this.type === BlockTypeEnum.Page) {
             let page = this.block as blockTypes.Page;
             return page.properties?.title;
-         } else if (this.type !== BlockTypes.Unknown) {
+         } else if (this.type !== BlockTypeEnum.Unknown) {
             let u = this.block as BaseTextBlock;
             return u.properties?.title ?? [];
          }
@@ -177,7 +177,7 @@ export class NotionBlockRecord implements NotionBlockModel {
                //if the block is empty, just skip saving it to array
                //its probably a collection and repeated as we traverse
                this.traverseUp(pBlock.getParentId(), pBlock.blockId, parents);
-            } else if (pBlock.type !== BlockTypes.Unknown) {
+            } else if (pBlock.type !== BlockTypeEnum.Unknown) {
                parents.splice(0, 0, pBlock);
                this.traverseUp(pBlock.getParentId(), pBlock.blockId, parents);
             }
@@ -205,12 +205,10 @@ export class NotionBlockRecord implements NotionBlockModel {
    }
 
    getRelationsAsBlockIds = (): string[] => {
-      if (this.type !== BlockTypes.Page) {
+      if (this.type !== BlockTypeEnum.Page) {
          return [];
       }
-
-      let b = this.block as blockTypes.Page;
-      return getPropertiesWithSemanticFormat(b, SemanticFormatEnum.Page);
+      return getPropertiesWithSemanticFormat(this, SemanticFormatEnum.Page);
    };
 
    hasBgColor = () => {
@@ -220,14 +218,14 @@ export class NotionBlockRecord implements NotionBlockModel {
    hasLinks = () => {
       return (
          this.hasType(SemanticFormatEnum.Link) ||
-         this.type === BlockTypes.Bookmark
+         this.type === BlockTypeEnum.Bookmark
       );
    };
 
    hasCode = () => {
       return (
          this.hasType(SemanticFormatEnum.InlineCode) ||
-         this.type === BlockTypes.Code
+         this.type === BlockTypeEnum.Code
       );
    };
 

@@ -7,7 +7,7 @@ import {
    NotionBlockRecord,
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
-import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
+import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionV3/notionRecordTypes';
@@ -42,7 +42,7 @@ export const fetchPageRecord = async (
 
          if (chunk != null && !signal.aborted) {
             block = getBlockFromPageChunk(chunk, pageId);
-            if (block.type === BlockTypes.CollectionViewPage) {
+            if (block.type === BlockTypeEnum.CollectionViewPage) {
                block = undefined;
             }
          }
@@ -101,8 +101,8 @@ export const getBlockFromPageChunk = (
 
 export const isNavigable = (block: NotionBlockModel): boolean => {
    return (
-      block.type === BlockTypes.Page ||
-      block.type === BlockTypes.CollectionViewPage
+      block.type === BlockTypeEnum.Page ||
+      block.type === BlockTypeEnum.CollectionViewPage
    );
 };
 
@@ -167,7 +167,7 @@ export const getColor = (color: NotionColor | string): string | undefined => {
 
 export const getBackgroundColor = (block: NotionBlockModel) => {
    let bgColor = block.block?.format?.block_color;
-   if (block.type === BlockTypes.Code) {
+   if (block.type === BlockTypeEnum.Code) {
       bgColor = NotionColor.GreyBg;
    }
 
@@ -182,7 +182,7 @@ export const getBackgroundColor = (block: NotionBlockModel) => {
 
 export const getForegroundColor = (block: NotionBlockModel) => {
    let bgColor = block.block?.format?.block_color;
-   if (block.type === BlockTypes.Code) {
+   if (block.type === BlockTypeEnum.Code) {
       bgColor = NotionColor.GreyBg;
    }
 

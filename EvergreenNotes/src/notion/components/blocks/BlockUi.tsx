@@ -7,7 +7,7 @@ import {
    Theme,
 } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
+import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { grey } from '@material-ui/core/colors';
 import { PageUi } from './PageUi';
@@ -73,17 +73,21 @@ export const BlockUi = ({
                bgColor={backgroundColor}
                color={color}></TextUi>
          )}
-         {block.type === BlockTypes.Divider && <Divider></Divider>}
-         {block.type === BlockTypes.Callout && (
+         {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
+         {block.type === BlockTypeEnum.Callout && (
             <CalloutUi block={block}></CalloutUi>
          )}
-         {block.type === BlockTypes.Quote && <QuoteUi block={block} />}
-         {block.type === BlockTypes.ButtetedList && <BulletUi block={block} />}
-         {block.type === BlockTypes.NumberedList && <NumberUi block={block} />}
-         {block.type === BlockTypes.ToDo && <TodoUi block={block} />}
-         {block.type === BlockTypes.Page && <PageUi block={block} />}
-         {block.type === BlockTypes.Toggle && <ToggleUi block={block} />}
-         {block.type === BlockTypes.Code && <CodeUi block={block} />}
+         {block.type === BlockTypeEnum.Quote && <QuoteUi block={block} />}
+         {block.type === BlockTypeEnum.ButtetedList && (
+            <BulletUi block={block} />
+         )}
+         {block.type === BlockTypeEnum.NumberedList && (
+            <NumberUi block={block} />
+         )}
+         {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
+         {block.type === BlockTypeEnum.Page && <PageUi block={block} />}
+         {block.type === BlockTypeEnum.Toggle && <ToggleUi block={block} />}
+         {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
       </div>
    );
 };
@@ -92,19 +96,19 @@ export default BlockUi;
 const useVariant = (block: NotionBlockModel) => {
    let variant: Variant | undefined;
    switch (block.type) {
-      case BlockTypes.Text:
-      case BlockTypes.Date:
-      case BlockTypes.Bookmark:
+      case BlockTypeEnum.Text:
+      case BlockTypeEnum.Date:
+      case BlockTypeEnum.Bookmark:
          variant = 'body1';
          break;
-      case BlockTypes.Header1:
-      case BlockTypes.CollectionViewPage:
+      case BlockTypeEnum.Header1:
+      case BlockTypeEnum.CollectionViewPage:
          variant = 'h4';
          break;
-      case BlockTypes.Header2:
+      case BlockTypeEnum.Header2:
          variant = 'h5';
          break;
-      case BlockTypes.Header3:
+      case BlockTypeEnum.Header3:
          variant = 'h6';
          break;
    }

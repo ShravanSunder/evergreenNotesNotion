@@ -2,7 +2,7 @@ import React, { MouseEvent, useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-import { Content } from '../contents/Content';
+import { BlockContent } from '../contents/BlockContent';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
 
 import BlockUi from 'aNotion/components/blocks/BlockUi';
@@ -48,11 +48,11 @@ export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
                   </Grid>
                   <Grid item xs={12}>
                      <div style={{ paddingLeft: 12 }}>
-                        <Content
+                        <BlockContent
                            blockId={refData.id}
                            contentIds={
                               refData.notionBlock.contentIds
-                           }></Content>
+                           }></BlockContent>
                      </div>
                   </Grid>
                </Grid>

@@ -1,5 +1,8 @@
-import { NotionBlockRecord } from 'aNotion/models/NotionBlock';
-import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
+import {
+   NotionBlockRecord,
+   NotionBlockModel,
+} from 'aNotion/models/NotionBlock';
+import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { NotionPageMarks } from 'aNotion/models/NotionPage';
 import {
    BaseTextBlock,
@@ -76,8 +79,8 @@ const buildPageRecords = async (
    let subContentIds: string[] = [];
    Object.entries(content).forEach(([blockId, block]) => {
       let checkSubContents =
-         block.value?.type !== BlockTypes.Page &&
-         block.value?.type !== BlockTypes.CollectionViewPage;
+         block.value?.type !== BlockTypeEnum.Page &&
+         block.value?.type !== BlockTypeEnum.CollectionViewPage;
 
       if (checkSubContents)
          subContentIds = subContentIds.concat(block.value?.content ?? []);
@@ -101,8 +104,8 @@ const traverseForMarks = (
       let block = recordMapData.block[blockId];
       let subContentIds = block.value?.content ?? [];
       let checkSubContents =
-         block.value?.type !== BlockTypes.Page &&
-         block.value?.type !== BlockTypes.CollectionViewPage;
+         block.value?.type !== BlockTypeEnum.Page &&
+         block.value?.type !== BlockTypeEnum.CollectionViewPage;
 
       getMarksInBlock(block, recordMapData, pageId, pageMarks);
       if (subContentIds.length > 0 && checkSubContents) {
@@ -154,11 +157,11 @@ const getMarksInBlock = (
          pageMarks.userMentions.push(nb);
       }
 
-      if (b.type === BlockTypes.ToDo) {
+      if (b.type === BlockTypeEnum.ToDo) {
          pageMarks.todos.push(nb);
       }
 
-      if (b.type === BlockTypes.Quote) {
+      if (b.type === BlockTypeEnum.Quote) {
          pageMarks.quotes.push(nb);
       }
    } catch {
@@ -167,26 +170,35 @@ const getMarksInBlock = (
 };
 
 export const getPropertiesWithSemanticFormat = (
-   pageBlock: Page,
+   pageBlock: NotionBlockModel,
    propertyType: SemanticFormatEnum
 ) => {
    let properties: string[] = [];
 
-   Object.keys(pageBlock.properties)
-      .filter((k) => k !== 'title')
-      .forEach((k) =>
-         pageBlock.properties[k].forEach((ps) => {
-            if (ps[1] != null) {
-               ps[1]
-                  .filter((sf) => sf[0] === propertyType && sf[1] != null)
-                  .forEach((sf) => {
-                     if (sf[1] != null) {
-                        properties.push(sf[1]);
-                     }
-                  });
-            }
-         })
-      );
+   if (pageBlock.type === BlockTypeEnum.Page) {
+      let page = pageBlock.block as Page;
+
+      Object.keys(page.properties)
+         .filter((k) => k !== 'title')
+         .forEach((k) =>
+            page.properties[k].forEach((ps) => {
+               if (ps[1] != null && ps[0] != null) {
+                  ps[1]
+                     .filter(
+                        (sf) =>
+                           sf[0] != null &&
+                           sf[1] != null &&
+                           sf[0] === propertyType
+                     )
+                     .forEach((sf) => {
+                        if (sf[1] != null) {
+                           properties.push(sf[1]);
+                        }
+                     });
+               }
+            })
+         );
+   }
 
    return properties;
 };

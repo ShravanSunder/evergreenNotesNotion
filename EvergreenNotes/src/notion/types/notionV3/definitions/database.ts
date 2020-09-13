@@ -1,12 +1,12 @@
 import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { EmptyBlock } from './basic_blocks';
-import { BlockTypes } from '../BlockTypes';
+import { BlockTypeEnum } from '../BlockTypes';
 
 /**
  * Inline database block or Linked database block.
  */
 export interface CollectionViewInline extends EmptyBlock {
-   type: BlockTypes.CollectionViewInline;
+   type: BlockTypeEnum.CollectionViewInline;
    view_ids: base.UUID[];
    collection_id: base.UUID;
 }
@@ -15,7 +15,7 @@ export interface CollectionViewInline extends EmptyBlock {
  * Full page database block.
  */
 export interface CollectionViewPage extends EmptyBlock {
-   type: BlockTypes.CollectionViewPage;
+   type: BlockTypeEnum.CollectionViewPage;
    view_ids: base.UUID[];
    collection_id: base.UUID;
 }

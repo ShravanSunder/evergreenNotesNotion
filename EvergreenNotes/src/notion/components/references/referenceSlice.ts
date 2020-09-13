@@ -48,15 +48,9 @@ const fetchRefsForPage = createAsyncThunk<
       let linksPromise = referenceApi.getBacklinks(pageId, thunkApi.signal);
 
       //get page relations
-      let relationsPromise: Promise<NotionBlockModel[]> = new Promise<
-         NotionBlockModel[]
-      >(() => []);
       let pageBlock = currentPageSelector(thunkApi.getState() as RootState)
          .currentPage?.pageBlock;
-      if (pageBlock != null && pageBlock.block != null) {
-         let page = pageBlock.block as Page;
-         relationsPromise = getRelationsForPage(page, thunkApi.signal);
-      }
+      let relationsPromise = getRelationsForPage(pageBlock, thunkApi.signal);
 
       //resolve promises
       let search = await searchPromise;

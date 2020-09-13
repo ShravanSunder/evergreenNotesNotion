@@ -2,7 +2,7 @@
 //  * All block names.
 //  */
 
-export enum BlockTypes {
+export enum BlockTypeEnum {
    Unknown = 'unknown',
    Page = 'page',
    Text = 'text',

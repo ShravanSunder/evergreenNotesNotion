@@ -1,13 +1,16 @@
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as base from 'aNotion/types/notionV3/notionBaseTypes';
-import { BlockTypes } from '../BlockTypes';
+import { BlockTypeEnum } from '../BlockTypes';
 import { EmptyBlock } from './basic_blocks';
 
 /**
  * General purpose embed block.
  */
 export interface Embed extends EmptyBlock {
-   type: BlockTypes.Embed | BlockTypes.EmbedCodePen | BlockTypes.EmbedInvision;
+   type:
+      | BlockTypeEnum.Embed
+      | BlockTypeEnum.EmbedCodePen
+      | BlockTypeEnum.EmbedInvision;
    properties?: {
       /**
        * This is a normal link.
@@ -49,7 +52,7 @@ export interface Embed extends EmptyBlock {
  * PDF embed block.
  */
 export interface PDF extends EmptyBlock {
-   type: BlockTypes.PDF;
+   type: BlockTypeEnum.PDF;
    properties?: {
       source?: [[base.NotionSecureUrl | base.PublicUrl]];
    };

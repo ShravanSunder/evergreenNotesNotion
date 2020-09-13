@@ -14,7 +14,6 @@ import {
    NotionBlockRecord,
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
-import { Page } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import { getPropertiesWithSemanticFormat } from './pageService';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
@@ -147,9 +146,16 @@ export const processBacklinks = (
    return backlinkData;
 };
 
-export const getRelationsForPage = async (page: Page, signal: AbortSignal) => {
+export const getRelationsForPage = async (
+   pageBlock: NotionBlockModel | undefined,
+   signal: AbortSignal
+): Promise<NotionBlockModel[]> => {
+   if (pageBlock == null) {
+      return [];
+   }
+
    let relatedIds = getPropertiesWithSemanticFormat(
-      page,
+      pageBlock,
       SemanticFormatEnum.Page
    );
 

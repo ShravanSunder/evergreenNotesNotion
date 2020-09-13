@@ -1,6 +1,6 @@
 import { RecordMap, Record } from 'aNotion/types/notionV3/notionRecordTypes';
 import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
-import { BlockTypes, BlockProps } from '../types/notionV3/BlockTypes';
+import { BlockTypeEnum, BlockProps } from '../types/notionV3/BlockTypes';
 import {
    NotionBlockRecord,
    NotionBlockModel,
@@ -17,7 +17,7 @@ export const getContent = (
       content = content.concat(c);
    }
 
-   if (node != null && node.value?.type === BlockTypes.CollectionViewPage) {
+   if (node != null && node.value?.type === BlockTypeEnum.CollectionViewPage) {
       let colId = (node.value as blockTypes.CollectionViewPage).collection_id;
       if (record.collection != null) {
          //get parent block of collection
@@ -46,7 +46,7 @@ const getNotionBlocksFromContent = (
    for (let childId of contentIds) {
       if (childId != null) {
          let cBlock = new NotionBlockRecord(record, childId);
-         if (cBlock.type !== BlockTypes.Unknown) {
+         if (cBlock.type !== BlockTypeEnum.Unknown) {
             content.push(cBlock.toSerializable());
          }
       }

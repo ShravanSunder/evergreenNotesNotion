@@ -1,7 +1,7 @@
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import { t_Permission as Permission } from './permission';
 import * as base from 'aNotion/types/notionV3/notionBaseTypes';
-import { BlockTypes } from '../BlockTypes';
+import { BlockTypeEnum } from '../BlockTypes';
 
 /**
  * Everything about how to layout a block.
@@ -42,7 +42,7 @@ export interface BlockFormat {
 export interface EmptyBlock {
    id: base.UUID;
    version: number;
-   type: BlockTypes;
+   type: BlockTypeEnum;
    format?: BlockFormat;
    /** Ids of children blocks */
    content?: base.UUID[];
@@ -75,7 +75,7 @@ export interface BaseTextBlock extends EmptyBlock {
  * Embedded Sub-Page block or Link To Page block.
  */
 export interface Page extends BaseTextBlock {
-   type: BlockTypes.Page;
+   type: BlockTypeEnum.Page;
    /**
     * In a database, every record is a page. Properties set in a database
     * are stored here.
@@ -105,7 +105,7 @@ export interface Page extends BaseTextBlock {
  * Text block. Editable, can have children.
  */
 export interface Text extends BaseTextBlock {
-   type: BlockTypes.Text;
+   type: BlockTypeEnum.Text;
    properties?: {
       title: SemanticString[];
    };
@@ -115,7 +115,7 @@ export interface Text extends BaseTextBlock {
  * Bulleted List block. Editable, can have children.
  */
 export interface BulletedList extends BaseTextBlock {
-   type: BlockTypes.ButtetedList;
+   type: BlockTypeEnum.ButtetedList;
    properties?: {
       title: SemanticString[];
    };
@@ -125,7 +125,7 @@ export interface BulletedList extends BaseTextBlock {
  * Numbered List block. Editable, can have children.
  */
 export interface NumberedList extends BaseTextBlock {
-   type: BlockTypes.NumberedList;
+   type: BlockTypeEnum.NumberedList;
    properties?: {
       title: SemanticString[];
    };
@@ -135,7 +135,7 @@ export interface NumberedList extends BaseTextBlock {
  * To Do block. Editable, can have children.
  */
 export interface ToDo extends BaseTextBlock {
-   type: BlockTypes.ToDo;
+   type: BlockTypeEnum.ToDo;
    properties?: {
       title: SemanticString[];
       checked?: [['Yes' | 'No']];
@@ -146,7 +146,7 @@ export interface ToDo extends BaseTextBlock {
  * Toggle block. Editable, can have children.
  */
 export interface Toggle extends BaseTextBlock {
-   type: BlockTypes.Toggle;
+   type: BlockTypeEnum.Toggle;
    properties?: {
       title: SemanticString[];
    };
@@ -156,7 +156,7 @@ export interface Toggle extends BaseTextBlock {
  * Heading1 block. Editable, can't have children.
  */
 export interface Header1 extends BaseTextBlock {
-   type: BlockTypes.Header1;
+   type: BlockTypeEnum.Header1;
    properties?: {
       title: SemanticString[];
    };
@@ -166,7 +166,7 @@ export interface Header1 extends BaseTextBlock {
  * Heading2 block. Editable, can't have children.
  */
 export interface Header2 extends BaseTextBlock {
-   type: BlockTypes.Header2;
+   type: BlockTypeEnum.Header2;
    properties?: {
       title: SemanticString[];
    };
@@ -176,7 +176,7 @@ export interface Header2 extends BaseTextBlock {
  * Heading3 block. Editable, can't have children.
  */
 export interface Header3 extends BaseTextBlock {
-   type: BlockTypes.Header3;
+   type: BlockTypeEnum.Header3;
    properties?: {
       title: SemanticString[];
    };
@@ -186,7 +186,7 @@ export interface Header3 extends BaseTextBlock {
  * Quote block. Editable, can't have children.
  */
 export interface Quote extends BaseTextBlock {
-   type: BlockTypes.Quote;
+   type: BlockTypeEnum.Quote;
    properties?: {
       title: SemanticString[];
    };
@@ -196,7 +196,7 @@ export interface Quote extends BaseTextBlock {
  * Callout block. Editable, can't have children.
  */
 export interface Callout extends BaseTextBlock {
-   type: BlockTypes.Callout;
+   type: BlockTypeEnum.Callout;
    properties?: {
       title: SemanticString[];
    };
@@ -212,7 +212,7 @@ export interface Callout extends BaseTextBlock {
  * Children of this block must be {@link Column}.
  */
 export interface ColumnList extends EmptyBlock {
-   type: BlockTypes.ColumnList;
+   type: BlockTypeEnum.ColumnList;
 }
 
 /**
@@ -221,25 +221,25 @@ export interface ColumnList extends EmptyBlock {
  * Parent of this block must be {@link ColumnList}.
  */
 export interface Column extends EmptyBlock {
-   type: BlockTypes.Column;
+   type: BlockTypeEnum.Column;
 }
 
 /**
  * Divider block. Not editable, can't have children.
  */
 export interface Divider extends EmptyBlock {
-   type: BlockTypes.Divider;
+   type: BlockTypeEnum.Divider;
 }
 
 export interface TableOfContents extends EmptyBlock {
-   type: BlockTypes.TableOfContents;
+   type: BlockTypeEnum.TableOfContents;
 }
 
 /**
  * Math Equation block.
  */
 export interface Equation extends BaseTextBlock {
-   type: BlockTypes.Equation;
+   type: BlockTypeEnum.Equation;
    properties?: {
       /** LaTeX. */
       title?: SemanticString[];
@@ -250,7 +250,7 @@ export interface Equation extends BaseTextBlock {
  * Template button block.
  */
 export interface TemplateButton extends BaseTextBlock {
-   type: BlockTypes.TemplateButton;
+   type: BlockTypeEnum.TemplateButton;
    properties?: {
       /** Button name. */
       title?: SemanticString[];
@@ -258,7 +258,7 @@ export interface TemplateButton extends BaseTextBlock {
 }
 
 export interface Breadcrumb extends EmptyBlock {
-   type: BlockTypes.BreadCrumb;
+   type: BlockTypeEnum.BreadCrumb;
 }
 
 export type BasicBlockUnion =
@@ -290,7 +290,7 @@ export type BasicBlockUnion =
  * Image block.
  */
 export interface Image extends EmptyBlock {
-   type: BlockTypes.Image;
+   type: BlockTypeEnum.Image;
    properties?: {
       /**
        * Normally, the same as `display_source` in {@link BlockFormat}.
@@ -307,7 +307,7 @@ export interface Image extends EmptyBlock {
  * Video block.
  */
 export interface Video extends EmptyBlock {
-   type: BlockTypes.Video;
+   type: BlockTypeEnum.Video;
    properties?: {
       /**
        * Normally, the same as `display_source` in {@link BlockFormat}.
@@ -324,7 +324,7 @@ export interface Video extends EmptyBlock {
  * Audio block.
  */
 export interface Audio extends EmptyBlock {
-   type: BlockTypes.Audio;
+   type: BlockTypeEnum.Audio;
    properties?: {
       source: [[base.NotionSecureUrl | base.PublicUrl]];
    };
@@ -336,7 +336,7 @@ export interface Audio extends EmptyBlock {
  * Web Bookmark block.
  */
 export interface Bookmark extends BaseTextBlock {
-   type: BlockTypes.Bookmark;
+   type: BlockTypeEnum.Bookmark;
    properties?: {
       /** Link of the bookmarked web page. */
       link: [[string]];
@@ -351,7 +351,7 @@ export interface Bookmark extends BaseTextBlock {
  * Code block.
  */
 export interface Code extends BaseTextBlock {
-   type: BlockTypes.Code;
+   type: BlockTypeEnum.Code;
    properties?: {
       /** Code content. */
       title?: SemanticString[];
@@ -363,7 +363,7 @@ export interface Code extends BaseTextBlock {
  * File block.
  */
 export interface File extends EmptyBlock {
-   type: BlockTypes.File;
+   type: BlockTypeEnum.File;
    properties?: {
       /** Filename. */
       title: [[string]];

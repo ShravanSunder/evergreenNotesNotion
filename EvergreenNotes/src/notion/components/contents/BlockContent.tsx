@@ -9,7 +9,7 @@ import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 
 const BlockUi = React.lazy(() => import('../blocks/BlockUi'));
 
-export const Content = ({
+export const BlockContent = ({
    blockId,
    contentIds,
 }: {

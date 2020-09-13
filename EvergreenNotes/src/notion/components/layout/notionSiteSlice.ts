@@ -15,7 +15,7 @@ import { extractNavigationData } from 'aNotion/services/notionSiteService';
 import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
 import { CurrentPage } from 'aNotion/models/NotionPage';
 import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
-import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
+import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
@@ -39,7 +39,7 @@ const fetchCurrentPage = createAsyncThunk<
 
       if (
          record != null &&
-         record.type !== BlockTypes.Unknown &&
+         record.type !== BlockTypeEnum.Unknown &&
          chunk != null
       ) {
          thunkApi.dispatch(
