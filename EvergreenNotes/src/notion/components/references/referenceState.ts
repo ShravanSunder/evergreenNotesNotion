@@ -11,6 +11,7 @@ export type ReferenceState = {
 export type PageReferences = {
    backlinks: BacklinkRecordModel[];
    references: SearchReferences;
+   relations: NotionBlockModel[];
    pageId?: string;
 };
 
@@ -28,6 +29,7 @@ export const defaultPageReferences = (): PageReferences => {
    return {
       backlinks: [],
       references: defaultSearchReferences(),
+      relations: [],
    };
 };
 

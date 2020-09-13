@@ -58,7 +58,7 @@ const fetchCurrentPage = createAsyncThunk<
          const spaceId = Object.keys(chunk.recordMap.space)[0];
 
          return {
-            record: record?.toSerializable(),
+            pageBlock: record?.toSerializable(),
             spaceId: spaceId,
          };
       } else if (pageId != null && !thunkApi.signal.aborted) {

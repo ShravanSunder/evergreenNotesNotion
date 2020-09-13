@@ -11,7 +11,7 @@ import { referenceActions } from './referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
-import { ReferenceState } from './referenceState';
+import { ReferenceState, BacklinkRecordModel } from './referenceState';
 import { LoadingTab, NothingToFind } from '../common/Loading';
 import { Backlink } from './Backlink';
 
@@ -31,8 +31,8 @@ export const ReferencesPane = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const record = useSelector(currentPageSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
-   const pageName = record.currentPage?.record.simpleTitle;
-   const pageId = record.currentPage?.record.blockId as string;
+   const pageName = record.currentPage?.pageBlock.simpleTitle;
+   const pageId = record.currentPage?.pageBlock.blockId as string;
 
    useEffect(() => {
       if (
@@ -52,14 +52,15 @@ export const ReferencesPane = () => {
    }, [record.status, dispatch, record.currentPage, pageName, pageId]);
 
    return (
-      <React.Fragment>
+      <>
          <Backlinks refs={references}></Backlinks>
+         <Relations refs={references}></Relations>
          <FullTitle refs={references}></FullTitle>
          <Related refs={references}></Related>
          {references.pageReferencesStatus === thunkStatus.rejected && (
             <div>error!</div>
          )}
-      </React.Fragment>
+      </>
    );
 };
 export default ReferencesPane;
@@ -90,6 +91,35 @@ const Backlinks = ({ refs }: { refs: ReferenceState }) => {
             </React.Fragment>
          )}
       </React.Fragment>
+   );
+};
+
+const Relations = ({ refs }: { refs: ReferenceState }) => {
+   let classes = useStyles();
+
+   let relations = refs.pageReferences.relations;
+
+   return (
+      <>
+         {refs.pageReferencesStatus === thunkStatus.pending && (
+            <LoadingTab></LoadingTab>
+         )}
+         {refs.pageReferencesStatus === thunkStatus.fulfilled && (
+            <>
+               <Typography className={classes.sections} variant="h5">
+                  <b>Relations</b>
+               </Typography>
+               {relations.map((u) => {
+                  let link: BacklinkRecordModel = {
+                     backlinkBlock: u,
+                     path: [],
+                  };
+                  return <Backlink key={u.blockId} backlink={link}></Backlink>;
+               })}
+               {relations.length === 0 && <NothingToFind />}
+            </>
+         )}
+      </>
    );
 };
 

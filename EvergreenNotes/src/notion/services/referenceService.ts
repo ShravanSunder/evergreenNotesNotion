@@ -14,6 +14,11 @@ import {
    NotionBlockRecord,
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
+import { Page } from 'aNotion/types/notionV3/definitions/basic_blocks';
+import { getPropertiesWithSemanticFormat } from './pageService';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+
+import * as blockService from 'aNotion/services/blockService';
 
 export const searchNotion = async (
    query: string,
@@ -140,4 +145,18 @@ export const processBacklinks = (
       });
 
    return backlinkData;
+};
+
+export const getRelationsForPage = async (page: Page, signal: AbortSignal) => {
+   let relatedIds = getPropertiesWithSemanticFormat(
+      page,
+      SemanticFormatEnum.Page
+   );
+
+   const [records, chunk] = await blockService.syncBlockRecords(
+      relatedIds,
+      signal
+   );
+   let relations = records.map((m) => m.toSerializable());
+   return relations;
 };

@@ -26,10 +26,10 @@ const saveAllUsers: CaseReducer<
 > = (state, action) => {
    let users = action.payload;
    if (users != null) {
-      Object.keys(users).forEach((kv, i) => {
-         if (users?.[kv].value != null) {
-            state.users[kv] = {
-               user: users?.[kv].value,
+      Object.keys(users).forEach((k, i) => {
+         if (users?.[k].value != null) {
+            state.users[k] = {
+               user: users?.[k].value,
                status: thunkStatus.fulfilled,
             };
          }

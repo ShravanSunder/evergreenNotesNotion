@@ -1,14 +1,21 @@
 import { RecordMap, Record } from 'aNotion/types/notionV3/notionRecordTypes';
 import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
 import { BlockTypes, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
-import { BaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
+import {
+   BaseTextBlock,
+   Page,
+} from 'aNotion/types/notionV3/definitions/basic_blocks';
 import * as recordService from 'aNotion/services/recordService';
 import * as blockService from 'aNotion/services/blockService';
 import {
    SemanticString,
-   SemanticFormat,
-   StringFormatting,
+   SemanticFormatEnum,
 } from 'aNotion/types/notionV3/semanticStringTypes';
+import {
+   getPropertiesWithSemanticFormat,
+   hasBackgroundColorFormat,
+   hasSemanticFormatType,
+} from 'aNotion/services/pageService';
 
 export interface NotionBlockModel {
    block?: blockTypes.Block;
@@ -38,6 +45,7 @@ export class NotionBlockRecord implements NotionBlockModel {
    blockId: string = '';
    parentNodes?: NotionBlockModel[] = undefined;
    contentNodes?: NotionBlockModel[] = undefined;
+   relatedBlocks?: NotionBlockModel[] = undefined;
    contentIds: string[] = [];
 
    constructor(data: RecordMap, blockId: string) {
@@ -196,62 +204,47 @@ export class NotionBlockRecord implements NotionBlockModel {
       return children.concat(recordService.getContent(this.recordMapData, id));
    }
 
+   getRelationsAsBlockIds = (): string[] => {
+      if (this.type !== BlockTypes.Page) {
+         return [];
+      }
+
+      let b = this.block as blockTypes.Page;
+      return getPropertiesWithSemanticFormat(b, SemanticFormatEnum.Page);
+   };
+
    hasBgColor = () => {
-      return this.semanticTitle.some((s) => {
-         if (s[0] != null && s[1] != null) {
-            let format: SemanticFormat[] = s[1];
-            return format.some((f) => {
-               if (f[0] === StringFormatting.Colored) {
-                  if (f[1]?.includes('background')) {
-                     return true;
-                  }
-               }
-               return false;
-            });
-         }
-         return false;
-      });
+      return hasBackgroundColorFormat(this.semanticTitle);
    };
 
    hasLinks = () => {
       return (
-         this.hasType(StringFormatting.Link) ||
+         this.hasType(SemanticFormatEnum.Link) ||
          this.type === BlockTypes.Bookmark
       );
    };
 
    hasCode = () => {
       return (
-         this.hasType(StringFormatting.InlineCode) ||
+         this.hasType(SemanticFormatEnum.InlineCode) ||
          this.type === BlockTypes.Code
       );
    };
 
    hasComments = () => {
-      return this.hasType(StringFormatting.Commented);
+      return this.hasType(SemanticFormatEnum.Commented);
    };
 
    hasUserMentions = () => {
-      return this.hasType(StringFormatting.User);
+      return this.hasType(SemanticFormatEnum.User);
    };
 
    hasPageMentions = () => {
-      return this.hasType(StringFormatting.Page);
+      return this.hasType(SemanticFormatEnum.Page);
    };
 
-   private hasType(formatType: StringFormatting) {
-      return this.semanticTitle.some((s) => {
-         if (s[0] != null && s[1] != null) {
-            let format: SemanticFormat[] = s[1];
-            return format.some((f) => {
-               if (f[0] === formatType) {
-                  return true;
-               }
-               return false;
-            });
-         }
-         return false;
-      });
+   private hasType(formatType: SemanticFormatEnum) {
+      return hasSemanticFormatType(this.semanticTitle, formatType);
    }
 
    toSerializable = (): NotionBlockModel => {

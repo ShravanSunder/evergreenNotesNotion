@@ -1,7 +1,10 @@
 import { NotionBlockRecord } from 'aNotion/models/NotionBlock';
 import { BlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { NotionPageMarks } from 'aNotion/models/NotionPage';
-import { BaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
+import {
+   BaseTextBlock,
+   Page,
+} from 'aNotion/types/notionV3/definitions/basic_blocks';
 import { isBackGroundColor } from './blockService';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import {
@@ -10,6 +13,11 @@ import {
    BlockRecord,
 } from 'aNotion/types/notionV3/notionRecordTypes';
 import { Block } from 'aNotion/types/notionV3/notionBlockTypes';
+import {
+   SemanticFormatEnum,
+   SemanticString,
+   SemanticFormat,
+} from 'aNotion/types/notionV3/semanticStringTypes';
 
 export const processPageForMarks = async (
    pageId: string,
@@ -156,4 +164,64 @@ const getMarksInBlock = (
    } catch {
       //ignore cast errors, if its not a BaseTextBlock, such as collections
    }
+};
+
+export const getPropertiesWithSemanticFormat = (
+   pageBlock: Page,
+   propertyType: SemanticFormatEnum
+) => {
+   let properties: string[] = [];
+
+   Object.keys(pageBlock.properties)
+      .filter((k) => k !== 'title')
+      .forEach((k) =>
+         pageBlock.properties[k].forEach((ps) => {
+            if (ps[1] != null) {
+               ps[1]
+                  .filter((sf) => sf[0] === propertyType && sf[1] != null)
+                  .forEach((sf) => {
+                     if (sf[1] != null) {
+                        properties.push(sf[1]);
+                     }
+                  });
+            }
+         })
+      );
+
+   return properties;
+};
+
+export const hasSemanticFormatType = (
+   property: SemanticString[],
+   formatType: SemanticFormatEnum
+) => {
+   return property.some((s) => {
+      if (s[0] != null && s[1] != null) {
+         let format: SemanticFormat[] = s[1];
+         return format.some((f) => {
+            if (f[0] === formatType) {
+               return true;
+            }
+            return false;
+         });
+      }
+      return false;
+   });
+};
+
+export const hasBackgroundColorFormat = (property: SemanticString[]) => {
+   return property.some((s) => {
+      if (s[0] != null && s[1] != null) {
+         let format: SemanticFormat[] = s[1];
+         return format.some((f) => {
+            if (f[0] === SemanticFormatEnum.Colored) {
+               if (f[1]?.includes('background')) {
+                  return true;
+               }
+            }
+            return false;
+         });
+      }
+      return false;
+   });
 };

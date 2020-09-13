@@ -9,7 +9,6 @@ import * as referenceApi from 'aNotion/api/v3/referenceApi';
 import { SearchSort } from 'aNotion/api/v3/apiRequestTypes';
 import {
    ReferenceState,
-   SearchReferences,
    defaultPageReferences,
    PageReferences,
 } from './referenceState';
@@ -17,7 +16,12 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import {
    processSearchResults,
    processBacklinks,
+   getRelationsForPage,
 } from 'aNotion/services/referenceService';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { currentPageSelector } from 'aNotion/providers/storeSelectors';
+import { RootState } from 'aNotion/providers/rootReducer';
+import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
 
 const initialState: ReferenceState = {
    pageReferences: defaultPageReferences(),
@@ -31,6 +35,7 @@ const fetchRefsForPage = createAsyncThunk<
 >(
    'notion/reference/current',
    async ({ query, pageId }, thunkApi): Promise<PageReferences> => {
+      //related seraches
       let searchPromise = searchApi.searchByRelevance(
          query,
          false,
@@ -39,9 +44,26 @@ const fetchRefsForPage = createAsyncThunk<
          thunkApi.signal
       );
 
-      let links = await referenceApi.getBacklinks(pageId, thunkApi.signal);
-      let search = await searchPromise;
+      //get backlinks
+      let linksPromise = referenceApi.getBacklinks(pageId, thunkApi.signal);
 
+      //get page relations
+      let relationsPromise: Promise<NotionBlockModel[]> = new Promise<
+         NotionBlockModel[]
+      >(() => []);
+      let pageBlock = currentPageSelector(thunkApi.getState() as RootState)
+         .currentPage?.pageBlock;
+      if (pageBlock != null && pageBlock.block != null) {
+         let page = pageBlock.block as Page;
+         relationsPromise = getRelationsForPage(page, thunkApi.signal);
+      }
+
+      //resolve promises
+      let search = await searchPromise;
+      let links = await linksPromise;
+      let relations = await relationsPromise;
+
+      //construct result
       if (links != null && !thunkApi.signal.aborted && search != null) {
          const b = processBacklinks(links);
          const s = processSearchResults(
@@ -54,6 +76,7 @@ const fetchRefsForPage = createAsyncThunk<
             backlinks: b,
             references: s,
             pageId: pageId,
+            relations: relations,
          };
       }
 

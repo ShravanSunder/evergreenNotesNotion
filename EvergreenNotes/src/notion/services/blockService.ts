@@ -62,6 +62,30 @@ export const fetchPageRecord = async (
    return [block!, chunk!];
 };
 
+export const syncBlockRecords = async (
+   blockIds: string[],
+   signal: AbortSignal
+): Promise<[NotionBlockRecord[], LoadPageChunk.PageChunk]> => {
+   let chunk: LoadPageChunk.PageChunk | undefined = undefined;
+   let blocks: NotionBlockRecord[] = [];
+
+   let sycRecordPromise = blockApi.syncRecordValues(blockIds, signal);
+
+   // this method is much faster, but doesn't work for collection pages
+   chunk = (await sycRecordPromise) as LoadPageChunk.PageChunk;
+
+   if (chunk != null && !signal.aborted) {
+      blockIds.forEach((id) => {
+         let block = getBlockFromPageChunk(chunk!, id);
+         if (block.block != null) {
+            blocks.push(block);
+         }
+      });
+   }
+
+   return [blocks, chunk!];
+};
+
 export const getBlockFromPageChunk = (
    page: PageChunk,
    pageId: string

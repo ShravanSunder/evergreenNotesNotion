@@ -6,7 +6,7 @@ import { BaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import {
    SemanticString,
    SemanticFormat,
-   StringFormatting,
+   SemanticFormatEnum,
    AbsoluteDateTime,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import { useSelector, useDispatch } from 'react-redux';
@@ -109,24 +109,24 @@ const TextSegment = ({
    let link: string | undefined = undefined;
 
    useEffect(() => {
-      if (textInfo != null && textType === StringFormatting.Page) {
+      if (textInfo != null && textType === SemanticFormatEnum.Page) {
          dispatch(blockActions.fetchBlock({ blockId: textInfo }));
       }
    }, [dispatch, textInfo, textType]);
 
-   if (textInfo != null && textType === StringFormatting.Page) {
+   if (textInfo != null && textType === SemanticFormatEnum.Page) {
       text = blockData[textInfo]?.block?.simpleTitle ?? '';
       link = getPageUrl(textInfo);
-   } else if (textInfo != null && textType === StringFormatting.Link) {
+   } else if (textInfo != null && textType === SemanticFormatEnum.Link) {
       link = textInfo;
-   } else if (textInfo != null && textType === StringFormatting.User) {
+   } else if (textInfo != null && textType === SemanticFormatEnum.User) {
       text =
          ' @' +
          mentionData.users[textInfo]?.user?.given_name +
          ', ' +
          mentionData.users[textInfo]?.user?.family_name +
          ' ';
-   } else if (textInfo != null && textType === StringFormatting.DateTime) {
+   } else if (textInfo != null && textType === SemanticFormatEnum.DateTime) {
       text = '@date support added in next version';
       if ('isAbsolute' in (textInfo as AbsoluteDateTime)) {
          let d = textInfo as AbsoluteDateTime;
@@ -150,7 +150,7 @@ const TextSegment = ({
                {text}
             </Typography>
          )}
-         {link != null && textType === StringFormatting.Page && (
+         {link != null && textType === SemanticFormatEnum.Page && (
             <Link
                display="inline"
                className={classes.typography}
@@ -168,7 +168,7 @@ const TextSegment = ({
                {text}
             </Link>
          )}
-         {link != null && textType === StringFormatting.Link && (
+         {link != null && textType === SemanticFormatEnum.Link && (
             <>
                <Typography
                   display="inline"
@@ -202,7 +202,7 @@ const useSegmentData = (
 } => {
    let textStyle: React.CSSProperties = {};
    let textInfo: string | undefined = undefined;
-   let textType: StringFormatting | undefined = undefined;
+   let textType: SemanticFormatEnum | undefined = undefined;
 
    if (color) {
       textStyle.color = color;
@@ -213,13 +213,13 @@ const useSegmentData = (
 
    format.forEach((d) => {
       switch (d[0]) {
-         case StringFormatting.Bold:
+         case SemanticFormatEnum.Bold:
             textStyle.fontWeight = 'bold';
             break;
-         case StringFormatting.Italic:
+         case SemanticFormatEnum.Italic:
             textStyle.fontStyle = 'italic';
             break;
-         case StringFormatting.Colored:
+         case SemanticFormatEnum.Colored:
             if (d[1] != null && getColor(d[1]) != null) {
                if (d[1].includes('background')) {
                   textStyle.backgroundColor = getColor(d[1]);
@@ -228,10 +228,10 @@ const useSegmentData = (
                }
             }
             break;
-         case StringFormatting.Strike:
+         case SemanticFormatEnum.Strike:
             textStyle.textDecoration = 'line-through';
             break;
-         case StringFormatting.User:
+         case SemanticFormatEnum.User:
             if (d[1] != null) {
                textInfo = d[1];
                textType = d[0];
@@ -240,7 +240,7 @@ const useSegmentData = (
                textStyle.color = grey[700];
             }
             break;
-         case StringFormatting.Link:
+         case SemanticFormatEnum.Link:
             if (d[1] != null) {
                textInfo = d[1];
                textType = d[0];
@@ -249,7 +249,7 @@ const useSegmentData = (
                textStyle.color = grey[700];
             }
             break;
-         case StringFormatting.Page:
+         case SemanticFormatEnum.Page:
             textStyle.color = grey[800];
             textStyle.fontWeight = 'bold';
             if (d[1] != null) {
@@ -257,7 +257,7 @@ const useSegmentData = (
                textType = d[0];
             }
             break;
-         case StringFormatting.InlineCode:
+         case SemanticFormatEnum.InlineCode:
             textStyle.fontFamily = 'Consolas';
             if (textStyle.backgroundColor == null) {
                textStyle.background = grey[300];
@@ -266,7 +266,7 @@ const useSegmentData = (
                textStyle.color = red[700];
             }
             break;
-         case StringFormatting.DateTime:
+         case SemanticFormatEnum.DateTime:
             if (d[1] != null) {
                textInfo = d[1];
                textType = d[0];

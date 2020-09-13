@@ -92,7 +92,7 @@ export interface Page extends BaseTextBlock {
     */
    properties: {
       title: SemanticString[];
-      COXj?: SemanticString[];
+      [key: string]: SemanticString[];
    };
    permissions?: Permission[];
    /**
