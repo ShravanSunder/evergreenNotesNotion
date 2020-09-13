@@ -52,6 +52,10 @@ const LoadingDetails = () => {
    );
 };
 
+export const LoadingImage = () => {
+   return <Skeleton variant="rect" style={{ padding: 9 }} height={40} />;
+};
+
 export const NothingToFind = () => {
    return (
       <Typography
