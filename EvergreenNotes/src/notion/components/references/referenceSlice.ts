@@ -64,7 +64,8 @@ const fetchRefsForPage = createAsyncThunk<
             query,
             search,
             pageId,
-            b.map((b) => b.backlinkBlock.blockId)
+            b.map((b) => b.backlinkBlock.blockId),
+            10
          );
          return {
             backlinks: b,

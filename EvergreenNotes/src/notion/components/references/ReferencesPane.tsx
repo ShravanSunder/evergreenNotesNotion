@@ -169,7 +169,7 @@ const FullTitle = ({ refs }: { refs: ReferenceState }) => {
          {refs.pageReferencesStatus === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>References</b>
+                  <b>Related Search</b>
                </Typography>
                {fullTitle.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;
@@ -194,7 +194,7 @@ const Related = ({ refs }: { refs: ReferenceState }) => {
          {refs.pageReferencesStatus === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Related Searches</b>
+                  <b>Additional Search Results</b>
                </Typography>
                {data.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;

@@ -31,7 +31,7 @@ export const searchNotion = async (
       abort?.signal
    );
    if (result1 != null && abort?.signal.aborted !== true) {
-      return processSearchResults(query, result1, undefined, undefined);
+      return processSearchResults(query, result1, undefined, undefined, 20);
    }
 
    return defaultSearchReferences();
@@ -42,7 +42,7 @@ export const processSearchResults = (
    searchResults: SearchResultsType,
    pageId: string | undefined,
    excludedBlockIds: string[] = [],
-   searchLimit: number = 20
+   searchLimit: number = 10
 ): SearchReferences => {
    let fullTitle: SearchRecordModel[] = [];
    let related: SearchRecordModel[] = [];
@@ -65,11 +65,15 @@ export const processSearchResults = (
       }
    }
 
-   related = related.sort((x, y) => y.score - x.score).slice(0, searchLimit);
-   fullTitle = fullTitle.sort((x, y) => y.score - x.score);
+   const sortedFullTitle = fullTitle.sort((x, y) => y.score - x.score);
+   fullTitle = sortedFullTitle.slice(0, searchLimit);
+
+   const sortedLimitedRelated = related
+      .concat(sortedFullTitle.slice(searchLimit * 2))
+      .sort((x, y) => y.score - x.score);
 
    return {
-      related: related,
+      related: sortedLimitedRelated,
       fullTitle: fullTitle,
    };
 };
