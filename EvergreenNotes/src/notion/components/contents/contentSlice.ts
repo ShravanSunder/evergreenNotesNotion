@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import {
+   createSlice,
+   createAsyncThunk,
+   PayloadAction,
+   CaseReducer,
+} from '@reduxjs/toolkit';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import {
    ContentState,
@@ -65,10 +70,18 @@ const checkStateForContent = (
    return undefined;
 };
 
+const clearContent: CaseReducer<ContentState, PayloadAction<any>> = (
+   state: ContentState
+) => {
+   state = {};
+};
+
 const contentSlice = createSlice({
    name: 'contentSlice',
    initialState: initialState,
-   reducers: {},
+   reducers: {
+      clearContent: clearContent,
+   },
    extraReducers: {
       [fetchContent.fulfilled.toString()]: (
          state,

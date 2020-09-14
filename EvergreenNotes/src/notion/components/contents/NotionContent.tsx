@@ -66,7 +66,7 @@ const Children = ({
    block: NotionBlockModel;
    depth: number;
 }) => {
-   if (depth > 4) {
+   if (depth > 6) {
       return null;
    }
 
@@ -74,6 +74,7 @@ const Children = ({
       case BlockTypeEnum.Page:
       case BlockTypeEnum.CollectionViewInline:
       case BlockTypeEnum.CollectionViewPage:
+      case BlockTypeEnum.TemplateButton:
          return null;
    }
 

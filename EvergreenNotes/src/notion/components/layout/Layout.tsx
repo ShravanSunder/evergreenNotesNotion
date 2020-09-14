@@ -14,6 +14,7 @@ import {
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { notionSiteActions } from './notionSiteSlice';
+import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
@@ -36,6 +37,7 @@ import {
 } from '@material-ui/core';
 import { LoadingTab } from '../common/Loading';
 import { LightTooltip } from '../common/Styles';
+import { flushCache } from 'aUtilities/apiCache';
 
 const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
 const MarksPane = React.lazy(() => import('../pageMarks/MarksPane'));
@@ -97,6 +99,8 @@ const MenuBar = ({
 
    const handleRefresh = (e: SyntheticEvent) => {
       if (navigation.pageId != null) {
+         flushCache();
+         dispatch(contentActions.clearContent({}));
          dispatch(
             notionSiteActions.fetchCurrentPage({
                pageId: navigation.pageId,

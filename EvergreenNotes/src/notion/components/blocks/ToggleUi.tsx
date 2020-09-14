@@ -17,7 +17,7 @@ export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
 
    return (
       <Grid container>
-         <Grid item xs={1} style={{ paddingRight: 8 }}>
+         <Grid item xs={1} style={{ paddingLeft: 3 }}>
             <IconButton size="small" onClick={handleClick}>
                {expanded && <ArrowDropDown fontSize="inherit" />}
                {!expanded && <ArrowRight fontSize="inherit" />}
