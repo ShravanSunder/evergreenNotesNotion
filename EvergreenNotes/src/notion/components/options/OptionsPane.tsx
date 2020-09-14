@@ -1,17 +1,14 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
+import manifest from '../../../manifest.json';
 
 import {
    makeStyles,
    createStyles,
    Typography,
    Grid,
-   Switch,
-   FormGroup,
-   FormControlLabel,
    Link,
 } from '@material-ui/core';
-import { pageMarksSelector } from 'aNotion/providers/storeSelectors';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
@@ -81,6 +78,12 @@ export const OptionsPane = () => {
                <b>Information and Feedback</b>
             </Typography>
             <Grid style={{ marginLeft: 6 }}>
+               <Typography>
+                  <strong>Version:</strong> v{manifest.version}
+               </Typography>
+               <Typography display="inline">
+                  <strong>Details: </strong>
+               </Typography>
                <Link
                   variant="subtitle1"
                   target="_blank"
@@ -88,6 +91,9 @@ export const OptionsPane = () => {
                   Website
                </Link>
                <div></div>
+               <Typography display="inline">
+                  <strong>Contact: </strong>
+               </Typography>
                <Link
                   variant="subtitle1"
                   target="_blank"

@@ -1,5 +1,11 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, MouseEvent, useState, SyntheticEvent } from 'react';
+import React, {
+   useEffect,
+   MouseEvent,
+   useState,
+   SyntheticEvent,
+   Suspense,
+} from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import {
@@ -21,7 +27,7 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
 import { SearchReferences, defaultSearchReferences } from './referenceState';
-import { LoadingTab, NothingToFind } from '../common/Loading';
+import { NothingToFind, LoadingSection } from '../common/Loading';
 import { useApi, UseApiPromise } from '../../hooks/useApiPromise';
 import { searchNotion } from 'aNotion/services/referenceService';
 import {
@@ -31,6 +37,7 @@ import {
 } from 'material-ui-popup-state/hooks';
 import HistoryIcon from '@material-ui/icons/History';
 import { grey } from '@material-ui/core/colors';
+import { ErrorBoundary, ErrorFallback } from 'aCommon/Components/ErrorFallback';
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -82,7 +89,7 @@ export const SearchPane = () => {
    result = result ?? defaultSearchReferences();
 
    return (
-      <React.Fragment>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Grid container>
             <Grid item xs>
                <TextField
@@ -145,7 +152,7 @@ export const SearchPane = () => {
             searchResults={result}
             status={status}></RelatedReferences>
          {status === thunkStatus.rejected && <div>error!</div>}
-      </React.Fragment>
+      </ErrorBoundary>
    );
 };
 export default SearchPane;
@@ -162,10 +169,10 @@ const FullReferences = ({
    let fullTitle = searchResults.fullTitle;
 
    return (
-      <React.Fragment>
-         {status === thunkStatus.pending && <LoadingTab></LoadingTab>}
+      <Suspense fallback={LoadingSection}>
+         {status === thunkStatus.pending && <LoadingSection></LoadingSection>}
          {status === thunkStatus.fulfilled && (
-            <React.Fragment>
+            <>
                <Typography className={classes.sections} variant="h5">
                   <b>References</b>
                </Typography>
@@ -173,9 +180,9 @@ const FullReferences = ({
                   return <Reference key={u.id} refData={u}></Reference>;
                })}
                {fullTitle.length === 0 && <NothingToFind />}
-            </React.Fragment>
+            </>
          )}
-      </React.Fragment>
+      </Suspense>
    );
 };
 
@@ -191,10 +198,10 @@ const RelatedReferences = ({
    let data = searchResults.related;
 
    return (
-      <React.Fragment>
-         {status === thunkStatus.pending && <LoadingTab></LoadingTab>}
+      <Suspense fallback={LoadingSection}>
+         {status === thunkStatus.pending && <LoadingSection></LoadingSection>}
          {status === thunkStatus.fulfilled && (
-            <React.Fragment>
+            <>
                <Typography className={classes.sections} variant="h5">
                   <b>Related Searches</b>
                </Typography>
@@ -202,8 +209,8 @@ const RelatedReferences = ({
                   return <Reference key={u.id} refData={u}></Reference>;
                })}
                {data.length === 0 && <NothingToFind />}
-            </React.Fragment>
+            </>
          )}
-      </React.Fragment>
+      </Suspense>
    );
 };

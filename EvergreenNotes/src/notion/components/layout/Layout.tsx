@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export enum LayoutTabs {
-   References = 'Page References',
+   References = 'References',
    Search = 'Search',
    PageMarkups = 'Page Markups',
    Events = 'Events',
@@ -228,8 +228,20 @@ export const Layout = () => {
             <div style={{ marginTop: 12 }}></div>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
                <Suspense fallback={<LoadingTab />}>
-                  {tab === LayoutTabs.References && <ReferencesPane />}
-                  {tab === LayoutTabs.PageMarkups && <MarksPane />}
+                  <div
+                     style={{
+                        display:
+                           tab === LayoutTabs.References ? 'block' : 'none',
+                     }}>
+                     <ReferencesPane />
+                  </div>
+                  <div
+                     style={{
+                        display:
+                           tab === LayoutTabs.PageMarkups ? 'block' : 'none',
+                     }}>
+                     <MarksPane />
+                  </div>
                   <div
                      style={{
                         display: tab === LayoutTabs.Search ? 'block' : 'none',

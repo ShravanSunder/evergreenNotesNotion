@@ -4,7 +4,7 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { contentActions } from 'aNotion/components/contents/contentSlice';
-import { LoadingSection } from '../common/Loading';
+import { LoadingSection, LoadingLine } from '../common/Loading';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';

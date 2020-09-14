@@ -15,7 +15,6 @@ export const LoadingTab = () => {
          <Typography variant="h2">
             <Skeleton></Skeleton>
          </Typography>
-
          <LoadingDetails />
          <LoadingDetails />
          <LoadingDetails />
@@ -36,6 +35,16 @@ export const LoadingSection = () => {
    );
 };
 
+export const LoadingLine = () => {
+   return (
+      <Box style={{ padding: 6 }}>
+         <Typography variant="h6">
+            <Skeleton></Skeleton>
+         </Typography>
+      </Box>
+   );
+};
+
 const LoadingDetails = () => {
    return (
       <React.Fragment>
@@ -44,6 +53,7 @@ const LoadingDetails = () => {
          </Typography>
          <Typography variant="body2">
             <Skeleton></Skeleton>
+            <Skeleton variant="rect" style={{ padding: 9 }} height={40} />;
             <Skeleton></Skeleton>
             <Skeleton></Skeleton>
          </Typography>

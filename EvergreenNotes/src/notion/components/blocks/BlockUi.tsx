@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import {
    Typography,
    Divider,
@@ -27,6 +27,7 @@ import {
 } from 'aNotion/services/blockService';
 import { TextUi } from './TextUi';
 import { ImageUi } from './ImageUi';
+import { LoadingImage, LoadingLine } from '../common/Loading';
 
 export const useBlockStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -73,40 +74,42 @@ export const BlockUi = ({
       block.type !== BlockTypeEnum.CollectionViewPage;
 
    return (
-      <div
-         className={classes.block}
-         style={{ backgroundColor: backgroundColor, color: color }}>
-         {useGeneric && (
-            <TextUi
-               variant={variant}
-               block={block}
-               style={{
-                  backgroundColor: backgroundColor,
-                  color: color,
-               }}></TextUi>
-         )}
-         {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
-         {block.type === BlockTypeEnum.Callout && (
-            <CalloutUi block={block}></CalloutUi>
-         )}
-         {block.type === BlockTypeEnum.Quote && <QuoteUi block={block} />}
-         {block.type === BlockTypeEnum.ButtetedList && (
-            <BulletUi block={block} />
-         )}
-         {block.type === BlockTypeEnum.NumberedList && (
-            <NumberUi block={block} />
-         )}
-         {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
-         {block.type === BlockTypeEnum.Page && (
-            <PageUi block={block} variant={variant} />
-         )}
-         {block.type === BlockTypeEnum.CollectionViewPage && (
-            <PageUi block={block} variant={variant} />
-         )}
-         {block.type === BlockTypeEnum.Toggle && <ToggleUi block={block} />}
-         {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
-         {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
-      </div>
+      <Suspense fallback={LoadingLine}>
+         <div
+            className={classes.block}
+            style={{ backgroundColor: backgroundColor, color: color }}>
+            {useGeneric && (
+               <TextUi
+                  variant={variant}
+                  block={block}
+                  style={{
+                     backgroundColor: backgroundColor,
+                     color: color,
+                  }}></TextUi>
+            )}
+            {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
+            {block.type === BlockTypeEnum.Callout && (
+               <CalloutUi block={block}></CalloutUi>
+            )}
+            {block.type === BlockTypeEnum.Quote && <QuoteUi block={block} />}
+            {block.type === BlockTypeEnum.ButtetedList && (
+               <BulletUi block={block} />
+            )}
+            {block.type === BlockTypeEnum.NumberedList && (
+               <NumberUi block={block} />
+            )}
+            {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
+            {block.type === BlockTypeEnum.Page && (
+               <PageUi block={block} variant={variant} />
+            )}
+            {block.type === BlockTypeEnum.CollectionViewPage && (
+               <PageUi block={block} variant={variant} />
+            )}
+            {block.type === BlockTypeEnum.Toggle && <ToggleUi block={block} />}
+            {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
+            {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
+         </div>
+      </Suspense>
    );
 };
 export default BlockUi;

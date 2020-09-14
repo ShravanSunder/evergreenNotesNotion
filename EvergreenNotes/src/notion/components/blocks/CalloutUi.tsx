@@ -3,6 +3,7 @@ import { Typography, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Callout } from 'aNotion/types/notionV3/notionBlockTypes';
 import { useBlockStyles } from './BlockUi';
+import { TextUi } from './TextUi';
 
 export const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
@@ -16,9 +17,7 @@ export const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
             </Typography>
          </Grid>
          <Grid item xs={10}>
-            <Typography variant={'body1'} className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
+            <TextUi block={block}></TextUi>
          </Grid>
       </Grid>
    );
