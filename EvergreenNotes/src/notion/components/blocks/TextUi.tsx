@@ -249,7 +249,7 @@ const useSegmentData = (
          case SemanticFormatEnum.DateTime:
             if (d[1] != null) {
                let dateData = d[1] as any;
-               textInfo = parseDate(dateData, textInfo);
+               textInfo = parseDate(dateData);
                textType = d[0];
             }
             if (textStyle.color == null) {
@@ -261,31 +261,32 @@ const useSegmentData = (
    return { textStyle: { ...textStyle }, textType, textInfo };
 };
 
-function parseDate(
-   dateData: any,
-   textInfo: import('c:/Users/Shravan/Dropbox/Dev/evergreenNotes/EvergreenNotes/src/notion/types/notionV3/semanticStringTypes').SemanticFormatValue
-) {
-   if (dateData.date_format === 'relative') {
-      let date = dateData as RelativeDateTime;
-      textInfo =
-         '@' + DateTime.fromFormat(date.start_date, 'yyyy-mm-dd').toRelative();
-      if (date.end_date)
+function parseDate(dateData: any) {
+   let textInfo: string = '';
+   try {
+      if (dateData.date_format === 'relative') {
+         let date = dateData as RelativeDateTime;
          textInfo =
-            ' --> ' +
-            DateTime.fromFormat(date.end_date, 'yyyy-mm-dd').toRelative();
-   } else {
-      let date = dateData as AbsoluteDateTime;
-      textInfo =
-         '@' +
-         DateTime.fromFormat(date.start_date, 'yyyy-mm-dd').toFormat(
-            date.date_format
-         );
-      if (date.end_date)
+            '@' +
+            DateTime.fromFormat(date.start_date, 'yyyy-mm-dd').toRelative();
+         if (date.end_date)
+            textInfo =
+               ' --> ' +
+               DateTime.fromFormat(date.end_date, 'yyyy-mm-dd').toRelative();
+      } else {
+         let date = dateData as AbsoluteDateTime;
          textInfo =
-            ' ⟶ ' +
-            DateTime.fromFormat(date.end_date, 'yyyy-mm-dd').toFormat(
+            '@' +
+            DateTime.fromFormat(date.start_date, 'yyyy-mm-dd').toFormat(
                date.date_format
             );
-   }
+         if (date.end_date)
+            textInfo =
+               ' ⟶ ' +
+               DateTime.fromFormat(date.end_date, 'yyyy-mm-dd').toFormat(
+                  date.date_format
+               );
+      }
+   } catch {}
    return textInfo;
 }
