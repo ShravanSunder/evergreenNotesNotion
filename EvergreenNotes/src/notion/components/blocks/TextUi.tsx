@@ -8,6 +8,7 @@ import {
    SemanticFormat,
    SemanticFormatEnum,
    AbsoluteDateTime,
+   RelativeDateTime,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -27,14 +28,12 @@ export const TextUi = ({
    block,
    variant,
    interactive,
-   color,
-   bgColor,
+   style,
 }: {
    block: NotionBlockModel;
    variant?: Variant | undefined;
    interactive?: boolean;
-   color?: string;
-   bgColor?: string;
+   style?: React.CSSProperties;
 }) => {
    let classes = useBlockStyles();
    const bb = block.block as BaseTextBlock;
@@ -72,8 +71,7 @@ export const TextUi = ({
                      segment={segment}
                      variant={variant ?? 'body1'}
                      interactive={interactive ?? true}
-                     color={color}
-                     bgColor={bgColor}></TextSegment>
+                     style={style}></TextSegment>
                );
             })}
          </React.Fragment>
@@ -85,14 +83,12 @@ const TextSegment = ({
    segment,
    variant,
    interactive,
-   color,
-   bgColor,
+   style,
 }: {
    segment: SemanticString;
    variant: Variant;
    interactive: boolean;
-   color?: string;
-   bgColor?: string;
+   style?: React.CSSProperties;
 }) => {
    let classes = useBlockStyles();
    let text = segment[0];
@@ -101,11 +97,7 @@ const TextSegment = ({
 
    const blockData = useSelector(blockSelector);
    const mentionData = useSelector(mentionSelector);
-   let { textStyle, textInfo, textType } = useSegmentData(
-      format,
-      color,
-      bgColor
-   );
+   let { textStyle, textInfo, textType } = useSegmentData(format, style);
    let link: string | undefined = undefined;
 
    useEffect(() => {
@@ -126,13 +118,8 @@ const TextSegment = ({
          ', ' +
          mentionData.users[textInfo]?.user?.family_name +
          ' ';
-   } else if (textInfo != null && textType === SemanticFormatEnum.DateTime) {
-      text = '@date support added in next version';
-      if ('isAbsolute' in (textInfo as AbsoluteDateTime)) {
-         let d = textInfo as AbsoluteDateTime;
-      } else {
-         let d = textInfo as AbsoluteDateTime;
-      }
+   } else if (textType === SemanticFormatEnum.DateTime) {
+      text = '@@@dates not supported yet';
    }
 
    if (text == null || (text.trim().length === 0 && textInfo == null)) {
@@ -193,23 +180,15 @@ const TextSegment = ({
 };
 const useSegmentData = (
    format: SemanticFormat[],
-   color?: string,
-   bgColor?: string
+   style?: React.CSSProperties
 ): {
    textStyle: React.CSSProperties;
    textInfo: string | undefined;
    textType: string | undefined;
 } => {
-   let textStyle: React.CSSProperties = {};
+   let textStyle: React.CSSProperties = style || {};
    let textInfo: string | undefined = undefined;
    let textType: SemanticFormatEnum | undefined = undefined;
-
-   if (color) {
-      textStyle.color = color;
-   }
-   if (bgColor) {
-      textStyle.backgroundColor = bgColor;
-   }
 
    format.forEach((d) => {
       switch (d[0]) {
@@ -269,6 +248,11 @@ const useSegmentData = (
          case SemanticFormatEnum.DateTime:
             if (d[1] != null) {
                textInfo = d[1];
+               // if ('isAbsolute' in (d[1] as AbsoluteDateTime)) {
+               //    let date = d[1] as AbsoluteDateTime;
+               // } else {
+               //    let date = d[1] as RelativeDateTime;
+               // }
                textType = d[0];
             }
             if (textStyle.color == null) {

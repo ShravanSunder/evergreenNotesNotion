@@ -80,8 +80,10 @@ export const BlockUi = ({
             <TextUi
                variant={variant}
                block={block}
-               bgColor={backgroundColor}
-               color={color}></TextUi>
+               style={{
+                  backgroundColor: backgroundColor,
+                  color: color,
+               }}></TextUi>
          )}
          {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
          {block.type === BlockTypeEnum.Callout && (

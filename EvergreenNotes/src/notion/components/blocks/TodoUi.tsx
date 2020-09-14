@@ -3,6 +3,7 @@ import { Typography, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ToDo } from 'aNotion/types/notionV3/notionBlockTypes';
 import { useBlockStyles } from './BlockUi';
+import { TextUi } from './TextUi';
 
 export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
@@ -24,13 +25,11 @@ export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
             )}
          </Grid>
          <Grid item xs={11}>
-            <Typography
-               display={'inline'}
-               variant={'body1'}
-               style={{ textDecoration: checked ? 'line-through' : '' }}
-               className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
+            <TextUi
+               block={block}
+               style={{
+                  textDecoration: checked ? 'line-through' : '',
+               }}></TextUi>
          </Grid>
       </Grid>
    );
