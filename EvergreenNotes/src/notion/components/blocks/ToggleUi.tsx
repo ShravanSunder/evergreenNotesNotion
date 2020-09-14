@@ -5,6 +5,7 @@ import { Toggle } from 'aNotion/types/notionV3/notionBlockTypes';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
 import { NotionContent } from '../contents/NotionContent';
 import { useBlockStyles } from './BlockUi';
+import { TextUi } from './TextUi';
 export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
    let toggle = block.block as Toggle;
@@ -24,12 +25,7 @@ export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
             </IconButton>
          </Grid>
          <Grid item xs={11}>
-            <Typography
-               display={'inline'}
-               variant={'body1'}
-               className={classes.typography}>
-               {block.simpleTitle}
-            </Typography>
+            <TextUi block={block} />
             {expanded && (
                <NotionContent blockId={block.blockId}></NotionContent>
             )}
