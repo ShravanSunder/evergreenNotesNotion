@@ -1,47 +1,61 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as blockApi from 'aNotion/api/v3/blockApi';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { getBlockFromPageChunk } from 'aNotion/services/blockService';
-import { ContentState } from 'aNotion/components/contents/contentState';
+import {
+   ContentState,
+   ContentBlocks,
+} from 'aNotion/components/contents/contentState';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
+import { fetchContentForBlock } from 'aNotion/services/recordService';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 const initialState: ContentState = {};
 
-const fetchContent = createAsyncThunk(
-   'notion/content',
+const fetchContent = createAsyncThunk<
+   ContentBlocks[],
+   {
+      blockId: string;
+      signal?: AbortSignal;
+   }
+>(
+   'notion/fetchContent',
    async (
-      { blockId, contentIds }: { blockId: string; contentIds: string[] },
+      {
+         blockId,
+      }: {
+         blockId: string;
+      },
       thunkApi
    ) => {
-      let state = contentSelector(
-         thunkApi.getState() as RootState
-      ) as ContentState;
-
-      //if it gets inefficient, we can use contentIds and syncRecordValues
-      return fetchContentIfNotInStore(state, blockId, thunkApi);
+      try {
+         //if it gets inefficient, we can use contentIds and syncRecordValues
+         const result = await fetchContentForBlock(blockId, thunkApi.signal);
+         return result;
+      } catch (err) {
+         console.log(err);
+         throw err;
+      }
+   },
+   {
+      condition: ({ blockId, signal }, { getState, extra }) => {
+         let state = contentSelector(getState() as RootState) as ContentState;
+         const data = checkStateForContent(state, blockId);
+         if (
+            data != null &&
+            (data.status === thunkStatus.pending ||
+               data.status === thunkStatus.fulfilled)
+         ) {
+            return false;
+         }
+         return true;
+      },
    }
 );
-const fetchContentIfNotInStore = async (
+
+const checkStateForContent = (
    state: ContentState,
-   blockId: string,
-   thunkApi: any
-) => {
-   let data = checkStateForContent(state, blockId);
-
-   if (data?.status !== thunkStatus.fulfilled) {
-      let result = await blockApi.loadPageChunk(blockId, 100, thunkApi.signal);
-      if (result != null && !thunkApi.signal.aborted) {
-         let block = getBlockFromPageChunk(result, blockId);
-         return block.getContentNodes();
-      }
-   } else {
-      return data.content;
-   }
-   return [];
-};
-
-const checkStateForContent = (state: ContentState, blockId: string) => {
+   blockId: string
+): { content: NotionBlockModel[]; status: thunkStatus } | undefined => {
    if (
       state[blockId] != null &&
       state[blockId].status === thunkStatus.fulfilled
@@ -56,17 +70,22 @@ const contentSlice = createSlice({
    initialState: initialState,
    reducers: {},
    extraReducers: {
-      [fetchContent.fulfilled.toString()]: (state, action) => {
-         const { blockId } = action.meta.arg;
-         state[blockId] = {
-            content: action.payload,
-            status: thunkStatus.fulfilled,
-         }; // = action.payload;
+      [fetchContent.fulfilled.toString()]: (
+         state,
+         action: PayloadAction<ContentBlocks[]>
+      ) => {
+         action.payload.forEach((contentBlocks) => {
+            state[contentBlocks.blockId] = {
+               content: contentBlocks.content,
+               status: thunkStatus.fulfilled,
+            };
+         });
       },
       [fetchContent.pending.toString()]: (state, action) => {
          const { blockId } = action.meta.arg;
          let data = checkStateForContent(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
+            //clear block if its in transition
             state[blockId] = {
                content: [],
                status: thunkStatus.pending,
@@ -77,6 +96,7 @@ const contentSlice = createSlice({
          const { blockId } = action.meta.arg;
          let data = checkStateForContent(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
+            //clear block if its in transition
             state[blockId] = {
                content: [],
                status: thunkStatus.rejected,

@@ -82,8 +82,7 @@ const buildPageRecords = async (
          block.value?.type !== BlockTypeEnum.Page &&
          block.value?.type !== BlockTypeEnum.CollectionViewPage;
 
-      if (checkSubContents)
-         subContentIds = subContentIds.concat(block.value?.content ?? []);
+      if (checkSubContents) subContentIds.push(...(block.value?.content ?? []));
    });
 
    if (subContentIds.length > 0 && !signal.aborted) {

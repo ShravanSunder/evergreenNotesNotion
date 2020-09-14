@@ -3,7 +3,7 @@ import { Typography, Grid, IconButton } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Toggle } from 'aNotion/types/notionV3/notionBlockTypes';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
-import { BlockContent } from '../contents/BlockContent';
+import { NotionContent } from '../contents/NotionContent';
 import { useBlockStyles } from './BlockUi';
 export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
@@ -17,7 +17,7 @@ export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
 
    return (
       <Grid container>
-         <Grid item xs={1} style={{ paddingRight: 9 }}>
+         <Grid item xs={1} style={{ paddingRight: 8 }}>
             <IconButton size="small" onClick={handleClick}>
                {expanded && <ArrowDropDown fontSize="inherit" />}
                {!expanded && <ArrowRight fontSize="inherit" />}
@@ -30,7 +30,9 @@ export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
                className={classes.typography}>
                {block.simpleTitle}
             </Typography>
-            {expanded && <BlockContent blockId={block.blockId}></BlockContent>}
+            {expanded && (
+               <NotionContent blockId={block.blockId}></NotionContent>
+            )}
          </Grid>
       </Grid>
    );

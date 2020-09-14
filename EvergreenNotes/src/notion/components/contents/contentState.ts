@@ -7,3 +7,9 @@ export type ContentState = {
       status: thunkStatus;
    };
 };
+
+export type ContentBlocks = {
+   blockId: string;
+   content: NotionBlockModel[];
+   contentIds?: string[];
+};

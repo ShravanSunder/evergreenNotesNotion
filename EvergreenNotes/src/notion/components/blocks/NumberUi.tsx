@@ -7,12 +7,9 @@ export const NumberUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
    return (
       <Grid container>
-         <Grid
-            item
-            xs={1}
-            style={{ paddingLeft: 12, paddingRight: 3, marginTop: 1 }}>
+         <Grid item xs={1} className={classes.indentColumnBlock}>
             <Typography display={'inline'} variant={'body1'}>
-               {'  # '}
+               {' # '}
             </Typography>
          </Grid>
          <Grid item xs={11}>

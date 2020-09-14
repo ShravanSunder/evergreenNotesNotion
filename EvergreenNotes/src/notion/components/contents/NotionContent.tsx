@@ -12,7 +12,7 @@ import { Grid, Typography } from '@material-ui/core';
 
 const BlockUi = React.lazy(() => import('../blocks/BlockUi'));
 
-export const BlockContent = ({
+export const NotionContent = ({
    blockId,
    contentIds,
    depth,
@@ -27,10 +27,18 @@ export const BlockContent = ({
    const dispatch: AppPromiseDispatch<any> = useDispatch();
 
    useEffect(() => {
-      dispatch(
-         contentActions.fetchContent({ blockId, contentIds: contentIds ?? [] })
-      );
-   }, [blockId, contentIds, dispatch]);
+      if (
+         content == null ||
+         status === thunkStatus.rejected ||
+         status === thunkStatus.idle
+      ) {
+         const promise = dispatch(contentActions.fetchContent({ blockId }));
+         return () => {
+            promise.abort();
+         };
+      }
+      return () => {};
+   }, []);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -38,13 +46,10 @@ export const BlockContent = ({
             {status === thunkStatus.fulfilled && (
                <>
                   {content.map((p, i) => (
-                     <>
-                        <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
-                        <Children
-                           key={'children' + p.blockId}
-                           block={p}
-                           depth={depth ?? 1}></Children>
-                     </>
+                     <React.Fragment key={p.blockId}>
+                        <BlockUi block={p} index={i}></BlockUi>
+                        <Children block={p} depth={depth ?? 1}></Children>
+                     </React.Fragment>
                   ))}
                </>
             )}
@@ -73,15 +78,16 @@ const Children = ({
    }
 
    return (
-      <>
-         <Grid container alignItems="flex-start">
-            <Grid item xs={1}></Grid>
-            <Grid item xs={11}>
-               <BlockContent
-                  blockId={block.blockId}
-                  contentIds={block.contentIds}></BlockContent>
-            </Grid>
+      <Grid container alignItems="flex-start">
+         {block.type !== BlockTypeEnum.Column && (
+            <Grid item style={{ width: 21 }}></Grid>
+         )}
+         <Grid item xs>
+            <NotionContent
+               blockId={block.blockId}
+               contentIds={block.contentIds}
+               depth={depth + 1}></NotionContent>
          </Grid>
-      </>
+      </Grid>
    );
 };

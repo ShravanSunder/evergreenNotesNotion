@@ -3,21 +3,23 @@ import { Typography, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ToDo } from 'aNotion/types/notionV3/notionBlockTypes';
 import { useBlockStyles } from './BlockUi';
+
 export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
    let todo = block.block as ToDo;
    let checked = todo.properties?.checked?.[0]?.[0] === 'Yes' ?? false;
+
    return (
       <Grid container>
-         <Grid item xs={1} style={{ paddingLeft: 3, paddingRight: 6 }}>
+         <Grid item xs={1} className={classes.indentColumnBlock}>
             {!checked && (
                <Typography display={'inline'} variant={'body1'}>
-                  {' ☐ '}
+                  <strong>{' ☐ '}</strong>
                </Typography>
             )}
             {checked && (
                <Typography display={'inline'} variant={'body1'}>
-                  {' ☑ '}
+                  <strong>{' ☑ '}</strong>
                </Typography>
             )}
          </Grid>

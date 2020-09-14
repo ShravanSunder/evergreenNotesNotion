@@ -31,13 +31,18 @@ import { ImageUi } from './ImageUi';
 export const useBlockStyles = makeStyles((theme: Theme) =>
    createStyles({
       block: {
-         margin: 6,
-         padding: 3,
+         margin: 2,
+         padding: 1,
       },
       typography: {
          overflowWrap: 'break-word',
          wordBreak: 'break-word',
          position: 'relative',
+      },
+      indentColumnBlock: {
+         paddingLeft: 12,
+         paddingRight: 3,
+         marginTop: 1,
       },
       inlineIcon: {
          position: 'relative',

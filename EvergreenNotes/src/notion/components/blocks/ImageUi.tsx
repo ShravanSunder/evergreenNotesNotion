@@ -21,16 +21,14 @@ export const ImageUi = ({ block }: { block: NotionBlockModel }) => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingImage />}>
-            <Grid container style={{ padding: 6 }}>
-               <Grid xs={12} item style={{ paddingLeft: 9, paddingRight: 9 }}>
-                  <Box width={1}>
-                     <img
-                        src={notionUrl}
-                        alt={txt}
-                        style={{ maxWidth: '100%' }}></img>
-                  </Box>
-               </Grid>
-            </Grid>
+            <div style={{ padding: 3 }}>
+               <Box width={1}>
+                  <img
+                     src={notionUrl}
+                     alt={txt}
+                     style={{ maxWidth: '100%' }}></img>
+               </Box>
+            </div>
          </Suspense>
       </ErrorBoundary>
    );
