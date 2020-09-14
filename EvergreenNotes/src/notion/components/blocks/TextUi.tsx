@@ -268,22 +268,22 @@ function parseDate(dateData: any) {
          let date = dateData as RelativeDateTime;
          textInfo =
             '@' +
-            DateTime.fromFormat(date.start_date, 'yyyy-mm-dd').toRelative();
+            DateTime.fromFormat(date.start_date, 'yyyy-MM-dd').toRelative();
          if (date.end_date)
             textInfo =
-               ' --> ' +
-               DateTime.fromFormat(date.end_date, 'yyyy-mm-dd').toRelative();
+               ' ⟶ ' +
+               DateTime.fromFormat(date.end_date, 'yyyy-MM-dd').toRelative();
       } else {
          let date = dateData as AbsoluteDateTime;
          textInfo =
             '@' +
-            DateTime.fromFormat(date.start_date, 'yyyy-mm-dd').toFormat(
+            DateTime.fromFormat(date.start_date, 'yyyy-MM-dd').toFormat(
                date.date_format
             );
          if (date.end_date)
             textInfo =
                ' ⟶ ' +
-               DateTime.fromFormat(date.end_date, 'yyyy-mm-dd').toFormat(
+               DateTime.fromFormat(date.end_date, 'yyyy-MM-dd').toFormat(
                   date.date_format
                );
       }
