@@ -23,6 +23,7 @@ import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
 import { useBlockStyles } from './BlockUi';
 import { LinkOutlined } from '@material-ui/icons';
 import { Variant } from '@material-ui/core/styles/createTypography';
+import { DateTime } from 'luxon';
 
 export const TextUi = ({
    block,
@@ -71,7 +72,7 @@ export const TextUi = ({
                      segment={segment}
                      variant={variant ?? 'body1'}
                      interactive={interactive ?? true}
-                     style={style}></TextSegment>
+                     style={{ ...style }}></TextSegment>
                );
             })}
          </React.Fragment>
@@ -119,7 +120,7 @@ const TextSegment = ({
          mentionData.users[textInfo]?.user?.family_name +
          ' ';
    } else if (textType === SemanticFormatEnum.DateTime) {
-      text = '@@@dates not supported yet';
+      text = textInfo ?? '';
    }
 
    if (text == null || (text.trim().length === 0 && textInfo == null)) {
@@ -186,7 +187,7 @@ const useSegmentData = (
    textInfo: string | undefined;
    textType: string | undefined;
 } => {
-   let textStyle: React.CSSProperties = style || {};
+   let textStyle: React.CSSProperties = { ...style } ?? {};
    let textInfo: string | undefined = undefined;
    let textType: SemanticFormatEnum | undefined = undefined;
 
@@ -225,11 +226,11 @@ const useSegmentData = (
                textType = d[0];
             }
             if (textStyle.color == null) {
-               textStyle.color = grey[700];
+               textStyle.color = grey[800];
             }
             break;
          case SemanticFormatEnum.Page:
-            textStyle.color = grey[800];
+            textStyle.color = grey[700];
             textStyle.fontWeight = 'bold';
             if (d[1] != null) {
                textInfo = d[1];
@@ -247,12 +248,8 @@ const useSegmentData = (
             break;
          case SemanticFormatEnum.DateTime:
             if (d[1] != null) {
-               textInfo = d[1];
-               // if ('isAbsolute' in (d[1] as AbsoluteDateTime)) {
-               //    let date = d[1] as AbsoluteDateTime;
-               // } else {
-               //    let date = d[1] as RelativeDateTime;
-               // }
+               let dateData = d[1] as any;
+               textInfo = parseDate(dateData, textInfo);
                textType = d[0];
             }
             if (textStyle.color == null) {
@@ -263,3 +260,32 @@ const useSegmentData = (
 
    return { textStyle: { ...textStyle }, textType, textInfo };
 };
+
+function parseDate(
+   dateData: any,
+   textInfo: import('c:/Users/Shravan/Dropbox/Dev/evergreenNotes/EvergreenNotes/src/notion/types/notionV3/semanticStringTypes').SemanticFormatValue
+) {
+   if (dateData.date_format === 'relative') {
+      let date = dateData as RelativeDateTime;
+      textInfo =
+         '@' + DateTime.fromFormat(date.start_date, 'yyyy-mm-dd').toRelative();
+      if (date.end_date)
+         textInfo =
+            ' --> ' +
+            DateTime.fromFormat(date.end_date, 'yyyy-mm-dd').toRelative();
+   } else {
+      let date = dateData as AbsoluteDateTime;
+      textInfo =
+         '@' +
+         DateTime.fromFormat(date.start_date, 'yyyy-mm-dd').toFormat(
+            date.date_format
+         );
+      if (date.end_date)
+         textInfo =
+            ' ⟶ ' +
+            DateTime.fromFormat(date.end_date, 'yyyy-mm-dd').toFormat(
+               date.date_format
+            );
+   }
+   return textInfo;
+}

@@ -64,4 +64,14 @@ export type AbsoluteDateTime = {
    /** 12h ("h:mm A") or 24h ("H:mm") */
    time_format?: 'h:mm A' | 'H:mm';
    time_zone?: base.TimeZone;
-} & RelativeDateTime;
+   type: 'date' | 'daterange' | 'datetime' | 'datetimerange';
+   /** e.g. "2019-05-27" */
+   start_date: string;
+   /** e.g. "2019-05-27" */
+   end_date?: string;
+   /** e.g. "15:00" */
+   start_time?: string;
+   /** e.g. "15:00" */
+   end_time?: string;
+   reminder?: Reminder;
+};
