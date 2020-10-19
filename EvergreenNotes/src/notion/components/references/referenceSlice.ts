@@ -18,10 +18,8 @@ import {
    processBacklinks,
    getRelationsForPage,
 } from 'aNotion/services/referenceService';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { currentPageSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
-import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
 
 const initialState: ReferenceState = {
    pageReferences: defaultPageReferences(),

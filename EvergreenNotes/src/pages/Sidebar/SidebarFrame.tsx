@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent } from 'react';
+import React, { useState, SyntheticEvent, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
 import {
@@ -39,14 +39,34 @@ const useStyles = makeStyles({
    },
 });
 
+const notionScrollDivClass = 'notion-scroller';
+const notionFrameClass = 'notion-frame';
 export const LoadSidebarFrame = () => {
    let url = chrome.extension.getURL('sidebar.html');
    let classes = useStyles();
 
    const [wWidth, wHeight] = useWindowSize();
    const [showFrame, setShowFrame] = useState(false);
-
    const [wasDragging, setWasDragging] = useState(false);
+
+   useEffect(() => {
+      let notionFrame = document.getElementsByClassName(
+         notionFrameClass
+      )[0] as HTMLElement;
+
+      let notionScrollDiv = notionFrame?.getElementsByClassName(
+         notionScrollDivClass
+      )[0] as HTMLElement;
+
+      if (notionScrollDiv != null) {
+         if (showFrame) {
+            notionScrollDiv.style.marginRight =
+               appWidth(wWidth).toString() + 'px';
+         } else {
+            notionScrollDiv.style.marginRight = '0px';
+         }
+      }
+   }, [wWidth, showFrame]);
 
    const handleClick = (e: SyntheticEvent) => {
       console.log('evergreen launcher clicked');
@@ -105,7 +125,7 @@ const AppFab = (props: any) => (
                style={{
                   position: 'absolute',
                   top: 66,
-                  left: props.wWidth - 87,
+                  left: props.wWidth - 67,
                   color: props.showFrame ? grey[700] : lightGreen[800],
                   backgroundColor: props.showFrame
                      ? 'rgb(244, 252, 233, 0.5)'

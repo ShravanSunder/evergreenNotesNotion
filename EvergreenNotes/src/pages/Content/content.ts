@@ -1,6 +1,6 @@
 import { mountSidebar } from '../Sidebar/SidebarFrame';
 import 'chrome-extension-async';
-import { createNewRootElement } from '../Sidebar/sidebarElements';
+import { createAsFloatingElement } from '../Sidebar/sidebarElements';
 import { contentCommands, contentCommandRequest } from './contentMessaging';
 import { sleep } from 'aUtilities/helpers';
 console.log('Content script loading...');
@@ -23,6 +23,7 @@ chrome.runtime.onMessage.addListener(
 );
 
 const notionAppId = 'notion-app';
+
 export const notionSidebarRootId = 'notion-sidebar-root-987384';
 var initalized = false;
 
@@ -37,7 +38,7 @@ const initalize = async () => {
       initalized = true;
 
       if (!document.getElementById(notionSidebarRootId)) {
-         createNewRootElement(notionApp);
+         createAsFloatingElement(notionApp);
       }
    }
 

@@ -6,7 +6,7 @@ export const notionNavClass = 'notion-sidebar-container';
 export const notionBaseNewRootId = 'new-app-root';
 export const notionAppInnerClass = 'notion-app-inner';
 
-export const createNewRootElement = (notionApp: HTMLElement) => {
+export const createAsFloatingElement = (notionApp: HTMLElement) => {
    let newRoot = document.createElement('div');
    document.body.appendChild(newRoot);
    newRoot.setAttribute('id', notionBaseNewRootId);
