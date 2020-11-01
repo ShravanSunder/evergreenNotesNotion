@@ -187,23 +187,6 @@ export class NotionBlockRecord implements NotionBlockModel {
       }
    }
 
-   // getContentNodes = (refresh: boolean = false) => {
-   //    if (!refresh || this.contentNodes == null) {
-   //       let children: [] = [];
-   //       this.contentNodes = this.traverseDown(this.blockId, children);
-   //       return this.contentNodes;
-   //    }
-   //    return this.contentNodes;
-   // };
-
-   // protected traverseDown(
-   //    id: string,
-   //    children: NotionBlockModel[]
-   // ): NotionBlockModel[] {
-   //    //maybe later we might need a way to traverse down the tree?
-   //    return children.concat(recordService.getContent(this.recordMapData, id));
-   // }
-
    getRelationsAsBlockIds = (): string[] => {
       if (this.type !== BlockTypeEnum.Page) {
          return [];
@@ -251,7 +234,6 @@ export class NotionBlockRecord implements NotionBlockModel {
          collection: this.collection,
          collection_views: this.collection_views,
          contentIds: this.contentIds,
-         //recordMapData: this.recordMapData,
          type: this.type,
          simpleTitle: this.simpleTitle,
          semanticTitle: [],
