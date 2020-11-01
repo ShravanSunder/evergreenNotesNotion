@@ -1,9 +1,6 @@
 import React, { useState, SyntheticEvent, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import Draggable from 'react-draggable';
 import {
-   Fab,
-   ThemeProvider,
    makeStyles,
    Icon,
    SvgIcon,
@@ -13,15 +10,14 @@ import {
 } from '@material-ui/core';
 import EcoIcon from '@material-ui/icons/Eco';
 import { useWindowSize } from '@react-hook/window-size';
-import { theme } from 'aNotion/components/theme';
-import { green, lightGreen, grey } from '@material-ui/core/colors';
-import MenuBookTwoToneIcon from '@material-ui/icons/MenuBookTwoTone';
+import { green } from '@material-ui/core/colors';
 import {
    appPositionTop,
    appPositionLeft,
    appWidth,
    appHeight,
 } from './frameProperties';
+import { SidebarFab } from './SidebarFab';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render sidebar frame');
@@ -40,33 +36,27 @@ const useStyles = makeStyles({
 });
 
 const notionScrollDivClass = 'notion-scroller';
-const notionFrameClass = 'notion-frame';
+const notionAppId = 'notion-app';
 export const LoadSidebarFrame = () => {
    let url = chrome.extension.getURL('sidebar.html');
    let classes = useStyles();
 
-   const [wWidth, wHeight] = useWindowSize();
+   const [wWidth, wHeight] = useWindowSize({ wait: 100 });
    const [showFrame, setShowFrame] = useState(false);
    const [wasDragging, setWasDragging] = useState(false);
 
    useEffect(() => {
-      let notionFrame = document.getElementsByClassName(
-         notionFrameClass
-      )[0] as HTMLElement;
+      let notionApp = document.getElementById(notionAppId) as HTMLElement;
 
-      let notionScrollDiv = notionFrame?.getElementsByClassName(
-         notionScrollDivClass
-      )[0] as HTMLElement;
-
-      if (notionScrollDiv != null) {
+      if (notionApp != null) {
          if (showFrame) {
-            notionScrollDiv.style.marginRight =
-               appWidth(wWidth).toString() + 'px';
+            notionApp.style.marginRight =
+               (wWidth - appWidth(wWidth)).toString() + 'px';
          } else {
-            notionScrollDiv.style.marginRight = '0px';
+            // notionScrollDiv.style.marginRight = '0px';
          }
       }
-   }, [wWidth, showFrame]);
+   }, [wWidth, wHeight, showFrame]);
 
    const handleClick = (e: SyntheticEvent) => {
       console.log('evergreen launcher clicked');
@@ -82,16 +72,16 @@ export const LoadSidebarFrame = () => {
 
    return (
       <div>
-         <AppFab
+         <SidebarFab
             wWidth={wWidth}
             showFrame={showFrame}
             handleClick={handleClick}
-            handleDrag={handleDrag}></AppFab>
+            handleDrag={handleDrag}></SidebarFab>
          <Slide in={showFrame} direction={'left'}>
             <iframe
                style={{
                   display: showFrame ? 'block' : 'none',
-                  position: 'absolute',
+                  position: 'fixed',
                   top: appPositionTop(),
                   left: appPositionLeft(wWidth),
                   width: appWidth(wWidth),
@@ -106,43 +96,3 @@ export const LoadSidebarFrame = () => {
       </div>
    );
 };
-
-const AppFab = (props: any) => (
-   <ThemeProvider theme={theme}>
-      <div
-         style={{
-            zIndex: 1100,
-            backgroundColor: '#00000000',
-         }}>
-         <Draggable
-            axis="y"
-            handle=".handle"
-            position={undefined}
-            bounds={{ top: -50, bottom: props.wHeight - 100 }}
-            onDrag={props.handleDrag}
-            scale={1}>
-            <Fab
-               style={{
-                  position: 'absolute',
-                  top: 66,
-                  left: props.wWidth - 67,
-                  color: props.showFrame ? grey[700] : lightGreen[800],
-                  backgroundColor: props.showFrame
-                     ? 'rgb(244, 252, 233, 0.5)'
-                     : lightGreen[50],
-                  zIndex: 1100,
-               }}
-               className="handle"
-               variant="extended"
-               size="small"
-               color="primary"
-               onClick={props.handleClick}
-               aria-label="add">
-               <MenuBookTwoToneIcon />
-            </Fab>
-         </Draggable>
-      </div>
-   </ThemeProvider>
-);
-
-//Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>

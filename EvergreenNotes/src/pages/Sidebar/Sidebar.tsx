@@ -32,8 +32,6 @@ const snackbarRoot = {
    color: grey[600],
    maxWidth: 290,
    zIndex: 1000,
-   marginRight: 12,
-   marginBottom: 18,
 };
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -69,9 +67,9 @@ export const Sidebar = () => {
                <ErrorBoundary FallbackComponent={ErrorFallback}>
                   <ThemeProvider theme={theme}>
                      <Box
-                        height={wHeight - 9}
-                        width={wWidth - 9}
-                        style={{ overflow: 'visible' }}>
+                        height={wHeight}
+                        width={wWidth}
+                        style={{ overflowX: 'hidden', overflowY: 'auto' }}>
                         <SnackbarProvider
                            ref={notistackRef}
                            action={(key) => (
@@ -99,11 +97,6 @@ export const Sidebar = () => {
                               elevation={3}
                               style={{
                                  padding: 6,
-                                 margin: 6,
-                                 height: wHeight - 30,
-                                 width: wWidth - 30,
-                                 overflowY: 'auto',
-                                 overflowX: 'visible',
                                  scrollbarWidth: 'thin',
                               }}>
                               <Suspense fallback={<LoadingUnknown />}>
