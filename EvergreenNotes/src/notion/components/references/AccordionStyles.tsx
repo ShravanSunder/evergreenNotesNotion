@@ -10,6 +10,7 @@ import { grey } from '@material-ui/core/colors';
 export const Accordion = withStyles({
    root: {
       border: '1px solid rgba(0, 0, 0, .33)',
+      borderRadius: 6,
       boxShadow: 'none',
 
       marginTop: '12px',
@@ -29,8 +30,9 @@ export const Accordion = withStyles({
 export const AccordionSummary = withStyles((theme) => ({
    root: {
       backgroundColor: grey[100],
+      borderRadius: 6,
       borderBottom: '1px solid rgba(0, 0, 0, .125)',
-      marginBottom: -1,
+      marginBottom: 0,
       minHeight: 42,
       '&$expanded': {
          minHeight: 51,
@@ -54,6 +56,7 @@ export const AccordionActions = withStyles((theme) => ({
    root: {
       padding: theme.spacing(2),
       boxShadow: '0px 1px 6px #f5f5f5',
+      borderRadius: 6,
       backgroundColor: grey[50],
    },
 }))(MuiAccordionActions);

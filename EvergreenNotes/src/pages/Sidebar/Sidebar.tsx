@@ -69,7 +69,11 @@ export const Sidebar = () => {
                      <Box
                         height={wHeight}
                         width={wWidth}
-                        style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+                        style={{
+                           overflowX: 'hidden',
+                           overflowY: 'auto',
+                           border: '0px',
+                        }}>
                         <SnackbarProvider
                            ref={notistackRef}
                            action={(key) => (
@@ -96,8 +100,9 @@ export const Sidebar = () => {
                            <Paper
                               elevation={3}
                               style={{
-                                 padding: 6,
-                                 scrollbarWidth: 'thin',
+                                 padding: 12,
+                                 overflow: 'hidden',
+                                 marginBottom: 12,
                               }}>
                               <Suspense fallback={<LoadingUnknown />}>
                                  <Layout />

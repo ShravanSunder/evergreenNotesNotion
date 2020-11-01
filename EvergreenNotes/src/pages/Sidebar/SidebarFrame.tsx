@@ -88,7 +88,6 @@ export const LoadSidebarFrame = () => {
                   height: appHeight(wHeight),
                   border: 0,
                   overflow: 'hidden',
-                  // boxShadow: '-2px 0px 6px grey',
                }}
                title="Evergreen Notes"
                src={url}></iframe>
