@@ -25,17 +25,24 @@ import { LinkOutlined } from '@material-ui/icons';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { DateTime } from 'luxon';
 
+export interface UiParameters {
+   variant?: Variant;
+   interactive?: boolean;
+   style?: React.CSSProperties;
+   semanticFilter?: SemanticFormatEnum[];
+}
+
+interface TextUiParameters extends UiParameters {
+   block: NotionBlockModel;
+}
+
 export const TextUi = ({
    block,
    variant,
    interactive,
    style,
-}: {
-   block: NotionBlockModel;
-   variant?: Variant | undefined;
-   interactive?: boolean;
-   style?: React.CSSProperties;
-}) => {
+   semanticFilter,
+}: TextUiParameters) => {
    let classes = useBlockStyles();
    const bb = block.block as BaseTextBlock;
    const title = bb?.properties?.title as SemanticString[];
@@ -57,7 +64,7 @@ export const TextUi = ({
                      <Typography
                         display="inline"
                         className={classes.typography}
-                        variant={variant}>
+                        variant={variant ?? 'body1'}>
                         {'...'}
                      </Typography>
                   );
@@ -80,17 +87,25 @@ export const TextUi = ({
    }
    return null;
 };
+
+export interface SegmentParameters extends UiParameters {
+   segment: SemanticString;
+}
+
+export interface SegmentMeta {
+   segmentStyle: React.CSSProperties;
+   segmentDetails: string | undefined;
+   segmentType: string | undefined;
+   hiddenSegment: boolean;
+}
+
 const TextSegment = ({
    segment,
    variant,
    interactive,
    style,
-}: {
-   segment: SemanticString;
-   variant: Variant;
-   interactive: boolean;
-   style?: React.CSSProperties;
-}) => {
+   semanticFilter,
+}: SegmentParameters) => {
    let classes = useBlockStyles();
    let text = segment[0];
    let format = segment[1] ?? [];
@@ -98,32 +113,47 @@ const TextSegment = ({
 
    const blockData = useSelector(blockSelector);
    const mentionData = useSelector(mentionSelector);
-   let { textStyle, textInfo, textType } = useSegmentData(format, style);
+   let {
+      segmentStyle,
+      segmentDetails,
+      segmentType,
+      hiddenSegment,
+   }: SegmentMeta = useSegmentData(format, style, semanticFilter);
    let link: string | undefined = undefined;
 
    useEffect(() => {
-      if (textInfo != null && textType === SemanticFormatEnum.Page) {
-         dispatch(blockActions.fetchBlock({ blockId: textInfo }));
+      if (segmentDetails != null && segmentType === SemanticFormatEnum.Page) {
+         dispatch(blockActions.fetchBlock({ blockId: segmentDetails }));
       }
-   }, [dispatch, textInfo, textType]);
+   }, [dispatch, segmentDetails, segmentType]);
 
-   if (textInfo != null && textType === SemanticFormatEnum.Page) {
-      text = blockData[textInfo]?.block?.simpleTitle ?? '';
-      link = getPageUrl(textInfo);
-   } else if (textInfo != null && textType === SemanticFormatEnum.Link) {
-      link = textInfo;
-   } else if (textInfo != null && textType === SemanticFormatEnum.User) {
+   if (segmentDetails != null && segmentType === SemanticFormatEnum.Page) {
+      text = blockData[segmentDetails]?.block?.simpleTitle ?? '';
+      link = getPageUrl(segmentDetails);
+   } else if (
+      segmentDetails != null &&
+      segmentType === SemanticFormatEnum.Link
+   ) {
+      link = segmentDetails;
+   } else if (
+      segmentDetails != null &&
+      segmentType === SemanticFormatEnum.User
+   ) {
       text =
          ' @' +
-         mentionData.users[textInfo]?.user?.given_name +
+         mentionData.users[segmentDetails]?.user?.given_name +
          ', ' +
-         mentionData.users[textInfo]?.user?.family_name +
+         mentionData.users[segmentDetails]?.user?.family_name +
          ' ';
-   } else if (textType === SemanticFormatEnum.DateTime) {
-      text = textInfo ?? '';
+   } else if (segmentType === SemanticFormatEnum.DateTime) {
+      text = segmentDetails ?? '';
    }
 
-   if (text == null || (text.trim().length === 0 && textInfo == null)) {
+   if (text == null || (text.trim().length === 0 && segmentDetails == null)) {
+      return null;
+   }
+
+   if (hiddenSegment) {
       return null;
    }
 
@@ -134,18 +164,18 @@ const TextSegment = ({
                display="inline"
                className={classes.typography}
                variant={variant}
-               style={{ ...textStyle }}>
+               style={{ ...segmentStyle }}>
                {text}
             </Typography>
          )}
-         {link != null && textType === SemanticFormatEnum.Page && (
+         {link != null && segmentType === SemanticFormatEnum.Page && (
             <Link
                display="inline"
                className={classes.typography}
                variant={variant}
                href={interactive ? link : undefined}
                target="_blank"
-               style={{ ...textStyle }}>
+               style={{ ...segmentStyle }}>
                {'  '}
                <SvgIcon
                   fontSize="inherit"
@@ -156,13 +186,13 @@ const TextSegment = ({
                {text}
             </Link>
          )}
-         {link != null && textType === SemanticFormatEnum.Link && (
+         {link != null && segmentType === SemanticFormatEnum.Link && (
             <>
                <Typography
                   display="inline"
                   className={classes.link}
                   variant={variant}
-                  style={{ ...textStyle }}>
+                  style={{ ...segmentStyle }}>
                   {' '}
                </Typography>
                <Link
@@ -171,7 +201,7 @@ const TextSegment = ({
                   variant={variant}
                   href={interactive ? link : undefined}
                   target="_blank"
-                  style={{ ...textStyle, textDecoration: 'underline' }}>
+                  style={{ ...segmentStyle, textDecoration: 'underline' }}>
                   {text}
                </Link>
             </>
@@ -181,112 +211,119 @@ const TextSegment = ({
 };
 const useSegmentData = (
    format: SemanticFormat[],
-   style?: React.CSSProperties
-): {
-   textStyle: React.CSSProperties;
-   textInfo: string | undefined;
-   textType: string | undefined;
-} => {
-   let textStyle: React.CSSProperties = { ...style } ?? {};
-   let textInfo: string | undefined = undefined;
-   let textType: SemanticFormatEnum | undefined = undefined;
+   style?: React.CSSProperties,
+   semanticFilter?: SemanticFormatEnum[]
+): SegmentMeta => {
+   let segmentStyle: React.CSSProperties = { ...style } ?? {};
+   let segmentDetails: string | undefined = undefined;
+   let segmentType: SemanticFormatEnum | undefined = undefined;
+   let hiddenSegment: boolean = semanticFilter == null ? false : true;
 
    format.forEach((d) => {
+      if (hiddenSegment && semanticFilter?.includes(d[0])) {
+         hiddenSegment = false;
+      }
+
       switch (d[0]) {
          case SemanticFormatEnum.Bold:
-            textStyle.fontWeight = 'bold';
+            segmentStyle.fontWeight = 'bold';
             break;
          case SemanticFormatEnum.Italic:
-            textStyle.fontStyle = 'italic';
+            segmentStyle.fontStyle = 'italic';
             break;
          case SemanticFormatEnum.Colored:
             if (d[1] != null && getColor(d[1]) != null) {
                if (d[1].includes('background')) {
-                  textStyle.backgroundColor = getColor(d[1]);
+                  segmentStyle.backgroundColor = getColor(d[1]);
                } else {
-                  textStyle.color = getColor(d[1]);
+                  segmentStyle.color = getColor(d[1]);
                }
             }
             break;
          case SemanticFormatEnum.Strike:
-            textStyle.textDecoration = 'line-through';
+            segmentStyle.textDecoration = 'line-through';
             break;
          case SemanticFormatEnum.User:
             if (d[1] != null) {
-               textInfo = d[1];
-               textType = d[0];
+               segmentDetails = d[1];
+               segmentType = d[0];
             }
-            if (textStyle.color == null) {
-               textStyle.color = grey[700];
+            if (segmentStyle.color == null) {
+               segmentStyle.color = grey[700];
             }
             break;
          case SemanticFormatEnum.Link:
             if (d[1] != null) {
-               textInfo = d[1];
-               textType = d[0];
+               segmentDetails = d[1];
+               segmentType = d[0];
             }
-            if (textStyle.color == null) {
-               textStyle.color = grey[800];
+            if (segmentStyle.color == null) {
+               segmentStyle.color = grey[800];
             }
             break;
          case SemanticFormatEnum.Page:
-            textStyle.color = grey[700];
-            textStyle.fontWeight = 'bold';
+            segmentStyle.color = grey[700];
+            segmentStyle.fontWeight = 'bold';
             if (d[1] != null) {
-               textInfo = d[1];
-               textType = d[0];
+               segmentDetails = d[1];
+               segmentType = d[0];
             }
             break;
          case SemanticFormatEnum.InlineCode:
-            textStyle.fontFamily = 'Consolas';
-            if (textStyle.backgroundColor == null) {
-               textStyle.background = grey[300];
+            segmentStyle.fontFamily = 'Consolas';
+            if (segmentStyle.backgroundColor == null) {
+               segmentStyle.background = grey[300];
             }
-            if (textStyle.color == null) {
-               textStyle.color = red[700];
+            if (segmentStyle.color == null) {
+               segmentStyle.color = red[700];
             }
             break;
          case SemanticFormatEnum.DateTime:
             if (d[1] != null) {
                let dateData = d[1] as any;
-               textInfo = parseDate(dateData);
-               textType = d[0];
+               segmentDetails = parseDate(dateData);
+               segmentType = d[0];
             }
-            if (textStyle.color == null) {
-               textStyle.color = grey[700];
+            if (segmentStyle.color == null) {
+               segmentStyle.color = grey[700];
             }
       }
    });
 
-   return { textStyle: { ...textStyle }, textType, textInfo };
+   return {
+      segmentStyle: { ...segmentStyle },
+      segmentType: segmentType,
+      segmentDetails: segmentDetails,
+      hiddenSegment: hiddenSegment,
+   };
 };
 
 function parseDate(dateData: any) {
-   let textInfo: string = '';
+   let segmentDetails: string = '';
    try {
       if (dateData.date_format === 'relative') {
          let date = dateData as RelativeDateTime;
-         textInfo =
+         segmentDetails =
             '@' +
             DateTime.fromFormat(date.start_date, 'yyyy-MM-dd').toRelative();
          if (date.end_date)
-            textInfo =
+            segmentDetails =
                ' ⟶ ' +
                DateTime.fromFormat(date.end_date, 'yyyy-MM-dd').toRelative();
       } else {
          let date = dateData as AbsoluteDateTime;
-         textInfo =
+         segmentDetails =
             '@' +
             DateTime.fromFormat(date.start_date, 'yyyy-MM-dd').toFormat(
                date.date_format
             );
          if (date.end_date)
-            textInfo =
+            segmentDetails =
                ' ⟶ ' +
                DateTime.fromFormat(date.end_date, 'yyyy-MM-dd').toFormat(
                   date.date_format
                );
       }
    } catch {}
-   return textInfo;
+   return segmentDetails;
 }
