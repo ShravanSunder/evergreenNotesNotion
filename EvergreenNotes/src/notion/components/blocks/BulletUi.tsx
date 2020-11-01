@@ -3,7 +3,14 @@ import { Typography, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { useBlockStyles } from './BlockUi';
 import { TextUi } from './TextUi';
-export const BulletUi = ({ block }: { block: NotionBlockModel }) => {
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+export const BulletUi = ({
+   block,
+   semanticFilter,
+}: {
+   block: NotionBlockModel;
+   semanticFilter?: SemanticFormatEnum[];
+}) => {
    let classes = useBlockStyles();
    return (
       <Grid container alignItems="flex-start">
@@ -13,7 +20,7 @@ export const BulletUi = ({ block }: { block: NotionBlockModel }) => {
             </Typography>
          </Grid>
          <Grid item xs={11}>
-            <TextUi block={block}></TextUi>
+            <TextUi block={block} semanticFilter={semanticFilter}></TextUi>
          </Grid>
       </Grid>
    );

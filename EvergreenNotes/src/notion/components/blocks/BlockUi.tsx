@@ -28,6 +28,7 @@ import {
 import { TextUi } from './TextUi';
 import { ImageUi } from './ImageUi';
 import { LoadingImage, LoadingLine } from '../common/Loading';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
 export const useBlockStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -60,9 +61,11 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
 export const BlockUi = ({
    block,
    index,
+   semanticFilter,
 }: {
    block: NotionBlockModel;
    index: number | undefined;
+   semanticFilter?: SemanticFormatEnum[];
 }) => {
    let classes = useBlockStyles();
    let variant = useVariant(block);
@@ -82,6 +85,7 @@ export const BlockUi = ({
                <TextUi
                   variant={variant}
                   block={block}
+                  semanticFilter={semanticFilter}
                   style={{
                      backgroundColor: backgroundColor,
                      color: color,
@@ -91,12 +95,14 @@ export const BlockUi = ({
             {block.type === BlockTypeEnum.Callout && (
                <CalloutUi block={block}></CalloutUi>
             )}
-            {block.type === BlockTypeEnum.Quote && <QuoteUi block={block} />}
+            {block.type === BlockTypeEnum.Quote && (
+               <QuoteUi block={block} semanticFilter={semanticFilter} />
+            )}
             {block.type === BlockTypeEnum.ButtetedList && (
-               <BulletUi block={block} />
+               <BulletUi block={block} semanticFilter={semanticFilter} />
             )}
             {block.type === BlockTypeEnum.NumberedList && (
-               <NumberUi block={block} />
+               <NumberUi block={block} semanticFilter={semanticFilter} />
             )}
             {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
             {block.type === BlockTypeEnum.Page && (

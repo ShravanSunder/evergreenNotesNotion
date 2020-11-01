@@ -147,7 +147,7 @@ export const getColor = (color: NotionColor | string): string | undefined => {
          case NotionColor.OrangeBg:
             return deepOrange[50];
          case NotionColor.YellowBg:
-            return yellow[50];
+            return yellow[100];
          case NotionColor.TealBg:
             return teal[50];
          case NotionColor.BlueBg:

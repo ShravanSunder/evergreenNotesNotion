@@ -8,6 +8,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { LoadingSection, NothingToFind } from '../common/Loading';
 import BlockUi from '../blocks/BlockUi';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -47,7 +48,11 @@ export const MarksPane = () => {
                <b>Highlights</b>
             </Typography>
             {pageMarks?.highlights?.map((p, i) => (
-               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+               <BlockUi
+                  key={p.blockId}
+                  block={p}
+                  index={i}
+                  semanticFilter={[SemanticFormatEnum.Colored]}></BlockUi>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -91,7 +96,11 @@ export const MarksPane = () => {
                <b>Links</b>
             </Typography>
             {pageMarks?.links?.map((p, i) => (
-               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+               <BlockUi
+                  key={p.blockId}
+                  block={p}
+                  index={i}
+                  semanticFilter={[SemanticFormatEnum.Link]}></BlockUi>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -104,7 +113,13 @@ export const MarksPane = () => {
                <b>Code</b>
             </Typography>
             {pageMarks?.code?.map((p, i) => (
-               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+               <>
+                  <BlockUi
+                     key={p.blockId}
+                     block={p}
+                     index={i}
+                     semanticFilter={[SemanticFormatEnum.InlineCode]}></BlockUi>
+               </>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -134,9 +149,9 @@ export const MarksPane = () => {
             {status === thunkStatus.fulfilled && highlights}
             {status === thunkStatus.fulfilled && todos}
             {status === thunkStatus.fulfilled && Mentions}
-            {status === thunkStatus.fulfilled && code}
-            {status === thunkStatus.fulfilled && quotes}
             {status === thunkStatus.fulfilled && links}
+            {status === thunkStatus.fulfilled && quotes}
+            {status === thunkStatus.fulfilled && code}
             {status === thunkStatus.pending && <LoadingSection />}
             {status === thunkStatus.fulfilled && nothingFound && (
                <NothingToFind></NothingToFind>

@@ -9,6 +9,7 @@ import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Grid, Typography } from '@material-ui/core';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
 const BlockUi = React.lazy(() => import('../blocks/BlockUi'));
 
@@ -16,10 +17,12 @@ export const NotionContent = ({
    blockId,
    contentIds,
    depth,
+   semanticFilter,
 }: {
    blockId: string;
    contentIds?: string[];
    depth?: number;
+   semanticFilter?: SemanticFormatEnum[];
 }) => {
    const contentData = useSelector(contentSelector);
    const content = contentData?.[blockId]?.content;
@@ -47,8 +50,14 @@ export const NotionContent = ({
                <>
                   {content.map((p, i) => (
                      <React.Fragment key={p.blockId}>
-                        <BlockUi block={p} index={i}></BlockUi>
-                        <Children block={p} depth={depth ?? 1}></Children>
+                        <BlockUi
+                           block={p}
+                           index={i}
+                           semanticFilter={semanticFilter}></BlockUi>
+                        <Children
+                           block={p}
+                           depth={depth ?? 1}
+                           semanticFilter={semanticFilter}></Children>
                      </React.Fragment>
                   ))}
                </>
@@ -62,9 +71,11 @@ export const NotionContent = ({
 const Children = ({
    block,
    depth,
+   semanticFilter,
 }: {
    block: NotionBlockModel;
    depth: number;
+   semanticFilter?: SemanticFormatEnum[];
 }) => {
    if (depth > 6) {
       return null;
@@ -87,6 +98,7 @@ const Children = ({
             <NotionContent
                blockId={block.blockId}
                contentIds={block.contentIds}
+               semanticFilter={semanticFilter}
                depth={depth + 1}></NotionContent>
          </Grid>
       </Grid>

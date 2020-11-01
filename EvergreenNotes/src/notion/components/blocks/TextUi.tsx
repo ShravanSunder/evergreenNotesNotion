@@ -60,6 +60,8 @@ export const TextUi = ({
                   textCount < maxLen &&
                   textCount + segment[0].length > maxLen
                ) {
+                  //catch errors
+                  console.log('render error');
                   return (
                      <Typography
                         display="inline"
@@ -71,6 +73,7 @@ export const TextUi = ({
                }
                textCount += segment[0].length;
                if (interactive === false && textCount > maxLen) {
+                  //catch errors
                   return null;
                }
                return (
@@ -79,6 +82,7 @@ export const TextUi = ({
                      segment={segment}
                      variant={variant ?? 'body1'}
                      interactive={interactive ?? true}
+                     semanticFilter={semanticFilter}
                      style={{ ...style }}></TextSegment>
                );
             })}
@@ -154,7 +158,11 @@ const TextSegment = ({
    }
 
    if (hiddenSegment) {
-      return null;
+      return (
+         <div style={{ paddingTop: 3 }}>
+            <Typography> {'  '} </Typography>
+         </div>
+      );
    }
 
    return (
