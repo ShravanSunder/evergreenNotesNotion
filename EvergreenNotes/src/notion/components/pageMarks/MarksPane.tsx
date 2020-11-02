@@ -148,7 +148,7 @@ export const MarksPane = () => {
             )} */}
             {status === thunkStatus.fulfilled && highlights}
             {status === thunkStatus.fulfilled && todos}
-            {status === thunkStatus.fulfilled && Mentions}
+            {/* {status === thunkStatus.fulfilled && Mentions} */}
             {status === thunkStatus.fulfilled && links}
             {status === thunkStatus.fulfilled && quotes}
             {status === thunkStatus.fulfilled && code}
