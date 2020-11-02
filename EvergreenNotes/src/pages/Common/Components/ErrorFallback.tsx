@@ -17,12 +17,12 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 
-export const ErrorFallback = ({ error, componentStack }: FallbackProps) => {
+export const ErrorFallback = ({ error }: FallbackProps) => {
    // TODO in future, change this so that it takes dev or production into account when rendering
    //https://github.com/bvaughn/react-error-boundary
 
    let { msg, showDetails, msgDetails } = componentMessages(error);
-   consoleLog(error, componentStack);
+   consoleLog(error, error?.stack);
 
    return (
       <React.Fragment>
