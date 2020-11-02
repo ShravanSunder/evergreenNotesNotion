@@ -112,7 +112,7 @@ const Relations = ({ refs }: { refs: ReferenceState }) => {
          {refs.pageReferencesStatus === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Relations</b>
+                  <b>Database Relations</b>
                </Typography>
                {relations.map((u) => {
                   let link: BacklinkRecordModel = {
@@ -140,7 +140,7 @@ const PageMentions = ({ marks }: { marks: PageMarkState }) => {
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Mentions</b>
+                  <b>Mentions in Page</b>
                </Typography>
                {mentions.map((u) => {
                   let link: BacklinkRecordModel = {
@@ -169,7 +169,7 @@ const FullTitle = ({ refs }: { refs: ReferenceState }) => {
          {refs.pageReferencesStatus === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Related Search</b>
+                  <b>Unlinked References</b>
                </Typography>
                {fullTitle.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;
@@ -194,7 +194,7 @@ const Related = ({ refs }: { refs: ReferenceState }) => {
          {refs.pageReferencesStatus === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Additional Search Results</b>
+                  <b>Related Search Results</b>
                </Typography>
                {data.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;

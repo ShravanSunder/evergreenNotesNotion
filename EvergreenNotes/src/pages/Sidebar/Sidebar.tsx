@@ -25,6 +25,7 @@ import { SnackbarProvider } from 'notistack';
 import { green, yellow, red, grey } from '@material-ui/core/colors';
 import { LoadingUnknown } from 'aNotion/components/common/Loading';
 import { getOptionsFromStorage } from 'aNotion/components/options/optionsService';
+import { appHeight } from './frameProperties';
 
 const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 
@@ -102,7 +103,7 @@ export const Sidebar = () => {
                               style={{
                                  padding: 12,
                                  overflow: 'hidden',
-                                 marginBottom: 12,
+                                 minHeight: appHeight(wHeight),
                               }}>
                               <Suspense fallback={<LoadingUnknown />}>
                                  <Layout />

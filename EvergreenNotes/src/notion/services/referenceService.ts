@@ -84,8 +84,8 @@ const filterSearchResults = (
    fullTitle: SearchRecordModel[],
    relatedResults: SearchRecordModel[]
 ) => {
-   let full = new RegExp(query, 'i');
-   if (full.test(data.text!)) {
+   let fullRegex = new RegExp('\\b' + query + '\\b', 'i');
+   if (fullRegex.test(data.text!)) {
       pushFullTextResults(fullTitle, data);
    } else {
       pushRelatedResults(data, fullTitle, relatedResults);

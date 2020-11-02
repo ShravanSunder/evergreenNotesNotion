@@ -53,7 +53,7 @@ export const LoadSidebarFrame = () => {
       200,
       {
          trailing: true,
-         maxWait: 1000,
+         maxWait: 500,
       }
    );
 
@@ -118,29 +118,7 @@ const styleChangedCallback = (mutations: MutationRecord[]) => {
    if (setUpdateNotionScroller != null) {
       setUpdateNotionScroller(true);
    }
-   // let record = mutations.find((f) =>
-   //    (f.removedNodes?.[0] as HTMLElement)?.classList?.contains(
-   //       'notion-scroller'
-   //    )
-   // );
-
-   // if (record != null && setUpdateNotionScroller != null) {
-   //    setUpdateNotionScroller(true);
-   //    //setMarginRight(record);
-   // }
 };
-
-// const setMarginRight = (record: MutationRecord) => {
-//    const oldNotionScroller = record.removedNodes[0] as HTMLElement;
-//    if (oldNotionScroller.classList.contains('notion-scroller')) {
-//       let { notionScrollDiv: newNotionScrollDiv } = getNotionScroll();
-
-//       if (oldNotionScroller != null && newNotionScrollDiv != null) {
-//          newNotionScrollDiv.style.marginRight =
-//             oldNotionScroller.style.marginRight;
-//       }
-//    }
-// };
 
 const notionScrollDivClass = 'notion-scroller';
 const notionFrameClass = 'notion-frame';
@@ -154,6 +132,12 @@ const modifyNotionFrame = (showFrame: boolean, wWidth: number) => {
       setFrameMargin(showFrame, notionScrollDiv, wWidth);
       observer.observe(notionframe, {
          childList: true,
+         attributes: true,
+         attributeFilter: ['style'],
+      });
+      observer.observe(notionScrollDiv, {
+         attributes: true,
+         attributeFilter: ['style'],
       });
    }
 };
