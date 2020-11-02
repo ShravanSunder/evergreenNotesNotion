@@ -13,12 +13,37 @@ export const PageUi = ({
    variant: Variant | undefined;
 }) => {
    const page = block.block as Page;
-   const icon = page.format?.page_icon;
-   return (
-      <React.Fragment>
+   let icon = page.format?.page_icon;
+   let iconComponent: JSX.Element | undefined = undefined;
+
+   if (icon?.length === 1) {
+      iconComponent = (
          <Typography display="inline" variant={variant}>
             {' ' + icon + ' '}
          </Typography>
+      );
+   } else if (icon != null && /https:.*/.test(icon)) {
+      const notionUrl =
+         'https://www.notion.so/image/' +
+         encodeURIComponent(icon) +
+         `?table=block&id=${block.blockId}&width=${32}`;
+      iconComponent = (
+         <Typography display="inline" variant={variant}>
+            <img src={notionUrl} alt="📄"></img>
+         </Typography>
+      );
+   } else {
+      icon = '📄';
+      iconComponent = (
+         <Typography display="inline" variant={variant}>
+            {' ' + icon + ' '}
+         </Typography>
+      );
+   }
+
+   return (
+      <React.Fragment>
+         {iconComponent}
          <TextUi block={block} variant={variant}></TextUi>
       </React.Fragment>
    );
