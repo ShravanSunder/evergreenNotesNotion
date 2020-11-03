@@ -100,7 +100,7 @@ export interface SegmentMeta {
    segmentStyle: React.CSSProperties;
    segmentDetails: string | undefined;
    segmentType: string | undefined;
-   hiddenSegment: boolean;
+   hideSegment: boolean;
 }
 
 const TextSegment = ({
@@ -121,7 +121,7 @@ const TextSegment = ({
       segmentStyle,
       segmentDetails,
       segmentType,
-      hiddenSegment,
+      hideSegment,
    }: SegmentMeta = useSegmentData(format, style, semanticFilter);
    let link: string | undefined = undefined;
 
@@ -157,7 +157,7 @@ const TextSegment = ({
       return null;
    }
 
-   if (hiddenSegment) {
+   if (hideSegment) {
       return (
          <div style={{ paddingTop: 3 }}>
             <Typography> {'  '} </Typography>
@@ -225,11 +225,21 @@ const useSegmentData = (
    let segmentStyle: React.CSSProperties = { ...style } ?? {};
    let segmentDetails: string | undefined = undefined;
    let segmentType: SemanticFormatEnum | undefined = undefined;
-   let hiddenSegment: boolean = semanticFilter == null ? false : true;
+   let hideSegment: boolean = semanticFilter == null ? false : true;
+
+   if (hideSegment) {
+      if (
+         style?.backgroundColor != null &&
+         style?.backgroundColor !== '#FFFFFF' &&
+         semanticFilter?.find((f) => f === SemanticFormatEnum.Colored)
+      ) {
+         hideSegment = false;
+      }
+   }
 
    format.forEach((d) => {
-      if (hiddenSegment && semanticFilter?.includes(d[0])) {
-         hiddenSegment = false;
+      if (hideSegment && semanticFilter?.includes(d[0])) {
+         hideSegment = false;
       }
 
       switch (d[0]) {
@@ -302,7 +312,7 @@ const useSegmentData = (
       segmentStyle: { ...segmentStyle },
       segmentType: segmentType,
       segmentDetails: segmentDetails,
-      hiddenSegment: hiddenSegment,
+      hideSegment: hideSegment,
    };
 };
 

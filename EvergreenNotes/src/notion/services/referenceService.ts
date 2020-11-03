@@ -100,7 +100,9 @@ const pushRelatedResults = (
       !fullTitle.find((x) => x.id === data.id) &&
       !relatedResults.find((x) => x.id === data.id)
    ) {
-      relatedResults.push(data.toSerializable());
+      if (data.notionBlock.block?.alive) {
+         relatedResults.push(data.toSerializable());
+      }
    }
 };
 
@@ -109,7 +111,9 @@ const pushFullTextResults = (
    data: SearchRecord
 ) => {
    if (!fullTitle.find((x) => x.id === data.id)) {
-      fullTitle.push(data.toSerializable());
+      if (data.notionBlock.block?.alive) {
+         fullTitle.push(data.toSerializable());
+      }
    }
 };
 
@@ -137,7 +141,7 @@ export const processBacklinks = (
             b.mentioned_from.block_id
          );
 
-         if (rec.blockId != null && rec.block != null) {
+         if (rec.blockId != null && rec.block != null && rec.block.alive) {
             backlinkData.push({
                backlinkBlock: rec.toSerializable(),
                path: rec
