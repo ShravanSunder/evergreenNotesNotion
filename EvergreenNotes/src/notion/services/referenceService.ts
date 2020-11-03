@@ -167,6 +167,8 @@ export const getRelationsForPage = async (
       relatedIds,
       signal
    );
-   let relations = records.map((m) => m.toSerializable());
+   let relations = records
+      .filter((f) => f.block?.alive === true)
+      .map((m) => m.toSerializable());
    return relations;
 };

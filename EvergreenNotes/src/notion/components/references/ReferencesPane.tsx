@@ -194,7 +194,7 @@ const Related = ({ refs }: { refs: ReferenceState }) => {
          {refs.pageReferencesStatus === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Related Search Results</b>
+                  <b>Similar Notes</b>
                </Typography>
                {data.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;

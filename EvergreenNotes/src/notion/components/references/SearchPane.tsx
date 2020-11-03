@@ -151,6 +151,16 @@ export const SearchPane = () => {
          <RelatedReferences
             searchResults={result}
             status={status}></RelatedReferences>
+         {status === thunkStatus.idle &&
+            result.fullTitle.length === 0 &&
+            result.related.length === 0 && (
+               <Typography
+                  variant="h6"
+                  style={{ marginBottom: 15, marginTop: 30 }}
+                  gutterBottom>
+                  📚 Search your notes!
+               </Typography>
+            )}
          {status === thunkStatus.rejected && <div>error!</div>}
       </ErrorBoundary>
    );
@@ -174,7 +184,7 @@ const FullReferences = ({
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>References</b>
+                  <b>Search Results</b>
                </Typography>
                {fullTitle.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;
@@ -203,7 +213,7 @@ const RelatedReferences = ({
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Related Searches</b>
+                  <b>Similar Notes</b>
                </Typography>
                {data.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;
