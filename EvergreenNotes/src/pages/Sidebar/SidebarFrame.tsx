@@ -123,13 +123,37 @@ const styleChangedCallback = (mutations: MutationRecord[]) => {
 const notionScrollDivClass = 'notion-scroller';
 const notionFrameClass = 'notion-frame';
 const notionAppId = 'notion-app';
+const notionSidebarClass = 'notion-sidebar-container';
+const notionCollectionScrollersClass =
+   'notion-selectable notion-collection_view-block';
+
+const getNotionScroll = () => {
+   let notionApp = document.getElementById(notionAppId) as HTMLElement;
+   let notionSidebar = notionApp?.getElementsByClassName(
+      notionSidebarClass
+   )?.[0] as HTMLElement;
+   let notionframe = notionApp?.getElementsByClassName(
+      notionFrameClass
+   )?.[0] as HTMLElement;
+   let notionScrollDiv = notionframe?.getElementsByClassName(
+      notionScrollDivClass
+   )?.[0] as HTMLElement;
+   let isExpectedChild = notionScrollDiv?.parentElement === notionframe;
+   return { isExpectedChild, notionScrollDiv, notionframe, notionSidebar };
+};
+
 var observer = new MutationObserver(styleChangedCallback);
 const modifyNotionFrame = (showFrame: boolean, wWidth: number) => {
-   let { isExpectedChild, notionScrollDiv, notionframe } = getNotionScroll();
+   let {
+      isExpectedChild,
+      notionScrollDiv,
+      notionframe,
+      notionSidebar,
+   } = getNotionScroll();
 
    if (isExpectedChild && notionScrollDiv != null) {
       observer.disconnect();
-      setFrameMargin(showFrame, notionScrollDiv, wWidth);
+      setFrameWidth(showFrame, notionScrollDiv, wWidth, notionSidebar);
       observer.observe(notionframe, {
          childList: true,
          attributes: true,
@@ -142,27 +166,31 @@ const modifyNotionFrame = (showFrame: boolean, wWidth: number) => {
    }
 };
 
-const getNotionScroll = () => {
-   let notionApp = document.getElementById(notionAppId) as HTMLElement;
-   let notionframe = notionApp?.getElementsByClassName(
-      notionFrameClass
-   )?.[0] as HTMLElement;
-   let notionScrollDiv = notionframe?.getElementsByClassName(
-      notionScrollDivClass
-   )?.[0] as HTMLElement;
-   let isExpectedChild = notionScrollDiv?.parentElement === notionframe;
-   return { isExpectedChild, notionScrollDiv, notionframe };
-};
-
-const setFrameMargin = (
+const setFrameWidth = (
    showFrame: boolean,
    notionScrollDiv: HTMLElement,
-   wWidth: number
+   wWidth: number,
+   notionSidebar: HTMLElement
 ) => {
+   const sidebarWidth = notionSidebar?.getBoundingClientRect()?.width ?? 0;
+   const frameWidth =
+      wWidth - appWidth(wWidth) - appScrollMargin - sidebarWidth;
+
    if (showFrame) {
-      notionScrollDiv.style.marginRight =
-         (appWidth(wWidth) + appScrollMargin).toString() + 'px';
+      notionScrollDiv.style.width = frameWidth.toString() + 'px';
+      [
+         ...notionScrollDiv.getElementsByClassName(
+            notionCollectionScrollersClass
+         ),
+      ].forEach(
+         (f) => ((f as HTMLElement).style.maxWidth = frameWidth - 9 + 'px')
+      );
    } else {
-      notionScrollDiv.style.marginRight = '0px';
+      notionScrollDiv.style.width = wWidth - sidebarWidth + 'px';
+      [
+         ...notionScrollDiv.getElementsByClassName(
+            notionCollectionScrollersClass
+         ),
+      ].forEach((f) => ((f as HTMLElement).style.maxWidth = ''));
    }
 };
