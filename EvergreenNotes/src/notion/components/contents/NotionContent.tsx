@@ -18,11 +18,13 @@ export const NotionContent = ({
    contentIds,
    depth,
    semanticFilter,
+   style,
 }: {
    blockId: string;
    contentIds?: string[];
    depth?: number;
    semanticFilter?: SemanticFormatEnum[];
+   style?: React.CSSProperties;
 }) => {
    const contentData = useSelector(contentSelector);
    const content = contentData?.[blockId]?.content;
@@ -53,11 +55,13 @@ export const NotionContent = ({
                         <BlockUi
                            block={p}
                            index={i}
-                           semanticFilter={semanticFilter}></BlockUi>
+                           semanticFilter={semanticFilter}
+                           style={style}></BlockUi>
                         <Children
                            block={p}
                            depth={depth ?? 1}
-                           semanticFilter={semanticFilter}></Children>
+                           semanticFilter={semanticFilter}
+                           style={style}></Children>
                      </React.Fragment>
                   ))}
                </>
@@ -72,10 +76,12 @@ const Children = ({
    block,
    depth,
    semanticFilter,
+   style,
 }: {
    block: NotionBlockModel;
    depth: number;
    semanticFilter?: SemanticFormatEnum[];
+   style?: React.CSSProperties;
 }) => {
    if (depth > 6) {
       return null;
@@ -99,6 +105,7 @@ const Children = ({
                blockId={block.blockId}
                contentIds={block.contentIds}
                semanticFilter={semanticFilter}
+               style={style}
                depth={depth + 1}></NotionContent>
          </Grid>
       </Grid>

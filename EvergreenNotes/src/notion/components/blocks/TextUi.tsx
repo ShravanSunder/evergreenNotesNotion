@@ -25,15 +25,23 @@ import { LinkOutlined } from '@material-ui/icons';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { DateTime } from 'luxon';
 
-export interface UiParameters {
-   variant?: Variant;
-   interactive?: boolean;
+export interface BaseTextUiParameters {
+   block: NotionBlockModel;
    style?: React.CSSProperties;
    semanticFilter?: SemanticFormatEnum[];
 }
 
-interface TextUiParameters extends UiParameters {
-   block: NotionBlockModel;
+interface TextUiParameters extends BaseTextUiParameters {
+   variant?: Variant;
+   interactive?: boolean;
+}
+
+interface SegmentParameters {
+   segment: SemanticString;
+   style?: React.CSSProperties;
+   semanticFilter?: SemanticFormatEnum[];
+   variant?: Variant;
+   interactive?: boolean;
 }
 
 export const TextUi = ({
@@ -91,10 +99,6 @@ export const TextUi = ({
    }
    return null;
 };
-
-export interface SegmentParameters extends UiParameters {
-   segment: SemanticString;
-}
 
 export interface SegmentMeta {
    segmentStyle: React.CSSProperties;

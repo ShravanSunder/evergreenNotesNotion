@@ -18,9 +18,6 @@ import { CalloutUi } from './CalloutUi';
 import { CodeUi } from './CodeUi';
 import { ToggleUi } from './ToggleUi';
 import { NumberUi } from './NumberUi';
-import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
-import { shallowEqual } from 'react-redux';
-import { navigationSelector } from 'aNotion/providers/storeSelectors';
 import {
    getBackgroundColor,
    getForegroundColor,
@@ -62,10 +59,12 @@ export const BlockUi = ({
    block,
    index,
    semanticFilter,
+   style,
 }: {
    block: NotionBlockModel;
    index: number | undefined;
    semanticFilter?: SemanticFormatEnum[];
+   style?: React.CSSProperties;
 }) => {
    let classes = useBlockStyles();
    let variant = useVariant(block);
@@ -75,6 +74,15 @@ export const BlockUi = ({
       variant != null &&
       block.type !== BlockTypeEnum.Page &&
       block.type !== BlockTypeEnum.CollectionViewPage;
+
+   //@ts-ignore
+   let blockStyle: React.CSSProperties = {
+      ...style,
+      ...[
+         backgroundColor !== '#FFFFFF' && { backgroundColor: backgroundColor },
+      ],
+      ...[color !== '#FFFFFF' && { color: color }],
+   };
 
    return (
       <Suspense fallback={LoadingLine}>
@@ -86,23 +94,32 @@ export const BlockUi = ({
                   variant={variant}
                   block={block}
                   semanticFilter={semanticFilter}
-                  style={{
-                     backgroundColor: backgroundColor,
-                     color: color,
-                  }}></TextUi>
+                  style={blockStyle}></TextUi>
             )}
             {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
             {block.type === BlockTypeEnum.Callout && (
                <CalloutUi block={block}></CalloutUi>
             )}
             {block.type === BlockTypeEnum.Quote && (
-               <QuoteUi block={block} semanticFilter={semanticFilter} />
+               <QuoteUi
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  style={blockStyle}
+               />
             )}
             {block.type === BlockTypeEnum.ButtetedList && (
-               <BulletUi block={block} semanticFilter={semanticFilter} />
+               <BulletUi
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  style={blockStyle}
+               />
             )}
             {block.type === BlockTypeEnum.NumberedList && (
-               <NumberUi block={block} semanticFilter={semanticFilter} />
+               <NumberUi
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  style={blockStyle}
+               />
             )}
             {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
             {block.type === BlockTypeEnum.Page && (
@@ -111,7 +128,13 @@ export const BlockUi = ({
             {block.type === BlockTypeEnum.CollectionViewPage && (
                <PageUi block={block} variant={variant} />
             )}
-            {block.type === BlockTypeEnum.Toggle && <ToggleUi block={block} />}
+            {block.type === BlockTypeEnum.Toggle && (
+               <ToggleUi
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  style={blockStyle}
+               />
+            )}
             {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
             {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
          </div>

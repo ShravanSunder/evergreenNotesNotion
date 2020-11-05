@@ -69,10 +69,10 @@ export const LoadSidebarFrame = () => {
             console.log('send updateEvergreenSidebar message...');
          }
       },
-      3000,
+      5000,
       {
          trailing: true,
-         maxWait: 21000,
+         maxWait: 60000,
       }
    );
 

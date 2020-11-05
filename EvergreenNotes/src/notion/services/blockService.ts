@@ -222,9 +222,6 @@ export const getBackgroundColor = (block: NotionBlockModel) => {
 
 export const getForegroundColor = (block: NotionBlockModel) => {
    let bgColor = block.block?.format?.block_color;
-   if (block.type === BlockTypeEnum.Code) {
-      bgColor = NotionColor.GreyBg;
-   }
 
    let color: string | undefined = undefined;
    if (bgColor && !isBackGroundColor(bgColor)) {

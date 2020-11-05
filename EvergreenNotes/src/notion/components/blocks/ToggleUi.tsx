@@ -5,8 +5,13 @@ import { Toggle } from 'aNotion/types/notionV3/notionBlockTypes';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
 import { NotionContent } from '../contents/NotionContent';
 import { useBlockStyles } from './BlockUi';
-import { TextUi } from './TextUi';
-export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
+import { BaseTextUiParameters, TextUi } from './TextUi';
+
+export const ToggleUi = ({
+   block,
+   semanticFilter,
+   style,
+}: BaseTextUiParameters) => {
    let classes = useBlockStyles();
    let toggle = block.block as Toggle;
 
@@ -25,9 +30,16 @@ export const ToggleUi = ({ block }: { block: NotionBlockModel }) => {
             </IconButton>
          </Grid>
          <Grid item xs={11}>
-            <TextUi block={block} />
+            <TextUi
+               block={block}
+               semanticFilter={semanticFilter}
+               style={style}
+            />
             {expanded && (
-               <NotionContent blockId={block.blockId}></NotionContent>
+               <NotionContent
+                  blockId={block.blockId}
+                  semanticFilter={semanticFilter}
+                  style={style}></NotionContent>
             )}
          </Grid>
       </Grid>
