@@ -8,7 +8,11 @@ import {
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
-import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
+import {
+   AbsoluteDateTime,
+   RelativeDateTime,
+   SemanticString,
+} from 'aNotion/types/notionV3/semanticStringTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionV3/notionRecordTypes';
 import {
@@ -23,6 +27,7 @@ import {
    red,
 } from '@material-ui/core/colors';
 import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
+import { DateTime } from 'luxon';
 
 export const fetchPageRecord = async (
    pageId: string,
@@ -106,10 +111,45 @@ export const isNavigable = (block: NotionBlockModel): boolean => {
    );
 };
 
+export const parseDate = (dateData: any) => {
+   let segmentDetails: string = '';
+   try {
+      if (dateData.date_format === 'relative') {
+         let date = dateData as RelativeDateTime;
+         segmentDetails =
+            '@' +
+            DateTime.fromFormat(date.start_date, 'yyyy-MM-dd').toRelative();
+         if (date.end_date)
+            segmentDetails =
+               ' ⟶ ' +
+               DateTime.fromFormat(date.end_date, 'yyyy-MM-dd').toRelative();
+      } else {
+         let date = dateData as AbsoluteDateTime;
+         segmentDetails =
+            '@' +
+            DateTime.fromFormat(date.start_date, 'yyyy-MM-dd').toFormat(
+               date.date_format
+            );
+         if (date.end_date)
+            segmentDetails =
+               ' ⟶ ' +
+               DateTime.fromFormat(date.end_date, 'yyyy-MM-dd').toFormat(
+                  date.date_format
+               );
+      }
+   } catch {}
+   return segmentDetails;
+};
+
 export const reduceTitle = (title?: SemanticString[]) => {
    if (title != null) {
       return title
          .map((segment) => {
+            if (segment[1] != null) {
+               //handle dates
+               let dateData = segment[1] as any;
+               return parseDate(dateData);
+            }
             return segment[0];
          })
          .reduce((acuumulator, value) => {

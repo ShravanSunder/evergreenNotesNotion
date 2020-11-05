@@ -15,7 +15,7 @@ import {
    blockSelector,
    mentionSelector,
 } from 'aNotion/providers/storeSelectors';
-import { getColor } from 'aNotion/services/blockService';
+import { getColor, parseDate } from 'aNotion/services/blockService';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { blockActions } from './blockSlice';
 import { getPageUrl } from 'aNotion/services/notionSiteService';
@@ -315,33 +315,3 @@ const useSegmentData = (
       hideSegment: hideSegment,
    };
 };
-
-function parseDate(dateData: any) {
-   let segmentDetails: string = '';
-   try {
-      if (dateData.date_format === 'relative') {
-         let date = dateData as RelativeDateTime;
-         segmentDetails =
-            '@' +
-            DateTime.fromFormat(date.start_date, 'yyyy-MM-dd').toRelative();
-         if (date.end_date)
-            segmentDetails =
-               ' ⟶ ' +
-               DateTime.fromFormat(date.end_date, 'yyyy-MM-dd').toRelative();
-      } else {
-         let date = dateData as AbsoluteDateTime;
-         segmentDetails =
-            '@' +
-            DateTime.fromFormat(date.start_date, 'yyyy-MM-dd').toFormat(
-               date.date_format
-            );
-         if (date.end_date)
-            segmentDetails =
-               ' ⟶ ' +
-               DateTime.fromFormat(date.end_date, 'yyyy-MM-dd').toFormat(
-                  date.date_format
-               );
-      }
-   } catch {}
-   return segmentDetails;
-}
