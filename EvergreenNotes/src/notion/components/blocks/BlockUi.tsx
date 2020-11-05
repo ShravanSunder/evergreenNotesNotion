@@ -76,19 +76,15 @@ export const BlockUi = ({
       block.type !== BlockTypeEnum.CollectionViewPage;
 
    //@ts-ignore
-   let blockStyle: React.CSSProperties = {
-      ...style,
-      ...[
-         backgroundColor !== '#FFFFFF' && { backgroundColor: backgroundColor },
-      ],
-      ...[color !== '#FFFFFF' && { color: color }],
-   };
+   let blockStyle: React.CSSProperties = getStyles(
+      style,
+      backgroundColor,
+      color
+   );
 
    return (
       <Suspense fallback={LoadingLine}>
-         <div
-            className={classes.block}
-            style={{ backgroundColor: backgroundColor, color: color }}>
+         <div className={classes.block} style={blockStyle}>
             {useGeneric && (
                <TextUi
                   variant={variant}
@@ -123,10 +119,10 @@ export const BlockUi = ({
             )}
             {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
             {block.type === BlockTypeEnum.Page && (
-               <PageUi block={block} variant={variant} />
+               <PageUi block={block} variant={variant} style={style} />
             )}
             {block.type === BlockTypeEnum.CollectionViewPage && (
-               <PageUi block={block} variant={variant} />
+               <PageUi block={block} variant={variant} style={style} />
             )}
             {block.type === BlockTypeEnum.Toggle && (
                <ToggleUi
@@ -165,3 +161,21 @@ const useVariant = (block: NotionBlockModel) => {
    }
    return variant;
 };
+function getStyles(
+   style: React.CSSProperties | undefined,
+   backgroundColor: string,
+   color: string | undefined
+) {
+   let blockStyle: React.CSSProperties = {
+      ...style,
+   };
+
+   if (backgroundColor !== '#FFFFFF' && backgroundColor != null) {
+      blockStyle.backgroundColor = backgroundColor;
+   }
+
+   if (color != null) {
+      blockStyle.color = color;
+   }
+   return blockStyle;
+}

@@ -6,6 +6,7 @@ import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
 import { NotionContent } from '../contents/NotionContent';
 import { useBlockStyles } from './BlockUi';
 import { BaseTextUiParameters, TextUi } from './TextUi';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
 export const ToggleUi = ({
    block,
@@ -20,6 +21,14 @@ export const ToggleUi = ({
       e.stopPropagation();
       setExpanded(!expanded);
    };
+
+   let filteredSemanticFilter: SemanticFormatEnum[] = [];
+   if (style?.backgroundColor !== '#ffffff' && style?.backgroundColor != null) {
+      filteredSemanticFilter =
+         semanticFilter?.filter((f) => f !== SemanticFormatEnum.Colored) ?? [];
+   } else if (semanticFilter != null) {
+      filteredSemanticFilter = [...semanticFilter];
+   }
 
    return (
       <Grid container>
@@ -38,7 +47,7 @@ export const ToggleUi = ({
             {expanded && (
                <NotionContent
                   blockId={block.blockId}
-                  semanticFilter={semanticFilter}
+                  semanticFilter={filteredSemanticFilter}
                   style={style}></NotionContent>
             )}
          </Grid>

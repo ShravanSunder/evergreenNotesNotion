@@ -8,9 +8,11 @@ import { Variant } from '@material-ui/core/styles/createTypography';
 export const PageUi = ({
    block,
    variant,
+   style,
 }: {
    block: NotionBlockModel;
    variant: Variant | undefined;
+   style: React.CSSProperties | undefined;
 }) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
@@ -42,9 +44,9 @@ export const PageUi = ({
    }
 
    return (
-      <React.Fragment>
+      <div style={style}>
          {iconComponent}
-         <TextUi block={block} variant={variant}></TextUi>
-      </React.Fragment>
+         <TextUi block={block} variant={variant} style={style}></TextUi>
+      </div>
    );
 };

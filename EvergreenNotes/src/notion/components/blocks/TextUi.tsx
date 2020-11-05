@@ -229,7 +229,8 @@ const useSegmentData = (
    let segmentStyle: React.CSSProperties = { ...style } ?? {};
    let segmentDetails: string | undefined = undefined;
    let segmentType: SemanticFormatEnum | undefined = undefined;
-   let hideSegment: boolean = semanticFilter == null ? false : true;
+   let hideSegment: boolean =
+      semanticFilter?.length === 0 || semanticFilter == null ? false : true;
 
    if (hideSegment) {
       if (

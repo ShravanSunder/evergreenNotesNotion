@@ -10,7 +10,7 @@ export const BulletUi = ({
 }: BaseTextUiParameters) => {
    let classes = useBlockStyles();
    return (
-      <Grid container alignItems="flex-start">
+      <Grid container alignItems="flex-start" style={style}>
          <Grid item xs={1} className={classes.indentColumnBlock}>
             <Typography display={'inline'} variant={'body1'}>
                {' • '}
