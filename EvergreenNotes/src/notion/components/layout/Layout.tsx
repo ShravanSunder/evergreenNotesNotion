@@ -38,6 +38,7 @@ import {
 import { LoadingTab } from '../common/Loading';
 import { LightTooltip } from '../common/Styles';
 import { flushCache } from 'aUtilities/apiCache';
+import { NavigationState } from './NotionSiteState';
 
 const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
 const MarksPane = React.lazy(() => import('../pageMarks/MarksPane'));
@@ -98,15 +99,7 @@ const MenuBar = ({
    };
 
    const handleRefresh = (e: SyntheticEvent) => {
-      if (navigation.pageId != null) {
-         flushCache();
-         dispatch(contentActions.clearContent({}));
-         dispatch(
-            notionSiteActions.fetchCurrentPage({
-               pageId: navigation.pageId,
-            })
-         );
-      }
+      refreshSidebarContents(dispatch, navigation);
    };
 
    return (
@@ -198,6 +191,16 @@ export const Layout = () => {
 
    useEffect(() => {
       setTab(LayoutTabs.References);
+
+      const receiveMessage = function (event: any) {
+         refreshSidebarContents(dispatch, navigation);
+      };
+
+      console.log('useEffect updateEvergreenSidebar');
+      window.addEventListener('message', receiveMessage);
+      return () => {
+         window.removeEventListener('message', receiveMessage);
+      };
    }, []);
 
    useEffect(() => {
@@ -259,3 +262,15 @@ export const Layout = () => {
 };
 
 export default Layout;
+function refreshSidebarContents(dispatch: any, navigation: NavigationState) {
+   console.log('...received refreshSidebarContents updateevergreensidebar');
+   if (navigation.pageId != null) {
+      flushCache();
+      dispatch(contentActions.clearContent({}));
+      dispatch(
+         notionSiteActions.fetchCurrentPage({
+            pageId: navigation.pageId,
+         })
+      );
+   }
+}

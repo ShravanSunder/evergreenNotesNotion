@@ -40,6 +40,9 @@ const useStyles = makeStyles({
 var setUpdateNotionScroller:
    | React.Dispatch<React.SetStateAction<boolean>>
    | undefined = undefined;
+var setUpdateSidebarContents:
+   | React.Dispatch<React.SetStateAction<boolean>>
+   | undefined = undefined;
 export const LoadSidebarFrame = () => {
    let url = chrome.extension.getURL('sidebar.html');
    let classes = useStyles();
@@ -56,24 +59,35 @@ export const LoadSidebarFrame = () => {
          maxWait: 500,
       }
    );
+   const debouncedSidebarContents = useDebouncedCallback(
+      () => {
+         let iframe = (document.getElementById(
+            'evergreenNotesForNotion'
+         ) as HTMLIFrameElement)?.contentWindow;
+         if (iframe != null) {
+            iframe?.postMessage('updateEvergreenSidebar', '*');
+            console.log('send updateEvergreenSidebar message...');
+         }
+      },
+      3000,
+      {
+         trailing: true,
+         maxWait: 21000,
+      }
+   );
 
    useEffect(() => {
       setUpdateNotionScroller = debouncedUpdateFrame.callback;
+      setUpdateSidebarContents = debouncedSidebarContents.callback;
       return () => {
          setUpdateNotionScroller = undefined;
+         setUpdateSidebarContents = undefined;
       };
    }, []);
 
    useEffect(() => {
-      if (updateFrame) {
-         setUpdateFrame(false);
-      }
-   }, [updateFrame]);
-
-   useEffect(() => {
-      modifyNotionFrame(showFrame, wWidth);
+      modifyNotionFrameAndCreateListeners(showFrame, wWidth);
       setUpdateFrame(false);
-      console.log('updated frame');
    }, [wWidth, wHeight, showFrame, updateFrame]);
 
    const handleClick = (e: SyntheticEvent) => {
@@ -97,6 +111,7 @@ export const LoadSidebarFrame = () => {
             handleDrag={handleDrag}></SidebarFab>
          <Slide in={showFrame} direction={'left'}>
             <iframe
+               id="evergreenNotesForNotion"
                style={{
                   display: showFrame ? 'block' : 'none',
                   position: 'fixed',
@@ -117,6 +132,12 @@ export const LoadSidebarFrame = () => {
 const styleChangedCallback = (mutations: MutationRecord[]) => {
    if (setUpdateNotionScroller != null) {
       setUpdateNotionScroller(true);
+   }
+};
+
+const contentChangedCallback = (mutations: MutationRecord[]) => {
+   if (setUpdateSidebarContents != null) {
+      setUpdateSidebarContents(true);
    }
 };
 
@@ -142,8 +163,12 @@ const getNotionScroll = () => {
    return { isExpectedChild, notionScrollDiv, notionframe, notionSidebar };
 };
 
-var observer = new MutationObserver(styleChangedCallback);
-const modifyNotionFrame = (showFrame: boolean, wWidth: number) => {
+var notionFrameBoundsObserver = new MutationObserver(styleChangedCallback);
+var notionFrameContentObserver = new MutationObserver(contentChangedCallback);
+const modifyNotionFrameAndCreateListeners = (
+   showFrame: boolean,
+   wWidth: number
+) => {
    let {
       isExpectedChild,
       notionScrollDiv,
@@ -152,16 +177,26 @@ const modifyNotionFrame = (showFrame: boolean, wWidth: number) => {
    } = getNotionScroll();
 
    if (isExpectedChild && notionScrollDiv != null) {
-      observer.disconnect();
+      notionFrameContentObserver.disconnect();
+      notionFrameBoundsObserver.disconnect();
       setFrameWidth(showFrame, notionScrollDiv, wWidth, notionSidebar);
-      observer.observe(notionframe, {
+      notionFrameBoundsObserver.observe(notionframe, {
          childList: true,
+         subtree: false,
          attributes: true,
          attributeFilter: ['style'],
       });
-      observer.observe(notionScrollDiv, {
+      notionFrameBoundsObserver.observe(notionScrollDiv, {
+         childList: false,
+         subtree: false,
          attributes: true,
          attributeFilter: ['style'],
+      });
+      notionFrameContentObserver.observe(notionScrollDiv, {
+         childList: true,
+         subtree: true,
+         attributes: false,
+         characterData: false,
       });
    }
 };
