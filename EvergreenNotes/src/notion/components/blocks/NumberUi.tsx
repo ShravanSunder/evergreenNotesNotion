@@ -4,6 +4,7 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { useBlockStyles } from './BlockUi';
 import { BaseTextUiParameters, TextUi } from './TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import { TextUiGroup } from './TextUiGroup';
 
 export const NumberUi = ({
    block,
@@ -19,10 +20,10 @@ export const NumberUi = ({
             </Typography>
          </Grid>
          <Grid item xs={11}>
-            <TextUi
+            <TextUiGroup
                block={block}
                semanticFilter={semanticFilter}
-               style={style}></TextUi>
+               style={style}></TextUiGroup>
          </Grid>
       </Grid>
    );

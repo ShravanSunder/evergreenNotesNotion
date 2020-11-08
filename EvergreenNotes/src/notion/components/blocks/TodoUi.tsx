@@ -4,6 +4,7 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ToDo } from 'aNotion/types/notionV3/notionBlockTypes';
 import { useBlockStyles } from './BlockUi';
 import { TextUi } from './TextUi';
+import { TextUiGroup } from './TextUiGroup';
 
 export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
@@ -25,11 +26,11 @@ export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
             )}
          </Grid>
          <Grid item xs={11}>
-            <TextUi
+            <TextUiGroup
                block={block}
                style={{
                   textDecoration: checked ? 'line-through' : '',
-               }}></TextUi>
+               }}></TextUiGroup>
          </Grid>
       </Grid>
    );
