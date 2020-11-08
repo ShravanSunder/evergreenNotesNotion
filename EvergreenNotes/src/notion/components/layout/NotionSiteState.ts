@@ -8,6 +8,7 @@ export type CookieData = {
 
 export type NavigationState = {
    pageId?: string;
+   previousPageId?: string;
    locationId?: string;
    backgroundId?: string;
    url?: string;

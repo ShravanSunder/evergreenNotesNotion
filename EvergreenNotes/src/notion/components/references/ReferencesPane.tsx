@@ -7,6 +7,7 @@ import {
    currentPageSelector,
    referenceSelector,
    pageMarksSelector,
+   navigationSelector,
 } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from './referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
@@ -37,6 +38,7 @@ export const ReferencesPane = () => {
    const pageName = record.currentPage?.pageBlock.simpleTitle;
    const pageId = record.currentPage?.pageBlock.blockId as string;
    const marks = useSelector(pageMarksSelector, shallowEqual);
+   //const previousPageId = useSelector(navigationSelector, shallowEqual);
 
    useEffect(() => {
       if (
@@ -63,7 +65,7 @@ export const ReferencesPane = () => {
          <FullTitle refs={references}></FullTitle>
          <Related refs={references}></Related>
          {references.pageReferencesStatus === thunkStatus.rejected && (
-            <div>error!</div>
+            <div>🔄</div>
          )}
       </ErrorBoundary>
    );

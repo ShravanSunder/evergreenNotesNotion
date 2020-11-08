@@ -9,6 +9,7 @@ import React, {
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    cookieSelector,
+   currentPageSelector,
    navigationSelector,
 } from 'aNotion/providers/storeSelectors';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
@@ -178,6 +179,7 @@ export const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
+   const currentPage = useSelector(currentPageSelector, shallowEqual);
 
    const classes = useStyles();
 
@@ -193,7 +195,12 @@ export const Layout = () => {
       setTab(LayoutTabs.References);
 
       const receiveMessage = function (event: any) {
-         refreshSidebarContents(dispatch, navigation);
+         if (
+            currentPage.status === thunkStatus.fulfilled &&
+            navigation.pageId != null
+         ) {
+            refreshSidebarContents(dispatch, navigation);
+         }
       };
 
       console.log('useEffect updateEvergreenSidebar');
