@@ -89,12 +89,12 @@ export const LoadingUnknown = () => {
             container
             justify="center"
             alignItems="center"
-            style={{ minHeight: 100, minWidth: 100 }}>
+            style={{ minHeight: 100, minWidth: 100, marginTop: 100 }}>
             <Grid item>
                <Fade
                   in={loading}
                   style={{
-                     transitionDelay: loading ? '800ms' : '0ms',
+                     transitionDelay: loading ? '500ms' : '0ms',
                   }}
                   unmountOnExit>
                   <CircularProgress />

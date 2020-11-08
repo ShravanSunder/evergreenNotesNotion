@@ -136,7 +136,48 @@ const styleChangedCallback = (mutations: MutationRecord[]) => {
 };
 
 const contentChangedCallback = (mutations: MutationRecord[]) => {
-   if (setUpdateSidebarContents != null) {
+   const checkNodesForText = (nodes: NodeList): boolean => {
+      for (let node of nodes) {
+         if (node.nodeName === '#text') {
+            return true;
+         }
+      }
+
+      return false;
+   };
+
+   const checkNodesForHighlights = (node: Node, oldValue: string): boolean => {
+      let element = node as HTMLElement;
+      if (
+         element.attributes[0].name === 'data-block-id' &&
+         element.classList.contains('notion-selectable')
+      ) {
+         return true;
+      }
+
+      return false;
+   };
+
+   let hasChanged = mutations.some((m: MutationRecord) => {
+      let result = false;
+
+      if (m.type === 'characterData') {
+         return true;
+      } else if (m.type === 'childList') {
+         result = checkNodesForText(m.addedNodes);
+         if (result) return true;
+         result = checkNodesForText(m.removedNodes);
+         if (result) return true;
+      } else if (
+         m.type === 'attributes' &&
+         m.attributeName?.startsWith('style')
+      ) {
+         result = checkNodesForHighlights(m.target, m.oldValue ?? '');
+      }
+      return result;
+   });
+
+   if (setUpdateSidebarContents != null && hasChanged) {
       setUpdateSidebarContents(true);
    }
 };
@@ -195,8 +236,9 @@ const modifyNotionFrameAndCreateListeners = (
       notionFrameContentObserver.observe(notionScrollDiv, {
          childList: true,
          subtree: true,
+         characterData: true,
          attributes: false,
-         characterData: false,
+         // attributeFilter: ['style'],
       });
    }
 };
