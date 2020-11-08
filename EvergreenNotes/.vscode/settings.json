@@ -19,5 +19,8 @@
       "**/obj": true,
       "release": true
    },
-   "explorerExclude.backup": null
+   "explorerExclude.backup": null,
+   "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+   }
 }

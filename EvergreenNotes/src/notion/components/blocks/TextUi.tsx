@@ -21,9 +21,9 @@ import { blockActions } from './blockSlice';
 import { getPageUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
 import { useBlockStyles } from './BlockUi';
-import { LinkOutlined } from '@material-ui/icons';
 import { Variant } from '@material-ui/core/styles/createTypography';
-import { DateTime } from 'luxon';
+import { MentionsState } from '../mentions/mentionsState';
+import { RecordState } from './blockState';
 
 export interface BaseTextUiParameters {
    block: NotionBlockModel;
@@ -31,7 +31,7 @@ export interface BaseTextUiParameters {
    semanticFilter?: SemanticFormatEnum[];
 }
 
-interface TextUiParameters extends BaseTextUiParameters {
+export interface TextUiParameters extends BaseTextUiParameters {
    variant?: Variant;
    interactive?: boolean;
 }
@@ -127,7 +127,6 @@ const TextSegment = ({
       segmentType,
       hideSegment,
    }: SegmentMeta = useSegmentData(format, style, semanticFilter);
-   let link: string | undefined = undefined;
 
    useEffect(() => {
       if (segmentDetails != null && segmentType === SemanticFormatEnum.Page) {
@@ -135,32 +134,21 @@ const TextSegment = ({
       }
    }, [dispatch, segmentDetails, segmentType]);
 
-   if (segmentDetails != null && segmentType === SemanticFormatEnum.Page) {
-      text = blockData[segmentDetails]?.block?.simpleTitle ?? '';
-      link = getPageUrl(segmentDetails);
-   } else if (
-      segmentDetails != null &&
-      segmentType === SemanticFormatEnum.Link
-   ) {
-      link = segmentDetails;
-   } else if (
-      segmentDetails != null &&
-      segmentType === SemanticFormatEnum.User
-   ) {
-      text =
-         ' @' +
-         mentionData.users[segmentDetails]?.user?.given_name +
-         ', ' +
-         mentionData.users[segmentDetails]?.user?.family_name +
-         ' ';
-   } else if (segmentType === SemanticFormatEnum.DateTime) {
-      text = segmentDetails ?? '';
-   }
+   let link: string | undefined;
+   ({ link, text } = formatSegment(
+      segmentDetails,
+      segmentType,
+      text,
+      blockData,
+      mentionData
+   ));
 
+   //nothing to render
    if (text == null || (text.trim().length === 0 && segmentDetails == null)) {
       return null;
    }
 
+   //hide the text
    if (hideSegment) {
       return (
          <div style={{ paddingTop: 3 }}>
@@ -320,3 +308,34 @@ const useSegmentData = (
       hideSegment: hideSegment,
    };
 };
+function formatSegment(
+   segmentDetails: string | undefined,
+   segmentType: string | undefined,
+   text: string,
+   blockData: RecordState,
+   mentionData: MentionsState
+) {
+   let link: string | undefined = undefined;
+   if (segmentDetails != null && segmentType === SemanticFormatEnum.Page) {
+      text = blockData[segmentDetails]?.block?.simpleTitle ?? '';
+      link = getPageUrl(segmentDetails);
+   } else if (
+      segmentDetails != null &&
+      segmentType === SemanticFormatEnum.Link
+   ) {
+      link = segmentDetails;
+   } else if (
+      segmentDetails != null &&
+      segmentType === SemanticFormatEnum.User
+   ) {
+      text =
+         ' @' +
+         mentionData.users[segmentDetails]?.user?.given_name +
+         ', ' +
+         mentionData.users[segmentDetails]?.user?.family_name +
+         ' ';
+   } else if (segmentType === SemanticFormatEnum.DateTime) {
+      text = segmentDetails ?? '';
+   }
+   return { link, text };
+}

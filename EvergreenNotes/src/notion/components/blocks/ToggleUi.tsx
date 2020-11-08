@@ -7,6 +7,7 @@ import { NotionContent } from '../contents/NotionContent';
 import { useBlockStyles } from './BlockUi';
 import { BaseTextUiParameters, TextUi } from './TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import { aggregateParentSemanticFilter } from 'aNotion/services/blockService';
 
 export const ToggleUi = ({
    block,
@@ -22,13 +23,10 @@ export const ToggleUi = ({
       setExpanded(!expanded);
    };
 
-   let filteredSemanticFilter: SemanticFormatEnum[] = [];
-   if (style?.backgroundColor !== '#ffffff' && style?.backgroundColor != null) {
-      filteredSemanticFilter =
-         semanticFilter?.filter((f) => f !== SemanticFormatEnum.Colored) ?? [];
-   } else if (semanticFilter != null) {
-      filteredSemanticFilter = [...semanticFilter];
-   }
+   const aggregatedSemanticFilter: SemanticFormatEnum[] = aggregateParentSemanticFilter(
+      style,
+      semanticFilter
+   );
 
    return (
       <Grid container>
@@ -47,7 +45,7 @@ export const ToggleUi = ({
             {expanded && (
                <NotionContent
                   blockId={block.blockId}
-                  semanticFilter={filteredSemanticFilter}
+                  semanticFilter={aggregatedSemanticFilter}
                   style={style}></NotionContent>
             )}
          </Grid>

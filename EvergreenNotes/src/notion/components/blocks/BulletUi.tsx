@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { useBlockStyles } from './BlockUi';
 import { BaseTextUiParameters, TextUi } from './TextUi';
+import { TextUiGroup } from './TextUiGroup';
 
 export const BulletUi = ({
    block,
@@ -17,10 +18,10 @@ export const BulletUi = ({
             </Typography>
          </Grid>
          <Grid item xs={11}>
-            <TextUi
+            <TextUiGroup
                block={block}
                semanticFilter={semanticFilter}
-               style={style}></TextUi>
+               style={style}></TextUiGroup>
          </Grid>
       </Grid>
    );

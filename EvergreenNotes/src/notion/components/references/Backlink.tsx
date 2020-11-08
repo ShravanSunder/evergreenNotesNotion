@@ -51,9 +51,8 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
                   <Grid item xs={12}>
                      <div style={{ paddingLeft: 12 }}>
                         <NotionContent
-                           blockId={backlink.backlinkBlock.blockId}
-                           contentIds={
-                              backlink.backlinkBlock.contentIds
+                           blockId={
+                              backlink.backlinkBlock.blockId
                            }></NotionContent>
                      </div>
                   </Grid>

@@ -48,11 +48,7 @@ export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
                   </Grid>
                   <Grid item xs={12}>
                      <div style={{ paddingLeft: 12 }}>
-                        <NotionContent
-                           blockId={refData.id}
-                           contentIds={
-                              refData.notionBlock.contentIds
-                           }></NotionContent>
+                        <NotionContent blockId={refData.id}></NotionContent>
                      </div>
                   </Grid>
                </Grid>

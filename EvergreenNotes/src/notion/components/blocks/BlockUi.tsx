@@ -21,11 +21,13 @@ import { NumberUi } from './NumberUi';
 import {
    getBackgroundColor,
    getForegroundColor,
+   inheritAndCombineStyles,
 } from 'aNotion/services/blockService';
-import { TextUi } from './TextUi';
 import { ImageUi } from './ImageUi';
-import { LoadingImage, LoadingLine } from '../common/Loading';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import { TextUiGroup } from './TextUiGroup';
+import { LoadingLine } from 'aNotion/components/common/Loading';
+import { TextUi } from './TextUi';
 
 export const useBlockStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -37,6 +39,7 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
          overflowWrap: 'break-word',
          wordBreak: 'break-word',
          position: 'relative',
+         whiteSpace: 'pre-wrap',
       },
       indentColumnBlock: {
          paddingLeft: 12,
@@ -70,13 +73,13 @@ export const BlockUi = ({
    let variant = useVariant(block);
    let backgroundColor = getBackgroundColor(block);
    let color = getForegroundColor(block);
-   let useGeneric =
+   const useGeneric =
       variant != null &&
       block.type !== BlockTypeEnum.Page &&
       block.type !== BlockTypeEnum.CollectionViewPage;
+   const hasChildren = block.contentIds.length > 0;
 
-   //@ts-ignore
-   let blockStyle: React.CSSProperties = getStyles(
+   const blockStyle: React.CSSProperties = inheritAndCombineStyles(
       style,
       backgroundColor,
       color
@@ -86,11 +89,11 @@ export const BlockUi = ({
       <Suspense fallback={LoadingLine}>
          <div className={classes.block} style={blockStyle}>
             {useGeneric && (
-               <TextUi
+               <TextUiGroup
                   variant={variant}
                   block={block}
                   semanticFilter={semanticFilter}
-                  style={blockStyle}></TextUi>
+                  style={blockStyle}></TextUiGroup>
             )}
             {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
             {block.type === BlockTypeEnum.Callout && (
@@ -161,21 +164,3 @@ const useVariant = (block: NotionBlockModel) => {
    }
    return variant;
 };
-function getStyles(
-   style: React.CSSProperties | undefined,
-   backgroundColor: string,
-   color: string | undefined
-) {
-   let blockStyle: React.CSSProperties = {
-      ...style,
-   };
-
-   if (backgroundColor !== '#FFFFFF' && backgroundColor != null) {
-      blockStyle.backgroundColor = backgroundColor;
-   }
-
-   if (color != null) {
-      blockStyle.color = color;
-   }
-   return blockStyle;
-}

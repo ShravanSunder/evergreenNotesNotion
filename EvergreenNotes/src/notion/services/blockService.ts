@@ -11,6 +11,7 @@ import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import {
    AbsoluteDateTime,
    RelativeDateTime,
+   SemanticFormatEnum,
    SemanticString,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
@@ -251,4 +252,37 @@ export const isBackGroundColor = (color: NotionColor | undefined) => {
 export const isChild = (nb: NotionBlockRecord, pageId: string): boolean => {
    if (nb.getParentsNodes().find((f) => f.blockId === pageId)) return true;
    return false;
+};
+
+export const aggregateParentSemanticFilter = (
+   style: React.CSSProperties | undefined,
+   semanticFilter: SemanticFormatEnum[] | undefined
+) => {
+   let filteredSemanticFilter: SemanticFormatEnum[] = [];
+   if (style?.backgroundColor !== '#ffffff' && style?.backgroundColor != null) {
+      filteredSemanticFilter =
+         semanticFilter?.filter((f) => f !== SemanticFormatEnum.Colored) ?? [];
+   } else if (semanticFilter != null) {
+      filteredSemanticFilter = [...semanticFilter];
+   }
+   return filteredSemanticFilter;
+};
+
+export const inheritAndCombineStyles = (
+   style: React.CSSProperties | undefined,
+   backgroundColor: string,
+   color: string | undefined
+) => {
+   let blockStyle: React.CSSProperties = {
+      ...style,
+   };
+
+   if (backgroundColor !== '#FFFFFF' && backgroundColor != null) {
+      blockStyle.backgroundColor = backgroundColor;
+   }
+
+   if (color != null) {
+      blockStyle.color = color;
+   }
+   return blockStyle;
 };

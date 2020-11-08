@@ -15,13 +15,11 @@ const BlockUi = React.lazy(() => import('../blocks/BlockUi'));
 
 export const NotionContent = ({
    blockId,
-   contentIds,
    depth,
    semanticFilter,
    style,
 }: {
    blockId: string;
-   contentIds?: string[];
    depth?: number;
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
@@ -103,7 +101,6 @@ const Children = ({
          <Grid item xs>
             <NotionContent
                blockId={block.blockId}
-               contentIds={block.contentIds}
                semanticFilter={semanticFilter}
                style={style}
                depth={depth + 1}></NotionContent>
