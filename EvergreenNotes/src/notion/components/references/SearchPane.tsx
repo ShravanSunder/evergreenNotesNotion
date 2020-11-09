@@ -22,7 +22,7 @@ import {
    ListItemText,
 } from '@material-ui/core';
 import { referenceSelector } from 'aNotion/providers/storeSelectors';
-import { referenceActions } from './referenceSlice';
+import { referenceActions } from 'aNotion/components/references/referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from 'aNotion/components/references/Reference';

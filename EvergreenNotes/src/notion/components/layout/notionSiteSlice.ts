@@ -18,7 +18,7 @@ import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 
 const initialState: SiteState = {
-   cookie: { status: thunkStatus.pending },
+   cookie: { status: thunkStatus.idle },
    navigation: {},
    currentPage: { status: thunkStatus.idle },
 };
@@ -85,13 +85,12 @@ const loadCookies: CaseReducer<SiteState, PayloadAction<CookieData>> = (
 
 const unloadPreviousPage: CaseReducer = (state, action) => {
    state.currentPage.currentPageData = undefined;
-   state.currentPage.status = thunkStatus.pending;
+   state.currentPage.status = thunkStatus.idle;
+   console.log('currentPage unload:' + state.currentPage.status);
 };
 
 const updateNavigationData = {
    reducer: (state: SiteState, action: PayloadAction<NavigationState>) => {
-      state.currentPage.currentPageData = undefined;
-      state.currentPage.status = thunkStatus.pending;
       state.navigation = action.payload;
    },
    prepare: (payload: string) => {

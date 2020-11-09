@@ -1,7 +1,7 @@
 import React from 'react';
 import { Breadcrumbs, Typography } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { getTitle } from './Reference';
+import { getTitle } from 'aNotion/components/references/Reference';
 
 export const Path = ({ path }: { path: NotionBlockModel[] }) => {
    return (

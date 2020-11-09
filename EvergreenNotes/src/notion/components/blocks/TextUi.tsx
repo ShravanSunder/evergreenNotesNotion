@@ -17,7 +17,7 @@ import {
 } from 'aNotion/providers/storeSelectors';
 import { getColor, parseDate } from 'aNotion/services/blockService';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
-import { blockActions } from './blockSlice';
+import { blockActions } from 'aNotion/components/blocks/blockSlice';
 import { getPageUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
 import { useBlockStyles } from './BlockUi';

@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
-   cookieSelector,
    currentPageSelector,
    navigationSelector,
 } from 'aNotion/providers/storeSelectors';
@@ -16,7 +15,6 @@ import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import { contentActions } from 'aNotion/components/contents/contentSlice';
-import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
@@ -36,15 +34,24 @@ import {
    Typography,
    IconButton,
 } from '@material-ui/core';
-import { LoadingTab } from '../common/Loading';
-import { LightTooltip } from '../common/Styles';
+import { LoadingTab } from 'aNotion/components/common/Loading';
+import { LightTooltip } from 'aNotion/components/common/Styles';
 import { flushCache } from 'aUtilities/apiCache';
-import { NavigationState } from './NotionSiteState';
+import { NavigationState } from 'aNotion/components/layout/NotionSiteState';
+import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
 
-const ReferencesPane = React.lazy(() => import('../references/ReferencesPane'));
-const MarksPane = React.lazy(() => import('../pageMarks/MarksPane'));
-const SearchPane = React.lazy(() => import('../references/SearchPane'));
-const OptionsPane = React.lazy(() => import('../options/OptionsPane'));
+const ReferencesPane = React.lazy(
+   () => import('aNotion/components/references/ReferencesPane')
+);
+const MarksPane = React.lazy(
+   () => import('aNotion/components/pageMarks/MarksPane')
+);
+const SearchPane = React.lazy(
+   () => import('aNotion/components/references/SearchPane')
+);
+const OptionsPane = React.lazy(
+   () => import('aNotion/components/options/OptionsPane')
+);
 
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
@@ -180,7 +187,6 @@ export const Layout = () => {
    const navigation = useSelector(navigationSelector, shallowEqual);
    const currentPage = useSelector(currentPageSelector, shallowEqual);
    const state = useSelector((state) => state, shallowEqual);
-
    const classes = useStyles();
 
    const [tab, setTab] = useState(LayoutTabs.References);
@@ -204,22 +210,46 @@ export const Layout = () => {
       return () => {};
    }, [navigation.pageId, navigation.url, dispatch]);
 
-   useEffect(() => {
-      const receiveMessage = function (event: any) {
+   const [currentPageStatus] = useDebounce(currentPage.status, 250, {
+      trailing: true,
+   });
+   const debouncedUpdateSignal = useDebouncedCallback(
+      () => {
          if (
-            currentPage.status === thunkStatus.fulfilled &&
+            currentPageStatus === thunkStatus.fulfilled &&
             navigation.pageId != null
          ) {
             refreshSidebarContents(dispatch, navigation);
          } else {
             console.log('currentPage status:' + currentPage.status);
          }
-      };
+      },
+      100,
+      {
+         maxWait: 100,
+      }
+   );
 
+   const handleReceiveMessage = useCallback((event) => {
+      debouncedUpdateSignal.callback();
+   }, []);
+
+   // const receiveMessage = function (event: any) {
+   //    if (
+   //       currentPage.status === thunkStatus.fulfilled &&
+   //       navigation.pageId != null
+   //    ) {
+   //       refreshSidebarContents(dispatch, navigation);
+   //    } else {
+   //       console.log('currentPage status:' + currentPage.status);
+   //    }
+   // };
+
+   useEffect(() => {
       console.log('useEffect updateEvergreenSidebar');
-      window.addEventListener('message', receiveMessage);
+      window.addEventListener('message', handleReceiveMessage);
       return () => {
-         window.removeEventListener('message', receiveMessage);
+         window.removeEventListener('message', handleReceiveMessage);
       };
    }, []);
 

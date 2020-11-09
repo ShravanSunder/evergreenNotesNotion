@@ -135,18 +135,18 @@ const styleChangedCallback = (mutations: MutationRecord[]) => {
    }
 };
 
-const contentChangedCallback = (mutations: MutationRecord[]) => {
-   const checkNodesForText = (nodes: NodeList): boolean => {
-      for (let node of nodes) {
-         if (node.nodeName === '#text') {
-            return true;
-         }
+const checkNodesForText = (nodes: NodeList): boolean => {
+   for (let node of nodes) {
+      if (node.nodeName === '#text') {
+         return true;
       }
+   }
 
-      return false;
-   };
+   return false;
+};
 
-   const checkNodesForHighlights = (node: Node, oldValue: string): boolean => {
+const checkForRemovedNodes = (nodes: NodeList): boolean => {
+   for (let node of nodes) {
       let element = node as HTMLElement;
       if (
          element.attributes[0].name === 'data-block-id' &&
@@ -154,10 +154,24 @@ const contentChangedCallback = (mutations: MutationRecord[]) => {
       ) {
          return true;
       }
+   }
 
-      return false;
-   };
+   return false;
+};
 
+const checkNodesForHighlights = (node: Node, oldValue: string): boolean => {
+   let element = node as HTMLElement;
+   if (
+      element.attributes[0].name === 'data-block-id' &&
+      element.classList.contains('notion-selectable')
+   ) {
+      return true;
+   }
+
+   return false;
+};
+
+const contentChangedCallback = (mutations: MutationRecord[]) => {
    let hasChanged = mutations.some((m: MutationRecord) => {
       let result = false;
 
@@ -167,6 +181,8 @@ const contentChangedCallback = (mutations: MutationRecord[]) => {
          result = checkNodesForText(m.addedNodes);
          if (result) return true;
          result = checkNodesForText(m.removedNodes);
+         if (result) return true;
+         result = checkForRemovedNodes(m.removedNodes);
          if (result) return true;
       } else if (
          m.type === 'attributes' &&
