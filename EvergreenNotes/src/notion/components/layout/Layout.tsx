@@ -14,7 +14,7 @@ import {
 } from 'aNotion/providers/storeSelectors';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { notionSiteActions } from './notionSiteSlice';
+import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
 import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { getCurrentUrl } from 'aCommon/extensionHelpers';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
@@ -177,45 +177,17 @@ const MenuBar = ({
 
 export const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
-   const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
    const currentPage = useSelector(currentPageSelector, shallowEqual);
    const state = useSelector((state) => state, shallowEqual);
 
    const classes = useStyles();
 
-   const updateCurrentPageId = useCallback(async () => {
-      getCurrentUrl().then((url) =>
-         dispatch(notionSiteActions.updateNavigationData(url))
-      );
-   }, [dispatch]);
-
    const [tab, setTab] = useState(LayoutTabs.References);
 
    useEffect(() => {
       setTab(LayoutTabs.References);
-
-      const receiveMessage = function (event: any) {
-         if (
-            currentPage.status === thunkStatus.fulfilled &&
-            navigation.pageId != null
-         ) {
-            refreshSidebarContents(dispatch, navigation);
-         }
-      };
-
-      console.log('useEffect updateEvergreenSidebar');
-      window.addEventListener('message', receiveMessage);
-      return () => {
-         window.removeEventListener('message', receiveMessage);
-      };
    }, []);
-
-   useEffect(() => {
-      if (cookie.status === thunkStatus.fulfilled) {
-         updateCurrentPageId();
-      }
-   }, [cookie.status, updateCurrentPageId]);
 
    useEffect(() => {
       if (navigation.pageId != null) {
@@ -231,6 +203,25 @@ export const Layout = () => {
       }
       return () => {};
    }, [navigation.pageId, navigation.url, dispatch]);
+
+   useEffect(() => {
+      const receiveMessage = function (event: any) {
+         if (
+            currentPage.status === thunkStatus.fulfilled &&
+            navigation.pageId != null
+         ) {
+            refreshSidebarContents(dispatch, navigation);
+         } else {
+            console.log('currentPage status:' + currentPage.status);
+         }
+      };
+
+      console.log('useEffect updateEvergreenSidebar');
+      window.addEventListener('message', receiveMessage);
+      return () => {
+         window.removeEventListener('message', receiveMessage);
+      };
+   }, []);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>

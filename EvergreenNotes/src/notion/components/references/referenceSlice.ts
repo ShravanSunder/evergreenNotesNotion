@@ -24,6 +24,7 @@ import { RootState } from 'aNotion/providers/rootReducer';
 const initialState: ReferenceState = {
    pageReferences: defaultPageReferences(),
    pageReferencesStatus: thunkStatus.idle,
+   //this is a history of search queries, should be moved
    searchQueries: [],
 };
 
@@ -47,7 +48,7 @@ const fetchRefsForPage = createAsyncThunk<
 
       //get page relations
       let pageBlock = currentPageSelector(thunkApi.getState() as RootState)
-         .currentPage?.pageBlock;
+         .currentPageData?.pageBlock;
       let relationsPromise = getRelationsForPage(pageBlock, thunkApi.signal);
 
       //resolve promises

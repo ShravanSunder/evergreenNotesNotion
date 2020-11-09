@@ -1,5 +1,5 @@
 import { thunkStatus as ThunkStatus } from 'aNotion/types/thunkStatus';
-import { CurrentPage } from 'aNotion/models/NotionPage';
+import { CurrentPageData } from 'aNotion/models/NotionPage';
 
 export type CookieData = {
    token: string;
@@ -15,7 +15,7 @@ export type NavigationState = {
 };
 export type PageRecordState = {
    status: ThunkStatus;
-   currentPage?: CurrentPage;
+   currentPageData?: CurrentPageData;
 };
 
 export type SiteState = {

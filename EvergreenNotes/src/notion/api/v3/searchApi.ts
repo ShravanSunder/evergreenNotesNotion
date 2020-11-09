@@ -16,7 +16,7 @@ export const searchByRelevance = async (
    sort: SearchSort = SearchSort.Relevance,
    abort: AbortSignal | undefined = undefined
 ): Promise<SearchResultsType> => {
-   let spaceId = getAppState(currentPageSelector).currentPage?.spaceId;
+   let spaceId = getAppState(currentPageSelector).currentPageData?.spaceId;
    let filters = defaultFilters();
    filters.isNavigableOnly = pageTitlesOnly;
 

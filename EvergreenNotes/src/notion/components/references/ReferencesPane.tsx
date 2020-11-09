@@ -35,15 +35,16 @@ export const ReferencesPane = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const record = useSelector(currentPageSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
-   const pageName = record.currentPage?.pageBlock.simpleTitle;
-   const pageId = record.currentPage?.pageBlock.blockId as string;
+   const pageName = record.currentPageData?.pageBlock.simpleTitle;
+   const pageId = record.currentPageData?.pageBlock.blockId as string;
    const marks = useSelector(pageMarksSelector, shallowEqual);
 
    useEffect(() => {
       if (
-         // record.status === thunkStatus.fulfilled &&
+         record.status === thunkStatus.fulfilled &&
          pageName != null &&
-         pageId != null
+         pageId != null &&
+         references.pageReferences.pageId !== pageId
       ) {
          const pr = dispatch(
             referenceActions.fetchRefsForPage({ query: pageName, pageId })
@@ -53,7 +54,13 @@ export const ReferencesPane = () => {
          };
       }
       return () => {};
-   }, [dispatch, pageName, pageId]);
+   }, [
+      dispatch,
+      pageName,
+      pageId,
+      record.status,
+      references.pageReferences.pageId,
+   ]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>

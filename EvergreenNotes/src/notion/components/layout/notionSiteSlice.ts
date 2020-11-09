@@ -13,25 +13,25 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import * as blockService from 'aNotion/services/blockService';
 import { extractNavigationData } from 'aNotion/services/notionSiteService';
 import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
-import { CurrentPage } from 'aNotion/models/NotionPage';
+import { CurrentPageData } from 'aNotion/models/NotionPage';
 import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 
 const initialState: SiteState = {
    cookie: { status: thunkStatus.pending },
    navigation: {},
-   currentPage: { status: thunkStatus.pending },
+   currentPage: { status: thunkStatus.idle },
 };
 
 const fetchCurrentPage = createAsyncThunk<
-   CurrentPage | undefined,
+   CurrentPageData | undefined,
    { pageId: string }
 >(
    'notion/page/current',
    async (
       { pageId }: { pageId: string },
       thunkApi
-   ): Promise<CurrentPage | undefined> => {
+   ): Promise<CurrentPageData | undefined> => {
       const [record, chunk] = await blockService.fetchPageRecord(
          pageId,
          thunkApi.signal
@@ -103,23 +103,26 @@ const notionSiteSlice = createSlice({
    extraReducers: {
       [fetchCurrentPage.fulfilled.toString()]: (
          state,
-         action: PayloadAction<CurrentPage>
+         action: PayloadAction<CurrentPageData>
       ) => {
-         state.currentPage.currentPage = action.payload;
+         state.currentPage.currentPageData = action.payload;
          state.currentPage.status = thunkStatus.fulfilled;
+         console.log('currentPage thunk:' + state.currentPage.status);
       },
       [fetchCurrentPage.pending.toString()]: (
          state,
-         action: PayloadAction<CurrentPage>
+         action: PayloadAction<CurrentPageData>
       ) => {
          state.currentPage.status = thunkStatus.pending;
-         state.currentPage.currentPage = undefined;
+         state.currentPage.currentPageData = undefined;
+         console.log('currentPage thunk:' + state.currentPage.status);
       },
       [fetchCurrentPage.rejected.toString()]: (
          state,
-         action: PayloadAction<CurrentPage>
+         action: PayloadAction<CurrentPageData>
       ) => {
          state.currentPage.status = thunkStatus.rejected;
+         console.log('currentPage thunk:' + state.currentPage.status);
       },
    },
 });

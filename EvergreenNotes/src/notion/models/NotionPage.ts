@@ -14,7 +14,7 @@ export interface NotionPageMarks {
    comments: NotionBlockModel[];
 }
 
-export interface CurrentPage {
+export interface CurrentPageData {
    pageBlock: NotionBlockModel;
    spaceId: string;
 }
