@@ -83,8 +83,15 @@ const loadCookies: CaseReducer<SiteState, PayloadAction<CookieData>> = (
    }
 };
 
+const unloadPreviousPage: CaseReducer = (state, action) => {
+   state.currentPage.currentPageData = undefined;
+   state.currentPage.status = thunkStatus.pending;
+};
+
 const updateNavigationData = {
    reducer: (state: SiteState, action: PayloadAction<NavigationState>) => {
+      state.currentPage.currentPageData = undefined;
+      state.currentPage.status = thunkStatus.pending;
       state.navigation = action.payload;
    },
    prepare: (payload: string) => {
@@ -99,6 +106,7 @@ const notionSiteSlice = createSlice({
    reducers: {
       loadCookies: loadCookies,
       updateNavigationData: updateNavigationData,
+      unloadPreviousPage: unloadPreviousPage,
    },
    extraReducers: {
       [fetchCurrentPage.fulfilled.toString()]: (

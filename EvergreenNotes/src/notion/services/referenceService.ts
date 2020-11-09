@@ -14,7 +14,7 @@ import {
    NotionBlockRecord,
    NotionBlockModel,
 } from 'aNotion/models/NotionBlock';
-import { getPropertiesWithSemanticFormat } from './pageService';
+import { getPropertiesWithSemanticFormat } from 'aNotion/services/pageService';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
 import * as blockService from 'aNotion/services/blockService';

@@ -25,10 +25,13 @@ import { referenceSelector } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from './referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
-import { Reference } from './Reference';
-import { SearchReferences, defaultSearchReferences } from './referenceState';
+import { Reference } from 'aNotion/components/references/Reference';
+import {
+   SearchReferences,
+   defaultSearchReferences,
+} from 'aNotion/components/references/referenceState';
 import { NothingToFind, LoadingSection } from '../common/Loading';
-import { useApi, UseApiPromise } from '../../hooks/useApiPromise';
+import { useApi, UseApiPromise } from 'aNotion/hooks/useApiPromise';
 import { searchNotion } from 'aNotion/services/referenceService';
 import {
    usePopupState,

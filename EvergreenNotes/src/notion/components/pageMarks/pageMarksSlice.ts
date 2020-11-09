@@ -8,7 +8,7 @@ import {
 import { NotionPageMarks } from 'aNotion/models/NotionPage';
 import * as blockService from 'aNotion/services/blockService';
 import * as pageService from 'aNotion/services/pageService';
-import { PageMarkState } from './pageMarksState';
+import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
 
 const initialState: PageMarkState = {
    status: thunkStatus.idle,

@@ -14,8 +14,8 @@ import {
    AccordionActions,
    AccordionDetails,
 } from './AccordionStyles';
-import { BacklinkRecordModel } from './referenceState';
-import { Path } from './Path';
+import { BacklinkRecordModel } from 'aNotion/components/references/referenceState';
+import { Path } from 'aNotion/components/references/Path';
 import { TextUi } from '../blocks/TextUi';
 
 export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {

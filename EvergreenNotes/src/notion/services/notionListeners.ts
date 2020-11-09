@@ -8,6 +8,7 @@ export const registerTabUpdateListener = () => {
       if (changeInfo.status === 'loading') {
          if (isNotionTab(tab!) && tab.id === getCurrentTabId()) {
             console.log('debug unload');
+            appDispatch(notionSiteActions.unloadPreviousPage());
             appDispatch(referenceActions.unloadReferences());
          }
       }

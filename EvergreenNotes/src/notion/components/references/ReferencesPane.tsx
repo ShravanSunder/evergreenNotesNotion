@@ -9,14 +9,20 @@ import {
    pageMarksSelector,
    navigationSelector,
 } from 'aNotion/providers/storeSelectors';
-import { referenceActions } from './referenceSlice';
+import { referenceActions } from 'aNotion/components/references/referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
-import { ReferenceState, BacklinkRecordModel } from './referenceState';
-import { NothingToFind, LoadingSection } from '../common/Loading';
-import { Backlink } from './Backlink';
-import { PageMarkState } from '../pageMarks/pageMarksState';
+import {
+   ReferenceState,
+   BacklinkRecordModel,
+} from 'aNotion/components/references/referenceState';
+import {
+   NothingToFind,
+   LoadingSection,
+} from 'aNotion/components/common/Loading';
+import { Backlink } from 'aNotion/components/references/Backlink';
+import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
 import { ErrorBoundary, ErrorFallback } from 'aCommon/Components/ErrorFallback';
 
 const useStyles = makeStyles(() =>
@@ -40,8 +46,11 @@ export const ReferencesPane = () => {
    const marks = useSelector(pageMarksSelector, shallowEqual);
 
    useEffect(() => {
+      // if current loaded block pageId is valid
+      // and the referencePageId isn't the same as the current loaded page (aka don't load references if the marks pane other other data needs to be updated) and is valid
       if (
          record.status === thunkStatus.fulfilled &&
+         record.currentPageData?.pageBlock?.blockId != null &&
          pageName != null &&
          pageId != null &&
          references.pageReferences.pageId !== pageId
@@ -60,6 +69,7 @@ export const ReferencesPane = () => {
       pageId,
       record.status,
       references.pageReferences.pageId,
+      record.currentPageData?.pageBlock?.blockId,
    ]);
 
    return (
