@@ -125,7 +125,7 @@ const setTabId = async () => {
       let tabId = tab.id!;
       w.contentTabId = tabId;
       fetchCookies(tabId);
-      appDispatch(notionSiteActions.currentPage(tab.url!));
+      appDispatch(notionSiteActions.updateNavigationData(tab.url!));
    }
 };
 const fetchCookies = (tabId: number) => {

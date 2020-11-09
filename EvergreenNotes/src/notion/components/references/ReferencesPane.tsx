@@ -38,11 +38,10 @@ export const ReferencesPane = () => {
    const pageName = record.currentPage?.pageBlock.simpleTitle;
    const pageId = record.currentPage?.pageBlock.blockId as string;
    const marks = useSelector(pageMarksSelector, shallowEqual);
-   //const previousPageId = useSelector(navigationSelector, shallowEqual);
 
    useEffect(() => {
       if (
-         record.status === thunkStatus.fulfilled &&
+         // record.status === thunkStatus.fulfilled &&
          pageName != null &&
          pageId != null
       ) {
@@ -52,10 +51,9 @@ export const ReferencesPane = () => {
          return () => {
             pr.abort();
          };
-      } else if (record.status === thunkStatus.pending) {
       }
       return () => {};
-   }, [record.status, dispatch, record.currentPage, pageName, pageId]);
+   }, [dispatch, pageName, pageId]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -111,21 +109,24 @@ const Relations = ({ refs }: { refs: ReferenceState }) => {
          {refs.pageReferencesStatus === thunkStatus.pending && (
             <LoadingSection></LoadingSection>
          )}
-         {refs.pageReferencesStatus === thunkStatus.fulfilled && (
-            <>
-               <Typography className={classes.sections} variant="h5">
-                  <b>Database Relations</b>
-               </Typography>
-               {relations.map((u) => {
-                  let link: BacklinkRecordModel = {
-                     backlinkBlock: u,
-                     path: [],
-                  };
-                  return <Backlink key={u.blockId} backlink={link}></Backlink>;
-               })}
-               {relations.length === 0 && <NothingToFind />}
-            </>
-         )}
+         {refs.pageReferencesStatus === thunkStatus.fulfilled &&
+            relations.length !== 0 && (
+               <>
+                  <Typography className={classes.sections} variant="h5">
+                     <b>Database Relations</b>
+                  </Typography>
+                  {relations.map((u) => {
+                     let link: BacklinkRecordModel = {
+                        backlinkBlock: u,
+                        path: [],
+                     };
+                     return (
+                        <Backlink key={u.blockId} backlink={link}></Backlink>
+                     );
+                  })}
+                  {relations.length === 0 && <NothingToFind />}
+               </>
+            )}
       </Suspense>
    );
 };
@@ -142,7 +143,7 @@ const PageMentions = ({ marks }: { marks: PageMarkState }) => {
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Mentions in Page</b>
+                  <b>Mentions in the Current Page</b>
                </Typography>
                {mentions.map((u) => {
                   let link: BacklinkRecordModel = {

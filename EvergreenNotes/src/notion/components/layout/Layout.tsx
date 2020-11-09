@@ -180,12 +180,13 @@ export const Layout = () => {
    const cookie = useSelector(cookieSelector, shallowEqual);
    const navigation = useSelector(navigationSelector, shallowEqual);
    const currentPage = useSelector(currentPageSelector, shallowEqual);
+   const state = useSelector((state) => state, shallowEqual);
 
    const classes = useStyles();
 
    const updateCurrentPageId = useCallback(async () => {
       getCurrentUrl().then((url) =>
-         dispatch(notionSiteActions.currentPage(url))
+         dispatch(notionSiteActions.updateNavigationData(url))
       );
    }, [dispatch]);
 

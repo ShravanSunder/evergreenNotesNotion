@@ -14,7 +14,7 @@ export const registerTabUpdateListener = () => {
       if (changeInfo.status === 'complete') {
          console.log('debug completed');
          if (isNotionTab(tab!) && tab.id === getCurrentTabId()) {
-            appDispatch(notionSiteActions.currentPage(tab.url!));
+            appDispatch(notionSiteActions.updateNavigationData(tab.url!));
          }
       }
 

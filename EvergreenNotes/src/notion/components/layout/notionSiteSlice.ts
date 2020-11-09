@@ -83,11 +83,9 @@ const loadCookies: CaseReducer<SiteState, PayloadAction<CookieData>> = (
    }
 };
 
-const currentPage = {
+const updateNavigationData = {
    reducer: (state: SiteState, action: PayloadAction<NavigationState>) => {
-      let previousPageId = state.navigation.pageId;
       state.navigation = action.payload;
-      state.navigation.previousPageId = previousPageId;
    },
    prepare: (payload: string) => {
       let data = extractNavigationData(payload);
@@ -100,7 +98,7 @@ const notionSiteSlice = createSlice({
    initialState: initialState,
    reducers: {
       loadCookies: loadCookies,
-      currentPage: currentPage,
+      updateNavigationData: updateNavigationData,
    },
    extraReducers: {
       [fetchCurrentPage.fulfilled.toString()]: (
