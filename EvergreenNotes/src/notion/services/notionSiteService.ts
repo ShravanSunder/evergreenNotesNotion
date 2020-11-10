@@ -4,7 +4,7 @@ import {
    NavigationState,
 } from 'aNotion/components/layout/NotionSiteState';
 import { appDispatch, getAppState } from 'aNotion/providers/appDispatch';
-import { toGuid } from 'aCommon/extensionHelpers';
+import { isGuid, toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
 import { navigationSelector } from 'aNotion/providers/storeSelectors';
 
@@ -36,11 +36,9 @@ export const extractNavigationData = (
       let data = queryString.parseUrl(url, { parseFragmentIdentifier: true });
       result.locationId = data.fragmentIdentifier;
       if (data.query?.p != null) {
-         result.pageId = toGuid(data.query.p as string);
-         result.backgroundId = getGuidFromUrl(data.url);
+         extractPageAndBackgroundIfValid(data, result);
       } else {
-         result.pageId = getGuidFromUrl(data.url);
-         result.backgroundId = undefined;
+         extractPageIfValid(data, result);
       }
       result.url = url;
       result.notionSite = getNotionSiteUrl(url);
@@ -84,3 +82,28 @@ export const getPageUrl = (pageId: string) => {
    const navigation = getAppState(navigationSelector);
    return navigation.notionSite + pageId.replace(/-/g, '');
 };
+function extractPageIfValid(
+   data: queryString.ParsedUrl,
+   result: NavigationState
+) {
+   if (isGuid(getGuidFromUrl(data.url))) {
+      result.pageId = getGuidFromUrl(data.url);
+      result.backgroundId = undefined;
+   } else {
+      result.pageId = undefined;
+      result.backgroundId = undefined;
+   }
+}
+
+function extractPageAndBackgroundIfValid(
+   data: queryString.ParsedUrl,
+   result: NavigationState
+) {
+   if (isGuid(data.query.p as string)) {
+      result.pageId = toGuid(data.query.p as string);
+      result.backgroundId = getGuidFromUrl(data.url);
+   } else {
+      result.pageId = undefined;
+      result.backgroundId = undefined;
+   }
+}

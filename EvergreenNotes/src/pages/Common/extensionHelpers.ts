@@ -36,6 +36,11 @@ export const toGuid = (guid: string): string => {
    );
 };
 
+export const isGuid = (guid: string): boolean => {
+   let reg = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+   return reg.test(guid);
+};
+
 export const copyToClipboard = (url: string): boolean => {
    try {
       var textField = document.createElement('textarea');

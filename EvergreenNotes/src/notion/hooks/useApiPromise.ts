@@ -22,6 +22,7 @@ export function useApi<TResult, TInput>(
    const [apiAbortController, setAbortController] = useState<AbortController>();
    const [result, setResult] = useState<TResult>();
    const [status, setStatus] = useState<thunkStatus>(thunkStatus.idle);
+   const [retry, setRetry] = useState(0);
 
    useEffect(() => {
       (async () => {
@@ -30,7 +31,7 @@ export function useApi<TResult, TInput>(
             //you can also check for max retries here
             if (
                debouncedInput !== lastApiPaylod ||
-               status === thunkStatus.rejected
+               (status === thunkStatus.rejected && retry <= 2)
             ) {
                setStatus(thunkStatus.pending);
                if (
@@ -48,10 +49,12 @@ export function useApi<TResult, TInput>(
                   setStatus(thunkStatus.fulfilled);
                   setResult(result);
                   setAbortController(undefined);
+                  setRetry(0);
                } catch (err) {
                   if (err.message !== 'Aborted') {
                      setStatus(thunkStatus.rejected);
                      setResult(undefined);
+                     setRetry(retry + 1);
                   }
                }
             }

@@ -39,6 +39,7 @@ import { LightTooltip } from 'aNotion/components/common/Styles';
 import { flushCache } from 'aUtilities/apiCache';
 import { NavigationState } from 'aNotion/components/layout/NotionSiteState';
 import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
+import { isGuid } from 'aCommon/extensionHelpers';
 
 const ReferencesPane = React.lazy(
    () => import('aNotion/components/references/ReferencesPane')
@@ -188,6 +189,7 @@ export const Layout = () => {
    const currentPage = useSelector(currentPageSelector, shallowEqual);
    const state = useSelector((state) => state, shallowEqual);
    const classes = useStyles();
+   const [noNotionPageId, setNoNotionPageId] = useState(false);
 
    const [tab, setTab] = useState(LayoutTabs.References);
 
@@ -196,7 +198,8 @@ export const Layout = () => {
    }, []);
 
    useEffect(() => {
-      if (navigation.pageId != null) {
+      if (navigation.pageId != null && isGuid(navigation.pageId)) {
+         setNoNotionPageId(false);
          let promise = dispatch(
             notionSiteActions.fetchCurrentPage({
                pageId: navigation.pageId,
@@ -206,6 +209,10 @@ export const Layout = () => {
          return () => {
             promise.abort();
          };
+      } else if (navigation.pageId == null || !isGuid(navigation.pageId)) {
+         //unload notion data
+         notionSiteActions.unloadPreviousPage();
+         setNoNotionPageId(true);
       }
       return () => {};
    }, [navigation.pageId, navigation.url, dispatch]);
@@ -234,17 +241,6 @@ export const Layout = () => {
       debouncedUpdateSignal.callback();
    }, []);
 
-   // const receiveMessage = function (event: any) {
-   //    if (
-   //       currentPage.status === thunkStatus.fulfilled &&
-   //       navigation.pageId != null
-   //    ) {
-   //       refreshSidebarContents(dispatch, navigation);
-   //    } else {
-   //       console.log('currentPage status:' + currentPage.status);
-   //    }
-   // };
-
    useEffect(() => {
       console.log('useEffect updateEvergreenSidebar');
       window.addEventListener('message', handleReceiveMessage);
@@ -256,41 +252,70 @@ export const Layout = () => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <>
-            <MenuBar tab={tab} setTab={setTab}></MenuBar>
-            <div style={{ marginTop: 12 }}></div>
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-               <Suspense fallback={<LoadingTab />}>
-                  <div
-                     style={{
-                        display:
-                           tab === LayoutTabs.References ? 'block' : 'none',
-                     }}>
-                     <ReferencesPane />
-                  </div>
-                  <div
-                     style={{
-                        display:
-                           tab === LayoutTabs.PageMarkups ? 'block' : 'none',
-                     }}>
-                     <MarksPane />
-                  </div>
-                  <div
-                     style={{
-                        display: tab === LayoutTabs.Search ? 'block' : 'none',
-                     }}>
-                     <SearchPane />
-                  </div>
-                  {tab === LayoutTabs.Events && <div>not implemented</div>}
-                  {tab === LayoutTabs.Settings && <OptionsPane />}
-               </Suspense>
-            </ErrorBoundary>
-            <div style={{ marginTop: 12 }}></div>
+            {noNotionPageId && <NoNotionPageId></NoNotionPageId>}
+            {!noNotionPageId && (
+               <>
+                  <MenuBar tab={tab} setTab={setTab}></MenuBar>
+                  <div style={{ marginTop: 12 }}></div>
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                     <Suspense fallback={<LoadingTab />}>
+                        <div
+                           style={{
+                              display:
+                                 tab === LayoutTabs.References
+                                    ? 'block'
+                                    : 'none',
+                           }}>
+                           <ReferencesPane />
+                        </div>
+                        <div
+                           style={{
+                              display:
+                                 tab === LayoutTabs.PageMarkups
+                                    ? 'block'
+                                    : 'none',
+                           }}>
+                           <MarksPane />
+                        </div>
+                        <div
+                           style={{
+                              display:
+                                 tab === LayoutTabs.Search ? 'block' : 'none',
+                           }}>
+                           <SearchPane />
+                        </div>
+                        {tab === LayoutTabs.Events && (
+                           <div>not implemented</div>
+                        )}
+                        {tab === LayoutTabs.Settings && <OptionsPane />}
+                     </Suspense>
+                  </ErrorBoundary>
+                  <div style={{ marginTop: 12 }}></div>
+               </>
+            )}
          </>
       </ErrorBoundary>
    );
 };
 
 export default Layout;
+
+const NoNotionPageId = () => {
+   return (
+      <div style={{ padding: 12 }}>
+         <div style={{ marginTop: 60 }}></div>
+         <Typography variant="h5" style={{ marginTop: 12 }}>
+            😵 Couldn't load notion page.
+         </Typography>
+         <Typography
+            variant="subtitle1"
+            style={{ marginTop: 12, marginLeft: 3 }}>
+            🙋🏾‍♂️ Are you sure you have full access to the space?
+         </Typography>
+      </div>
+   );
+};
+
 function refreshSidebarContents(dispatch: any, navigation: NavigationState) {
    console.log('...received refreshSidebarContents updateevergreensidebar');
    if (navigation.pageId != null) {

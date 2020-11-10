@@ -80,7 +80,7 @@ export const ReferencesPane = () => {
          <FullTitle refs={references}></FullTitle>
          <Related refs={references}></Related>
          {references.pageReferencesStatus === thunkStatus.rejected && (
-            <div>🔄</div>
+            <div style={{ marginTop: 12 }}>😵 Couldn't load references</div>
          )}
       </ErrorBoundary>
    );
