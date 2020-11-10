@@ -4,6 +4,7 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
 import { TextUi } from './TextUi';
 import { Variant } from '@material-ui/core/styles/createTypography';
+import { NotionContent } from '../contents/NotionContent';
 
 export const PageUi = ({
    block,
@@ -47,6 +48,8 @@ export const PageUi = ({
       <div style={style}>
          {iconComponent}
          <TextUi block={block} variant={variant} style={style}></TextUi>
+         <div style={{ marginTop: 6 }}></div>
+         <NotionContent blockId={block.blockId}></NotionContent>
       </div>
    );
 };
