@@ -31,7 +31,7 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 const initialState: ReferenceState = {
    pageReferences: defaultPageReferences(),
-   pageReferencesStatus: thunkStatus.idle,
+   status: thunkStatus.idle,
    //this is a history of search queries, should be moved
    searchQueries: [],
 };
@@ -47,16 +47,10 @@ const fetchRefsForPage = createAsyncThunk<
       let links: BacklinkRecordType | undefined = undefined;
       let relations: NotionBlockModel[] | undefined = undefined;
 
-      try {
-         //related seraches
-         let searchPromise = searchApi.searchByRelevance(
-            query,
-            false,
-            50,
-            SearchSort.Relevance,
-            thunkApi.signal
-         );
+      let spaceId = currentPageSelector(thunkApi.getState() as RootState)
+         .currentPageData?.spaceId;
 
+      try {
          //get backlinks
          let linksPromise = referenceApi.getBacklinks(pageId, thunkApi.signal);
          //get page relations
@@ -64,9 +58,19 @@ const fetchRefsForPage = createAsyncThunk<
             .currentPageData?.pageBlock;
          let relationsPromise = getRelationsForPage(pageBlock, thunkApi.signal);
 
+         //related seraches
+         if (spaceId != null) {
+            search = await searchApi.searchByRelevance(
+               query,
+               spaceId,
+               false,
+               50,
+               SearchSort.Relevance,
+               thunkApi.signal
+            );
+         }
          links = await linksPromise;
          relations = await relationsPromise;
-         search = await searchPromise;
       } catch {
          //don't worry about api errorrs as they are handled below with empty results
       }
@@ -104,7 +108,7 @@ const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
    state
 ) => {
    state.pageReferences = defaultPageReferences();
-   state.pageReferencesStatus = thunkStatus.pending;
+   state.status = thunkStatus.idle;
 };
 
 const addSearchQueries: CaseReducer<ReferenceState, PayloadAction<string>> = (
@@ -131,14 +135,14 @@ const referenceSlice = createSlice({
          action: PayloadAction<PageReferences>
       ) => {
          state.pageReferences = action.payload;
-         state.pageReferencesStatus = thunkStatus.fulfilled;
+         state.status = thunkStatus.fulfilled;
       },
       [fetchRefsForPage.pending.toString()]: (state) => {
-         state.pageReferencesStatus = thunkStatus.pending;
+         state.status = thunkStatus.pending;
          state.pageReferences = defaultPageReferences();
       },
       [fetchRefsForPage.rejected.toString()]: (state) => {
-         state.pageReferencesStatus = thunkStatus.rejected;
+         state.status = thunkStatus.rejected;
          state.pageReferences = defaultPageReferences();
       },
    },

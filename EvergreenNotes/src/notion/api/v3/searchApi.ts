@@ -11,29 +11,24 @@ import { addAbortSignal } from 'aUtilities/apiHelper';
 
 export const searchByRelevance = async (
    query: string,
+   spaceId: string,
    pageTitlesOnly: boolean = true,
    limit: number = 10,
    sort: SearchSort = SearchSort.Relevance,
    abort: AbortSignal | undefined = undefined
 ): Promise<SearchResultsType> => {
-   let spaceId = getAppState(currentPageSelector).currentPageData?.spaceId;
    let filters = defaultFilters();
    filters.isNavigableOnly = pageTitlesOnly;
 
-   try {
-      let req = superagent
-         .post('https://www.notion.so/api/v3/search')
-         .send(createParam(spaceId!, query, filters, sort, limit));
+   let req = superagent
+      .post('https://www.notion.so/api/v3/search')
+      .send(createParam(spaceId!, query, filters, sort, limit));
 
-      if (abort != null) {
-         addAbortSignal(req, abort);
-      }
-
-      return (await req).body;
-   } catch (err) {
-      console.log(err);
-      throw err;
+   if (abort != null) {
+      addAbortSignal(req, abort);
    }
+
+   return (await req).body;
 };
 
 const createParam = (

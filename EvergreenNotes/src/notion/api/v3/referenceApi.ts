@@ -6,18 +6,13 @@ export const getBacklinks = async (
    blockId: string,
    abort: AbortSignal
 ): Promise<BacklinkRecordType> => {
-   try {
-      let req = superagent
-         .post('https://www.notion.so/api/v3/getBacklinksForBlock')
-         .send({ blockId: blockId });
+   let req = superagent
+      .post('https://www.notion.so/api/v3/getBacklinksForBlock')
+      .send({ blockId: blockId });
 
-      if (abort != null) {
-         addAbortSignal(req, abort);
-      }
-
-      return (await req).body;
-   } catch (err) {
-      console.log(err);
-      throw err;
+   if (abort != null) {
+      addAbortSignal(req, abort);
    }
+
+   return (await req).body;
 };

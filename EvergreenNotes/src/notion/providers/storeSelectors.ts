@@ -1,7 +1,9 @@
 import { RootState } from 'aNotion/providers/rootReducer';
-export const cookieSelector = (state: RootState) => state.site.cookie;
-export const navigationSelector = (state: RootState) => state.site.navigation;
-export const currentPageSelector = (state: RootState) => state.site.currentPage;
+
+export const sidebarExtensionSelector = (state: RootState) =>
+   state.sidebarExtension;
+export const currentPageSelector = (state: RootState) =>
+   state.sidebarExtension.currentNotionPage;
 export const referenceSelector = (state: RootState) => state.references;
 export const contentSelector = (state: RootState) => state.content;
 export const blockSelector = (state: RootState) => state.blocks;

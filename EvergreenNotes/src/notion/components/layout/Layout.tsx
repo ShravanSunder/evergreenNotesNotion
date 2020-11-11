@@ -9,11 +9,11 @@ import React, {
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    currentPageSelector,
-   navigationSelector,
+   sidebarExtensionSelector,
 } from 'aNotion/providers/storeSelectors';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
+import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
 import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
@@ -37,7 +37,7 @@ import {
 import { LoadingTab } from 'aNotion/components/common/Loading';
 import { LightTooltip } from 'aNotion/components/common/Styles';
 import { flushCache } from 'aUtilities/apiCache';
-import { NavigationState } from 'aNotion/components/layout/NotionSiteState';
+import { NavigationState } from 'aNotion/components/layout/SidebarExtensionState';
 import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
 import { isGuid } from 'aCommon/extensionHelpers';
 
@@ -96,7 +96,7 @@ const MenuBar = ({
    const classes = useStyles();
 
    const dispatch = useDispatch();
-   const navigation = useSelector(navigationSelector, shallowEqual);
+   const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
 
    const handleTab = (
       event: React.MouseEvent<HTMLElement>,
@@ -108,7 +108,7 @@ const MenuBar = ({
    };
 
    const handleRefresh = (e: SyntheticEvent) => {
-      refreshSidebarContents(dispatch, navigation);
+      refreshSidebarContents(dispatch, sidebar.navigation);
    };
 
    return (
@@ -185,11 +185,14 @@ const MenuBar = ({
 
 export const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
-   const navigation = useSelector(navigationSelector, shallowEqual);
+   const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const currentPage = useSelector(currentPageSelector, shallowEqual);
    const state = useSelector((state) => state, shallowEqual);
    const classes = useStyles();
    const [noNotionPageId, setNoNotionPageId] = useState(false);
+   const [showNoPageIdError] = useDebounce(noNotionPageId, 500, {
+      trailing: true,
+   });
 
    const [tab, setTab] = useState(LayoutTabs.References);
 
@@ -198,24 +201,30 @@ export const Layout = () => {
    }, []);
 
    useEffect(() => {
-      if (navigation.pageId != null && isGuid(navigation.pageId)) {
+      if (
+         sidebar.navigation.pageId != null &&
+         isGuid(sidebar.navigation.pageId)
+      ) {
          setNoNotionPageId(false);
-         let promise = dispatch(
-            notionSiteActions.fetchCurrentPage({
-               pageId: navigation.pageId,
+         let pr = dispatch(
+            sidebarExtensionActions.fetchCurrentNotionPage({
+               pageId: sidebar.navigation.pageId,
             })
          );
 
          return () => {
-            promise.abort();
+            pr.abort();
          };
-      } else if (navigation.pageId == null || !isGuid(navigation.pageId)) {
+      } else if (
+         sidebar.navigation.pageId == null ||
+         !isGuid(sidebar.navigation.pageId)
+      ) {
          //unload notion data
-         notionSiteActions.unloadPreviousPage();
+         sidebarExtensionActions.unloadPreviousPage();
          setNoNotionPageId(true);
       }
       return () => {};
-   }, [navigation.pageId, navigation.url, dispatch]);
+   }, [sidebar.navigation.pageId, sidebar.navigation.url, dispatch]);
 
    const [currentPageStatus] = useDebounce(currentPage.status, 250, {
       trailing: true,
@@ -224,9 +233,9 @@ export const Layout = () => {
       () => {
          if (
             currentPageStatus === thunkStatus.fulfilled &&
-            navigation.pageId != null
+            sidebar.navigation.pageId != null
          ) {
-            refreshSidebarContents(dispatch, navigation);
+            refreshSidebarContents(dispatch, sidebar.navigation);
          } else {
             console.log('currentPage status:' + currentPage.status);
          }
@@ -252,8 +261,8 @@ export const Layout = () => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <>
-            {noNotionPageId && <NoNotionPageId></NoNotionPageId>}
-            {!noNotionPageId && (
+            {showNoPageIdError && <NoNotionPageId></NoNotionPageId>}
+            {!showNoPageIdError && (
                <>
                   <MenuBar tab={tab} setTab={setTab}></MenuBar>
                   <div style={{ marginTop: 12 }}></div>
@@ -322,7 +331,7 @@ function refreshSidebarContents(dispatch: any, navigation: NavigationState) {
       flushCache();
       dispatch(contentActions.clearContent({}));
       dispatch(
-         notionSiteActions.fetchCurrentPage({
+         sidebarExtensionActions.fetchCurrentNotionPage({
             pageId: navigation.pageId,
          })
       );

@@ -2,7 +2,7 @@ import React, { SyntheticEvent } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Button, Grid, IconButton } from '@material-ui/core';
 import { LinkOutlined } from '@material-ui/icons';
-import { navigationSelector } from 'aNotion/providers/storeSelectors';
+import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
 import { Launch, FileCopyOutlined, WidgetsTwoTone } from '@material-ui/icons';
 import { copyToClipboard } from 'aCommon/extensionHelpers';
 import { LightTooltip } from '../common/Styles';
@@ -20,15 +20,15 @@ export const ReferenceActions = ({
    text: string;
    path: NotionBlockModel[];
 }) => {
-   const navigation = useSelector(navigationSelector, shallowEqual);
+   const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const { enqueueSnackbar } = useSnackbar();
 
    let classes = useReferenceStyles();
 
    const handleEmbedBlock = (e: SyntheticEvent) => {
       e.stopPropagation();
-      if (navigation.notionSite != null) {
-         let url = navigation.notionSite + id.replace(/-/g, '');
+      if (sidebar.navigation.notionSite != null) {
+         let url = sidebar.navigation.notionSite + id.replace(/-/g, '');
          let success = copyToClipboard(url);
          console.log('copied to clipboard');
          if (success) {
@@ -40,9 +40,9 @@ export const ReferenceActions = ({
    const handleCopyLink = (e: SyntheticEvent) => {
       e.stopPropagation();
       let page = path.slice(-1).pop();
-      if (navigation.notionSite != null && page?.blockId != null) {
+      if (sidebar.navigation.notionSite != null && page?.blockId != null) {
          let url =
-            navigation.notionSite +
+            sidebar.navigation.notionSite +
             page.blockId.replace(/-/g, '') +
             '#' +
             id.replace(/-/g, '');
@@ -55,7 +55,7 @@ export const ReferenceActions = ({
 
    const handleCopyText = (e: SyntheticEvent) => {
       e.stopPropagation();
-      if (navigation.notionSite != null && text != null) {
+      if (sidebar.navigation.notionSite != null && text != null) {
          let success = copyToClipboard(text);
          if (success) {
             enqueueSnackbar('Copied text to clipboard', { variant: 'info' });
@@ -66,8 +66,8 @@ export const ReferenceActions = ({
    const handleNewTabMiddleClick = (e: SyntheticEvent) => {
       //e.stopPropagation();
       e.preventDefault();
-      if (navigation.notionSite != null) {
-         let url = navigation.notionSite + id.replace(/-/g, '');
+      if (sidebar.navigation.notionSite != null) {
+         let url = sidebar.navigation.notionSite + id.replace(/-/g, '');
          window.open(url);
       }
       return false;

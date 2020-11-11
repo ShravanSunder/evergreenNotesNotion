@@ -6,6 +6,9 @@ export const addAbortSignal = (
 ) =>
    req.on('progress', () => {
       if (signal != null && signal.aborted) {
-         req.abort();
+         try {
+            //req.abort();
+            //console.log('signaled to aborted api request');
+         } catch {}
       }
    });

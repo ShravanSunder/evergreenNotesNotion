@@ -4,12 +4,12 @@ import { referenceReducers } from 'aNotion/components/references/referenceSlice'
 import { contentReducers } from 'aNotion/components/contents/contentSlice';
 import { blockReducers } from 'aNotion/components/blocks/blockSlice';
 import { pageMarkReducers } from 'aNotion/components/pageMarks/pageMarksSlice';
-import { notionSiteReducers } from 'aNotion/components/layout/notionSiteSlice';
+import { sidebarExtensionReducers } from 'aNotion/components/layout/notionSiteSlice';
 import { mentionsReducers } from 'aNotion/components/mentions/mentionsSlice';
 //import {}
 
 export const rootReducer = combineReducers({
-   site: notionSiteReducers,
+   sidebarExtension: sidebarExtensionReducers,
    references: referenceReducers,
    content: contentReducers,
    blocks: blockReducers,

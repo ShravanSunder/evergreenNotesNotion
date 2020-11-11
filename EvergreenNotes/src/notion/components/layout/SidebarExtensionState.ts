@@ -1,4 +1,7 @@
-import { thunkStatus as ThunkStatus } from 'aNotion/types/thunkStatus';
+import {
+   thunkStatus,
+   thunkStatus as ThunkStatus,
+} from 'aNotion/types/thunkStatus';
 import { CurrentPageData } from 'aNotion/models/NotionPage';
 
 export type CookieData = {
@@ -6,20 +9,27 @@ export type CookieData = {
    cookies: chrome.cookies.Cookie[];
 };
 
+// location of the notion site
 export type NavigationState = {
    pageId?: string;
    locationId?: string;
    backgroundId?: string;
    url?: string;
    notionSite?: string;
+   spaceId?: string;
 };
 export type PageRecordState = {
    status: ThunkStatus;
    currentPageData?: CurrentPageData;
 };
 
-export type SiteState = {
+export type SidebarExtensionState = {
    cookie: { status: string; data?: CookieData };
    navigation: NavigationState;
-   currentPage: PageRecordState;
+   currentNotionPage: PageRecordState;
+   sidebarStatus: {
+      webpageStatus: thunkStatus;
+      updateReferences: boolean;
+      updateMarks: boolean;
+   };
 };

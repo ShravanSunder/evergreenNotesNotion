@@ -21,10 +21,13 @@ import {
    List,
    ListItemText,
 } from '@material-ui/core';
-import { referenceSelector } from 'aNotion/providers/storeSelectors';
+import {
+   currentPageSelector,
+   referenceSelector,
+} from 'aNotion/providers/storeSelectors';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
+import { AppPromiseDispatch, getAppState } from 'aNotion/providers/appDispatch';
 import { Reference } from 'aNotion/components/references/Reference';
 import {
    SearchReferences,
@@ -54,10 +57,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const search: UseApiPromise<SearchReferences, string> = (
    query: string | undefined
-) => {
-   const ab = new AbortController();
-   let result = searchNotion(query ?? '', ab);
-   return [result, ab];
+): [Promise<SearchReferences>, AbortController] => {
+   let spaceId = getAppState(currentPageSelector).currentPageData?.spaceId;
+
+   if (spaceId != null) {
+      const ab = new AbortController();
+      let result = searchNotion(query ?? '', spaceId, ab);
+      return [result, ab];
+   }
+   return [
+      new Promise<SearchReferences>(() => defaultSearchReferences()),
+      new AbortController(),
+   ];
 };
 
 // comment

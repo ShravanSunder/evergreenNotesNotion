@@ -1,21 +1,20 @@
 import { getCurrentTabId } from 'aCommon/extensionHelpers';
 import { appDispatch } from 'aNotion/providers/appDispatch';
-import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
+import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 
 export const registerTabUpdateListener = () => {
    chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
       if (changeInfo.status === 'loading') {
          if (isNotionTab(tab!) && tab.id === getCurrentTabId()) {
-            console.log('debug unload');
-            appDispatch(notionSiteActions.unloadPreviousPage());
-            appDispatch(referenceActions.unloadReferences());
+            appDispatch(sidebarExtensionActions.setPageLoadingStatus());
          }
       }
       if (changeInfo.status === 'complete') {
          console.log('debug completed');
          if (isNotionTab(tab!) && tab.id === getCurrentTabId()) {
-            appDispatch(notionSiteActions.updateNavigationData(tab.url!));
+            appDispatch(sidebarExtensionActions.updateNavigationData(tab.url!));
+            appDispatch(sidebarExtensionActions.setPageCompletedStatus());
          }
       }
 

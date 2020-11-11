@@ -4,7 +4,8 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 
 export type ReferenceState = {
    pageReferences: PageReferences;
-   pageReferencesStatus: thunkStatus;
+   status: thunkStatus;
+
    //this is a history of search queries, should be moved
    searchQueries: string[];
 };

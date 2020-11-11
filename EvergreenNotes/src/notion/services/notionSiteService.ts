@@ -1,18 +1,18 @@
-import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
+import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
 import {
    CookieData,
    NavigationState,
-} from 'aNotion/components/layout/NotionSiteState';
+} from 'aNotion/components/layout/SidebarExtensionState';
 import { appDispatch, getAppState } from 'aNotion/providers/appDispatch';
 import { isGuid, toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
-import { navigationSelector } from 'aNotion/providers/storeSelectors';
+import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
 
 export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
    let token = cookies.find((f) => f.name === 'token_v2')?.value;
    let c = { token, cookies } as CookieData;
 
-   appDispatch(notionSiteActions.loadCookies(c));
+   appDispatch(sidebarExtensionActions.loadCookies(c));
 };
 
 const cleanValue = (str: string) => {
@@ -79,9 +79,10 @@ const isNotionUrl = (url: string) => {
 };
 
 export const getPageUrl = (pageId: string) => {
-   const navigation = getAppState(navigationSelector);
-   return navigation.notionSite + pageId.replace(/-/g, '');
+   const sidebar = getAppState(sidebarExtensionSelector);
+   return sidebar.navigation.notionSite + pageId.replace(/-/g, '');
 };
+
 function extractPageIfValid(
    data: queryString.ParsedUrl,
    result: NavigationState

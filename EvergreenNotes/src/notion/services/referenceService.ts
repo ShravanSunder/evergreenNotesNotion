@@ -21,10 +21,12 @@ import * as blockService from 'aNotion/services/blockService';
 
 export const searchNotion = async (
    query: string,
+   spaceId: string,
    abort: AbortController | undefined = undefined
 ) => {
    let result1 = await searchApi.searchByRelevance(
       query,
+      spaceId,
       false,
       50,
       SearchSort.Relevance,

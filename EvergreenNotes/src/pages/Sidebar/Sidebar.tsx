@@ -6,7 +6,7 @@ import reduxStore from 'aNotion/providers/reduxStore';
 import { appDispatch } from 'aNotion/providers/appDispatch';
 import { commands } from 'aCommon/commands';
 import { activeTab } from 'aCommon/extensionHelpers';
-import { notionSiteActions } from 'aNotion/components/layout/notionSiteSlice';
+import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import {
@@ -125,7 +125,7 @@ const setTabId = async () => {
       let tabId = tab.id!;
       w.contentTabId = tabId;
       fetchCookies(tabId);
-      appDispatch(notionSiteActions.updateNavigationData(tab.url!));
+      appDispatch(sidebarExtensionActions.updateNavigationData(tab.url!));
    }
 };
 const fetchCookies = (tabId: number) => {

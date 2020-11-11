@@ -7,7 +7,7 @@ import {
    currentPageSelector,
    referenceSelector,
    pageMarksSelector,
-   navigationSelector,
+   sidebarExtensionSelector,
 } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
@@ -24,6 +24,8 @@ import {
 import { Backlink } from 'aNotion/components/references/Backlink';
 import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
 import { ErrorBoundary, ErrorFallback } from 'aCommon/Components/ErrorFallback';
+import { useDebounce } from 'use-debounce/lib';
+import { useDispatchWithSignal } from 'aNotion/hooks/useDispatchWithSignal';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -39,38 +41,30 @@ const useStyles = makeStyles(() =>
 // comment
 export const ReferencesPane = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
-   const record = useSelector(currentPageSelector, shallowEqual);
+   const currentPage = useSelector(currentPageSelector, shallowEqual);
+   const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
-   const pageName = record.currentPageData?.pageBlock.simpleTitle;
-   const pageId = record.currentPageData?.pageBlock.blockId as string;
    const marks = useSelector(pageMarksSelector, shallowEqual);
 
-   useEffect(() => {
-      // if current loaded block pageId is valid
-      // and the referencePageId isn't the same as the current loaded page (aka don't load references if the marks pane other other data needs to be updated) and is valid
-      if (
-         record.status === thunkStatus.fulfilled &&
-         record.currentPageData?.pageBlock?.blockId != null &&
-         pageName != null &&
-         pageId != null &&
-         references.pageReferences.pageId !== pageId
-      ) {
-         const pr = dispatch(
-            referenceActions.fetchRefsForPage({ query: pageName, pageId })
-         );
-         return () => {
-            pr.abort();
-         };
-      }
-      return () => {};
-   }, [
-      dispatch,
-      pageName,
-      pageId,
-      record.status,
-      references.pageReferences.pageId,
-      record.currentPageData?.pageBlock?.blockId,
-   ]);
+   const pageName = currentPage.currentPageData?.pageBlock?.simpleTitle;
+   const pageId = currentPage.currentPageData?.pageBlock?.blockId;
+   const [debouncedPage] = useDebounce(
+      { pageId, pageName, status: currentPage.status },
+      500,
+      { trailing: true }
+   );
+
+   useDispatchWithSignal(
+      () =>
+         debouncedPage?.status === thunkStatus.fulfilled &&
+         debouncedPage?.pageId != null &&
+         debouncedPage?.pageName != null,
+      referenceActions.fetchRefsForPage({
+         query: debouncedPage.pageId!,
+         pageId: debouncedPage.pageName!,
+      }),
+      [dispatch, debouncedPage]
+   );
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -79,7 +73,7 @@ export const ReferencesPane = () => {
          <PageMentions marks={marks}></PageMentions>
          <FullTitle refs={references}></FullTitle>
          <Related refs={references}></Related>
-         {references.pageReferencesStatus === thunkStatus.rejected && (
+         {references.status === thunkStatus.rejected && (
             <div style={{ marginTop: 12 }}>😵 Couldn't load references</div>
          )}
       </ErrorBoundary>
@@ -94,10 +88,10 @@ const Backlinks = ({ refs }: { refs: ReferenceState }) => {
 
    return (
       <Suspense fallback={LoadingSection}>
-         {refs.pageReferencesStatus === thunkStatus.pending && (
+         {refs.status === thunkStatus.pending && (
             <LoadingSection></LoadingSection>
          )}
-         {refs.pageReferencesStatus === thunkStatus.fulfilled && (
+         {refs.status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
                   <b>Backlinks</b>
@@ -123,27 +117,24 @@ const Relations = ({ refs }: { refs: ReferenceState }) => {
 
    return (
       <Suspense fallback={LoadingSection}>
-         {refs.pageReferencesStatus === thunkStatus.pending && (
+         {refs.status === thunkStatus.pending && (
             <LoadingSection></LoadingSection>
          )}
-         {refs.pageReferencesStatus === thunkStatus.fulfilled &&
-            relations.length !== 0 && (
-               <>
-                  <Typography className={classes.sections} variant="h5">
-                     <b>Database Relations</b>
-                  </Typography>
-                  {relations.map((u) => {
-                     let link: BacklinkRecordModel = {
-                        backlinkBlock: u,
-                        path: [],
-                     };
-                     return (
-                        <Backlink key={u.blockId} backlink={link}></Backlink>
-                     );
-                  })}
-                  {relations.length === 0 && <NothingToFind />}
-               </>
-            )}
+         {refs.status === thunkStatus.fulfilled && relations.length !== 0 && (
+            <>
+               <Typography className={classes.sections} variant="h5">
+                  <b>Database Relations</b>
+               </Typography>
+               {relations.map((u) => {
+                  let link: BacklinkRecordModel = {
+                     backlinkBlock: u,
+                     path: [],
+                  };
+                  return <Backlink key={u.blockId} backlink={link}></Backlink>;
+               })}
+               {relations.length === 0 && <NothingToFind />}
+            </>
+         )}
       </Suspense>
    );
 };
@@ -183,10 +174,10 @@ const FullTitle = ({ refs }: { refs: ReferenceState }) => {
 
    return (
       <Suspense fallback={LoadingSection}>
-         {refs.pageReferencesStatus === thunkStatus.pending && (
+         {refs.status === thunkStatus.pending && (
             <LoadingSection></LoadingSection>
          )}
-         {refs.pageReferencesStatus === thunkStatus.fulfilled && (
+         {refs.status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
                   <b>Unlinked References</b>
@@ -208,10 +199,10 @@ const Related = ({ refs }: { refs: ReferenceState }) => {
 
    return (
       <Suspense fallback={LoadingSection}>
-         {refs.pageReferencesStatus === thunkStatus.pending && (
+         {refs.status === thunkStatus.pending && (
             <LoadingSection></LoadingSection>
          )}
-         {refs.pageReferencesStatus === thunkStatus.fulfilled && (
+         {refs.status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
                   <b>Similar Notes</b>
