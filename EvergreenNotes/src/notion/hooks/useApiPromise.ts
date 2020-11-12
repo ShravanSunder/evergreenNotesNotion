@@ -15,7 +15,7 @@ export function useApi<TResult, TInput>(
    TInput | undefined
 ] {
    const [input, setInput] = useState<TInput>();
-   const [debouncedInput] = useDebounce(input, 333, {
+   const [debouncedInput] = useDebounce(input, 350, {
       trailing: true,
    });
    const [lastApiPaylod, setLastApiPayload] = useState<TInput>();

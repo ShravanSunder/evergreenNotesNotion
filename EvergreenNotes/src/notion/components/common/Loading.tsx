@@ -18,6 +18,12 @@ export const LoadingTab = () => {
          <LoadingDetails />
          <LoadingDetails />
          <LoadingDetails />
+         <Typography variant="h2">
+            <Skeleton></Skeleton>
+         </Typography>
+         <LoadingDetails />
+         <LoadingDetails />
+         <LoadingDetails />
       </Box>
    );
 };
@@ -88,6 +94,17 @@ export const AccessIssue = () => {
    );
 };
 
+export const ErrorCouldNotLoadEvergreenNotes = () => {
+   return (
+      <Typography
+         variant="h6"
+         style={{ padding: 7, marginBottom: 15 }}
+         gutterBottom>
+         😵 Couldn't load Evergreen Notes. 🙏🏾 Please try refreshing page.
+      </Typography>
+   );
+};
+
 export const LoadingTheNotionPage = () => {
    return (
       <Typography
@@ -105,7 +122,7 @@ export const WaitingToLoadNotionSite = () => {
          variant="h6"
          style={{ padding: 7, marginBottom: 15 }}
          gutterBottom>
-         🤹🏾‍♀️ Waiting for the Notion site to load ...
+         🤹🏾‍♀️ Waiting for the Notion site to load...
       </Typography>
    );
 };

@@ -16,6 +16,7 @@ import {
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import { ErrorCouldNotLoadEvergreenNotes } from 'aNotion/components/common/Loading';
 
 export const ErrorFallback = ({ error }: FallbackProps) => {
    // TODO in future, change this so that it takes dev or production into account when rendering
@@ -34,6 +35,7 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
                      <IconButton color="secondary">
                         <ErrorOutlineIcon></ErrorOutlineIcon>
                      </IconButton>
+                     <ErrorCouldNotLoadEvergreenNotes />
                      {msg}
                   </Typography>
                </AccordionSummary>

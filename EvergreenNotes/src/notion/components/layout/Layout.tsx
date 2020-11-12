@@ -47,6 +47,7 @@ import { NavigationState } from 'aNotion/components/layout/SidebarExtensionState
 import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
 import { isGuid } from 'aCommon/extensionHelpers';
 import { calculateSidebarStatus } from 'aNotion/services/notionSiteService';
+import { updateStatus } from 'aNotion/types/updateStatus';
 
 const ReferencesPane = React.lazy(
    () => import('aNotion/components/references/ReferencesPane')
@@ -115,6 +116,12 @@ const MenuBar = ({
    };
 
    const handleRefresh = (e: SyntheticEvent) => {
+      dispatch(
+         sidebarExtensionActions.setUpdateReferenceStatus(updateStatus.waiting)
+      );
+      dispatch(
+         sidebarExtensionActions.setUpdateMarksStatus(updateStatus.waiting)
+      );
       refreshSidebarContents(dispatch, sidebar.navigation);
    };
 
@@ -242,21 +249,33 @@ export const Layout = () => {
    ]);
 
    //update page marks data without a full refresh
-   const [debouncedCurrentPageStatus] = useDebounce(currentPage.status, 250, {
+   const [debouncedCurrentPage] = useDebounce(currentPage.status, 250, {
       trailing: true,
    });
+
+   const [debouncedWebpageStatus] = useDebounce(
+      sidebar.status.webpageStatus,
+      10000,
+      {
+         trailing: true,
+      }
+   );
+
    const debouncedUpdateSignal = useDebouncedCallback(
       () => {
          if (
-            debouncedCurrentPageStatus === thunkStatus.fulfilled &&
-            sidebar.navigation.pageId != null
+            debouncedCurrentPage === thunkStatus.fulfilled &&
+            sidebar.navigation.pageId != null &&
+            sidebar.status.updateMarks === updateStatus.updateSuccessful &&
+            debouncedWebpageStatus === thunkStatus.fulfilled &&
+            sidebar.status.webpageStatus === thunkStatus.fulfilled
          ) {
             refreshSidebarContents(dispatch, sidebar.navigation);
          }
       },
-      100,
+      3000,
       {
-         maxWait: 100,
+         maxWait: 60000,
       }
    );
 
@@ -271,6 +290,9 @@ export const Layout = () => {
       };
    }, []);
 
+   const tabsWithoutSiteLoading =
+      tab === LayoutTabs.Search || tab === LayoutTabs.Settings;
+
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <>
@@ -281,16 +303,18 @@ export const Layout = () => {
                   <div style={{ marginTop: 12 }}></div>
                   <ErrorBoundary FallbackComponent={ErrorFallback}>
                      <>
-                        <Suspense fallback={<WaitingToLoadNotionSite />}>
+                        <Suspense fallback={<AccessIssue />}>
                            {debouncedStatus.webpageStatus ===
                               thunkStatus.idle && <WaitingToLoadNotionSite />}
                            {debouncedStatus.webpageStatus ===
                               thunkStatus.rejected && <AccessIssue />}
                            {calculateSidebarStatus(debouncedStatus) ===
-                              thunkStatus.pending && <LoadingSection />}
+                              thunkStatus.pending &&
+                              !tabsWithoutSiteLoading && <LoadingTab />}
                         </Suspense>
                         <Suspense fallback={<LoadingTab />}>
-                           {calculateSidebarStatus(debouncedStatus) && (
+                           {(calculateSidebarStatus(debouncedStatus) ||
+                              tabsWithoutSiteLoading) && (
                               <>
                                  <div
                                     style={{

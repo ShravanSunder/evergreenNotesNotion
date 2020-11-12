@@ -111,11 +111,25 @@ export const calculateSidebarStatus = (status: SidebarExtensionStatus) => {
    } else {
       if (
          status.updateReferences !== updateStatus.shouldUpdate &&
-         status.updateReferences !== updateStatus.waiting
+         status.updateReferences !== updateStatus.waiting &&
+         status.updateMarks != updateStatus.waiting &&
+         status.updateMarks != updateStatus.shouldUpdate
       ) {
          return thunkStatus.fulfilled;
       }
 
       return thunkStatus.pending;
    }
+};
+
+export const calculateShouldUpdateStatus = (status: updateStatus) => {
+   if (
+      status === updateStatus.waiting ||
+      status === updateStatus.updateFailed ||
+      status === updateStatus.shouldUpdate
+   ) {
+      return true;
+   }
+
+   return false;
 };

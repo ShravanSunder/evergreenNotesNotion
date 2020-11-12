@@ -11,7 +11,10 @@ import {
 } from 'aNotion/components/layout/SidebarExtensionState';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import * as blockService from 'aNotion/services/blockService';
-import { extractNavigationData } from 'aNotion/services/notionSiteService';
+import {
+   calculateShouldUpdateStatus,
+   extractNavigationData,
+} from 'aNotion/services/notionSiteService';
 import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
 import { CurrentPageData } from 'aNotion/models/NotionPage';
 import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
@@ -19,6 +22,7 @@ import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { isGuid } from 'aCommon/extensionHelpers';
 import { appDispatch } from 'aNotion/providers/appDispatch';
 import { updateStatus } from 'aNotion/types/updateStatus';
+import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
 
 const initialState: SidebarExtensionState = {
    cookie: { status: thunkStatus.idle },
@@ -40,12 +44,6 @@ const fetchCurrentNotionPage = createAsyncThunk<
       { pageId }: { pageId: string },
       thunkApi
    ): Promise<CurrentPageData> => {
-      thunkApi.dispatch(
-         sidebarExtensionSlice.actions.setUpdateReferenceStatus(
-            updateStatus.waiting
-         )
-      );
-
       let spaceId: string | undefined = undefined;
       const [record, chunk] = await blockService.fetchPageRecord(
          pageId,
@@ -57,6 +55,12 @@ const fetchCurrentNotionPage = createAsyncThunk<
          record.type !== BlockTypeEnum.Unknown &&
          chunk != null
       ) {
+         thunkApi.dispatch(
+            sidebarExtensionSlice.actions.setUpdateMarksStatus(
+               updateStatus.updating
+            )
+         );
+
          thunkApi.dispatch(
             pageMarkActions.processPageForMarks({
                pageId,
@@ -71,11 +75,16 @@ const fetchCurrentNotionPage = createAsyncThunk<
          //get the first space id
          spaceId = Object.keys(chunk.recordMap.space)[0];
 
-         thunkApi.dispatch(
-            sidebarExtensionSlice.actions.setUpdateReferenceStatus(
-               updateStatus.shouldUpdate
-            )
-         );
+         const statusState = sidebarExtensionSelector(
+            thunkApi.getState() as any
+         ).status;
+         if (calculateShouldUpdateStatus(statusState.updateReferences)) {
+            thunkApi.dispatch(
+               sidebarExtensionSlice.actions.setUpdateReferenceStatus(
+                  updateStatus.shouldUpdate
+               )
+            );
+         }
          return {
             pageBlock: record?.toSerializable(),
             spaceId: spaceId,
@@ -86,6 +95,11 @@ const fetchCurrentNotionPage = createAsyncThunk<
          spaceId = Object.keys(chunk.recordMap.space)[0];
       }
 
+      thunkApi.dispatch(
+         sidebarExtensionSlice.actions.setUpdateMarksStatus(
+            updateStatus.updateAborted
+         )
+      );
       thunkApi.dispatch(
          sidebarExtensionSlice.actions.setUpdateReferenceStatus(
             updateStatus.updateAborted
@@ -153,12 +167,14 @@ const updateNavigationDataReducer = {
          state.navigation.url != null
       ) {
          if (state.navigation.pageId != oldPageId) {
-            state.status.updateReferences = updateStatus.shouldUpdate;
+            state.status.updateReferences = updateStatus.waiting;
+            state.status.updateMarks = updateStatus.waiting;
          }
       } else {
          unloadPreviousPageReducer(state);
          state.status.webpageStatus = thunkStatus.rejected;
          state.status.updateReferences = updateStatus.waiting;
+         state.status.updateMarks = updateStatus.waiting;
       }
    },
    prepare: (payload: string) => {
@@ -172,6 +188,13 @@ const setUpdateReferenceStatusReducer: CaseReducer<
    PayloadAction<updateStatus>
 > = (state, action) => {
    state.status.updateReferences = action.payload;
+};
+
+const setUpdateMarksStatusReducer: CaseReducer<
+   SidebarExtensionState,
+   PayloadAction<updateStatus>
+> = (state, action) => {
+   state.status.updateMarks = action.payload;
 };
 
 const sidebarExtensionSlice = createSlice({
@@ -188,6 +211,7 @@ const sidebarExtensionSlice = createSlice({
          state.status.webpageStatus = thunkStatus.fulfilled;
       },
       setUpdateReferenceStatus: setUpdateReferenceStatusReducer,
+      setUpdateMarksStatus: setUpdateMarksStatusReducer,
    },
    extraReducers: { ...fetchCurrentNotionPageReducers },
 });

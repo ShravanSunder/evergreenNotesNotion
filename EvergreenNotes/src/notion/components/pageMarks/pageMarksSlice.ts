@@ -9,6 +9,8 @@ import { NotionPageMarks } from 'aNotion/models/NotionPage';
 import * as blockService from 'aNotion/services/blockService';
 import * as pageService from 'aNotion/services/pageService';
 import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
+import { sidebarExtensionActions } from '../layout/sidebarExtensionSlice';
+import { updateStatus } from 'aNotion/types/updateStatus';
 
 const initialState: PageMarkState = {
    status: thunkStatus.idle,
@@ -21,6 +23,11 @@ const processPageForMarks = createAsyncThunk<
    'notion/page/processPage',
    async ({ pageId, record, signal }, thunkApi): Promise<NotionPageMarks> => {
       let marks = await pageService.processPageForMarks(pageId, record, signal);
+      thunkApi.dispatch(
+         sidebarExtensionActions.setUpdateMarksStatus(
+            updateStatus.updateSuccessful
+         )
+      );
       return marks;
    }
 );

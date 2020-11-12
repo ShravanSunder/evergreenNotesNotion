@@ -86,7 +86,7 @@ const fetchRefsForPage = createAsyncThunk<
       if (!thunkApi.signal.aborted) {
          let b: BacklinkRecordModel[] = [];
          if (links != null) {
-            const b = processBacklinks(links);
+            b = processBacklinks(links);
          }
          let s: SearchReferences = defaultSearchReferences();
          if (search != null) {

@@ -160,18 +160,6 @@ const checkForRemovedNodes = (nodes: NodeList): boolean => {
    return false;
 };
 
-const checkNodesForHighlights = (node: Node, oldValue: string): boolean => {
-   let element = node as HTMLElement;
-   if (
-      element.attributes[0].name === 'data-block-id' &&
-      element.classList.contains('notion-selectable')
-   ) {
-      return true;
-   }
-
-   return false;
-};
-
 const contentChangedCallback = (mutations: MutationRecord[]) => {
    let hasChanged = mutations.some((m: MutationRecord) => {
       let result = false;
@@ -179,22 +167,23 @@ const contentChangedCallback = (mutations: MutationRecord[]) => {
       if (m.type === 'characterData') {
          return true;
       } else if (m.type === 'childList') {
-         result = checkNodesForText(m.addedNodes);
-         if (result) return true;
-         result = checkNodesForText(m.removedNodes);
-         if (result) return true;
-         result = checkForRemovedNodes(m.removedNodes);
-         if (result) return true;
-      } else if (
-         m.type === 'attributes' &&
-         m.attributeName?.startsWith('style')
-      ) {
-         result = checkNodesForHighlights(m.target, m.oldValue ?? '');
+         // result = checkNodesForText(m.addedNodes);
+         // if (result) return true;
+         // result = checkNodesForText(m.removedNodes);
+         // if (result) return true;
+         //result = checkForRemovedNodes(m.removedNodes);
+         //if (result) return true;
       }
       return result;
    });
 
    if (setUpdateSidebarContents != null && hasChanged) {
+      setUpdateSidebarContents(true);
+   }
+};
+
+const setContentChanged = () => {
+   if (setUpdateSidebarContents != null) {
       setUpdateSidebarContents(true);
    }
 };
@@ -236,9 +225,14 @@ const modifyNotionFrameAndCreateListeners = (
    } = getNotionScroll();
 
    if (isExpectedChild && notionScrollDiv != null) {
+      notionScrollDiv.removeEventListener('keypress', setContentChanged);
+
       notionFrameContentObserver.disconnect();
       notionFrameBoundsObserver.disconnect();
       setFrameWidth(showFrame, notionScrollDiv, wWidth, notionSidebar);
+
+      notionScrollDiv.addEventListener('keypress', setContentChanged);
+
       notionFrameBoundsObserver.observe(notionframe, {
          childList: true,
          subtree: false,

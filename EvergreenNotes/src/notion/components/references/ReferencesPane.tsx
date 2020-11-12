@@ -24,6 +24,7 @@ import {
    AccessIssue,
    LoadingTheNotionPage,
    WaitingToLoadNotionSite,
+   ErrorCouldNotLoadEvergreenNotes,
 } from 'aNotion/components/common/Loading';
 import { Backlink } from 'aNotion/components/references/Backlink';
 import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
@@ -87,9 +88,9 @@ export const ReferencesPane = () => {
                <>
                   {references.status !== thunkStatus.rejected && (
                      <>
-                        <PageMentions marks={marks}></PageMentions>
                         <Backlinks refs={references}></Backlinks>
                         <Relations refs={references}></Relations>
+                        <PageMentions marks={marks}></PageMentions>
                         <FullTitle refs={references}></FullTitle>
                         <Related refs={references}></Related>
                      </>
