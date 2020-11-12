@@ -36,9 +36,6 @@ export const NotionContent = ({
          status === thunkStatus.idle
       ) {
          const promise = dispatch(contentActions.fetchContent({ blockId }));
-         return () => {
-            promise.abort();
-         };
       }
       return () => {};
    }, []);

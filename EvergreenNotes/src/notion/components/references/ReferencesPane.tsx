@@ -25,7 +25,7 @@ import { Backlink } from 'aNotion/components/references/Backlink';
 import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
 import { ErrorBoundary, ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { useDebounce } from 'use-debounce/lib';
-import { useDispatchWithSignal } from 'aNotion/hooks/useDispatchWithSignal';
+import { updateStatus } from 'aNotion/types/updateStatus';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -54,27 +54,57 @@ export const ReferencesPane = () => {
       { trailing: true }
    );
 
-   useDispatchWithSignal(
-      () =>
+   useEffect(() => {
+      if (
          debouncedPage?.status === thunkStatus.fulfilled &&
+         sidebar.status.updateReferences === updateStatus.shouldUpdate &&
          debouncedPage?.pageId != null &&
-         debouncedPage?.pageName != null,
-      referenceActions.fetchRefsForPage({
-         query: debouncedPage.pageId!,
-         pageId: debouncedPage.pageName!,
-      }),
-      [dispatch, debouncedPage]
-   );
+         debouncedPage?.pageName != null &&
+         references.status !== thunkStatus.pending
+      ) {
+         dispatch(
+            referenceActions.fetchRefsForPage({
+               query: debouncedPage.pageName!,
+               pageId: debouncedPage.pageId!,
+            })
+         );
+      }
+   }, [dispatch, debouncedPage, sidebar.status.updateReferences]);
+
+   //use sidebar.sidebarStatus.webpageStatus to not show things
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-         <Backlinks refs={references}></Backlinks>
-         <Relations refs={references}></Relations>
-         <PageMentions marks={marks}></PageMentions>
-         <FullTitle refs={references}></FullTitle>
-         <Related refs={references}></Related>
-         {references.status === thunkStatus.rejected && (
-            <div style={{ marginTop: 12 }}>😵 Couldn't load references</div>
+         {sidebar.status.webpageStatus === thunkStatus.idle && (
+            <Typography style={{ marginTop: 12 }}>⏸ Waiting...</Typography>
+         )}
+         {sidebar.status.webpageStatus === thunkStatus.rejected && (
+            <Typography style={{ marginTop: 12 }}>
+               🙅🏾‍♂️ This isn't a notion page or you have full access...
+            </Typography>
+         )}
+         {sidebar.status.webpageStatus === thunkStatus.pending && (
+            <Typography style={{ marginTop: 12 }}>
+               🔃 Loading notion page...
+            </Typography>
+         )}
+         {sidebar.status.webpageStatus === thunkStatus.fulfilled && (
+            <>
+               {references.status !== thunkStatus.rejected && (
+                  <>
+                     <Backlinks refs={references}></Backlinks>
+                     <Relations refs={references}></Relations>
+                     <PageMentions marks={marks}></PageMentions>
+                     <FullTitle refs={references}></FullTitle>
+                     <Related refs={references}></Related>
+                  </>
+               )}
+               {references.status === thunkStatus.rejected && (
+                  <Typography style={{ marginTop: 12 }}>
+                     😵 Couldn't load references. 🙏🏾 Please try refreshing page.
+                  </Typography>
+               )}
+            </>
          )}
       </ErrorBoundary>
    );

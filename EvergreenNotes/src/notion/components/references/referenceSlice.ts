@@ -28,6 +28,8 @@ import {
 import { currentPageSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';
+import { updateStatus } from 'aNotion/types/updateStatus';
 
 const initialState: ReferenceState = {
    pageReferences: defaultPageReferences(),
@@ -46,6 +48,10 @@ const fetchRefsForPage = createAsyncThunk<
       let search: SearchResultsType | undefined = undefined;
       let links: BacklinkRecordType | undefined = undefined;
       let relations: NotionBlockModel[] | undefined = undefined;
+
+      thunkApi.dispatch(
+         sidebarExtensionActions.setUpdateReferenceStatus(updateStatus.updating)
+      );
 
       let spaceId = currentPageSelector(thunkApi.getState() as RootState)
          .currentPageData?.spaceId;
@@ -92,6 +98,13 @@ const fetchRefsForPage = createAsyncThunk<
                10
             );
          }
+
+         thunkApi.dispatch(
+            sidebarExtensionActions.setUpdateReferenceStatus(
+               updateStatus.updateSuccessful
+            )
+         );
+
          return {
             backlinks: b,
             references: s,
@@ -100,6 +113,11 @@ const fetchRefsForPage = createAsyncThunk<
          };
       }
 
+      thunkApi.dispatch(
+         sidebarExtensionActions.setUpdateReferenceStatus(
+            updateStatus.updateFailed
+         )
+      );
       return defaultPageReferences();
    }
 );
@@ -151,7 +169,5 @@ const referenceSlice = createSlice({
 export const referenceActions = {
    ...referenceSlice.actions,
    fetchRefsForPage: fetchRefsForPage,
-   //fetchSearchResults: fetchSearchResults,
-   //processTitleRefs,
 };
 export const referenceReducers = referenceSlice.reducer;

@@ -1,4 +1,4 @@
-import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
+//import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
 import {
    CookieData,
    NavigationState,
@@ -7,13 +7,6 @@ import { appDispatch, getAppState } from 'aNotion/providers/appDispatch';
 import { isGuid, toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
 import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
-
-export const extractUserData = (cookies: chrome.cookies.Cookie[]) => {
-   let token = cookies.find((f) => f.name === 'token_v2')?.value;
-   let c = { token, cookies } as CookieData;
-
-   appDispatch(sidebarExtensionActions.loadCookies(c));
-};
 
 const cleanValue = (str: string) => {
    return toGuid(

@@ -16,5 +16,5 @@ export interface NotionPageMarks {
 
 export interface CurrentPageData {
    pageBlock?: NotionBlockModel;
-   spaceId: string;
+   spaceId: string | undefined;
 }

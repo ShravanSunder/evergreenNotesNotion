@@ -13,7 +13,7 @@ import {
 } from 'aNotion/providers/storeSelectors';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
+import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';
 import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
@@ -200,9 +200,12 @@ export const Layout = () => {
       setTab(LayoutTabs.References);
    }, []);
 
+   // loading the Notion page content when the page is completely loaded and we have pageId
+   // see notionListener -> registerTabUpdateListener for how pageId is obtained
    useEffect(() => {
       if (
          sidebar.navigation.pageId != null &&
+         sidebar.status.webpageStatus === thunkStatus.fulfilled &&
          isGuid(sidebar.navigation.pageId)
       ) {
          setNoNotionPageId(false);
@@ -211,10 +214,6 @@ export const Layout = () => {
                pageId: sidebar.navigation.pageId,
             })
          );
-
-         return () => {
-            pr.abort();
-         };
       } else if (
          sidebar.navigation.pageId == null ||
          !isGuid(sidebar.navigation.pageId)
@@ -224,7 +223,12 @@ export const Layout = () => {
          setNoNotionPageId(true);
       }
       return () => {};
-   }, [sidebar.navigation.pageId, sidebar.navigation.url, dispatch]);
+   }, [
+      sidebar.navigation.pageId,
+      sidebar.navigation.url,
+      sidebar.status.webpageStatus,
+      dispatch,
+   ]);
 
    const [currentPageStatus] = useDebounce(currentPage.status, 250, {
       trailing: true,

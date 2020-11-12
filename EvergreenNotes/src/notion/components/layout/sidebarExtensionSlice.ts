@@ -18,27 +18,35 @@ import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { isGuid } from 'aCommon/extensionHelpers';
 import { appDispatch } from 'aNotion/providers/appDispatch';
+import { updateStatus } from 'aNotion/types/updateStatus';
 
 const initialState: SidebarExtensionState = {
    cookie: { status: thunkStatus.idle },
    navigation: {},
    currentNotionPage: { status: thunkStatus.idle },
-   sidebarStatus: {
+   status: {
       webpageStatus: thunkStatus.idle,
-      updateReferences: true,
-      updateMarks: true,
+      updateReferences: updateStatus.waiting,
+      updateMarks: updateStatus.waiting,
    },
 };
 
 const fetchCurrentNotionPage = createAsyncThunk<
-   CurrentPageData | undefined,
+   CurrentPageData,
    { pageId: string }
 >(
    'notion/page/current',
    async (
       { pageId }: { pageId: string },
       thunkApi
-   ): Promise<CurrentPageData | undefined> => {
+   ): Promise<CurrentPageData> => {
+      thunkApi.dispatch(
+         sidebarExtensionSlice.actions.setUpdateReferenceStatus(
+            updateStatus.waiting
+         )
+      );
+
+      let spaceId: string | undefined = undefined;
       const [record, chunk] = await blockService.fetchPageRecord(
          pageId,
          thunkApi.signal
@@ -59,8 +67,15 @@ const fetchCurrentNotionPage = createAsyncThunk<
          thunkApi.dispatch(
             mentionsActions.saveAllUsers(chunk.recordMap.notion_user)
          );
+
          //get the first space id
-         const spaceId = Object.keys(chunk.recordMap.space)[0];
+         spaceId = Object.keys(chunk.recordMap.space)[0];
+
+         thunkApi.dispatch(
+            sidebarExtensionSlice.actions.setUpdateReferenceStatus(
+               updateStatus.shouldUpdate
+            )
+         );
          return {
             pageBlock: record?.toSerializable(),
             spaceId: spaceId,
@@ -68,18 +83,47 @@ const fetchCurrentNotionPage = createAsyncThunk<
       } else if (pageId != null && isGuid(pageId) && !thunkApi.signal.aborted) {
          thunkApi.dispatch(fetchCurrentNotionPage({ pageId }));
       } else if (chunk?.recordMap?.space != null) {
-         const spaceId = Object.keys(chunk.recordMap.space)[0];
-         return { pageBlock: undefined, spaceId };
+         spaceId = Object.keys(chunk.recordMap.space)[0];
       }
 
-      return undefined;
+      thunkApi.dispatch(
+         sidebarExtensionSlice.actions.setUpdateReferenceStatus(
+            updateStatus.updateAborted
+         )
+      );
+      return { pageBlock: undefined, spaceId: spaceId };
    }
 );
 
-const unloadPreviousPage = (state: SidebarExtensionState) => {
+const fetchCurrentNotionPageReducers = {
+   [fetchCurrentNotionPage.fulfilled.toString()]: (
+      state: SidebarExtensionState,
+      action: PayloadAction<CurrentPageData>
+   ) => {
+      state.currentNotionPage.currentPageData = action.payload;
+      state.navigation.spaceId = action.payload?.spaceId;
+      state.currentNotionPage.status = thunkStatus.fulfilled;
+   },
+   [fetchCurrentNotionPage.pending.toString()]: (
+      state: SidebarExtensionState,
+      action: PayloadAction<CurrentPageData>
+   ) => {
+      state.currentNotionPage.status = thunkStatus.pending;
+      state.currentNotionPage.currentPageData = undefined;
+   },
+   [fetchCurrentNotionPage.rejected.toString()]: (
+      state: SidebarExtensionState,
+      action: PayloadAction<CurrentPageData>
+   ) => {
+      state.currentNotionPage.status = thunkStatus.rejected;
+      state.currentNotionPage.currentPageData = undefined;
+   },
+};
+
+const unloadPreviousPageReducer = (state: SidebarExtensionState) => {
    state.currentNotionPage.currentPageData = undefined;
    state.currentNotionPage.status = thunkStatus.idle;
-   state.sidebarStatus.webpageStatus = thunkStatus.rejected;
+   state.status.webpageStatus = thunkStatus.idle;
 };
 
 const loadCookiesReducer: CaseReducer<
@@ -109,14 +153,12 @@ const updateNavigationDataReducer = {
          state.navigation.url != null
       ) {
          if (state.navigation.pageId != oldPageId) {
-            state.sidebarStatus.updateReferences = true;
+            state.status.updateReferences = updateStatus.shouldUpdate;
          }
-
-         appDispatch(
-            fetchCurrentNotionPage({ pageId: state.navigation.pageId })
-         );
       } else {
-         unloadPreviousPage(state);
+         unloadPreviousPageReducer(state);
+         state.status.webpageStatus = thunkStatus.rejected;
+         state.status.updateReferences = updateStatus.waiting;
       }
    },
    prepare: (payload: string) => {
@@ -125,44 +167,29 @@ const updateNavigationDataReducer = {
    },
 };
 
+const setUpdateReferenceStatusReducer: CaseReducer<
+   SidebarExtensionState,
+   PayloadAction<updateStatus>
+> = (state, action) => {
+   state.status.updateReferences = action.payload;
+};
+
 const sidebarExtensionSlice = createSlice({
    name: 'notionSiteSlice',
    initialState: initialState,
    reducers: {
       loadCookies: loadCookiesReducer,
       updateNavigationData: updateNavigationDataReducer,
-      unloadPreviousPage: unloadPreviousPage,
+      unloadPreviousPage: unloadPreviousPageReducer,
       setPageLoadingStatus: (state) => {
-         state.sidebarStatus.webpageStatus = thunkStatus.pending;
+         state.status.webpageStatus = thunkStatus.pending;
       },
       setPageCompletedStatus: (state) => {
-         state.sidebarStatus.webpageStatus = thunkStatus.fulfilled;
+         state.status.webpageStatus = thunkStatus.fulfilled;
       },
+      setUpdateReferenceStatus: setUpdateReferenceStatusReducer,
    },
-   extraReducers: {
-      [fetchCurrentNotionPage.fulfilled.toString()]: (
-         state,
-         action: PayloadAction<CurrentPageData>
-      ) => {
-         state.currentNotionPage.currentPageData = action.payload;
-         state.navigation.spaceId = action.payload?.spaceId;
-         state.currentNotionPage.status = thunkStatus.fulfilled;
-      },
-      [fetchCurrentNotionPage.pending.toString()]: (
-         state,
-         action: PayloadAction<CurrentPageData>
-      ) => {
-         state.currentNotionPage.status = thunkStatus.pending;
-         state.currentNotionPage.currentPageData = undefined;
-      },
-      [fetchCurrentNotionPage.rejected.toString()]: (
-         state,
-         action: PayloadAction<CurrentPageData>
-      ) => {
-         state.currentNotionPage.status = thunkStatus.rejected;
-         state.currentNotionPage.currentPageData = undefined;
-      },
-   },
+   extraReducers: { ...fetchCurrentNotionPageReducers },
 });
 
 export const sidebarExtensionActions = {

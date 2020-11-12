@@ -3,6 +3,7 @@ import {
    thunkStatus as ThunkStatus,
 } from 'aNotion/types/thunkStatus';
 import { CurrentPageData } from 'aNotion/models/NotionPage';
+import { updateStatus } from 'aNotion/types/updateStatus';
 
 export type CookieData = {
    token: string;
@@ -27,9 +28,9 @@ export type SidebarExtensionState = {
    cookie: { status: string; data?: CookieData };
    navigation: NavigationState;
    currentNotionPage: PageRecordState;
-   sidebarStatus: {
+   status: {
       webpageStatus: thunkStatus;
-      updateReferences: boolean;
-      updateMarks: boolean;
+      updateReferences: updateStatus;
+      updateMarks: updateStatus;
    };
 };

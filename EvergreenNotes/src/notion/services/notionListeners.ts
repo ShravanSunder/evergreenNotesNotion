@@ -1,7 +1,6 @@
 import { getCurrentTabId } from 'aCommon/extensionHelpers';
 import { appDispatch } from 'aNotion/providers/appDispatch';
-import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
-import { referenceActions } from 'aNotion/components/references/referenceSlice';
+import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';
 
 export const registerTabUpdateListener = () => {
    chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
