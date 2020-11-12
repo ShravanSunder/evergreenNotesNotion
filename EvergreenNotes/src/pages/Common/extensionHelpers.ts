@@ -41,6 +41,11 @@ export const isGuid = (guid: string): boolean => {
    return reg.test(guid);
 };
 
+export const isGuidOnlyNumbers = (guid: string): boolean => {
+   let reg = /^[0-9a-f]{32}$/i;
+   return reg.test(guid);
+};
+
 export const copyToClipboard = (url: string): boolean => {
    try {
       var textField = document.createElement('textarea');

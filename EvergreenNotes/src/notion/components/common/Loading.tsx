@@ -77,6 +77,50 @@ export const NothingToFind = () => {
    );
 };
 
+export const AccessIssue = () => {
+   return (
+      <Typography
+         variant="h6"
+         style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
+         gutterBottom>
+         🙅🏾‍♂️ Either This isn't a notion page or you have full access...
+      </Typography>
+   );
+};
+
+export const LoadingTheNotionPage = () => {
+   return (
+      <Typography
+         variant="h6"
+         style={{ padding: 7, marginBottom: 15 }}
+         gutterBottom>
+         🔃 Loading the notion page...
+      </Typography>
+   );
+};
+
+export const WaitingToLoadNotionSite = () => {
+   return (
+      <Typography
+         variant="h6"
+         style={{ padding: 7, marginBottom: 15 }}
+         gutterBottom>
+         🤹🏾‍♀️ Waiting for the Notion site to load ...
+      </Typography>
+   );
+};
+
+export const ErrorCouldNotLoadReferences = () => {
+   return (
+      <Typography
+         variant="h6"
+         style={{ padding: 7, marginBottom: 15 }}
+         gutterBottom>
+         😵 Couldn't load references. 🙏🏾 Please try refreshing page.
+      </Typography>
+   );
+};
+
 export const LoadingUnknown = () => {
    const [loading, setLoading] = useState(false);
    useEffect(() => {

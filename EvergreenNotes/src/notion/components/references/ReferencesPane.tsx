@@ -20,6 +20,10 @@ import {
 import {
    NothingToFind,
    LoadingSection,
+   ErrorCouldNotLoadReferences,
+   AccessIssue,
+   LoadingTheNotionPage,
+   WaitingToLoadNotionSite,
 } from 'aNotion/components/common/Loading';
 import { Backlink } from 'aNotion/components/references/Backlink';
 import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
@@ -75,37 +79,33 @@ export const ReferencesPane = () => {
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-         {sidebar.status.webpageStatus === thunkStatus.idle && (
-            <Typography style={{ marginTop: 12 }}>⏸ Waiting...</Typography>
-         )}
-         {sidebar.status.webpageStatus === thunkStatus.rejected && (
-            <Typography style={{ marginTop: 12 }}>
-               🙅🏾‍♂️ This isn't a notion page or you have full access...
-            </Typography>
-         )}
-         {sidebar.status.webpageStatus === thunkStatus.pending && (
-            <Typography style={{ marginTop: 12 }}>
-               🔃 Loading notion page...
-            </Typography>
-         )}
-         {sidebar.status.webpageStatus === thunkStatus.fulfilled && (
-            <>
-               {references.status !== thunkStatus.rejected && (
-                  <>
-                     <Backlinks refs={references}></Backlinks>
-                     <Relations refs={references}></Relations>
-                     <PageMentions marks={marks}></PageMentions>
-                     <FullTitle refs={references}></FullTitle>
-                     <Related refs={references}></Related>
-                  </>
-               )}
-               {references.status === thunkStatus.rejected && (
-                  <Typography style={{ marginTop: 12 }}>
-                     😵 Couldn't load references. 🙏🏾 Please try refreshing page.
-                  </Typography>
-               )}
-            </>
-         )}
+         <Suspense fallback={WaitingToLoadNotionSite}>
+            {sidebar.status.webpageStatus === thunkStatus.idle && (
+               <WaitingToLoadNotionSite />
+            )}
+            {sidebar.status.webpageStatus === thunkStatus.rejected && (
+               <AccessIssue />
+            )}
+            {sidebar.status.webpageStatus === thunkStatus.pending && (
+               <LoadingTheNotionPage />
+            )}
+            {sidebar.status.webpageStatus === thunkStatus.fulfilled && (
+               <>
+                  {references.status !== thunkStatus.rejected && (
+                     <>
+                        <Backlinks refs={references}></Backlinks>
+                        <Relations refs={references}></Relations>
+                        <PageMentions marks={marks}></PageMentions>
+                        <FullTitle refs={references}></FullTitle>
+                        <Related refs={references}></Related>
+                     </>
+                  )}
+                  {references.status === thunkStatus.rejected && (
+                     <ErrorCouldNotLoadReferences />
+                  )}
+               </>
+            )}
+         </Suspense>
       </ErrorBoundary>
    );
 };

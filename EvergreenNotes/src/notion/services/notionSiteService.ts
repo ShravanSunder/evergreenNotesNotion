@@ -4,7 +4,7 @@ import {
    NavigationState,
 } from 'aNotion/components/layout/SidebarExtensionState';
 import { appDispatch, getAppState } from 'aNotion/providers/appDispatch';
-import { isGuid, toGuid } from 'aCommon/extensionHelpers';
+import { isGuid, isGuidOnlyNumbers, toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
 import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
 
@@ -93,7 +93,7 @@ function extractPageAndBackgroundIfValid(
    data: queryString.ParsedUrl,
    result: NavigationState
 ) {
-   if (isGuid(data.query.p as string)) {
+   if (isGuidOnlyNumbers(data.query.p as string)) {
       result.pageId = toGuid(data.query.p as string);
       result.backgroundId = getGuidFromUrl(data.url);
    } else {
