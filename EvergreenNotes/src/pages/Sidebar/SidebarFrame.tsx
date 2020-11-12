@@ -20,6 +20,7 @@ import {
 } from './frameProperties';
 import { SidebarFab } from './SidebarFab';
 import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
+import { DonutSmall } from '@material-ui/icons';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render sidebar frame');
@@ -204,6 +205,7 @@ const notionAppId = 'notion-app';
 const notionSidebarClass = 'notion-sidebar-container';
 const notionCollectionScrollersClass =
    'notion-selectable notion-collection_view-block';
+const notionFocusPageDialogParentClass = 'notion-peek-renderer';
 
 const getNotionScroll = () => {
    let notionApp = document.getElementById(notionAppId) as HTMLElement;
@@ -265,6 +267,7 @@ const setFrameWidth = (
    wWidth: number,
    notionSidebar: HTMLElement
 ) => {
+   let notionApp = document.getElementById(notionAppId) as HTMLElement;
    const sidebarWidth = notionSidebar?.getBoundingClientRect()?.width ?? 0;
    const frameWidth =
       wWidth - appWidth(wWidth) - appScrollMargin - sidebarWidth;
@@ -278,6 +281,14 @@ const setFrameWidth = (
       ].forEach(
          (f) => ((f as HTMLElement).style.maxWidth = frameWidth - 9 + 'px')
       );
+
+      const dialogElements = notionApp.getElementsByClassName(
+         notionFocusPageDialogParentClass
+      ) as HTMLCollection;
+      if ((dialogElements?.[0]?.children?.[1] as HTMLElement)?.style != null) {
+         (dialogElements[0].children[1] as HTMLElement).style.marginRight =
+            appWidth(wWidth) + 'px';
+      }
    } else {
       notionScrollDiv.style.width = wWidth - sidebarWidth + 'px';
       [
@@ -285,5 +296,13 @@ const setFrameWidth = (
             notionCollectionScrollersClass
          ),
       ].forEach((f) => ((f as HTMLElement).style.maxWidth = ''));
+
+      const dialogElements = notionApp.getElementsByClassName(
+         notionFocusPageDialogParentClass
+      ) as HTMLCollection;
+      if ((dialogElements?.[0]?.children?.[1] as HTMLElement)?.style != null) {
+         (dialogElements[0].children[1] as HTMLElement).style.marginRight =
+            'auto';
+      }
    }
 };
