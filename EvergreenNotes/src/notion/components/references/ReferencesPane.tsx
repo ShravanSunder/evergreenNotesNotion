@@ -89,8 +89,8 @@ export const ReferencesPane = () => {
                   {references.status !== thunkStatus.rejected && (
                      <>
                         <Backlinks refs={references}></Backlinks>
-                        <Relations refs={references}></Relations>
                         <PageMentions marks={marks}></PageMentions>
+                        <Relations refs={references}></Relations>
                         <FullTitle refs={references}></FullTitle>
                         <Related refs={references}></Related>
                      </>
@@ -176,7 +176,7 @@ const PageMentions = ({ marks }: { marks: PageMarkState }) => {
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Mentions in the Current Page</b>
+                  <b>@Mentions in Page</b>
                </Typography>
                {mentions.map((u) => {
                   let link: BacklinkRecordModel = {
