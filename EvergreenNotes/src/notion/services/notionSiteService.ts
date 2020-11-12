@@ -2,11 +2,14 @@
 import {
    CookieData,
    NavigationState,
+   SidebarExtensionStatus,
 } from 'aNotion/components/layout/SidebarExtensionState';
 import { appDispatch, getAppState } from 'aNotion/providers/appDispatch';
 import { isGuid, isGuidOnlyNumbers, toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
 import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
+import { thunkStatus } from 'aNotion/types/thunkStatus';
+import { updateStatus } from 'aNotion/types/updateStatus';
 
 const cleanValue = (str: string) => {
    return toGuid(
@@ -89,10 +92,10 @@ function extractPageIfValid(
    }
 }
 
-function extractPageAndBackgroundIfValid(
+const extractPageAndBackgroundIfValid = (
    data: queryString.ParsedUrl,
    result: NavigationState
-) {
+) => {
    if (isGuidOnlyNumbers(data.query.p as string)) {
       result.pageId = toGuid(data.query.p as string);
       result.backgroundId = getGuidFromUrl(data.url);
@@ -100,4 +103,19 @@ function extractPageAndBackgroundIfValid(
       result.pageId = undefined;
       result.backgroundId = undefined;
    }
-}
+};
+
+export const calculateSidebarStatus = (status: SidebarExtensionStatus) => {
+   if (status.webpageStatus !== thunkStatus.fulfilled) {
+      return status.webpageStatus;
+   } else {
+      if (
+         status.updateReferences !== updateStatus.shouldUpdate &&
+         status.updateReferences !== updateStatus.waiting
+      ) {
+         return thunkStatus.fulfilled;
+      }
+
+      return thunkStatus.pending;
+   }
+};

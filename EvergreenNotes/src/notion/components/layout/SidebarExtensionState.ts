@@ -28,9 +28,11 @@ export type SidebarExtensionState = {
    cookie: { status: string; data?: CookieData };
    navigation: NavigationState;
    currentNotionPage: PageRecordState;
-   status: {
-      webpageStatus: thunkStatus;
-      updateReferences: updateStatus;
-      updateMarks: updateStatus;
-   };
+   status: SidebarExtensionStatus;
+};
+
+export type SidebarExtensionStatus = {
+   webpageStatus: thunkStatus;
+   updateReferences: updateStatus;
+   updateMarks: updateStatus;
 };

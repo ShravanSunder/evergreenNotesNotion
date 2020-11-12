@@ -30,6 +30,7 @@ import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
 import { ErrorBoundary, ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { useDebounce } from 'use-debounce/lib';
 import { updateStatus } from 'aNotion/types/updateStatus';
+import { calculateSidebarStatus } from 'aNotion/services/notionSiteService';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -53,15 +54,17 @@ export const ReferencesPane = () => {
    const pageName = currentPage.currentPageData?.pageBlock?.simpleTitle;
    const pageId = currentPage.currentPageData?.pageBlock?.blockId;
    const [debouncedPage] = useDebounce(
-      { pageId, pageName, status: currentPage.status },
+      { pageId, pageName, updateReferences: sidebar.status.updateReferences },
       500,
-      { trailing: true }
+      {
+         trailing: true,
+      }
    );
 
    useEffect(() => {
       if (
-         debouncedPage?.status === thunkStatus.fulfilled &&
-         sidebar.status.updateReferences === updateStatus.shouldUpdate &&
+         currentPage.status === thunkStatus.fulfilled &&
+         debouncedPage.updateReferences === updateStatus.shouldUpdate &&
          debouncedPage?.pageId != null &&
          debouncedPage?.pageName != null &&
          references.status !== thunkStatus.pending
@@ -80,22 +83,13 @@ export const ReferencesPane = () => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={WaitingToLoadNotionSite}>
-            {sidebar.status.webpageStatus === thunkStatus.idle && (
-               <WaitingToLoadNotionSite />
-            )}
-            {sidebar.status.webpageStatus === thunkStatus.rejected && (
-               <AccessIssue />
-            )}
-            {sidebar.status.webpageStatus === thunkStatus.pending && (
-               <LoadingTheNotionPage />
-            )}
-            {sidebar.status.webpageStatus === thunkStatus.fulfilled && (
+            {calculateSidebarStatus(sidebar.status) !== thunkStatus.pending && (
                <>
                   {references.status !== thunkStatus.rejected && (
                      <>
+                        <PageMentions marks={marks}></PageMentions>
                         <Backlinks refs={references}></Backlinks>
                         <Relations refs={references}></Relations>
-                        <PageMentions marks={marks}></PageMentions>
                         <FullTitle refs={references}></FullTitle>
                         <Related refs={references}></Related>
                      </>

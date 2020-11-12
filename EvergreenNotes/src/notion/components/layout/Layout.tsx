@@ -34,12 +34,19 @@ import {
    Typography,
    IconButton,
 } from '@material-ui/core';
-import { LoadingTab } from 'aNotion/components/common/Loading';
+import {
+   AccessIssue,
+   LoadingSection,
+   LoadingTab,
+   LoadingTheNotionPage,
+   WaitingToLoadNotionSite,
+} from 'aNotion/components/common/Loading';
 import { LightTooltip } from 'aNotion/components/common/Styles';
 import { flushCache } from 'aUtilities/apiCache';
 import { NavigationState } from 'aNotion/components/layout/SidebarExtensionState';
 import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
 import { isGuid } from 'aCommon/extensionHelpers';
+import { calculateSidebarStatus } from 'aNotion/services/notionSiteService';
 
 const ReferencesPane = React.lazy(
    () => import('aNotion/components/references/ReferencesPane')
@@ -187,10 +194,14 @@ export const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const currentPage = useSelector(currentPageSelector, shallowEqual);
-   const state = useSelector((state) => state, shallowEqual);
+
    const classes = useStyles();
    const [noNotionPageId, setNoNotionPageId] = useState(false);
-   const [showNoPageIdError] = useDebounce(noNotionPageId, 500, {
+   const [debouncedShowNoPageIdError] = useDebounce(noNotionPageId, 500, {
+      trailing: true,
+   });
+   const [debouncedStatus] = useDebounce(sidebar.status, 500, {
+      leading: true,
       trailing: true,
    });
 
@@ -230,18 +241,17 @@ export const Layout = () => {
       dispatch,
    ]);
 
-   const [currentPageStatus] = useDebounce(currentPage.status, 250, {
+   //update page marks data without a full refresh
+   const [debouncedCurrentPageStatus] = useDebounce(currentPage.status, 250, {
       trailing: true,
    });
    const debouncedUpdateSignal = useDebouncedCallback(
       () => {
          if (
-            currentPageStatus === thunkStatus.fulfilled &&
+            debouncedCurrentPageStatus === thunkStatus.fulfilled &&
             sidebar.navigation.pageId != null
          ) {
             refreshSidebarContents(dispatch, sidebar.navigation);
-         } else {
-            console.log('currentPage status:' + currentPage.status);
          }
       },
       100,
@@ -255,7 +265,6 @@ export const Layout = () => {
    }, []);
 
    useEffect(() => {
-      console.log('useEffect updateEvergreenSidebar');
       window.addEventListener('message', handleReceiveMessage);
       return () => {
          window.removeEventListener('message', handleReceiveMessage);
@@ -265,43 +274,61 @@ export const Layout = () => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <>
-            {showNoPageIdError && <NoNotionPageId></NoNotionPageId>}
-            {!showNoPageIdError && (
+            {debouncedShowNoPageIdError && <NoNotionPageId></NoNotionPageId>}
+            {!debouncedShowNoPageIdError && (
                <>
                   <MenuBar tab={tab} setTab={setTab}></MenuBar>
                   <div style={{ marginTop: 12 }}></div>
                   <ErrorBoundary FallbackComponent={ErrorFallback}>
-                     <Suspense fallback={<LoadingTab />}>
-                        <div
-                           style={{
-                              display:
-                                 tab === LayoutTabs.References
-                                    ? 'block'
-                                    : 'none',
-                           }}>
-                           <ReferencesPane />
-                        </div>
-                        <div
-                           style={{
-                              display:
-                                 tab === LayoutTabs.PageMarkups
-                                    ? 'block'
-                                    : 'none',
-                           }}>
-                           <MarksPane />
-                        </div>
-                        <div
-                           style={{
-                              display:
-                                 tab === LayoutTabs.Search ? 'block' : 'none',
-                           }}>
-                           <SearchPane />
-                        </div>
-                        {tab === LayoutTabs.Events && (
-                           <div>not implemented</div>
-                        )}
-                        {tab === LayoutTabs.Settings && <OptionsPane />}
-                     </Suspense>
+                     <>
+                        <Suspense fallback={<WaitingToLoadNotionSite />}>
+                           {debouncedStatus.webpageStatus ===
+                              thunkStatus.idle && <WaitingToLoadNotionSite />}
+                           {debouncedStatus.webpageStatus ===
+                              thunkStatus.rejected && <AccessIssue />}
+                           {calculateSidebarStatus(debouncedStatus) ===
+                              thunkStatus.pending && <LoadingSection />}
+                        </Suspense>
+                        <Suspense fallback={<LoadingTab />}>
+                           {calculateSidebarStatus(debouncedStatus) && (
+                              <>
+                                 <div
+                                    style={{
+                                       display:
+                                          tab === LayoutTabs.References
+                                             ? 'block'
+                                             : 'none',
+                                    }}>
+                                    <ReferencesPane />
+                                 </div>
+                                 <div
+                                    style={{
+                                       display:
+                                          tab === LayoutTabs.PageMarkups
+                                             ? 'block'
+                                             : 'none',
+                                    }}>
+                                    <MarksPane />
+                                 </div>
+                                 <div
+                                    style={{
+                                       display:
+                                          tab === LayoutTabs.Search
+                                             ? 'block'
+                                             : 'none',
+                                    }}>
+                                    <SearchPane />
+                                 </div>
+                                 {tab === LayoutTabs.Events && (
+                                    <div>not implemented</div>
+                                 )}
+                                 {tab === LayoutTabs.Settings && (
+                                    <OptionsPane />
+                                 )}
+                              </>
+                           )}
+                        </Suspense>
+                     </>
                   </ErrorBoundary>
                   <div style={{ marginTop: 12 }}></div>
                </>
