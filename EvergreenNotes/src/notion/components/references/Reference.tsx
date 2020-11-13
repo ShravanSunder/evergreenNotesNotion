@@ -46,11 +46,6 @@ export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
                         block={refData.notionBlock}
                         index={undefined}></BlockUi>
                   </Grid>
-                  <Grid item xs={12}>
-                     <div style={{ paddingLeft: 12 }}>
-                        <NotionContent blockId={refData.id}></NotionContent>
-                     </div>
-                  </Grid>
                </Grid>
             </AccordionDetails>
          </Accordion>

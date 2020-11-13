@@ -1,16 +1,7 @@
 import React, { useState, SyntheticEvent, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import {
-   makeStyles,
-   Icon,
-   SvgIcon,
-   Zoom,
-   Fade,
-   Slide,
-} from '@material-ui/core';
-import EcoIcon from '@material-ui/icons/Eco';
+import { makeStyles, Slide } from '@material-ui/core';
 import { useWindowSize } from '@react-hook/window-size';
-import { green } from '@material-ui/core/colors';
 import {
    appPositionTop,
    appPositionLeft,
@@ -19,8 +10,7 @@ import {
    appScrollMargin,
 } from './frameProperties';
 import { SidebarFab } from './SidebarFab';
-import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
-import { DonutSmall } from '@material-ui/icons';
+import { useDebouncedCallback } from 'use-debounce/lib';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render sidebar frame');
@@ -276,13 +266,7 @@ const setFrameWidth = (
          (f) => ((f as HTMLElement).style.maxWidth = frameWidth - 9 + 'px')
       );
 
-      const dialogElements = notionApp.getElementsByClassName(
-         notionFocusPageDialogParentClass
-      ) as HTMLCollection;
-      if ((dialogElements?.[0]?.children?.[1] as HTMLElement)?.style != null) {
-         (dialogElements[0].children[1] as HTMLElement).style.marginRight =
-            appWidth(wWidth) + 'px';
-      }
+      setNotionDialogMargin(notionApp, wWidth);
    } else {
       notionScrollDiv.style.width = wWidth - sidebarWidth + 'px';
       [
@@ -298,5 +282,15 @@ const setFrameWidth = (
          (dialogElements[0].children[1] as HTMLElement).style.marginRight =
             'auto';
       }
+   }
+};
+
+const setNotionDialogMargin = (notionApp: HTMLElement, wWidth: number) => {
+   const dialogElements = notionApp.getElementsByClassName(
+      notionFocusPageDialogParentClass
+   ) as HTMLCollection;
+   if ((dialogElements?.[0]?.children?.[1] as HTMLElement)?.style != null) {
+      (dialogElements[0].children[1] as HTMLElement).style.marginRight =
+         appWidth(wWidth) + 'px';
    }
 };

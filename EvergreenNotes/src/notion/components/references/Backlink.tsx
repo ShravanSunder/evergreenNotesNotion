@@ -48,14 +48,6 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
                         block={backlink.backlinkBlock}
                         index={undefined}></BlockUi>
                   </Grid>
-                  <Grid item xs={12}>
-                     <div style={{ paddingLeft: 12 }}>
-                        <NotionContent
-                           blockId={
-                              backlink.backlinkBlock.blockId
-                           }></NotionContent>
-                     </div>
-                  </Grid>
                </Grid>
             </AccordionDetails>
          </Accordion>

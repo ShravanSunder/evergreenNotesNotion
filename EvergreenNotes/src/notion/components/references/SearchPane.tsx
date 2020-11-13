@@ -76,7 +76,7 @@ export const SearchPane = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const { searchQueries } = useSelector(referenceSelector, shallowEqual);
 
-   const [text, setText] = useState<string>();
+   const [text, setText] = useState<string>('');
 
    let [status, result, setSearchText, searchText] = useApi<
       SearchReferences,

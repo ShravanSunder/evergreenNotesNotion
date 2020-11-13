@@ -7,12 +7,11 @@ var webpack = require('webpack'),
    CopyWebpackPlugin = require('copy-webpack-plugin'),
    HtmlWebpackPlugin = require('html-webpack-plugin'),
    WriteFilePlugin = require('write-file-webpack-plugin');
-const ReactDevToolsIFramePlugin = require('react-dev-tools-iframe-webpack-plugin');
+//const ReactDevToolsIFramePlugin = require('react-dev-tools-iframe-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // load the secrets
 var alias = {
-   //'react-dom': '@hot-loader/react-dom',
    aSidebar: path.resolve(__dirname, 'src/pages/sidebar/'),
    aNotion: path.resolve(__dirname, 'src/notion/'),
    aCommon: path.resolve(__dirname, 'src/pages/common'),
@@ -127,8 +126,7 @@ var options = {
          .concat(['.jsx', '.js', '.css', '.ts', '.tsx']),
    },
    plugins: [
-      // new HardSourceWebpackPlugin(),
-      //new ReactDevToolsIFramePlugin(),
+      // new ReactDevToolsIFramePlugin(),
       new webpack.ProgressPlugin(),
       // clean the build folder
       new CleanWebpackPlugin({
