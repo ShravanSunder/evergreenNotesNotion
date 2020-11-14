@@ -3,6 +3,8 @@ import {
    createAsyncThunk,
    CaseReducer,
    PayloadAction,
+   AnyAction,
+   ThunkDispatch,
 } from '@reduxjs/toolkit';
 import {
    CookieData,
@@ -22,7 +24,13 @@ import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { isGuid } from 'aCommon/extensionHelpers';
 import { appDispatch } from 'aNotion/providers/appDispatch';
 import { updateStatus } from 'aNotion/types/updateStatus';
-import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
+import {
+   currentPageSelector,
+   referenceSelector,
+   sidebarExtensionSelector,
+} from 'aNotion/providers/storeSelectors';
+import { NotionBlockRecord } from 'aNotion/models/NotionBlock';
+import { Dispatch } from 'react';
 
 const initialState: SidebarExtensionState = {
    cookie: { status: thunkStatus.idle },
@@ -75,16 +83,11 @@ const fetchCurrentNotionPage = createAsyncThunk<
          //get the first space id
          spaceId = Object.keys(chunk.recordMap.space)[0];
 
-         const statusState = sidebarExtensionSelector(
-            thunkApi.getState() as any
-         ).status;
-         if (calculateShouldUpdateStatus(statusState.updateReferences)) {
-            thunkApi.dispatch(
-               sidebarExtensionSlice.actions.setUpdateReferenceStatus(
-                  updateStatus.shouldUpdate
-               )
-            );
-         }
+         updateReferencesIfPageTitleChanged(
+            thunkApi.getState,
+            thunkApi.dispatch,
+            record
+         );
          return {
             pageBlock: record?.toSerializable(),
             spaceId: spaceId,
@@ -221,3 +224,24 @@ export const sidebarExtensionActions = {
    fetchCurrentNotionPage: fetchCurrentNotionPage,
 };
 export const sidebarExtensionReducers = sidebarExtensionSlice.reducer;
+function updateReferencesIfPageTitleChanged(
+   getState: any,
+   dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
+   record: NotionBlockRecord
+) {
+   const oldPageTitle = referenceSelector(getState() as any).pageReferences
+      .pageName;
+
+   const statusState = sidebarExtensionSelector(getState() as any).status;
+
+   if (
+      calculateShouldUpdateStatus(statusState.updateReferences) ||
+      oldPageTitle !== record.simpleTitle
+   ) {
+      dispatch(
+         sidebarExtensionSlice.actions.setUpdateReferenceStatus(
+            updateStatus.shouldUpdate
+         )
+      );
+   }
+}

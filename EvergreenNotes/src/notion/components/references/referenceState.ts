@@ -15,6 +15,7 @@ export type PageReferences = {
    references: SearchReferences;
    relations: NotionBlockModel[];
    pageId?: string;
+   pageName?: string;
 };
 
 export type BacklinkRecordModel = {

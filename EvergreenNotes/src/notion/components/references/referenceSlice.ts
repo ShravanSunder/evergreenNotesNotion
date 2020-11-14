@@ -110,6 +110,7 @@ const fetchRefsForPage = createAsyncThunk<
             references: s,
             pageId: pageId,
             relations: relations ?? [],
+            pageName: query,
          };
       }
 

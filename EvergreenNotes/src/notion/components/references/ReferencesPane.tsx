@@ -179,11 +179,13 @@ const PageMentions = ({ marks }: { marks: PageMarkState }) => {
                   <b>@Mentions in Page</b>
                </Typography>
                {mentions.map((u) => {
-                  let link: BacklinkRecordModel = {
+                  let backlink: BacklinkRecordModel = {
                      backlinkBlock: u,
                      path: [],
                   };
-                  return <Backlink key={u.blockId} backlink={link}></Backlink>;
+                  return (
+                     <Backlink key={u.blockId} backlink={backlink}></Backlink>
+                  );
                })}
                {mentions.length === 0 && <NothingToFind />}
             </>
