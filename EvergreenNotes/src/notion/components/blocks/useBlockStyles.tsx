@@ -17,22 +17,25 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
          margin: 0,
          padding: 0,
       },
-      indentFirstColumn: {
-         paddingLeft: 0,
-         paddingRight: 18,
-      },
-      indentFirstColumnBullets: {
-         paddingLeft: 9,
-         paddingRight: 9,
-         marginTop: 1,
-      },
-      indentFirstColumnTodo: {
+      bullets: {
          paddingLeft: 6,
          paddingRight: 6,
+         marginRight: 1,
          marginTop: 1,
+         float: 'right',
       },
-      indentSecondColumn: {
-         paddingLeft: 0,
+      numbers: {
+         paddingLeft: 4,
+         paddingRight: 6,
+         marginRight: 1,
+         float: 'right',
+      },
+      todo: {
+         paddingLeft: 2,
+         paddingRight: 6,
+         marginRight: 1,
+         marginTop: 1,
+         float: 'right',
       },
       inlineIcon: {
          position: 'relative',

@@ -39,14 +39,12 @@ export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
                   text={refData.text}></ReferenceActions>
             </AccordionActions>
             <AccordionDetails>
-               <Grid container spacing={1}>
-                  <Grid item xs={12} className={classes.reference}>
-                     <NotionContentWithBlocks
-                        blockContent={
-                           refData.notionBlock
-                        }></NotionContentWithBlocks>
-                  </Grid>
-               </Grid>
+               <div className={classes.reference}>
+                  <NotionContentWithBlocks
+                     blockContent={
+                        refData.notionBlock
+                     }></NotionContentWithBlocks>
+               </div>
             </AccordionDetails>
          </Accordion>
       </ErrorBoundary>

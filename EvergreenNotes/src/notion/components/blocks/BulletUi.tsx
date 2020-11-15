@@ -16,9 +16,11 @@ export const BulletUi = ({
          style={style}
          className={classes.blockUiGrids}>
          <Grid item xs={1} className={classes.blockUiGrids}>
-            <Typography display={'inline'} variant={'body1'}>
-               {' • '}
-            </Typography>
+            <div className={classes.bullets}>
+               <Typography display={'inline'} variant={'body1'}>
+                  {' • '}
+               </Typography>
+            </div>
          </Grid>
          <Grid item xs={11} className={classes.blockUiGrids}>
             <TextUi

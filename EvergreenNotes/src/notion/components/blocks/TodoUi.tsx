@@ -13,16 +13,18 @@ export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
    return (
       <Grid container className={classes.blockUiGrids} justify="flex-start">
          <Grid item xs={1} className={classes.blockUiGrids}>
-            {!checked && (
-               <Typography display={'inline'} variant={'body1'}>
-                  <strong>{' ☐ '}</strong>
-               </Typography>
-            )}
-            {checked && (
-               <Typography display={'inline'} variant={'body1'}>
-                  <strong>{' ☑ '}</strong>
-               </Typography>
-            )}
+            <div className={classes.todo}>
+               {!checked && (
+                  <Typography display={'inline'} variant={'body1'}>
+                     <strong>{' ☐ '}</strong>
+                  </Typography>
+               )}
+               {checked && (
+                  <Typography display={'inline'} variant={'body1'}>
+                     <strong>{' ☑ '}</strong>
+                  </Typography>
+               )}
+            </div>
          </Grid>
          <Grid item xs={11} className={classes.blockUiGrids}>
             <TextUi

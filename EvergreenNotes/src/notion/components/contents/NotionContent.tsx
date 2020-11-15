@@ -136,9 +136,9 @@ const Children = ({
    return (
       <Grid container justify="flex-start">
          {block.type !== BlockTypeEnum.Column && (
-            <Grid item xs={1} className={classes.indentFirstColumn} />
+            <Grid item xs={1} className={classes.blockUiGrids} />
          )}
-         <Grid item xs={11} className={classes.indentSecondColumn}>
+         <Grid item xs={11} className={classes.blockUiGrids}>
             <NotionContent
                parentBlockId={block.blockId}
                semanticFilter={semanticFilter}

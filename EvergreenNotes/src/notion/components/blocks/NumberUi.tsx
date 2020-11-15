@@ -14,9 +14,11 @@ export const NumberUi = ({
    return (
       <Grid container>
          <Grid item xs={1} className={classes.blockUiGrids}>
-            <Typography display={'inline'} variant={'body1'}>
-               {' # '}
-            </Typography>
+            <div className={classes.numbers}>
+               <Typography display={'inline'} variant={'body1'}>
+                  {' ♯ '}
+               </Typography>
+            </div>
          </Grid>
          <Grid item xs={11} className={classes.blockUiGrids}>
             <TextUi

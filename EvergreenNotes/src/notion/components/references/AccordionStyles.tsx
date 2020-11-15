@@ -73,8 +73,8 @@ export const useReferenceStyles = makeStyles((theme: Theme) =>
          borderColor: grey[700],
       },
       reference: {
-         paddingBottom: theme.spacing(1),
-         marginLeft: -theme.spacing(1),
+         padding: theme.spacing(1),
+         // marginLeft: -theme.spacing(1),
       },
    })
 );
