@@ -2,10 +2,9 @@ import React, { MouseEvent, useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-import { NotionContent } from '../contents/NotionContent';
+import { NotionContentWithBlocks } from 'aNotion/components/contents/NotionContent';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
 
-import BlockUi from 'aNotion/components/blocks/BlockUi';
 import {
    useReferenceStyles,
    Accordion,
@@ -42,9 +41,10 @@ export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
             <AccordionDetails>
                <Grid container spacing={1}>
                   <Grid item xs={12} className={classes.reference}>
-                     <BlockUi
-                        block={refData.notionBlock}
-                        index={undefined}></BlockUi>
+                     <NotionContentWithBlocks
+                        blockContent={
+                           refData.notionBlock
+                        }></NotionContentWithBlocks>
                   </Grid>
                </Grid>
             </AccordionDetails>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { useBlockStyles } from './BlockUi';
+import { useBlockStyles } from './useBlockStyles';
 export const CodeUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
    return (

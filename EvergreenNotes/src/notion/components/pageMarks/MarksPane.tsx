@@ -7,8 +7,11 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { LoadingSection, NothingToFind } from '../common/Loading';
-import BlockUi from '../blocks/BlockUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import {
+   NotionContentWithBlocks,
+   NotionContentWithParentId,
+} from 'aNotion/components/contents/NotionContent';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -48,11 +51,12 @@ export const MarksPane = () => {
                <b>Highlights</b>
             </Typography>
             {pageMarks?.highlights?.map((p, i) => (
-               <BlockUi
+               <NotionContentWithBlocks
                   key={p.blockId}
-                  block={p}
-                  index={i}
-                  semanticFilter={[SemanticFormatEnum.Colored]}></BlockUi>
+                  blockContent={p}
+                  semanticFilter={[
+                     SemanticFormatEnum.Colored,
+                  ]}></NotionContentWithBlocks>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -67,10 +71,14 @@ export const MarksPane = () => {
                <b>Mentions</b>
             </Typography>
             {pageMarks?.userMentions?.map((p, i) => (
-               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+               <NotionContentWithBlocks
+                  key={p.blockId}
+                  blockContent={p}></NotionContentWithBlocks>
             ))}
             {pageMarks?.pageMentions?.map((p, i) => (
-               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+               <NotionContentWithBlocks
+                  key={p.blockId}
+                  blockContent={p}></NotionContentWithBlocks>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -83,7 +91,9 @@ export const MarksPane = () => {
                <b>Quotes</b>
             </Typography>
             {pageMarks?.quotes?.map((p, i) => (
-               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+               <NotionContentWithBlocks
+                  key={p.blockId}
+                  blockContent={p}></NotionContentWithBlocks>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -96,11 +106,12 @@ export const MarksPane = () => {
                <b>Links</b>
             </Typography>
             {pageMarks?.links?.map((p, i) => (
-               <BlockUi
+               <NotionContentWithBlocks
                   key={p.blockId}
-                  block={p}
-                  index={i}
-                  semanticFilter={[SemanticFormatEnum.Link]}></BlockUi>
+                  blockContent={p}
+                  semanticFilter={[
+                     SemanticFormatEnum.Link,
+                  ]}></NotionContentWithBlocks>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -114,11 +125,12 @@ export const MarksPane = () => {
             </Typography>
             {pageMarks?.code?.map((p, i) => (
                <>
-                  <BlockUi
+                  <NotionContentWithBlocks
                      key={p.blockId}
-                     block={p}
-                     index={i}
-                     semanticFilter={[SemanticFormatEnum.InlineCode]}></BlockUi>
+                     blockContent={p}
+                     semanticFilter={[
+                        SemanticFormatEnum.InlineCode,
+                     ]}></NotionContentWithBlocks>
                </>
             ))}
             <div className={classes.spacing}></div>
@@ -131,7 +143,9 @@ export const MarksPane = () => {
                <b>Todo</b>
             </Typography>
             {pageMarks?.todos?.map((p, i) => (
-               <BlockUi key={p.blockId} block={p} index={i}></BlockUi>
+               <NotionContentWithBlocks
+                  key={p.blockId}
+                  blockContent={p}></NotionContentWithBlocks>
             ))}
             <div className={classes.spacing}></div>
          </>

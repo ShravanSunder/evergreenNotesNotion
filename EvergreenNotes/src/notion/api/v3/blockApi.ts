@@ -12,7 +12,7 @@ export const loadPageChunk = async (
 ): Promise<LoadPageChunk.PageChunk> => {
    let req = superagent
       .post('https://www.notion.so/api/v3/loadPageChunk')
-      .use(superagentCache)
+      //.use(superagentCache)
       .send({
          pageId: pageId,
          limit: limit,

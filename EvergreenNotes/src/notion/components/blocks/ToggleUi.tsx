@@ -3,8 +3,8 @@ import { Typography, Grid, IconButton } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Toggle } from 'aNotion/types/notionV3/notionBlockTypes';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
-import { NotionContent } from '../contents/NotionContent';
-import { useBlockStyles } from './BlockUi';
+import { NotionContentWithParentId } from 'aNotion/components/contents/NotionContent';
+import { useBlockStyles } from './useBlockStyles';
 import { BaseTextUiParameters, TextUi } from './TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 import { aggregateParentSemanticFilter } from 'aNotion/services/blockService';
@@ -43,10 +43,10 @@ export const ToggleUi = ({
                style={style}
             />
             {expanded && (
-               <NotionContent
-                  blockId={block.blockId}
+               <NotionContentWithParentId
+                  parentBlockId={block.blockId}
                   semanticFilter={aggregatedSemanticFilter}
-                  style={style}></NotionContent>
+                  style={style}></NotionContentWithParentId>
             )}
          </Grid>
       </Grid>

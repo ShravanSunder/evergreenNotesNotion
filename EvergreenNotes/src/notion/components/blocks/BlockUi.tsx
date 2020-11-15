@@ -1,15 +1,8 @@
 import React, { Suspense } from 'react';
-import {
-   Typography,
-   Divider,
-   makeStyles,
-   createStyles,
-   Theme,
-} from '@material-ui/core';
+import { Typography, Divider } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Variant } from '@material-ui/core/styles/createTypography';
-import { grey } from '@material-ui/core/colors';
 import { PageUi } from './PageUi';
 import { BulletUi } from './BulletUi';
 import { TodoUi } from './TodoUi';
@@ -25,38 +18,9 @@ import {
 } from 'aNotion/services/blockService';
 import { ImageUi } from './ImageUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
-import { TextUiGroup } from './TextUiGroup';
 import { LoadingLine } from 'aNotion/components/common/Loading';
-import { TextUi } from './TextUi';
-
-export const useBlockStyles = makeStyles((theme: Theme) =>
-   createStyles({
-      block: {
-         margin: 2,
-         padding: 1,
-      },
-      typography: {
-         overflowWrap: 'break-word',
-         wordBreak: 'break-word',
-         position: 'relative',
-         whiteSpace: 'pre-wrap',
-      },
-      indentColumnBlock: {
-         paddingLeft: 12,
-         paddingRight: 3,
-         marginTop: 1,
-      },
-      inlineIcon: {
-         position: 'relative',
-         top: 3,
-      },
-      link: {
-         overflowWrap: 'anywhere',
-         wordBreak: 'break-all',
-         color: grey[600],
-      },
-   })
-);
+import { TextUi } from 'aNotion/components/blocks/TextUi';
+import { useBlockStyles } from './useBlockStyles';
 
 export const BlockUi = ({
    block,
@@ -89,11 +53,11 @@ export const BlockUi = ({
       <Suspense fallback={LoadingLine}>
          <div className={classes.block} style={blockStyle}>
             {useGeneric && (
-               <TextUiGroup
+               <TextUi
                   variant={variant}
                   block={block}
                   semanticFilter={semanticFilter}
-                  style={blockStyle}></TextUiGroup>
+                  style={blockStyle}></TextUi>
             )}
             {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
             {block.type === BlockTypeEnum.Callout && (
