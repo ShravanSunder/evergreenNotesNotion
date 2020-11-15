@@ -6,10 +6,9 @@ import {
    NotionBlockRecord,
 } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-import { NotionContent } from '../contents/NotionContent';
+import { NotionContentWithParentId } from 'aNotion/components/contents/NotionContent';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
 
-import BlockUi from 'aNotion/components/blocks/BlockUi';
 import {
    useReferenceStyles,
    Accordion,
@@ -17,19 +16,9 @@ import {
    AccordionActions,
    AccordionDetails,
 } from './AccordionStyles';
-import { BacklinkRecordModel } from 'aNotion/components/references/referenceState';
-import { Path } from 'aNotion/components/references/Path';
 import { TextUi } from '../blocks/TextUi';
-import {
-   SemanticFormatEnum,
-   SemanticString,
-} from 'aNotion/types/notionV3/semanticStringTypes';
-import {
-   getSemanticStringForType,
-   getValuesForSemanticType,
-   getValuesOfSemanticString,
-   getValuesOfSemanticStringArray,
-} from 'aNotion/services/pageService';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import { getValuesForSemanticType } from 'aNotion/services/pageService';
 
 export const PageMention = ({
    mentionBlock,
@@ -52,7 +41,7 @@ export const PageMention = ({
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Accordion TransitionProps={{ unmountOnExit: true }}>
             <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-               <Grid container spacing={1} alignItems="flex-start">
+               <Grid container spacing={1} justify="flex-start">
                   <Grid item xs={12}>
                      <TextUi block={mentionBlock} interactive={false}></TextUi>
                   </Grid>
@@ -63,7 +52,8 @@ export const PageMention = ({
                <Grid container spacing={1}>
                   <Grid item xs={12} className={classes.reference}>
                      {mentionIds?.map((m) => (
-                        <NotionContent blockId={m}></NotionContent>
+                        <NotionContentWithParentId
+                           parentBlockId={m}></NotionContentWithParentId>
                      ))}
                   </Grid>
                </Grid>

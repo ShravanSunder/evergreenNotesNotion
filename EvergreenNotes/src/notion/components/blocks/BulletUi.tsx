@@ -1,8 +1,7 @@
 import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
-import { useBlockStyles } from './BlockUi';
+import { useBlockStyles } from './useBlockStyles';
 import { BaseTextUiParameters, TextUi } from './TextUi';
-import { TextUiGroup } from './TextUiGroup';
 
 export const BulletUi = ({
    block,
@@ -11,17 +10,21 @@ export const BulletUi = ({
 }: BaseTextUiParameters) => {
    let classes = useBlockStyles();
    return (
-      <Grid container alignItems="flex-start" style={style}>
-         <Grid item xs={1} className={classes.indentColumnBlock}>
+      <Grid
+         container
+         justify="flex-start"
+         style={style}
+         className={classes.blockUiGrids}>
+         <Grid item xs={1} className={classes.blockUiGrids}>
             <Typography display={'inline'} variant={'body1'}>
                {' • '}
             </Typography>
          </Grid>
-         <Grid item xs={11}>
-            <TextUiGroup
+         <Grid item xs={11} className={classes.blockUiGrids}>
+            <TextUi
                block={block}
                semanticFilter={semanticFilter}
-               style={style}></TextUiGroup>
+               style={style}></TextUi>
          </Grid>
       </Grid>
    );

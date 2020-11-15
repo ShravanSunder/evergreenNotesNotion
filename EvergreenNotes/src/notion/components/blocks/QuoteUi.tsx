@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Divider, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
-import { useBlockStyles } from './BlockUi';
+import { useBlockStyles } from './useBlockStyles';
 import { BaseTextUiParameters, TextUi } from './TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 

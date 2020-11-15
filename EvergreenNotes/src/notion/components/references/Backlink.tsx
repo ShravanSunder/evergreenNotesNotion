@@ -3,7 +3,7 @@ import { Breadcrumbs, Typography, Grid } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-import { NotionContent } from '../contents/NotionContent';
+import { NotionContentWithBlocks } from 'aNotion/components/contents/NotionContent';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
 
 import BlockUi from 'aNotion/components/blocks/BlockUi';
@@ -44,9 +44,10 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
             <AccordionDetails>
                <Grid container spacing={1}>
                   <Grid item xs={12} className={classes.reference}>
-                     <BlockUi
-                        block={backlink.backlinkBlock}
-                        index={undefined}></BlockUi>
+                     <NotionContentWithBlocks
+                        blockContent={
+                           backlink.backlinkBlock
+                        }></NotionContentWithBlocks>
                   </Grid>
                </Grid>
             </AccordionDetails>

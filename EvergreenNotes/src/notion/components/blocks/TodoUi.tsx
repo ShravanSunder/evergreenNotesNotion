@@ -2,9 +2,8 @@ import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ToDo } from 'aNotion/types/notionV3/notionBlockTypes';
-import { useBlockStyles } from './BlockUi';
+import { useBlockStyles } from './useBlockStyles';
 import { TextUi } from './TextUi';
-import { TextUiGroup } from './TextUiGroup';
 
 export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
@@ -12,8 +11,8 @@ export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
    let checked = todo.properties?.checked?.[0]?.[0] === 'Yes' ?? false;
 
    return (
-      <Grid container>
-         <Grid item xs={1} className={classes.indentColumnBlock}>
+      <Grid container className={classes.blockUiGrids} justify="flex-start">
+         <Grid item xs={1} className={classes.blockUiGrids}>
             {!checked && (
                <Typography display={'inline'} variant={'body1'}>
                   <strong>{' ☐ '}</strong>
@@ -25,12 +24,12 @@ export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
                </Typography>
             )}
          </Grid>
-         <Grid item xs={11}>
-            <TextUiGroup
+         <Grid item xs={11} className={classes.blockUiGrids}>
+            <TextUi
                block={block}
                style={{
                   textDecoration: checked ? 'line-through' : '',
-               }}></TextUiGroup>
+               }}></TextUi>
          </Grid>
       </Grid>
    );

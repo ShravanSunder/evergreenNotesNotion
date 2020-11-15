@@ -197,6 +197,33 @@ const MenuBar = ({
    );
 };
 
+const TabLayout = ({ tab }: { tab: LayoutTabs }) => {
+   return (
+      <>
+         <div
+            style={{
+               display: tab === LayoutTabs.References ? 'block' : 'none',
+            }}>
+            <ReferencesPane />
+         </div>
+         <div
+            style={{
+               display: tab === LayoutTabs.PageMarkups ? 'block' : 'none',
+            }}>
+            <MarksPane />
+         </div>
+         <div
+            style={{
+               display: tab === LayoutTabs.Search ? 'block' : 'none',
+            }}>
+            <SearchPane />
+         </div>
+         {tab === LayoutTabs.Events && <div>not implemented</div>}
+         {tab === LayoutTabs.Settings && <OptionsPane />}
+      </>
+   );
+};
+
 export const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
@@ -315,41 +342,7 @@ export const Layout = () => {
                         <Suspense fallback={<LoadingTab />}>
                            {(calculateSidebarStatus(debouncedStatus) ||
                               tabsWithoutSiteLoading) && (
-                              <>
-                                 <div
-                                    style={{
-                                       display:
-                                          tab === LayoutTabs.References
-                                             ? 'block'
-                                             : 'none',
-                                    }}>
-                                    <ReferencesPane />
-                                 </div>
-                                 <div
-                                    style={{
-                                       display:
-                                          tab === LayoutTabs.PageMarkups
-                                             ? 'block'
-                                             : 'none',
-                                    }}>
-                                    <MarksPane />
-                                 </div>
-                                 <div
-                                    style={{
-                                       display:
-                                          tab === LayoutTabs.Search
-                                             ? 'block'
-                                             : 'none',
-                                    }}>
-                                    <SearchPane />
-                                 </div>
-                                 {tab === LayoutTabs.Events && (
-                                    <div>not implemented</div>
-                                 )}
-                                 {tab === LayoutTabs.Settings && (
-                                    <OptionsPane />
-                                 )}
-                              </>
+                              <TabLayout tab={tab}></TabLayout>
                            )}
                         </Suspense>
                      </>

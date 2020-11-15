@@ -20,7 +20,7 @@ import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { blockActions } from 'aNotion/components/blocks/blockSlice';
 import { getPageUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
-import { useBlockStyles } from './BlockUi';
+import { useBlockStyles } from './useBlockStyles';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { MentionsState } from '../mentions/mentionsState';
 import { RecordState } from './blockState';
@@ -176,7 +176,6 @@ const TextSegment = ({
                href={interactive ? link : undefined}
                target="_blank"
                style={{ ...segmentStyle }}>
-               {'  '}
                <SvgIcon
                   fontSize="inherit"
                   className={classes.inlineIcon}
@@ -188,13 +187,6 @@ const TextSegment = ({
          )}
          {link != null && segmentType === SemanticFormatEnum.Link && (
             <>
-               <Typography
-                  display="inline"
-                  className={classes.link}
-                  variant={variant}
-                  style={{ ...segmentStyle }}>
-                  {' '}
-               </Typography>
                <Link
                   display="inline"
                   className={classes.link}
@@ -308,13 +300,14 @@ const useSegmentData = (
       hideSegment: hideSegment,
    };
 };
-function formatSegment(
+
+const formatSegment = (
    segmentDetails: string | undefined,
    segmentType: string | undefined,
    text: string,
    blockData: RecordState,
    mentionData: MentionsState
-) {
+) => {
    let link: string | undefined = undefined;
    if (segmentDetails != null && segmentType === SemanticFormatEnum.Page) {
       text = blockData[segmentDetails]?.block?.simpleTitle ?? '';
@@ -326,7 +319,8 @@ function formatSegment(
       link = segmentDetails;
    } else if (
       segmentDetails != null &&
-      segmentType === SemanticFormatEnum.User
+      segmentType === SemanticFormatEnum.User &&
+      mentionData.users[segmentDetails] != null
    ) {
       text =
          ' @' +
@@ -338,4 +332,4 @@ function formatSegment(
       text = segmentDetails ?? '';
    }
    return { link, text };
-}
+};

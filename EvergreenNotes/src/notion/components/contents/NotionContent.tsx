@@ -10,32 +10,75 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Grid, Typography } from '@material-ui/core';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import { useBlockStyles } from '../blocks/useBlockStyles';
 
 const BlockUi = React.lazy(() => import('../blocks/BlockUi'));
 
-export const NotionContent = ({
-   blockId,
-   depth,
-   semanticFilter,
-   style,
-}: {
-   blockId: string;
+interface INotionContentParams {
    depth?: number;
+   maxDepth?: number;
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
-}) => {
-   const contentData = useSelector(contentSelector);
-   const content = contentData?.[blockId]?.content;
-   const status = contentData?.[blockId]?.status;
+}
+
+interface INotionContentWithParentIdParams extends INotionContentParams {
+   parentBlockId?: string;
+}
+
+interface INotionContentWithBlocksParams extends INotionContentParams {
+   blockContent?: NotionBlockModel;
+}
+
+export const NotionContentWithParentId = (
+   props: INotionContentWithParentIdParams
+) => {
+   return NotionContent(props);
+};
+
+export const NotionContentWithBlocks = (
+   props: INotionContentWithBlocksParams
+) => {
+   return NotionContent(props);
+};
+
+const NotionContent = ({
+   parentBlockId,
+   blockContent,
+   depth,
+   maxDepth,
+   semanticFilter,
+   style,
+}: INotionContentParams &
+   INotionContentWithParentIdParams &
+   INotionContentWithBlocksParams) => {
+   const contentDataFromState = useSelector(contentSelector);
+   let status = thunkStatus.idle;
    const dispatch: AppPromiseDispatch<any> = useDispatch();
+
+   let content: NotionBlockModel[];
+   if (blockContent == null && parentBlockId != null) {
+      content = contentDataFromState?.[parentBlockId]?.content;
+      status = contentDataFromState?.[parentBlockId]?.status;
+   } else if (blockContent != null && parentBlockId == null) {
+      content = [blockContent]!;
+      status = thunkStatus.fulfilled;
+   } else {
+      content = [];
+      console.error(
+         'NotionContent: Both parentBlockId and blockContent cannot be null and only one should contain values'
+      );
+   }
 
    useEffect(() => {
       if (
-         content == null ||
-         status === thunkStatus.rejected ||
-         status === thunkStatus.idle
+         (content == null ||
+            status === thunkStatus.rejected ||
+            status === thunkStatus.idle) &&
+         parentBlockId != null
       ) {
-         const promise = dispatch(contentActions.fetchContent({ blockId }));
+         const promise = dispatch(
+            contentActions.fetchContent({ blockId: parentBlockId })
+         );
       }
       return () => {};
    }, []);
@@ -52,11 +95,13 @@ export const NotionContent = ({
                            index={i}
                            semanticFilter={semanticFilter}
                            style={style}></BlockUi>
-                        <Children
-                           block={p}
-                           depth={depth ?? 1}
-                           semanticFilter={semanticFilter}
-                           style={style}></Children>
+                        {(depth ?? 1) < (maxDepth ?? 6) && (
+                           <Children
+                              block={p}
+                              depth={depth ?? 1}
+                              semanticFilter={semanticFilter}
+                              style={style}></Children>
+                        )}
                      </React.Fragment>
                   ))}
                </>
@@ -78,9 +123,7 @@ const Children = ({
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
 }) => {
-   if (depth > 6) {
-      return null;
-   }
+   let classes = useBlockStyles();
 
    switch (block.type) {
       case BlockTypeEnum.Page:
@@ -91,13 +134,13 @@ const Children = ({
    }
 
    return (
-      <Grid container alignItems="flex-start">
+      <Grid container justify="flex-start">
          {block.type !== BlockTypeEnum.Column && (
-            <Grid item style={{ width: 21 }}></Grid>
+            <Grid item xs={1} className={classes.indentFirstColumn} />
          )}
-         <Grid item xs>
+         <Grid item xs={11} className={classes.indentSecondColumn}>
             <NotionContent
-               blockId={block.blockId}
+               parentBlockId={block.blockId}
                semanticFilter={semanticFilter}
                style={style}
                depth={depth + 1}></NotionContent>

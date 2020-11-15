@@ -4,17 +4,15 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
 import { TextUi } from './TextUi';
 import { Variant } from '@material-ui/core/styles/createTypography';
-import { NotionContent } from '../contents/NotionContent';
+import { NotionContentWithParentId } from 'aNotion/components/contents/NotionContent';
 
-export const PageUi = ({
-   block,
-   variant,
-   style,
-}: {
+interface IPageUIParams {
    block: NotionBlockModel;
    variant: Variant | undefined;
    style: React.CSSProperties | undefined;
-}) => {
+}
+
+export const PageUi = ({ block, variant, style }: IPageUIParams) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
    let iconComponent: JSX.Element | undefined = undefined;
@@ -22,7 +20,7 @@ export const PageUi = ({
    if (icon?.length === 1) {
       iconComponent = (
          <Typography display="inline" variant={variant}>
-            {' ' + icon + ' '}
+            {'' + icon + ' '}
          </Typography>
       );
    } else if (icon != null && /https:.*/.test(icon)) {
@@ -39,7 +37,7 @@ export const PageUi = ({
       icon = '📄';
       iconComponent = (
          <Typography display="inline" variant={variant}>
-            {' ' + icon + ' '}
+            {'' + icon + ' '}
          </Typography>
       );
    }
@@ -49,7 +47,8 @@ export const PageUi = ({
          {iconComponent}
          <TextUi block={block} variant={variant} style={style}></TextUi>
          <div style={{ marginTop: 6 }}></div>
-         <NotionContent blockId={block.blockId}></NotionContent>
+         <NotionContentWithParentId
+            parentBlockId={block.blockId}></NotionContentWithParentId>
       </div>
    );
 };
