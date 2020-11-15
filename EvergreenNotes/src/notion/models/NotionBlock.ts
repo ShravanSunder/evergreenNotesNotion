@@ -236,7 +236,7 @@ export class NotionBlockRecord implements NotionBlockModel {
          contentIds: this.contentIds,
          type: this.type,
          simpleTitle: this.simpleTitle,
-         semanticTitle: [],
+         semanticTitle: this.semanticTitle,
          blockId: this.blockId,
       };
       return model;

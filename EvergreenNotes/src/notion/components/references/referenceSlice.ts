@@ -38,11 +38,84 @@ const initialState: ReferenceState = {
    searchQueries: [],
 };
 
+const requestReferenceData = async (
+   pageId: string,
+   thunkApi: any,
+   spaceId: string | undefined,
+   search: SearchResultsType | undefined,
+   query: string,
+   links: BacklinkRecordType | undefined,
+   relations: NotionBlockModel[] | undefined
+) => {
+   try {
+      let linksPromise = referenceApi.getBacklinks(pageId, thunkApi.signal);
+      //get page relations
+      let pageBlock = currentPageSelector(thunkApi.getState() as RootState)
+         .currentPageData?.pageBlock;
+      let relationsPromise = getRelationsForPage(pageBlock, thunkApi.signal);
+
+      //related seraches
+      if (spaceId != null) {
+         search = await searchApi.searchByRelevance(
+            query,
+            spaceId,
+            false,
+            50,
+            SearchSort.Relevance,
+            thunkApi.signal
+         );
+      }
+      links = await linksPromise;
+      relations = await relationsPromise;
+   } catch {
+      //don't worry about api errorrs as they are handled below with empty results
+   }
+   return { search, links, relations };
+};
+
+const processReferenceData = (
+   links: BacklinkRecordType | undefined,
+   search: SearchResultsType | undefined,
+   query: string,
+   pageId: string,
+   thunkApi: any,
+   relations: NotionBlockModel[] | undefined
+) => {
+   let b: BacklinkRecordModel[] = [];
+   if (links != null) {
+      b = processBacklinks(links);
+   }
+   let s: SearchReferences = defaultSearchReferences();
+   if (search != null) {
+      s = processSearchResults(
+         query,
+         search,
+         pageId,
+         b.map((b) => b.backlinkBlock.blockId),
+         10
+      );
+   }
+
+   thunkApi.dispatch(
+      sidebarExtensionActions.setUpdateReferenceStatus(
+         updateStatus.updateSuccessful
+      )
+   );
+
+   return {
+      backlinks: b,
+      references: s,
+      pageId: pageId,
+      relations: relations ?? [],
+      pageName: query,
+   };
+};
+
 const fetchRefsForPage = createAsyncThunk<
    PageReferences,
    { query: string; pageId: string }
 >(
-   'notion/reference/current',
+   'notion/reference/fetchRefsForPage',
    async ({ query, pageId }, thunkApi): Promise<PageReferences> => {
       //resolve promises
       let search: SearchResultsType | undefined = undefined;
@@ -56,64 +129,29 @@ const fetchRefsForPage = createAsyncThunk<
       let spaceId = currentPageSelector(thunkApi.getState() as RootState)
          .currentPageData?.spaceId;
 
-      try {
-         //get backlinks
-         let linksPromise = referenceApi.getBacklinks(pageId, thunkApi.signal);
-         //get page relations
-         let pageBlock = currentPageSelector(thunkApi.getState() as RootState)
-            .currentPageData?.pageBlock;
-         let relationsPromise = getRelationsForPage(pageBlock, thunkApi.signal);
+      ({ search, links, relations } = await requestReferenceData(
+         pageId,
+         thunkApi,
+         spaceId,
+         search,
+         query,
+         links,
+         relations
+      ));
 
-         //related seraches
-         if (spaceId != null) {
-            search = await searchApi.searchByRelevance(
-               query,
-               spaceId,
-               false,
-               50,
-               SearchSort.Relevance,
-               thunkApi.signal
-            );
-         }
-         links = await linksPromise;
-         relations = await relationsPromise;
-      } catch {
-         //don't worry about api errorrs as they are handled below with empty results
-      }
-
-      //construct result
       // allows it to partially succeed
       if (!thunkApi.signal.aborted) {
-         let b: BacklinkRecordModel[] = [];
-         if (links != null) {
-            b = processBacklinks(links);
-         }
-         let s: SearchReferences = defaultSearchReferences();
-         if (search != null) {
-            s = processSearchResults(
-               query,
-               search,
-               pageId,
-               b.map((b) => b.backlinkBlock.blockId),
-               10
-            );
-         }
-
-         thunkApi.dispatch(
-            sidebarExtensionActions.setUpdateReferenceStatus(
-               updateStatus.updateSuccessful
-            )
+         return processReferenceData(
+            links,
+            search,
+            query,
+            pageId,
+            thunkApi,
+            relations
          );
-
-         return {
-            backlinks: b,
-            references: s,
-            pageId: pageId,
-            relations: relations ?? [],
-            pageName: query,
-         };
       }
 
+      //return default data if unsucessfull
       thunkApi.dispatch(
          sidebarExtensionActions.setUpdateReferenceStatus(
             updateStatus.updateFailed
@@ -122,6 +160,23 @@ const fetchRefsForPage = createAsyncThunk<
       return defaultPageReferences();
    }
 );
+const fetchRefsForPageReducers = {
+   [fetchRefsForPage.fulfilled.toString()]: (
+      state: ReferenceState,
+      action: PayloadAction<PageReferences>
+   ) => {
+      state.pageReferences = action.payload;
+      state.status = thunkStatus.fulfilled;
+   },
+   [fetchRefsForPage.pending.toString()]: (state: ReferenceState) => {
+      state.status = thunkStatus.pending;
+      state.pageReferences = defaultPageReferences();
+   },
+   [fetchRefsForPage.rejected.toString()]: (state: ReferenceState) => {
+      state.status = thunkStatus.rejected;
+      state.pageReferences = defaultPageReferences();
+   },
+};
 
 const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
    state
@@ -149,21 +204,7 @@ const referenceSlice = createSlice({
       addSearchQueries: addSearchQueries,
    },
    extraReducers: {
-      [fetchRefsForPage.fulfilled.toString()]: (
-         state,
-         action: PayloadAction<PageReferences>
-      ) => {
-         state.pageReferences = action.payload;
-         state.status = thunkStatus.fulfilled;
-      },
-      [fetchRefsForPage.pending.toString()]: (state) => {
-         state.status = thunkStatus.pending;
-         state.pageReferences = defaultPageReferences();
-      },
-      [fetchRefsForPage.rejected.toString()]: (state) => {
-         state.status = thunkStatus.rejected;
-         state.pageReferences = defaultPageReferences();
-      },
+      ...fetchRefsForPageReducers,
    },
 });
 

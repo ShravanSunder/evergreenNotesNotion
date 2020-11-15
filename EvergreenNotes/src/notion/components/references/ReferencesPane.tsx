@@ -32,6 +32,7 @@ import { ErrorBoundary, ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { useDebounce } from 'use-debounce/lib';
 import { updateStatus } from 'aNotion/types/updateStatus';
 import { calculateSidebarStatus } from 'aNotion/services/notionSiteService';
+import { PageMention } from './PageMention';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -89,7 +90,7 @@ export const ReferencesPane = () => {
                   {references.status !== thunkStatus.rejected && (
                      <>
                         <Backlinks refs={references}></Backlinks>
-                        <PageMentions marks={marks}></PageMentions>
+                        <Mentions marks={marks}></Mentions>
                         <Relations refs={references}></Relations>
                         <FullTitle refs={references}></FullTitle>
                         <Related refs={references}></Related>
@@ -164,7 +165,7 @@ const Relations = ({ refs }: { refs: ReferenceState }) => {
    );
 };
 
-const PageMentions = ({ marks }: { marks: PageMarkState }) => {
+const Mentions = ({ marks }: { marks: PageMarkState }) => {
    let classes = useStyles();
 
    let mentions = marks.pageMarks?.pageMentions ?? [];
@@ -179,12 +180,10 @@ const PageMentions = ({ marks }: { marks: PageMarkState }) => {
                   <b>@Mentions in Page</b>
                </Typography>
                {mentions.map((u) => {
-                  let backlink: BacklinkRecordModel = {
-                     backlinkBlock: u,
-                     path: [],
-                  };
                   return (
-                     <Backlink key={u.blockId} backlink={backlink}></Backlink>
+                     <PageMention
+                        key={u.blockId}
+                        mentionBlock={u}></PageMention>
                   );
                })}
                {mentions.length === 0 && <NothingToFind />}

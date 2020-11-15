@@ -20,6 +20,7 @@ import {
    SemanticFormatEnum,
    SemanticString,
    SemanticFormat,
+   SemanticFormatValue,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 
 export const processPageForMarks = async (
@@ -235,4 +236,49 @@ export const hasBackgroundColorFormat = (property: SemanticString[]) => {
       }
       return false;
    });
+};
+
+export const getSemanticStringForType = (
+   property: SemanticString[],
+   formatType: SemanticFormatEnum
+): SemanticString[] => {
+   return property.filter((s) => {
+      if (s[0] != null && s[1] != null) {
+         let format: SemanticFormat[] = s[1];
+         return format.some((f) => {
+            if (f[0] === formatType) {
+               return true;
+            }
+            return false;
+         });
+      }
+      return false;
+   });
+};
+
+export const getValuesForSemanticType = (
+   property: SemanticString[],
+   formatType: SemanticFormatEnum
+): string[] => {
+   const filtered = getSemanticStringForType(property, formatType);
+   return getValuesOfSemanticStringArray(property);
+};
+
+export const getValuesOfSemanticString = (
+   property: SemanticString
+): SemanticFormatValue | undefined => {
+   if (property[1]?.[0]?.[1] != null) {
+      return property[1][0][1];
+   } else {
+      return undefined;
+   }
+};
+
+export const getValuesOfSemanticStringArray = (
+   property: SemanticString[]
+): string[] => {
+   return property
+      .flatMap((m) => getValuesOfSemanticString(m))
+      .filter((m) => m != null)
+      .map((m) => m as string);
 };

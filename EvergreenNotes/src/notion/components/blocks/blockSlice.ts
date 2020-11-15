@@ -12,12 +12,17 @@ const initialState: RecordState = {};
 const fetchBlock = createAsyncThunk<
    NotionBlockModel | undefined,
    { blockId: string }
->('notion/block/', async ({ blockId }: { blockId: string }, thunkApi) => {
-   let state = blockSelector(thunkApi.getState() as RootState) as RecordState;
+>(
+   'notion/block/fetchBlock',
+   async ({ blockId }: { blockId: string }, thunkApi) => {
+      let state = blockSelector(
+         thunkApi.getState() as RootState
+      ) as RecordState;
 
-   //if it gets inefficient, we can use contentIds and syncRecordValues
-   return await fetchBlockIfNotInStore(state, blockId, thunkApi);
-});
+      //if it gets inefficient, we can use contentIds and syncRecordValues
+      return await fetchBlockIfNotInStore(state, blockId, thunkApi);
+   }
+);
 const fetchBlockIfNotInStore = async (
    state: RecordState,
    blockId: string,
