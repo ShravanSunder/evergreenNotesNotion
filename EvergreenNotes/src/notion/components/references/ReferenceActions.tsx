@@ -66,8 +66,15 @@ export const ReferenceActions = ({
    const handleNewTabMiddleClick = (e: SyntheticEvent) => {
       //e.stopPropagation();
       e.preventDefault();
-      if (sidebar.navigation.notionSite != null) {
-         let url = sidebar.navigation.notionSite + id.replace(/-/g, '');
+      let page = path.slice(-1).pop();
+      if (sidebar.navigation.notionSite != null && page?.blockId != null) {
+         let url =
+            sidebar.navigation.notionSite +
+            page.blockId.replace(/-/g, '') +
+            '#' +
+            id.replace(/-/g, '');
+
+         enqueueSnackbar('Opening page in new tab', { variant: 'info' });
          window.open(url);
       }
       return false;
@@ -121,7 +128,7 @@ export const ReferenceActions = ({
                </LightTooltip>
             </Grid>
             <Grid item>
-               <LightTooltip title="Open in a new tab" placement="bottom">
+               <LightTooltip title="Open page in a new tab" placement="bottom">
                   <IconButton
                      className={classes.button}
                      color="secondary"
