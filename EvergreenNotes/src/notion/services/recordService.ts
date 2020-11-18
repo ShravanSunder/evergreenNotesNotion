@@ -15,15 +15,20 @@ import * as blockApi from 'aNotion/api/v3/blockApi';
 export const getContent = (
    record: RecordMap,
    blockId: string
-): [NotionBlockModel[], string[]] => {
+): [NotionBlockModel[], string[], string[]] => {
    let node = record.block?.[blockId];
    let content: NotionBlockModel[] = [];
    let contentIds: string[] = [];
+   let idsOfMissingContent: string[] = [];
 
    if (node != null && node.value?.content != null) {
-      let c = getNotionBlocksFromContent(node.value.content, record);
+      let [tempContent, tempIdsOfMissingContent] = getNotionBlocksFromContent(
+         node.value.content,
+         record
+      );
       contentIds.push(...node.value.content);
-      content.push(...c);
+      content.push(...tempContent);
+      idsOfMissingContent.push(...tempIdsOfMissingContent);
    }
 
    if (node != null && node.value?.type === BlockTypeEnum.CollectionViewPage) {
@@ -35,35 +40,42 @@ export const getContent = (
             parentId != null &&
             record?.block?.[parentId]?.value?.content != null
          ) {
-            let c = getNotionBlocksFromContent(
+            let [
+               tempContent,
+               tempIdsOfMissingContent,
+            ] = getNotionBlocksFromContent(
                record.block[parentId].value?.content!,
                record
             );
             contentIds.push(
                ...(record?.block?.[parentId]?.value?.content ?? [])
             );
-            content.push(...c);
+            content.push(...tempContent);
+            idsOfMissingContent.push(...tempIdsOfMissingContent);
          }
       }
    }
 
-   return [content, contentIds];
+   return [content, contentIds, idsOfMissingContent];
 };
 
 const getNotionBlocksFromContent = (
    contentIds: string[],
    record: RecordMap
-) => {
+): [NotionBlockModel[], string[]] => {
    let content: NotionBlockModel[] = [];
+   let idsOfMissingContent: string[] = [];
    for (let childId of contentIds) {
       if (childId != null) {
          let cBlock = new NotionBlockRecord(record, childId);
          if (cBlock.type !== BlockTypeEnum.Unknown) {
             content.push(cBlock.toSerializable());
+         } else {
+            idsOfMissingContent.push(childId);
          }
       }
    }
-   return content;
+   return [content, idsOfMissingContent];
 };
 
 export const fetchContentForBlock = async (
@@ -87,7 +99,7 @@ export const fetchContentForBlock = async (
          signal
       );
 
-      await extractContentFromSync(missingBlocks, signal, resultContentBlocks);
+      await fetchContentFromSync(missingBlocks, signal, resultContentBlocks);
    }
 
    return resultContentBlocks;
@@ -97,12 +109,16 @@ const extractContentFromChunk = (
    chunk: PageChunk,
    blockId: string,
    resultContentBlocks: ContentBlocks[],
-   missingBlocks: ContentBlocks[],
+   missingBlocksList: ContentBlocks[],
    signal: AbortSignal
 ) => {
-   const [content, contentIds] = getContent(chunk?.recordMap, blockId);
+   const [content, contentIds, idsOfMissingContent] = getContent(
+      chunk?.recordMap,
+      blockId
+   );
 
-   if (content.length === contentIds.length) {
+   if (idsOfMissingContent.length === 0) {
+      //if no content is missing, save it, recurse into the children
       resultContentBlocks.push({
          blockId,
          content,
@@ -115,13 +131,14 @@ const extractContentFromChunk = (
                chunk,
                id,
                resultContentBlocks,
-               missingBlocks,
+               missingBlocksList,
                signal
             )
          );
       }
    } else if (contentIds.length > 0) {
-      missingBlocks.push({
+      // if any content is missing, record missing blocks
+      missingBlocksList.push({
          blockId: blockId,
          content: [],
          contentIds: contentIds,
@@ -129,16 +146,17 @@ const extractContentFromChunk = (
    }
 };
 
-const extractContentFromSync = async (
+const fetchContentFromSync = async (
    blocks: ContentBlocks[],
    signal: AbortSignal,
    resultContentBlocks: ContentBlocks[]
 ) => {
-   const missingBlocks: ContentBlocks[] = [];
+   const newMissingBlocks: ContentBlocks[] = [];
 
    if (blocks.length > 0) {
       const missingIds = [
          ...new Set(blocks.flatMap((m) => m.contentIds ?? [])),
+         ...blocks.map((c) => c.blockId),
       ];
 
       let chunk = await blockApi.syncRecordValues(missingIds, signal);
@@ -148,15 +166,15 @@ const extractContentFromSync = async (
                chunk!,
                m.blockId,
                resultContentBlocks,
-               missingBlocks,
+               newMissingBlocks,
                signal
             )
          );
       }
    }
 
-   //recursion
-   if (missingBlocks.length > 0 && !signal.aborted) {
-      await extractContentFromSync(missingBlocks, signal, resultContentBlocks);
+   // if there are any missing blocks, do this again for all of them
+   if (newMissingBlocks.length > 0 && !signal.aborted) {
+      await fetchContentFromSync(newMissingBlocks, signal, resultContentBlocks);
    }
 };

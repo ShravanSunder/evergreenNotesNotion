@@ -21,7 +21,7 @@ export const ImageUi = ({ block }: { block: NotionBlockModel }) => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingImage />}>
-            <div style={{ padding: 3 }}>
+            <div id="ImageUI" style={{ padding: 3 }}>
                <Box width={1}>
                   <img
                      src={notionUrl}

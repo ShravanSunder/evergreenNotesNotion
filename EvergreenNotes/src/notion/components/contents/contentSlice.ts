@@ -17,9 +17,10 @@ import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 const initialState: ContentState = {};
 
 const fetchContent = createAsyncThunk<
-   ContentBlocks[],
+   ContentBlocks[] | undefined,
    {
       blockId: string;
+      forceUpdate: boolean;
       signal?: AbortSignal;
    }
 >(
@@ -27,28 +28,44 @@ const fetchContent = createAsyncThunk<
    async (
       {
          blockId,
+         forceUpdate,
+         signal,
       }: {
          blockId: string;
+         forceUpdate: boolean;
+         signal?: AbortSignal;
       },
       thunkApi
    ) => {
       try {
-         //if it gets inefficient, we can use contentIds and syncRecordValues
-         const result = await fetchContentForBlock(blockId, thunkApi.signal);
-         return result;
+         const state = contentSelector(thunkApi.getState() as any);
+         const data = checkStateForContent(state, blockId);
+         if (
+            data?.content == null ||
+            data?.status != thunkStatus.fulfilled ||
+            data?.status == null ||
+            forceUpdate
+         ) {
+            const result = await fetchContentForBlock(blockId, thunkApi.signal);
+            return result;
+         } else {
+            return undefined;
+         }
       } catch (err) {
          console.log(err);
          throw err;
       }
    },
    {
-      condition: ({ blockId, signal }, { getState, extra }) => {
+      condition: ({ blockId, forceUpdate, signal }, { getState, extra }) => {
+         //if status is pending, don't continue
          let state = contentSelector(getState() as RootState) as ContentState;
          const data = checkStateForContent(state, blockId);
          if (
+            forceUpdate != true &&
             data != null &&
-            (data.status === thunkStatus.pending ||
-               data.status === thunkStatus.fulfilled)
+            data.status === thunkStatus.pending &&
+            !signal?.aborted
          ) {
             return false;
          }
@@ -63,14 +80,15 @@ const checkStateForContent = (
 ): { content: NotionBlockModel[]; status: thunkStatus } | undefined => {
    if (
       state[blockId] != null &&
-      state[blockId].status === thunkStatus.fulfilled
+      state[blockId].status != null &&
+      state[blockId].content != null
    ) {
       return state[blockId];
    }
    return undefined;
 };
 
-const clearContent: CaseReducer<ContentState, PayloadAction<any>> = (
+const clearContentReducer: CaseReducer<ContentState> = (
    state: ContentState
 ) => {
    state = {};
@@ -80,25 +98,26 @@ const contentSlice = createSlice({
    name: 'contentSlice',
    initialState: initialState,
    reducers: {
-      clearContent: clearContent,
+      clearContent: clearContentReducer,
    },
    extraReducers: {
       [fetchContent.fulfilled.toString()]: (
          state,
-         action: PayloadAction<ContentBlocks[]>
+         action: PayloadAction<ContentBlocks[] | undefined>
       ) => {
-         action.payload.forEach((contentBlocks) => {
-            state[contentBlocks.blockId] = {
-               content: contentBlocks.content,
-               status: thunkStatus.fulfilled,
-            };
-         });
+         if (action.payload != null) {
+            action.payload.forEach((contentBlocks) => {
+               state[contentBlocks.blockId] = {
+                  content: contentBlocks.content,
+                  status: thunkStatus.fulfilled,
+               };
+            });
+         }
       },
       [fetchContent.pending.toString()]: (state, action) => {
          const { blockId } = action.meta.arg;
          let data = checkStateForContent(state, blockId);
          if (data?.status !== thunkStatus.fulfilled) {
-            //clear block if its in transition
             state[blockId] = {
                content: [],
                status: thunkStatus.pending,

@@ -377,7 +377,7 @@ function refreshSidebarContents(dispatch: any, navigation: NavigationState) {
    console.log('...received refreshSidebarContents updateevergreensidebar');
    if (navigation.pageId != null) {
       flushCache();
-      dispatch(contentActions.clearContent({}));
+      dispatch(contentActions.clearContent());
       dispatch(
          sidebarExtensionActions.fetchCurrentNotionPage({
             pageId: navigation.pageId,

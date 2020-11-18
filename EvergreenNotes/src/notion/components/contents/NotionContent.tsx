@@ -72,16 +72,19 @@ const NotionContent = ({
    useEffect(() => {
       if (
          (content == null ||
-            status === thunkStatus.rejected ||
-            status === thunkStatus.idle) &&
+            status == null ||
+            status !== thunkStatus.fulfilled) &&
          parentBlockId != null
       ) {
          const promise = dispatch(
-            contentActions.fetchContent({ blockId: parentBlockId })
+            contentActions.fetchContent({
+               blockId: parentBlockId,
+               forceUpdate: false,
+            })
          );
       }
       return () => {};
-   }, []);
+   }, [parentBlockId, status, content, dispatch]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -133,12 +136,22 @@ const Children = ({
          return null;
    }
 
+   if (block.contentIds.length === 0 || block.type === BlockTypeEnum.Toggle) {
+      return null;
+   }
+
    return (
-      <Grid container justify="flex-start">
+      <Grid id="NotionContentChild" container justify="flex-start">
          {block.type !== BlockTypeEnum.Column && (
-            <Grid item xs={1} className={classes.blockUiGrids} />
+            <Grid item className={classes.blockUiGrids}>
+               <div className={classes.bullets}>
+                  <Typography display={'inline'} variant={'body1'}>
+                     {'   '}
+                  </Typography>
+               </div>
+            </Grid>
          )}
-         <Grid item xs={11} className={classes.blockUiGrids}>
+         <Grid item xs className={classes.blockUiGrids}>
             <NotionContent
                parentBlockId={block.blockId}
                semanticFilter={semanticFilter}

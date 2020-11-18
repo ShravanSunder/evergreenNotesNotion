@@ -51,7 +51,7 @@ export const BlockUi = ({
 
    return (
       <Suspense fallback={LoadingLine}>
-         <div className={classes.block} style={blockStyle}>
+         <div id="BlockUI" className={classes.block} style={blockStyle}>
             {useGeneric && (
                <TextUi
                   variant={variant}
@@ -86,10 +86,20 @@ export const BlockUi = ({
             )}
             {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
             {block.type === BlockTypeEnum.Page && (
-               <PageUi block={block} variant={variant} style={style} />
+               <PageUi
+                  block={block}
+                  variant={variant}
+                  style={style}
+                  renderChildren={true}
+               />
             )}
             {block.type === BlockTypeEnum.CollectionViewPage && (
-               <PageUi block={block} variant={variant} style={style} />
+               <PageUi
+                  block={block}
+                  variant={variant}
+                  style={style}
+                  renderChildren={false}
+               />
             )}
             {block.type === BlockTypeEnum.Toggle && (
                <ToggleUi
@@ -112,11 +122,11 @@ const useVariant = (block: NotionBlockModel) => {
       case BlockTypeEnum.Text:
       case BlockTypeEnum.Date:
       case BlockTypeEnum.Bookmark:
+      case BlockTypeEnum.Page:
          variant = 'body1';
          break;
       case BlockTypeEnum.Header1:
       case BlockTypeEnum.CollectionViewPage:
-      case BlockTypeEnum.Page:
          variant = 'h4';
          break;
       case BlockTypeEnum.Header2:

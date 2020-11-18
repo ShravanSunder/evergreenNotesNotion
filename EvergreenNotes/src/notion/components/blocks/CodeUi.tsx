@@ -5,7 +5,7 @@ import { useBlockStyles } from './useBlockStyles';
 export const CodeUi = ({ block }: { block: NotionBlockModel }) => {
    let classes = useBlockStyles();
    return (
-      <Grid container style={{ padding: 12 }}>
+      <Grid id="CodeUI" container style={{ padding: 12 }}>
          <Grid item xs>
             <Typography
                variant={'body2'}

@@ -10,9 +10,15 @@ interface IPageUIParams {
    block: NotionBlockModel;
    variant: Variant | undefined;
    style: React.CSSProperties | undefined;
+   renderChildren: boolean;
 }
 
-export const PageUi = ({ block, variant, style }: IPageUIParams) => {
+export const PageUi = ({
+   block,
+   variant,
+   style,
+   renderChildren,
+}: IPageUIParams) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
    let iconComponent: JSX.Element | undefined = undefined;
@@ -43,12 +49,16 @@ export const PageUi = ({ block, variant, style }: IPageUIParams) => {
    }
 
    return (
-      <div style={style}>
+      <div id="PageUI" style={style}>
          {iconComponent}
          <TextUi block={block} variant={variant} style={style}></TextUi>
-         <div style={{ marginTop: 6 }}></div>
-         <NotionContentWithParentId
-            parentBlockId={block.blockId}></NotionContentWithParentId>
+         {renderChildren && (
+            <>
+               <div style={{ marginTop: 6 }}></div>
+               <NotionContentWithParentId
+                  parentBlockId={block.blockId}></NotionContentWithParentId>
+            </>
+         )}
       </div>
    );
 };

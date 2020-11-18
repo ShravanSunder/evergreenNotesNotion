@@ -12,15 +12,15 @@ export const NumberUi = ({
 }: BaseTextUiParameters) => {
    let classes = useBlockStyles();
    return (
-      <Grid container>
-         <Grid item xs={1} className={classes.blockUiGrids}>
+      <Grid id="NumberUI" container>
+         <Grid item className={classes.blockUiGrids}>
             <div className={classes.numbers}>
                <Typography display={'inline'} variant={'body1'}>
                   {' ♯ '}
                </Typography>
             </div>
          </Grid>
-         <Grid item xs={11} className={classes.blockUiGrids}>
+         <Grid item xs className={classes.blockUiGrids}>
             <TextUi
                block={block}
                semanticFilter={semanticFilter}

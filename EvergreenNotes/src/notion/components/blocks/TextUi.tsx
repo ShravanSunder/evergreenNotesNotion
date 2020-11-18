@@ -161,6 +161,7 @@ const TextSegment = ({
       <React.Fragment>
          {link == null && (
             <Typography
+               id="TextUI"
                display="inline"
                className={classes.typography}
                variant={variant}
@@ -170,6 +171,7 @@ const TextSegment = ({
          )}
          {link != null && segmentType === SemanticFormatEnum.Page && (
             <Link
+               id="TextUI"
                display="inline"
                className={classes.typography}
                variant={variant}
@@ -188,6 +190,7 @@ const TextSegment = ({
          {link != null && segmentType === SemanticFormatEnum.Link && (
             <>
                <Link
+                  id="TextUI"
                   display="inline"
                   className={classes.link}
                   variant={variant}
@@ -311,6 +314,9 @@ const formatSegment = (
    let link: string | undefined = undefined;
    if (segmentDetails != null && segmentType === SemanticFormatEnum.Page) {
       text = blockData[segmentDetails]?.block?.simpleTitle ?? '';
+      if (text.length === 0) {
+         text == 'Untitled';
+      }
       link = getPageUrl(segmentDetails);
    } else if (
       segmentDetails != null &&

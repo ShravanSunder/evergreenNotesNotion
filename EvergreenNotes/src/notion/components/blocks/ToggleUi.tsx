@@ -29,14 +29,16 @@ export const ToggleUi = ({
    );
 
    return (
-      <Grid container>
-         <Grid item xs={1} style={{ paddingLeft: 3 }}>
-            <IconButton size="small" onClick={handleClick}>
-               {expanded && <ArrowDropDown fontSize="inherit" />}
-               {!expanded && <ArrowRight fontSize="inherit" />}
-            </IconButton>
+      <Grid id="ToggleUI" container>
+         <Grid item className={classes.blockUiGrids}>
+            <div className={classes.toggle}>
+               <IconButton size="small" onClick={handleClick}>
+                  {expanded && <ArrowDropDown fontSize="inherit" />}
+                  {!expanded && <ArrowRight fontSize="inherit" />}
+               </IconButton>
+            </div>
          </Grid>
-         <Grid item xs={11}>
+         <Grid item xs className={classes.blockUiGrids}>
             <TextUi
                block={block}
                semanticFilter={semanticFilter}

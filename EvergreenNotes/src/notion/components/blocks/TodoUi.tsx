@@ -11,8 +11,12 @@ export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
    let checked = todo.properties?.checked?.[0]?.[0] === 'Yes' ?? false;
 
    return (
-      <Grid container className={classes.blockUiGrids} justify="flex-start">
-         <Grid item xs={1} className={classes.blockUiGrids}>
+      <Grid
+         id="TodoUi"
+         container
+         className={classes.blockUiGrids}
+         justify="flex-start">
+         <Grid item className={classes.blockUiGrids}>
             <div className={classes.todo}>
                {!checked && (
                   <Typography display={'inline'} variant={'body1'}>
@@ -26,7 +30,7 @@ export const TodoUi = ({ block }: { block: NotionBlockModel }) => {
                )}
             </div>
          </Grid>
-         <Grid item xs={11} className={classes.blockUiGrids}>
+         <Grid item xs className={classes.blockUiGrids}>
             <TextUi
                block={block}
                style={{

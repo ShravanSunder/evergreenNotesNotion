@@ -37,6 +37,12 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
          marginTop: 1,
          float: 'right',
       },
+      toggle: {
+         paddingLeft: 0,
+         marginLeft: 0,
+         paddingRight: 0,
+         float: 'right',
+      },
       inlineIcon: {
          position: 'relative',
          top: 3,

@@ -12,7 +12,7 @@ export const QuoteUi = ({
 }: BaseTextUiParameters) => {
    let classes = useBlockStyles();
    return (
-      <Grid container>
+      <Grid id="QuoteUI" container>
          <Grid item style={{ paddingRight: 9 }}>
             <Divider
                orientation="vertical"
