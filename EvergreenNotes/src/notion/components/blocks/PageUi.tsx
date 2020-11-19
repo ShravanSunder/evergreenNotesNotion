@@ -8,20 +8,20 @@ import { NotionContentWithParentId } from 'aNotion/components/contents/NotionCon
 
 interface IPageUIParams {
    block: NotionBlockModel;
-   variant: Variant | undefined;
-   style: React.CSSProperties | undefined;
-   renderChildren: boolean;
+   style?: React.CSSProperties | undefined;
+   inlineBlock?: boolean;
 }
 
 export const PageUi = ({
    block,
-   variant,
-   style,
-   renderChildren,
+   style = undefined,
+   inlineBlock = true,
 }: IPageUIParams) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
    let iconComponent: JSX.Element | undefined = undefined;
+   const variant = inlineBlock ? 'body1' : 'h4';
+   const renderChildren = !inlineBlock;
 
    if (icon?.length === 1) {
       iconComponent = (
@@ -54,7 +54,7 @@ export const PageUi = ({
          <TextUi block={block} variant={variant} style={style}></TextUi>
          {renderChildren && (
             <>
-               <div style={{ marginTop: 6 }}></div>
+               <div style={{ marginTop: 12 }}></div>
                <NotionContentWithParentId
                   parentBlockId={block.blockId}></NotionContentWithParentId>
             </>

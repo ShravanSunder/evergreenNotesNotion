@@ -8,7 +8,8 @@ import { syncRecordType } from './apiRequestTypes';
 export const loadPageChunk = async (
    pageId: string,
    limit: number = 1,
-   abort: AbortSignal
+   abort: AbortSignal,
+   retry: boolean = true
 ): Promise<LoadPageChunk.PageChunk> => {
    let req = superagent
       .post('https://www.notion.so/api/v3/loadPageChunk')
@@ -22,7 +23,8 @@ export const loadPageChunk = async (
 
    addAbortSignal(req, abort);
 
-   return (await req).body;
+   const data = (await req).body as LoadPageChunk.PageChunk;
+   return data;
 };
 
 export const syncRecordValues = async (

@@ -22,17 +22,21 @@ import { LoadingLine } from 'aNotion/components/common/Loading';
 import { TextUi } from 'aNotion/components/blocks/TextUi';
 import { useBlockStyles } from './useBlockStyles';
 
+interface IBlockUi {
+   block: NotionBlockModel;
+   index: number | undefined;
+   semanticFilter?: SemanticFormatEnum[];
+   style?: React.CSSProperties;
+   renderPagesAsInline?: boolean;
+}
+
 export const BlockUi = ({
    block,
    index,
    semanticFilter,
    style,
-}: {
-   block: NotionBlockModel;
-   index: number | undefined;
-   semanticFilter?: SemanticFormatEnum[];
-   style?: React.CSSProperties;
-}) => {
+   renderPagesAsInline = true,
+}: IBlockUi) => {
    let classes = useBlockStyles();
    let variant = useVariant(block);
    let backgroundColor = getBackgroundColor(block);
@@ -88,17 +92,15 @@ export const BlockUi = ({
             {block.type === BlockTypeEnum.Page && (
                <PageUi
                   block={block}
-                  variant={variant}
                   style={style}
-                  renderChildren={true}
+                  inlineBlock={renderPagesAsInline}
                />
             )}
             {block.type === BlockTypeEnum.CollectionViewPage && (
                <PageUi
                   block={block}
-                  variant={variant}
                   style={style}
-                  renderChildren={false}
+                  inlineBlock={renderPagesAsInline}
                />
             )}
             {block.type === BlockTypeEnum.Toggle && (

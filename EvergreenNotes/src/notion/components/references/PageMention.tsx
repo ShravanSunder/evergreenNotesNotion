@@ -53,6 +53,8 @@ export const PageMention = ({
                   <Grid item xs={12} className={classes.reference}>
                      {mentionIds?.map((m) => (
                         <NotionContentWithParentId
+                           key={m}
+                           renderPagesAsInline={false}
                            parentBlockId={m}></NotionContentWithParentId>
                      ))}
                   </Grid>

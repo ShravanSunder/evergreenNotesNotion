@@ -87,7 +87,7 @@ export const fetchContentForBlock = async (
    const missingBlocks: ContentBlocks[] = [];
 
    if (chunk == null) {
-      chunk = await blockApi.loadPageChunk(blockId, 100, signal);
+      chunk = await blockApi.loadPageChunk(blockId, 50, signal);
    }
 
    if (chunk != null && !signal.aborted) {

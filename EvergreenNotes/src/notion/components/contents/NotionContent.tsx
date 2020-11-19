@@ -19,6 +19,7 @@ interface INotionContentParams {
    maxDepth?: number;
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
+   renderPagesAsInline?: boolean;
 }
 
 interface INotionContentWithParentIdParams extends INotionContentParams {
@@ -48,6 +49,7 @@ const NotionContent = ({
    maxDepth,
    semanticFilter,
    style,
+   renderPagesAsInline = true,
 }: INotionContentParams &
    INotionContentWithParentIdParams &
    INotionContentWithBlocksParams) => {
@@ -97,7 +99,8 @@ const NotionContent = ({
                            block={p}
                            index={i}
                            semanticFilter={semanticFilter}
-                           style={style}></BlockUi>
+                           style={style}
+                           renderPagesAsInline={renderPagesAsInline}></BlockUi>
                         {(depth ?? 1) < (maxDepth ?? 6) && (
                            <Children
                               block={p}
