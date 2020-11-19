@@ -55,7 +55,7 @@ export const fetchPageRecord = async (
       }
    }
 
-   let loadChunkPromise = blockApi.loadPageChunk(pageId, 1, signal);
+   let loadChunkPromise = blockApi.loadPageChunk(pageId, 50, signal);
    if (block == null && !signal.aborted) {
       chunk = (await loadChunkPromise) as LoadPageChunk.PageChunk;
 

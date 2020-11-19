@@ -7,7 +7,7 @@ import { syncRecordType } from './apiRequestTypes';
 
 export const loadPageChunk = async (
    pageId: string,
-   limit: number = 1,
+   limit: number = 50,
    abort: AbortSignal,
    retry: boolean = true
 ): Promise<LoadPageChunk.PageChunk> => {
@@ -23,7 +23,7 @@ export const loadPageChunk = async (
 
    addAbortSignal(req, abort);
 
-   const data = (await req).body as LoadPageChunk.PageChunk;
+   const data = (await req).body;
    return data;
 };
 
