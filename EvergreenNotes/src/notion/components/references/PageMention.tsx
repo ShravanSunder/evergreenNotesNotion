@@ -47,7 +47,14 @@ export const PageMention = ({
                   </Grid>
                </Grid>
             </AccordionSummary>
-            <AccordionActions></AccordionActions>
+            <AccordionActions>
+               {mentionIds != null && mentionIds?.length > 0 && (
+                  <ReferenceActions
+                     id={mentionIds[0]}
+                     path={[]}
+                     text={undefined}></ReferenceActions>
+               )}
+            </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
                   <Grid item xs={12} className={classes.reference}>

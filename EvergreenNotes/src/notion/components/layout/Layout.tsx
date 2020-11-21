@@ -307,7 +307,12 @@ export const Layout = () => {
    );
 
    const handleReceiveMessage = useCallback((event) => {
-      debouncedUpdateSignal.callback();
+      if (
+         event.data === 'updateEvergreenSidebarData' &&
+         event.origin.includes('notion')
+      ) {
+         debouncedUpdateSignal.callback();
+      }
    }, []);
 
    useEffect(() => {

@@ -7,14 +7,19 @@ import {
    appPositionLeft,
    appWidth,
    appHeight,
-   appScrollMargin,
 } from './frameProperties';
 import { SidebarFab } from './SidebarFab';
 import { useDebouncedCallback } from 'use-debounce/lib';
+import {
+   checkDomForNotionFrameChanges,
+   modifyNotionFrameAndCreateListeners,
+} from './sidebarFrameMutations';
+import { registerNavigateMessageHandler } from './sidebarMessaging';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render sidebar frame');
    chrome.extension.getURL('sidebar.html');
+   //registerNavigateMessageHandler();
 
    ReactDOM.render(<LoadSidebarFrame />, sidebar);
 };
@@ -28,12 +33,14 @@ const useStyles = makeStyles({
    },
 });
 
-var setUpdateNotionScroller:
+let setUpdateNotionFramesAndScroller:
    | React.Dispatch<React.SetStateAction<boolean>>
    | undefined = undefined;
-var setUpdateSidebarContents:
+let setUpdateSidebarContents:
    | React.Dispatch<React.SetStateAction<boolean>>
    | undefined = undefined;
+let href = '';
+
 export const LoadSidebarFrame = () => {
    let url = chrome.extension.getURL('sidebar.html');
    let classes = useStyles();
@@ -42,6 +49,7 @@ export const LoadSidebarFrame = () => {
    const [showFrame, setShowFrame] = useState(false);
    const [wasDragging, setWasDragging] = useState(false);
    const [updateFrame, setUpdateFrame] = useState(false);
+
    const debouncedUpdateFrame = useDebouncedCallback(
       () => setUpdateFrame(true),
       200,
@@ -56,8 +64,7 @@ export const LoadSidebarFrame = () => {
             'evergreenNotesForNotion'
          ) as HTMLIFrameElement)?.contentWindow;
          if (iframe != null) {
-            iframe?.postMessage('updateEvergreenSidebar', '*');
-            console.log('send updateEvergreenSidebar message...');
+            iframe?.postMessage('updateEvergreenSidebarData', '*');
          }
       },
       3000,
@@ -68,10 +75,20 @@ export const LoadSidebarFrame = () => {
    );
 
    useEffect(() => {
-      setUpdateNotionScroller = debouncedUpdateFrame.callback;
+      setUpdateNotionFramesAndScroller = debouncedUpdateFrame.callback;
       setUpdateSidebarContents = debouncedSidebarContents.callback;
+
+      const schedule = () => {
+         if (window.location.href !== href) {
+            checkDomForNotionFrameChanges(setUpdateNotionFramesAndScroller);
+         }
+         setTimeout(() => schedule(), 2000);
+      };
+
+      schedule();
+
       return () => {
-         setUpdateNotionScroller = undefined;
+         setUpdateNotionFramesAndScroller = undefined;
          setUpdateSidebarContents = undefined;
       };
    }, []);
@@ -120,9 +137,9 @@ export const LoadSidebarFrame = () => {
    );
 };
 
-const styleChangedCallback = (mutations: MutationRecord[]) => {
-   if (setUpdateNotionScroller != null) {
-      setUpdateNotionScroller(true);
+export const styleChangedCallback = (mutations: MutationRecord[]) => {
+   if (setUpdateNotionFramesAndScroller != null) {
+      setUpdateNotionFramesAndScroller(true);
    }
 };
 
@@ -150,19 +167,13 @@ const checkForRemovedNodes = (nodes: NodeList): boolean => {
    return false;
 };
 
-const contentChangedCallback = (mutations: MutationRecord[]) => {
+export const contentChangedCallback = (mutations: MutationRecord[]) => {
    let hasChanged = mutations.some((m: MutationRecord) => {
       let result = false;
 
       if (m.type === 'characterData') {
          return true;
       } else if (m.type === 'childList') {
-         // result = checkNodesForText(m.addedNodes);
-         // if (result) return true;
-         // result = checkNodesForText(m.removedNodes);
-         // if (result) return true;
-         //result = checkForRemovedNodes(m.removedNodes);
-         //if (result) return true;
       }
       return result;
    });
@@ -172,125 +183,15 @@ const contentChangedCallback = (mutations: MutationRecord[]) => {
    }
 };
 
-const setContentChanged = () => {
+export const setContentChanged = () => {
    if (setUpdateSidebarContents != null) {
       setUpdateSidebarContents(true);
    }
 };
 
-const notionScrollDivClass = 'notion-scroller';
-const notionFrameClass = 'notion-frame';
-const notionAppId = 'notion-app';
-const notionSidebarClass = 'notion-sidebar-container';
-const notionCollectionScrollersClass =
-   'notion-selectable notion-collection_view-block';
-const notionFocusPageDialogParentClass = 'notion-peek-renderer';
-
-const getNotionScroll = () => {
-   let notionApp = document.getElementById(notionAppId) as HTMLElement;
-   let notionSidebar = notionApp?.getElementsByClassName(
-      notionSidebarClass
-   )?.[0] as HTMLElement;
-   let notionframe = notionApp?.getElementsByClassName(
-      notionFrameClass
-   )?.[0] as HTMLElement;
-   let notionScrollDiv = notionframe?.getElementsByClassName(
-      notionScrollDivClass
-   )?.[0] as HTMLElement;
-   let isExpectedChild = notionScrollDiv?.parentElement === notionframe;
-   return { isExpectedChild, notionScrollDiv, notionframe, notionSidebar };
-};
-
-var notionFrameBoundsObserver = new MutationObserver(styleChangedCallback);
-var notionFrameContentObserver = new MutationObserver(contentChangedCallback);
-const modifyNotionFrameAndCreateListeners = (
-   showFrame: boolean,
-   wWidth: number
-) => {
-   let {
-      isExpectedChild,
-      notionScrollDiv,
-      notionframe,
-      notionSidebar,
-   } = getNotionScroll();
-
-   if (isExpectedChild && notionScrollDiv != null) {
-      notionScrollDiv.removeEventListener('keypress', setContentChanged);
-
-      notionFrameContentObserver.disconnect();
-      notionFrameBoundsObserver.disconnect();
-      setFrameWidth(showFrame, notionScrollDiv, wWidth, notionSidebar);
-
-      notionScrollDiv.addEventListener('keypress', setContentChanged);
-
-      notionFrameBoundsObserver.observe(notionframe, {
-         childList: true,
-         subtree: false,
-         attributes: true,
-         attributeFilter: ['style'],
-      });
-      notionFrameBoundsObserver.observe(notionScrollDiv, {
-         childList: false,
-         subtree: false,
-         attributes: true,
-         attributeFilter: ['style'],
-      });
-      notionFrameContentObserver.observe(notionScrollDiv, {
-         childList: true,
-         subtree: true,
-         characterData: true,
-         attributes: false,
-         // attributeFilter: ['style'],
-      });
-   }
-};
-
-const setFrameWidth = (
-   showFrame: boolean,
-   notionScrollDiv: HTMLElement,
-   wWidth: number,
-   notionSidebar: HTMLElement
-) => {
-   let notionApp = document.getElementById(notionAppId) as HTMLElement;
-   const sidebarWidth = notionSidebar?.getBoundingClientRect()?.width ?? 0;
-   const frameWidth =
-      wWidth - appWidth(wWidth) - appScrollMargin - sidebarWidth;
-
-   if (showFrame) {
-      notionScrollDiv.style.width = frameWidth.toString() + 'px';
-      [
-         ...notionScrollDiv.getElementsByClassName(
-            notionCollectionScrollersClass
-         ),
-      ].forEach(
-         (f) => ((f as HTMLElement).style.maxWidth = frameWidth - 9 + 'px')
-      );
-
-      setNotionDialogMargin(notionApp, wWidth);
-   } else {
-      notionScrollDiv.style.width = wWidth - sidebarWidth + 'px';
-      [
-         ...notionScrollDiv.getElementsByClassName(
-            notionCollectionScrollersClass
-         ),
-      ].forEach((f) => ((f as HTMLElement).style.maxWidth = ''));
-
-      const dialogElements = notionApp.getElementsByClassName(
-         notionFocusPageDialogParentClass
-      ) as HTMLCollection;
-      if ((dialogElements?.[0]?.children?.[1] as HTMLElement)?.style != null) {
-         (dialogElements[0].children[1] as HTMLElement).style.marginRight =
-            'auto';
-      }
-   }
-};
-
-const setNotionDialogMargin = (notionApp: HTMLElement, wWidth: number) => {
-   const dialogElements = notionApp.getElementsByClassName(
-      notionFocusPageDialogParentClass
-   ) as HTMLCollection;
-   if ((dialogElements?.[0]?.children?.[1] as HTMLElement)?.style != null) {
-      (dialogElements[0].children[1] as HTMLElement).style.marginRight =
-         appWidth(wWidth) + 'px';
-   }
-};
+export let notionFrameBoundsObserver = new MutationObserver(
+   styleChangedCallback
+);
+export let notionFrameContentObserver = new MutationObserver(
+   contentChangedCallback
+);

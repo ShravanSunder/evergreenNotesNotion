@@ -10,6 +10,7 @@ import { useSnackbar } from 'notistack';
 import { useReferenceStyles } from './AccordionStyles';
 import { SearchRecordModel } from 'aNotion/models/SearchRecord';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { SidebarExtensionState } from '../layout/SidebarExtensionState';
 
 export const ReferenceActions = ({
    id,
@@ -17,7 +18,7 @@ export const ReferenceActions = ({
    path,
 }: {
    id: string;
-   text: string;
+   text: string | undefined;
    path: NotionBlockModel[];
 }) => {
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
@@ -40,12 +41,8 @@ export const ReferenceActions = ({
    const handleCopyLink = (e: SyntheticEvent) => {
       e.stopPropagation();
       let page = path.slice(-1).pop();
-      if (sidebar.navigation.notionSite != null && page?.blockId != null) {
-         let url =
-            sidebar.navigation.notionSite +
-            page.blockId.replace(/-/g, '') +
-            '#' +
-            id.replace(/-/g, '');
+      const url = getNotionUrl(path, sidebar, id);
+      if (url != null) {
          let success = copyToClipboard(url);
          if (success) {
             enqueueSnackbar('Copied link to clipboard', { variant: 'info' });
@@ -66,17 +63,9 @@ export const ReferenceActions = ({
    const handleNewTabMiddleClick = (e: SyntheticEvent) => {
       //e.stopPropagation();
       e.preventDefault();
-      let page = path.slice(-1).pop();
-      if (sidebar.navigation.notionSite != null && page?.blockId != null) {
-         let url =
-            sidebar.navigation.notionSite +
-            page.blockId.replace(/-/g, '') +
-            '#' +
-            id.replace(/-/g, '');
-
-         enqueueSnackbar('Opening page in new tab', { variant: 'info' });
-         window.open(url);
-      }
+      const url = getNotionUrl(path, sidebar, id);
+      enqueueSnackbar('Opening page in new tab', { variant: 'info' });
+      window.open(url);
       return false;
    };
 
@@ -99,7 +88,7 @@ export const ReferenceActions = ({
                      variant="outlined"
                      onClick={handleEmbedBlock}
                      startIcon={<WidgetsTwoTone />}>
-                     embed block
+                     embed
                   </Button>
                </LightTooltip>
             </Grid>
@@ -116,17 +105,19 @@ export const ReferenceActions = ({
                   </IconButton>
                </LightTooltip>
             </Grid>
-            <Grid item>
-               <LightTooltip title="Copy text" placement="bottom">
-                  <IconButton
-                     className={classes.button}
-                     size="small"
-                     color="secondary"
-                     onClick={handleCopyText}>
-                     <FileCopyOutlined />
-                  </IconButton>
-               </LightTooltip>
-            </Grid>
+            {text != null && (
+               <Grid item>
+                  <LightTooltip title="Copy text" placement="bottom">
+                     <IconButton
+                        className={classes.button}
+                        size="small"
+                        color="secondary"
+                        onClick={handleCopyText}>
+                        <FileCopyOutlined />
+                     </IconButton>
+                  </LightTooltip>
+               </Grid>
+            )}
             <Grid item>
                <LightTooltip title="Open page in a new tab" placement="bottom">
                   <IconButton
@@ -142,4 +133,28 @@ export const ReferenceActions = ({
          </Grid>
       </Grid>
    );
+};
+
+export const getNotionUrl = (
+   path: NotionBlockModel[],
+   sidebar: SidebarExtensionState,
+   id: string
+): string | undefined => {
+   let page = path.slice(-1).pop();
+   if (sidebar.navigation.notionSite != null) {
+      if (page?.blockId != null) {
+         let pageId = page.blockId.replace(/-/g, '');
+
+         if (page.collection != null) {
+            return sidebar.navigation.notionSite + id.replace(/-/g, '');
+         }
+         return (
+            sidebar.navigation.notionSite + pageId + '#' + id.replace(/-/g, '')
+         );
+      } else {
+         return sidebar.navigation.notionSite + id.replace(/-/g, '');
+      }
+   }
+
+   return undefined;
 };
