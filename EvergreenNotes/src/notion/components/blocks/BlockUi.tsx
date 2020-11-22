@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Typography, Divider } from '@material-ui/core';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { PageUi } from './PageUi';
@@ -23,7 +23,7 @@ import { TextUi } from 'aNotion/components/blocks/TextUi';
 import { useBlockStyles } from './useBlockStyles';
 
 interface IBlockUi {
-   block: NotionBlockModel;
+   block: INotionBlockModel;
    index: number | undefined;
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
@@ -118,7 +118,7 @@ export const BlockUi = ({
 };
 export default BlockUi;
 
-const useVariant = (block: NotionBlockModel) => {
+const useVariant = (block: INotionBlockModel) => {
    let variant: Variant | undefined;
    switch (block.type) {
       case BlockTypeEnum.Text:

@@ -8,7 +8,7 @@ import { copyToClipboard, isGuid } from 'aCommon/extensionHelpers';
 import { LightTooltip } from '../common/Styles';
 import { useSnackbar } from 'notistack';
 import { useReferenceStyles } from './referenceStyles';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { SidebarExtensionState } from '../layout/SidebarExtensionState';
 import { TNavigateMessage } from 'aSidebar/sidebarMessaging';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
@@ -16,7 +16,7 @@ import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 interface IReferenceActionParams {
    id: string;
    text: string | undefined;
-   path: NotionBlockModel[];
+   path: INotionBlockModel[];
    mentionSourceId?: string;
 }
 
@@ -171,7 +171,7 @@ export const ReferenceActions = ({
 };
 
 export const getNotionUrl = (
-   path: NotionBlockModel[],
+   path: INotionBlockModel[],
    sidebar: SidebarExtensionState,
    id: string
 ): string | undefined => {

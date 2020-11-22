@@ -1,12 +1,12 @@
 import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { BlockTypeEnum } from '../BlockTypes';
-import { EmptyBlock } from './basic_blocks';
+import { IEmptyBlock } from './basic_blocks';
 
 /**
  * General purpose embed block.
  */
-export interface Embed extends EmptyBlock {
+export interface Embed extends IEmptyBlock {
    type:
       | BlockTypeEnum.Embed
       | BlockTypeEnum.EmbedCodePen
@@ -51,7 +51,7 @@ export interface Embed extends EmptyBlock {
 /**
  * PDF embed block.
  */
-export interface PDF extends EmptyBlock {
+export interface PDF extends IEmptyBlock {
    type: BlockTypeEnum.PDF;
    properties?: {
       source?: [[base.NotionSecureUrl | base.PublicUrl]];

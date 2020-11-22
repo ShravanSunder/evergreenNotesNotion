@@ -1,11 +1,11 @@
 import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Callout } from 'aNotion/types/notionV3/notionBlockTypes';
 import { useBlockStyles } from './useBlockStyles';
 import { TextUi } from './TextUi';
 
-export const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
+export const CalloutUi = ({ block }: { block: INotionBlockModel }) => {
    let classes = useBlockStyles();
    var callout = block.block as Callout;
 

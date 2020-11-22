@@ -17,7 +17,7 @@ import {
    hasSemanticFormatType,
 } from 'aNotion/services/pageService';
 
-export interface NotionBlockModel {
+export interface INotionBlockModel {
    block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined;
@@ -27,14 +27,8 @@ export interface NotionBlockModel {
    blockId: string;
    contentIds: string[];
 }
-export interface TreeNode {
-   id: number;
-}
-export interface TreeType extends TreeNode {
-   children: [TreeNode];
-}
 
-export class NotionBlockRecord implements NotionBlockModel {
+export class NotionBlockRecord implements INotionBlockModel {
    block?: blockTypes.Block;
    collection?: blockTypes.Collection | undefined;
    collection_views?: blockTypes.CollectionView[] | undefined = [];
@@ -43,9 +37,9 @@ export class NotionBlockRecord implements NotionBlockModel {
    simpleTitle: string;
    semanticTitle: SemanticString[] = [];
    blockId: string = '';
-   parentNodes?: NotionBlockModel[] = undefined;
-   contentNodes?: NotionBlockModel[] = undefined;
-   relatedBlocks?: NotionBlockModel[] = undefined;
+   parentNodes?: INotionBlockModel[] = undefined;
+   contentNodes?: INotionBlockModel[] = undefined;
+   relatedBlocks?: INotionBlockModel[] = undefined;
    contentIds: string[] = [];
 
    constructor(data: RecordMap, blockId: string) {
@@ -155,9 +149,9 @@ export class NotionBlockRecord implements NotionBlockModel {
       return [];
    }
 
-   getParentsNodes = (refresh: boolean = false): NotionBlockModel[] => {
+   getParentsNodes = (refresh: boolean = false): INotionBlockModel[] => {
       if (!refresh || this.parentNodes == null) {
-         let parents: NotionBlockModel[] = [];
+         let parents: INotionBlockModel[] = [];
          this.traverseUp(this.getParentId(), this.blockId, parents);
          this.parentNodes = parents;
          return parents;
@@ -168,7 +162,7 @@ export class NotionBlockRecord implements NotionBlockModel {
    protected traverseUp(
       parentId: string | undefined,
       id: string,
-      parents: NotionBlockModel[]
+      parents: INotionBlockModel[]
    ) {
       try {
          if (parentId != null) {
@@ -228,8 +222,8 @@ export class NotionBlockRecord implements NotionBlockModel {
       return hasSemanticFormatType(this.semanticTitle, formatType);
    }
 
-   toSerializable = (): NotionBlockModel => {
-      let model: NotionBlockModel = {
+   toSerializable = (): INotionBlockModel => {
+      let model: INotionBlockModel = {
          block: this.block,
          collection: this.collection,
          collection_views: this.collection_views,

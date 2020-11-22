@@ -2,7 +2,7 @@ import {
    thunkStatus,
    thunkStatus as ThunkStatus,
 } from 'aNotion/types/thunkStatus';
-import { CurrentPageData } from 'aNotion/models/NotionPage';
+import { ICurrentPageData } from 'aNotion/models/INotionPage';
 import { updateStatus } from 'aNotion/types/updateStatus';
 
 export type CookieData = {
@@ -21,7 +21,7 @@ export type NavigationState = {
 };
 export type PageRecordState = {
    status: ThunkStatus;
-   currentPageData?: CurrentPageData;
+   currentPageData?: ICurrentPageData;
 };
 
 export type SidebarExtensionState = {

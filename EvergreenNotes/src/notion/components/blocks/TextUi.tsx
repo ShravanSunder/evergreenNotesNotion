@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Typography, Link, Icon, SvgIcon } from '@material-ui/core';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { grey, red } from '@material-ui/core/colors';
 import { BaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import {
@@ -25,18 +25,18 @@ import { Variant } from '@material-ui/core/styles/createTypography';
 import { MentionsState } from '../mentions/mentionsState';
 import { RecordState } from './blockState';
 
-export interface BaseTextUiParameters {
-   block: NotionBlockModel;
+export interface IBaseTextUiParams {
+   block: INotionBlockModel;
    style?: React.CSSProperties;
    semanticFilter?: SemanticFormatEnum[];
 }
 
-export interface TextUiParameters extends BaseTextUiParameters {
+export interface ITextUiParams extends IBaseTextUiParams {
    variant?: Variant;
    interactive?: boolean;
 }
 
-interface SegmentParameters {
+interface ISegmentParams {
    segment: SemanticString;
    style?: React.CSSProperties;
    semanticFilter?: SemanticFormatEnum[];
@@ -50,7 +50,7 @@ export const TextUi = ({
    interactive,
    style,
    semanticFilter,
-}: TextUiParameters) => {
+}: ITextUiParams) => {
    let classes = useBlockStyles();
    const bb = block.block as BaseTextBlock;
    const title = bb?.properties?.title as SemanticString[];
@@ -100,7 +100,7 @@ export const TextUi = ({
    return null;
 };
 
-export interface SegmentMeta {
+export interface ISegmentMeta {
    segmentStyle: React.CSSProperties;
    segmentDetails: string | undefined;
    segmentType: string | undefined;
@@ -113,7 +113,7 @@ const TextSegment = ({
    interactive,
    style,
    semanticFilter,
-}: SegmentParameters) => {
+}: ISegmentParams) => {
    let classes = useBlockStyles();
    let text = segment[0];
    let format = segment[1] ?? [];
@@ -126,7 +126,7 @@ const TextSegment = ({
       segmentDetails,
       segmentType,
       hideSegment,
-   }: SegmentMeta = useSegmentData(format, style, semanticFilter);
+   }: ISegmentMeta = useSegmentData(format, style, semanticFilter);
 
    useEffect(() => {
       if (segmentDetails != null && segmentType === SemanticFormatEnum.Page) {
@@ -208,7 +208,7 @@ const useSegmentData = (
    format: SemanticFormat[],
    style?: React.CSSProperties,
    semanticFilter?: SemanticFormatEnum[]
-): SegmentMeta => {
+): ISegmentMeta => {
    let segmentStyle: React.CSSProperties = { ...style } ?? {};
    let segmentDetails: string | undefined = undefined;
    let segmentType: SemanticFormatEnum | undefined = undefined;

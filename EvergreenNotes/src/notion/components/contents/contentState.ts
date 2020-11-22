@@ -1,15 +1,15 @@
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 
 export type ContentState = {
    [key: string]: {
-      content: NotionBlockModel[];
+      content: INotionBlockModel[];
       status: thunkStatus;
    };
 };
 
 export type ContentBlocks = {
    blockId: string;
-   content: NotionBlockModel[];
+   content: INotionBlockModel[];
    contentIds?: string[];
 };

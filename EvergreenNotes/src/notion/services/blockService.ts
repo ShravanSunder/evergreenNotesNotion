@@ -5,7 +5,7 @@
 import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
 import {
    NotionBlockRecord,
-   NotionBlockModel,
+   INotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import {
@@ -104,7 +104,7 @@ export const getBlockFromPageChunk = (
    }
 };
 
-export const isNavigable = (block: NotionBlockModel): boolean => {
+export const isNavigable = (block: INotionBlockModel): boolean => {
    return (
       block.type === BlockTypeEnum.Page ||
       block.type === BlockTypeEnum.CollectionViewPage
@@ -205,7 +205,7 @@ export const getColor = (color: NotionColor | string): string | undefined => {
    return undefined;
 };
 
-export const getBackgroundColor = (block: NotionBlockModel) => {
+export const getBackgroundColor = (block: INotionBlockModel) => {
    let bgColor = block.block?.format?.block_color;
    if (block.type === BlockTypeEnum.Code) {
       bgColor = NotionColor.GreyBg;
@@ -220,7 +220,7 @@ export const getBackgroundColor = (block: NotionBlockModel) => {
    return color ?? '#FFFFFF';
 };
 
-export const getForegroundColor = (block: NotionBlockModel) => {
+export const getForegroundColor = (block: INotionBlockModel) => {
    let bgColor = block.block?.format?.block_color;
 
    let color: string | undefined = undefined;

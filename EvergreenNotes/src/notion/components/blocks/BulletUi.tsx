@@ -1,13 +1,13 @@
 import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { useBlockStyles } from './useBlockStyles';
-import { BaseTextUiParameters, TextUi } from './TextUi';
+import { IBaseTextUiParams, TextUi } from './TextUi';
 
 export const BulletUi = ({
    block,
    semanticFilter,
    style,
-}: BaseTextUiParameters) => {
+}: IBaseTextUiParams) => {
    let classes = useBlockStyles();
    return (
       <Grid

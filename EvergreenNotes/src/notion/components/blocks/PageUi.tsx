@@ -1,13 +1,13 @@
 import React from 'react';
 import { Typography, Icon } from '@material-ui/core';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
 import { TextUi } from './TextUi';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { NotionContentWithParentId } from 'aNotion/components/contents/NotionContent';
 
 interface IPageUIParams {
-   block: NotionBlockModel;
+   block: INotionBlockModel;
    style?: React.CSSProperties | undefined;
    inlineBlock?: boolean;
 }

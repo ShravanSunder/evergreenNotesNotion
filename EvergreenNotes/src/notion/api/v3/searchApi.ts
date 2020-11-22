@@ -2,10 +2,10 @@ import { getAppState } from 'aNotion/providers/appDispatch';
 import { currentPageSelector } from 'aNotion/providers/storeSelectors';
 import superagent from 'superagent';
 import {
-   SearchFilters,
+   ISearchFilters,
    Type,
    SearchSort,
-   SearchResultsType,
+   ISearchResultsType,
 } from './apiRequestTypes';
 import { addAbortSignal } from 'aUtilities/apiHelper';
 
@@ -16,7 +16,7 @@ export const searchByRelevance = async (
    limit: number = 10,
    sort: SearchSort = SearchSort.Relevance,
    abort: AbortSignal | undefined = undefined
-): Promise<SearchResultsType> => {
+): Promise<ISearchResultsType> => {
    let filters = defaultFilters();
    filters.isNavigableOnly = pageTitlesOnly;
 
@@ -34,7 +34,7 @@ export const searchByRelevance = async (
 const createParam = (
    spaceId: string,
    query: string,
-   filters: SearchFilters,
+   filters: ISearchFilters,
    sort: SearchSort,
    limit: number
 ) => {
@@ -49,7 +49,7 @@ const createParam = (
    return q;
 };
 
-const defaultFilters = (): SearchFilters => {
+const defaultFilters = (): ISearchFilters => {
    return {
       isDeletedOnly: false,
       excludeTemplates: true,

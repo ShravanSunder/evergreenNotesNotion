@@ -12,7 +12,7 @@ import {
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 import { fetchContentForBlock } from 'aNotion/services/recordService';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 
 const initialState: ContentState = {};
 
@@ -77,7 +77,7 @@ const fetchContent = createAsyncThunk<
 const checkStateForContent = (
    state: ContentState,
    blockId: string
-): { content: NotionBlockModel[]; status: thunkStatus } | undefined => {
+): { content: INotionBlockModel[]; status: thunkStatus } | undefined => {
    if (
       state[blockId] != null &&
       state[blockId].status != null &&

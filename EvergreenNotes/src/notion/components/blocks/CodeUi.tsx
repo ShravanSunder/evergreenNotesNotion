@@ -1,8 +1,8 @@
 import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { useBlockStyles } from './useBlockStyles';
-export const CodeUi = ({ block }: { block: NotionBlockModel }) => {
+export const CodeUi = ({ block }: { block: INotionBlockModel }) => {
    let classes = useBlockStyles();
    return (
       <Grid id="CodeUI" container style={{ padding: 12 }}>

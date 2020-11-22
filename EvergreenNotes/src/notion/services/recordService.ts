@@ -7,7 +7,7 @@ import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
 import { BlockTypeEnum, BlockProps } from '../types/notionV3/BlockTypes';
 import {
    NotionBlockRecord,
-   NotionBlockModel,
+   INotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { ContentBlocks } from 'aNotion/components/contents/contentState';
 import * as blockApi from 'aNotion/api/v3/blockApi';
@@ -15,9 +15,9 @@ import * as blockApi from 'aNotion/api/v3/blockApi';
 export const getContent = (
    record: RecordMap,
    blockId: string
-): [NotionBlockModel[], string[], string[]] => {
+): [INotionBlockModel[], string[], string[]] => {
    let node = record.block?.[blockId];
-   let content: NotionBlockModel[] = [];
+   let content: INotionBlockModel[] = [];
    let contentIds: string[] = [];
    let idsOfMissingContent: string[] = [];
 
@@ -62,8 +62,8 @@ export const getContent = (
 const getNotionBlocksFromContent = (
    contentIds: string[],
    record: RecordMap
-): [NotionBlockModel[], string[]] => {
-   let content: NotionBlockModel[] = [];
+): [INotionBlockModel[], string[]] => {
+   let content: INotionBlockModel[] = [];
    let idsOfMissingContent: string[] = [];
    for (let childId of contentIds) {
       if (childId != null) {

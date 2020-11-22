@@ -1,11 +1,11 @@
 import superagent from 'superagent';
-import { BacklinkRecordType } from './apiRequestTypes';
+import { IBacklinkRecordType } from './apiRequestTypes';
 import { addAbortSignal } from 'aUtilities/apiHelper';
 
 export const getBacklinks = async (
    blockId: string,
    abort: AbortSignal
-): Promise<BacklinkRecordType> => {
+): Promise<IBacklinkRecordType> => {
    let req = superagent
       .post('https://www.notion.so/api/v3/getBacklinksForBlock')
       .send({ blockId: blockId });

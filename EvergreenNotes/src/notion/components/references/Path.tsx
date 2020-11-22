@@ -1,9 +1,9 @@
 import React from 'react';
 import { Breadcrumbs, Typography } from '@material-ui/core';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { getTitle } from 'aNotion/components/references/Reference';
 
-export const Path = ({ path }: { path: NotionBlockModel[] }) => {
+export const Path = ({ path }: { path: INotionBlockModel[] }) => {
    return (
       <Breadcrumbs maxItems={4}>
          {path.map((p) => (

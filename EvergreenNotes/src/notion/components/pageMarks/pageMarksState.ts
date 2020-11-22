@@ -1,8 +1,8 @@
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { NotionPageMarks } from 'aNotion/models/NotionPage';
+import { INotionPageMarks } from 'aNotion/models/INotionPage';
 
 export type PageMarkState = {
-   pageMarks?: NotionPageMarks;
+   pageMarks?: INotionPageMarks;
    status: thunkStatus;
 };

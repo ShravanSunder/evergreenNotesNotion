@@ -1,9 +1,9 @@
 import {
    NotionBlockRecord,
-   NotionBlockModel,
+   INotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
-import { NotionPageMarks } from 'aNotion/models/NotionPage';
+import { INotionPageMarks } from 'aNotion/models/INotionPage';
 import {
    BaseTextBlock,
    Page,
@@ -27,8 +27,8 @@ export const processPageForMarks = async (
    pageId: string,
    record: NotionBlockRecord,
    signal: AbortSignal
-): Promise<NotionPageMarks> => {
-   let pageMarks: NotionPageMarks = {
+): Promise<INotionPageMarks> => {
+   let pageMarks: INotionPageMarks = {
       pageId: pageId,
       highlights: [],
       todos: [],
@@ -96,7 +96,7 @@ const traverseForMarks = (
    pageId: string,
    contentIds: string[],
    signal: AbortSignal,
-   pageMarks: NotionPageMarks
+   pageMarks: INotionPageMarks
 ) => {
    if (signal.aborted) return;
 
@@ -124,7 +124,7 @@ const getMarksInBlock = (
    block: Record<Block>,
    recordMapData: RecordMap,
    pageId: string,
-   pageMarks: NotionPageMarks
+   pageMarks: INotionPageMarks
 ) => {
    try {
       let b = block.value as BaseTextBlock;
@@ -170,7 +170,7 @@ const getMarksInBlock = (
 };
 
 export const getPropertiesWithSemanticFormat = (
-   pageBlock: NotionBlockModel,
+   pageBlock: INotionBlockModel,
    propertyType: SemanticFormatEnum
 ) => {
    let properties: string[] = [];

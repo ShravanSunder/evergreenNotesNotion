@@ -6,7 +6,7 @@ import { BlockTypeEnum } from '../BlockTypes';
 /**
  * Everything about how to layout a block.
  */
-export interface BlockFormat {
+export interface IBlockFormat {
    block_locked?: boolean;
    /** User ID. */
    block_locked_by?: base.UUID;
@@ -39,11 +39,11 @@ export interface BlockFormat {
  *
  * Doesn't actually exist in Notion.
  */
-export interface EmptyBlock {
+export interface IEmptyBlock {
    id: base.UUID;
    version: number;
    type: BlockTypeEnum;
-   format?: BlockFormat;
+   format?: IBlockFormat;
    /** Ids of children blocks */
    content?: base.UUID[];
    created_by: base.UUID;
@@ -65,7 +65,7 @@ export interface EmptyBlock {
    copied_from?: base.UUID;
 }
 
-export interface BaseTextBlock extends EmptyBlock {
+export interface BaseTextBlock extends IEmptyBlock {
    properties?: {
       title?: SemanticString[];
    };
@@ -211,7 +211,7 @@ export interface Callout extends BaseTextBlock {
  *
  * Children of this block must be {@link Column}.
  */
-export interface ColumnList extends EmptyBlock {
+export interface ColumnList extends IEmptyBlock {
    type: BlockTypeEnum.ColumnList;
 }
 
@@ -220,18 +220,18 @@ export interface ColumnList extends EmptyBlock {
  *
  * Parent of this block must be {@link ColumnList}.
  */
-export interface Column extends EmptyBlock {
+export interface Column extends IEmptyBlock {
    type: BlockTypeEnum.Column;
 }
 
 /**
  * Divider block. Not editable, can't have children.
  */
-export interface Divider extends EmptyBlock {
+export interface Divider extends IEmptyBlock {
    type: BlockTypeEnum.Divider;
 }
 
-export interface TableOfContents extends EmptyBlock {
+export interface TableOfContents extends IEmptyBlock {
    type: BlockTypeEnum.TableOfContents;
 }
 
@@ -257,7 +257,7 @@ export interface TemplateButton extends BaseTextBlock {
    };
 }
 
-export interface Breadcrumb extends EmptyBlock {
+export interface Breadcrumb extends IEmptyBlock {
    type: BlockTypeEnum.BreadCrumb;
 }
 
@@ -289,7 +289,7 @@ export type BasicBlockUnion =
 /**
  * Image block.
  */
-export interface Image extends EmptyBlock {
+export interface Image extends IEmptyBlock {
    type: BlockTypeEnum.Image;
    properties?: {
       /**
@@ -306,7 +306,7 @@ export interface Image extends EmptyBlock {
 /**
  * Video block.
  */
-export interface Video extends EmptyBlock {
+export interface Video extends IEmptyBlock {
    type: BlockTypeEnum.Video;
    properties?: {
       /**
@@ -323,7 +323,7 @@ export interface Video extends EmptyBlock {
 /**
  * Audio block.
  */
-export interface Audio extends EmptyBlock {
+export interface Audio extends IEmptyBlock {
    type: BlockTypeEnum.Audio;
    properties?: {
       source: [[base.NotionSecureUrl | base.PublicUrl]];
@@ -362,7 +362,7 @@ export interface Code extends BaseTextBlock {
 /**
  * File block.
  */
-export interface File extends EmptyBlock {
+export interface File extends IEmptyBlock {
    type: BlockTypeEnum.File;
    properties?: {
       /** Filename. */

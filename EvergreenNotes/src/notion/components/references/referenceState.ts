@@ -1,6 +1,6 @@
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { SearchRecordModel } from 'aNotion/models/SearchRecord';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { ISearchRecordModel } from 'aNotion/models/SearchRecord';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 
 export type ReferenceState = {
    pageReferences: PageReferences;
@@ -13,19 +13,19 @@ export type ReferenceState = {
 export type PageReferences = {
    backlinks: BacklinkRecordModel[];
    references: SearchReferences;
-   relations: NotionBlockModel[];
+   relations: INotionBlockModel[];
    pageId?: string;
    pageName?: string;
 };
 
 export type BacklinkRecordModel = {
-   backlinkBlock: NotionBlockModel;
-   path: NotionBlockModel[];
+   backlinkBlock: INotionBlockModel;
+   path: INotionBlockModel[];
 };
 
 export type SearchReferences = {
-   fullTitle: SearchRecordModel[];
-   related: SearchRecordModel[];
+   fullTitle: ISearchRecordModel[];
+   related: ISearchRecordModel[];
 };
 
 export const defaultPageReferences = (): PageReferences => {

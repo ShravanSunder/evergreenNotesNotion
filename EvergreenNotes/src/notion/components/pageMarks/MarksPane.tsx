@@ -24,7 +24,7 @@ import ForwardIcon from '@material-ui/icons/Forward';
 import InputIcon from '@material-ui/icons/Input';
 import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { TNavigateMessage } from 'aSidebar/sidebarMessaging';
 
 const useStyles = makeStyles(() =>
@@ -41,7 +41,7 @@ const useStyles = makeStyles(() =>
    })
 );
 
-const NavigateToBlockInNotion = ({ block }: { block: NotionBlockModel }) => {
+const NavigateToBlockInNotion = ({ block }: { block: INotionBlockModel }) => {
    const handleNavigate = (blockId: string) => {
       const msg: TNavigateMessage = {
          blockId: blockId,
@@ -226,7 +226,7 @@ const RenderMark = ({
    p,
    semanticFilters,
 }: {
-   p: NotionBlockModel;
+   p: INotionBlockModel;
    semanticFilters: SemanticFormatEnum[];
 }) => {
    return (

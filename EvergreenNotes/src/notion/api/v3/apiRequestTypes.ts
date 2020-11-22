@@ -12,7 +12,7 @@ export enum SearchSort {
    CreatedOldest = 'CreatedOldest',
 }
 
-export interface SearchFilters {
+export interface ISearchFilters {
    isDeletedOnly: false;
    excludeTemplates: true;
    isNavigableOnly: boolean;
@@ -24,7 +24,7 @@ export interface SearchFilters {
    createdTime: {};
 }
 
-export interface SearchResultType {
+export interface ISearchResultType {
    id: string;
    isNavigable: boolean;
    score: number;
@@ -34,13 +34,13 @@ export interface SearchResultType {
    };
 }
 
-export interface SearchResultsType {
+export interface ISearchResultsType {
    recordMap: RecordMap;
-   results: SearchResultType[];
+   results: ISearchResultType[];
    total: number;
 }
 
-export interface syncRecordType {
+export interface ISyncRecordType {
    recordVersionMap: {
       block: {
          [key: string]: number;
@@ -48,7 +48,7 @@ export interface syncRecordType {
    };
 }
 
-export interface BacklinkType {
+export interface IBacklinkType {
    block_id: string;
    mentioned_from: {
       type: 'property_mention' | 'collection_reference';
@@ -57,7 +57,7 @@ export interface BacklinkType {
    };
 }
 
-export interface BacklinkRecordType {
-   backlinks: BacklinkType[];
+export interface IBacklinkRecordType {
+   backlinks: IBacklinkType[];
    recordMap: RecordMap;
 }

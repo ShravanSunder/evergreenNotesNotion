@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import {
-   NotionBlockModel,
+   INotionBlockModel,
    NotionBlockRecord,
 } from 'aNotion/models/NotionBlock';
-import { NotionPageMarks } from 'aNotion/models/NotionPage';
+import { INotionPageMarks } from 'aNotion/models/INotionPage';
 import * as blockService from 'aNotion/services/blockService';
 import * as pageService from 'aNotion/services/pageService';
 import { PageMarkState } from 'aNotion/components/pageMarks/pageMarksState';
@@ -17,11 +17,11 @@ const initialState: PageMarkState = {
 };
 
 const processPageForMarks = createAsyncThunk<
-   NotionPageMarks,
+   INotionPageMarks,
    { pageId: string; record: NotionBlockRecord; signal: AbortSignal }
 >(
    'notion/page/processPage',
-   async ({ pageId, record, signal }, thunkApi): Promise<NotionPageMarks> => {
+   async ({ pageId, record, signal }, thunkApi): Promise<INotionPageMarks> => {
       let marks = await pageService.processPageForMarks(pageId, record, signal);
       thunkApi.dispatch(
          sidebarExtensionActions.setUpdateMarksStatus(
@@ -39,21 +39,21 @@ const pageMarkSlice = createSlice({
    extraReducers: {
       [processPageForMarks.fulfilled.toString()]: (
          state,
-         action: PayloadAction<NotionPageMarks>
+         action: PayloadAction<INotionPageMarks>
       ) => {
          state.pageMarks = action.payload;
          state.status = thunkStatus.fulfilled;
       },
       [processPageForMarks.pending.toString()]: (
          state,
-         action: PayloadAction<NotionPageMarks>
+         action: PayloadAction<INotionPageMarks>
       ) => {
          state.pageMarks = undefined;
          state.status = thunkStatus.pending;
       },
       [processPageForMarks.rejected.toString()]: (
          state,
-         action: PayloadAction<NotionPageMarks>
+         action: PayloadAction<INotionPageMarks>
       ) => {
          state.pageMarks = undefined;
          state.status = thunkStatus.rejected;

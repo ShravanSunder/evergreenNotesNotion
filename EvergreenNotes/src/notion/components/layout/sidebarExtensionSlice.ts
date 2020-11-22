@@ -18,7 +18,7 @@ import {
    extractNavigationData,
 } from 'aNotion/services/notionSiteService';
 import { pageMarkActions } from 'aNotion/components/pageMarks/pageMarksSlice';
-import { CurrentPageData } from 'aNotion/models/NotionPage';
+import { ICurrentPageData } from 'aNotion/models/INotionPage';
 import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { isGuid } from 'aCommon/extensionHelpers';
@@ -44,14 +44,14 @@ const initialState: SidebarExtensionState = {
 };
 
 const fetchCurrentNotionPage = createAsyncThunk<
-   CurrentPageData,
+   ICurrentPageData,
    { pageId: string }
 >(
    'notion/page/current',
    async (
       { pageId }: { pageId: string },
       thunkApi
-   ): Promise<CurrentPageData> => {
+   ): Promise<ICurrentPageData> => {
       let spaceId: string | undefined = undefined;
       const [record, chunk] = await blockService.fetchPageRecord(
          pageId,
@@ -115,7 +115,7 @@ const fetchCurrentNotionPage = createAsyncThunk<
 const fetchCurrentNotionPageReducers = {
    [fetchCurrentNotionPage.fulfilled.toString()]: (
       state: SidebarExtensionState,
-      action: PayloadAction<CurrentPageData>
+      action: PayloadAction<ICurrentPageData>
    ) => {
       state.currentNotionPage.currentPageData = action.payload;
       state.navigation.spaceId = action.payload?.spaceId;
@@ -123,14 +123,14 @@ const fetchCurrentNotionPageReducers = {
    },
    [fetchCurrentNotionPage.pending.toString()]: (
       state: SidebarExtensionState,
-      action: PayloadAction<CurrentPageData>
+      action: PayloadAction<ICurrentPageData>
    ) => {
       state.currentNotionPage.status = thunkStatus.pending;
       state.currentNotionPage.currentPageData = undefined;
    },
    [fetchCurrentNotionPage.rejected.toString()]: (
       state: SidebarExtensionState,
-      action: PayloadAction<CurrentPageData>
+      action: PayloadAction<ICurrentPageData>
    ) => {
       state.currentNotionPage.status = thunkStatus.rejected;
       state.currentNotionPage.currentPageData = undefined;

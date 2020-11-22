@@ -1,20 +1,20 @@
 import { RecordMap } from 'aNotion/types/notionV3/notionRecordTypes';
-import { NotionBlockModel, NotionBlockRecord } from './NotionBlock';
-import { SearchResultType } from 'aNotion/api/v3/apiRequestTypes';
+import { INotionBlockModel, NotionBlockRecord } from './NotionBlock';
+import { ISearchResultType } from 'aNotion/api/v3/apiRequestTypes';
 import * as blockService from 'aNotion/services/blockService';
 
-export interface SearchRecordModel {
+export interface ISearchRecordModel {
    id: string;
    isNavigable: boolean;
    score: number;
    highlight: { text: string; pathText: string };
-   notionBlock: NotionBlockModel;
+   notionBlock: INotionBlockModel;
    text: string;
    textByContext: string[];
-   path: NotionBlockModel[];
+   path: INotionBlockModel[];
 }
 
-export class SearchRecord implements SearchRecordModel {
+export class SearchRecord implements ISearchRecordModel {
    id: string;
    isNavigable: boolean;
    score: number;
@@ -22,9 +22,9 @@ export class SearchRecord implements SearchRecordModel {
    notionBlock: NotionBlockRecord;
    textByContext: string[] = [];
    text: string = '';
-   path: NotionBlockModel[] = [];
+   path: INotionBlockModel[] = [];
 
-   constructor(data: RecordMap, searchResult: SearchResultType) {
+   constructor(data: RecordMap, searchResult: ISearchResultType) {
       this.id = searchResult.id;
       this.isNavigable = searchResult.isNavigable;
       this.highlight = searchResult.highlight;
@@ -53,8 +53,8 @@ export class SearchRecord implements SearchRecordModel {
       );
    }
 
-   toSerializable = (): SearchRecordModel => {
-      let model: SearchRecordModel = {
+   toSerializable = (): ISearchRecordModel => {
+      let model: ISearchRecordModel = {
          id: this.id,
          isNavigable: this.isNavigable,
          score: this.score,

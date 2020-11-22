@@ -1,7 +1,7 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
 import { Breadcrumbs, Typography, Grid, Divider } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import {
    NotionContentWithBlocks,
@@ -28,7 +28,7 @@ import { isGuid } from 'aCommon/extensionHelpers';
 export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
    let classes = useReferenceStyles();
 
-   let backlinkedPageBlock: NotionBlockModel | undefined = undefined;
+   let backlinkedPageBlock: INotionBlockModel | undefined = undefined;
    if (backlink.path.length > 0) {
       backlinkedPageBlock = backlink.path[0];
    }

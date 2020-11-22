@@ -7,8 +7,8 @@ import {
 import * as searchApi from 'aNotion/api/v3/searchApi';
 import * as referenceApi from 'aNotion/api/v3/referenceApi';
 import {
-   BacklinkRecordType,
-   SearchResultsType,
+   IBacklinkRecordType,
+   ISearchResultsType,
    SearchSort,
 } from 'aNotion/api/v3/apiRequestTypes';
 import {
@@ -27,7 +27,7 @@ import {
 } from 'aNotion/services/referenceService';
 import { currentPageSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';
 import { updateStatus } from 'aNotion/types/updateStatus';
 
@@ -42,10 +42,10 @@ const requestReferenceData = async (
    pageId: string,
    thunkApi: any,
    spaceId: string | undefined,
-   search: SearchResultsType | undefined,
+   search: ISearchResultsType | undefined,
    query: string,
-   links: BacklinkRecordType | undefined,
-   relations: NotionBlockModel[] | undefined
+   links: IBacklinkRecordType | undefined,
+   relations: INotionBlockModel[] | undefined
 ) => {
    try {
       let linksPromise = referenceApi.getBacklinks(pageId, thunkApi.signal);
@@ -74,12 +74,12 @@ const requestReferenceData = async (
 };
 
 const processReferenceData = (
-   links: BacklinkRecordType | undefined,
-   search: SearchResultsType | undefined,
+   links: IBacklinkRecordType | undefined,
+   search: ISearchResultsType | undefined,
    query: string,
    pageId: string,
    thunkApi: any,
-   relations: NotionBlockModel[] | undefined
+   relations: INotionBlockModel[] | undefined
 ) => {
    let b: BacklinkRecordModel[] = [];
    if (links != null) {
@@ -118,9 +118,9 @@ const fetchRefsForPage = createAsyncThunk<
    'notion/reference/fetchRefsForPage',
    async ({ query, pageId }, thunkApi): Promise<PageReferences> => {
       //resolve promises
-      let search: SearchResultsType | undefined = undefined;
-      let links: BacklinkRecordType | undefined = undefined;
-      let relations: NotionBlockModel[] | undefined = undefined;
+      let search: ISearchResultsType | undefined = undefined;
+      let links: IBacklinkRecordType | undefined = undefined;
+      let relations: INotionBlockModel[] | undefined = undefined;
 
       thunkApi.dispatch(
          sidebarExtensionActions.setUpdateReferenceStatus(updateStatus.updating)

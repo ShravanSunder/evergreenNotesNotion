@@ -2,7 +2,7 @@ import React, { MouseEvent, useEffect, useState } from 'react';
 import { Breadcrumbs, Typography, Grid, Divider } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import {
-   NotionBlockModel,
+   INotionBlockModel,
    NotionBlockRecord,
 } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
@@ -26,7 +26,7 @@ import { getValuesForSemanticType } from 'aNotion/services/pageService';
 export const PageMention = ({
    mentionBlock,
 }: {
-   mentionBlock: NotionBlockModel;
+   mentionBlock: INotionBlockModel;
 }) => {
    let classes = useReferenceStyles();
    const [mentionIds, setMentionIds] = useState<string[]>();

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, ThunkDispatch } from '@reduxjs/toolkit';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { fetchPageRecord } from 'aNotion/services/blockService';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { RecordState } from 'aNotion/components/blocks/blockState';
 import { blockSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
@@ -10,7 +10,7 @@ import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
 const initialState: RecordState = {};
 
 const fetchBlock = createAsyncThunk<
-   NotionBlockModel | undefined,
+   INotionBlockModel | undefined,
    { blockId: string }
 >(
    'notion/block/fetchBlock',
@@ -27,7 +27,7 @@ const fetchBlockIfNotInStore = async (
    state: RecordState,
    blockId: string,
    thunkApi: any
-): Promise<NotionBlockModel | undefined> => {
+): Promise<INotionBlockModel | undefined> => {
    let data = checkStateForBlock(state, blockId);
 
    if (data?.status !== thunkStatus.fulfilled) {

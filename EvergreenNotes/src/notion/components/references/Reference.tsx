@@ -12,10 +12,10 @@ import {
    AccordionDetails,
 } from './AccordionStyles';
 import { useReferenceStyles } from './referenceStyles';
-import { SearchRecordModel } from 'aNotion/models/SearchRecord';
+import { ISearchRecordModel } from 'aNotion/models/SearchRecord';
 import { Path } from './Path';
 
-export const Reference = ({ refData }: { refData: SearchRecordModel }) => {
+export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
    let classes = useReferenceStyles();
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>

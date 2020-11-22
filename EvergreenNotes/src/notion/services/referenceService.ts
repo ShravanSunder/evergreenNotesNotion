@@ -1,9 +1,9 @@
 import {
-   SearchResultsType,
+   ISearchResultsType,
    SearchSort,
-   BacklinkRecordType,
+   IBacklinkRecordType,
 } from 'aNotion/api/v3/apiRequestTypes';
-import { SearchRecord, SearchRecordModel } from 'aNotion/models/SearchRecord';
+import { SearchRecord, ISearchRecordModel } from 'aNotion/models/SearchRecord';
 import {
    SearchReferences,
    defaultSearchReferences,
@@ -12,7 +12,7 @@ import {
 import * as searchApi from 'aNotion/api/v3/searchApi';
 import {
    NotionBlockRecord,
-   NotionBlockModel,
+   INotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { getPropertiesWithSemanticFormat } from 'aNotion/services/pageService';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
@@ -41,13 +41,13 @@ export const searchNotion = async (
 
 export const processSearchResults = (
    query: string,
-   searchResults: SearchResultsType,
+   searchResults: ISearchResultsType,
    pageId: string | undefined,
    excludedBlockIds: string[] = [],
    searchLimit: number = 10
 ): SearchReferences => {
-   let fullTitle: SearchRecordModel[] = [];
-   let related: SearchRecordModel[] = [];
+   let fullTitle: ISearchRecordModel[] = [];
+   let related: ISearchRecordModel[] = [];
 
    for (let s of searchResults.results) {
       try {
@@ -83,8 +83,8 @@ export const processSearchResults = (
 const filterSearchResults = (
    data: SearchRecord,
    query: string,
-   fullTitle: SearchRecordModel[],
-   relatedResults: SearchRecordModel[]
+   fullTitle: ISearchRecordModel[],
+   relatedResults: ISearchRecordModel[]
 ) => {
    let fullRegex = new RegExp('\\b' + query + '\\b', 'i');
    if (fullRegex.test(data.text!)) {
@@ -95,8 +95,8 @@ const filterSearchResults = (
 };
 const pushRelatedResults = (
    data: SearchRecord,
-   fullTitle: SearchRecordModel[],
-   relatedResults: SearchRecordModel[]
+   fullTitle: ISearchRecordModel[],
+   relatedResults: ISearchRecordModel[]
 ) => {
    if (
       !fullTitle.find((x) => x.id === data.id) &&
@@ -109,7 +109,7 @@ const pushRelatedResults = (
 };
 
 const pushFullTextResults = (
-   fullTitle: SearchRecordModel[],
+   fullTitle: ISearchRecordModel[],
    data: SearchRecord
 ) => {
    if (!fullTitle.find((x) => x.id === data.id)) {
@@ -120,7 +120,7 @@ const pushFullTextResults = (
 };
 
 export const processBacklinks = (
-   backlinksRecords: BacklinkRecordType
+   backlinksRecords: IBacklinkRecordType
 ): BacklinkRecordModel[] => {
    let backlinkData: BacklinkRecordModel[] = [];
 
@@ -157,9 +157,9 @@ export const processBacklinks = (
 };
 
 export const getRelationsForPage = async (
-   pageBlock: NotionBlockModel | undefined,
+   pageBlock: INotionBlockModel | undefined,
    signal: AbortSignal
-): Promise<NotionBlockModel[]> => {
+): Promise<INotionBlockModel[]> => {
    if (pageBlock == null) {
       return [];
    }

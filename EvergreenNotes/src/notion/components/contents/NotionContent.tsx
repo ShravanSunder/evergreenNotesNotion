@@ -6,7 +6,7 @@ import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { LoadingSection, LoadingLine } from '../common/Loading';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Grid, Typography } from '@material-ui/core';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
@@ -27,7 +27,7 @@ interface INotionContentWithParentIdParams extends INotionContentParams {
 }
 
 interface INotionContentWithBlocksParams extends INotionContentParams {
-   blockContent?: NotionBlockModel;
+   blockContent?: INotionBlockModel;
 }
 
 export const NotionContentWithParentId = (
@@ -57,7 +57,7 @@ const NotionContent = ({
    let status = thunkStatus.idle;
    const dispatch: AppPromiseDispatch<any> = useDispatch();
 
-   let content: NotionBlockModel[];
+   let content: INotionBlockModel[];
    if (blockContent == null && parentBlockId != null) {
       content = contentDataFromState?.[parentBlockId]?.content;
       status = contentDataFromState?.[parentBlockId]?.status;
@@ -124,7 +124,7 @@ const Children = ({
    semanticFilter,
    style,
 }: {
-   block: NotionBlockModel;
+   block: INotionBlockModel;
    depth: number;
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
