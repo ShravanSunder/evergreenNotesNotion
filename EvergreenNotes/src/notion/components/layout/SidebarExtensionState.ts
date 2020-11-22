@@ -35,4 +35,5 @@ export type SidebarExtensionStatus = {
    webpageStatus: thunkStatus;
    updateReferences: updateStatus;
    updateMarks: updateStatus;
+   retryCounter: number;
 };

@@ -48,7 +48,9 @@ export const Layout = () => {
    useEffect(() => {
       if (
          sidebar.navigation.pageId != null &&
-         sidebar.status.webpageStatus === thunkStatus.fulfilled &&
+         (sidebar.status.webpageStatus === thunkStatus.fulfilled ||
+            (sidebar.status.webpageStatus === thunkStatus.rejected &&
+               sidebar.status.retryCounter <= 3)) &&
          isGuid(sidebar.navigation.pageId)
       ) {
          setNoNotionPageId(false);
@@ -65,6 +67,7 @@ export const Layout = () => {
          sidebarExtensionActions.unloadPreviousPage();
          setNoNotionPageId(true);
       }
+
       return () => {};
    }, [
       sidebar.navigation.pageId,

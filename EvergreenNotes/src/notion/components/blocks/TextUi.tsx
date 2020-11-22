@@ -24,6 +24,7 @@ import { useBlockStyles } from './useBlockStyles';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { MentionsState } from '../mentions/mentionsState';
 import { RecordState } from './blockState';
+import { SomethingWentWrong } from '../common/Loading';
 
 export interface IBaseTextUiParams {
    block: INotionBlockModel;
@@ -52,8 +53,11 @@ export const TextUi = ({
    semanticFilter,
 }: ITextUiParams) => {
    let classes = useBlockStyles();
-   const bb = block.block as IBaseTextBlock;
-   const title = bb?.properties?.title as SemanticString[];
+   let title: SemanticString[] | undefined = (block.block as IBaseTextBlock)
+      ?.properties?.title as SemanticString[];
+   if (title == null) {
+      title = block?.collection?.name;
+   }
 
    if (title != null) {
       //using interactive as a switch to truncate text size
@@ -97,7 +101,7 @@ export const TextUi = ({
          </React.Fragment>
       );
    }
-   return null;
+   return <SomethingWentWrong />;
 };
 
 export interface ISegmentMeta {

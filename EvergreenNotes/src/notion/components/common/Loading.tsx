@@ -72,6 +72,17 @@ export const LoadingImage = () => {
    return <Skeleton variant="rect" style={{ padding: 9 }} height={40} />;
 };
 
+export const SomethingWentWrong = () => {
+   return (
+      <Typography
+         variant="body2"
+         style={{ padding: 7, marginBottom: 15 }}
+         gutterBottom>
+         😵 Something went wrong in rendering the block...
+      </Typography>
+   );
+};
+
 export const NothingToFind = () => {
    return (
       <Typography
@@ -89,7 +100,8 @@ export const AccessIssue = () => {
          variant="h6"
          style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
-         🙅🏾‍♂️ Either This isn't a notion page or you have full access...
+         🙅🏾‍♂️ Either This isn't a notion page, the API is down or you do not have
+         full access...
       </Typography>
    );
 };
@@ -133,7 +145,7 @@ export const ErrorCouldNotLoadReferences = () => {
          variant="h6"
          style={{ padding: 7, marginBottom: 15 }}
          gutterBottom>
-         😵 Couldn't load references. 🙏🏾 Please try refreshing page.
+         😵😵😵 Couldn't load references. 🙏🏾 Please try refreshing page.
       </Typography>
    );
 };
