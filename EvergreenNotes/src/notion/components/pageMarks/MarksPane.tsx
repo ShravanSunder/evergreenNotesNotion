@@ -44,7 +44,7 @@ const useStyles = makeStyles(() =>
 const NavigateToBlockInNotion = ({ block }: { block: NotionBlockModel }) => {
    const handleNavigate = (blockId: string) => {
       const msg: TNavigateMessage = {
-         blockId,
+         blockId: blockId,
          type: 'navigate',
          message: 'NavigateToBlockInNotion',
       };

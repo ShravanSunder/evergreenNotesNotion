@@ -4,23 +4,28 @@ import { Button, Grid, IconButton } from '@material-ui/core';
 import { LinkOutlined } from '@material-ui/icons';
 import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
 import { Launch, FileCopyOutlined, WidgetsTwoTone } from '@material-ui/icons';
-import { copyToClipboard } from 'aCommon/extensionHelpers';
+import { copyToClipboard, isGuid } from 'aCommon/extensionHelpers';
 import { LightTooltip } from '../common/Styles';
 import { useSnackbar } from 'notistack';
-import { useReferenceStyles } from './AccordionStyles';
-import { SearchRecordModel } from 'aNotion/models/SearchRecord';
+import { useReferenceStyles } from './referenceStyles';
 import { NotionBlockModel } from 'aNotion/models/NotionBlock';
 import { SidebarExtensionState } from '../layout/SidebarExtensionState';
+import { TNavigateMessage } from 'aSidebar/sidebarMessaging';
+import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
+
+interface IReferenceActionParams {
+   id: string;
+   text: string | undefined;
+   path: NotionBlockModel[];
+   mentionSourceId?: string;
+}
 
 export const ReferenceActions = ({
    id,
    text,
    path,
-}: {
-   id: string;
-   text: string | undefined;
-   path: NotionBlockModel[];
-}) => {
+   mentionSourceId = undefined,
+}: IReferenceActionParams) => {
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const { enqueueSnackbar } = useSnackbar();
 
@@ -38,6 +43,20 @@ export const ReferenceActions = ({
          }
       }
    };
+
+   const handleMentionSourceIdClick = (e: SyntheticEvent) => {
+      e.stopPropagation();
+
+      if (mentionSourceId != null && isGuid(mentionSourceId)) {
+         const msg: TNavigateMessage = {
+            blockId: mentionSourceId,
+            type: 'navigate',
+            message: 'NavigateToBlockInNotion',
+         };
+         window.parent.postMessage(msg, '*');
+      }
+   };
+
    const handleCopyLink = (e: SyntheticEvent) => {
       e.stopPropagation();
       let page = path.slice(-1).pop();
@@ -82,7 +101,7 @@ export const ReferenceActions = ({
                   title="Copy a global embed block link"
                   placement="bottom">
                   <Button
-                     className={classes.button}
+                     className={classes.actionButton}
                      size="small"
                      color="secondary"
                      variant="outlined"
@@ -97,11 +116,12 @@ export const ReferenceActions = ({
             <Grid item>
                <LightTooltip title="Copy link" placement="bottom">
                   <IconButton
-                     className={classes.button}
+                     className={classes.actionButton}
                      color="secondary"
                      size="small"
                      onMouseDown={handleCopyLink}>
-                     <LinkOutlined></LinkOutlined>
+                     <LinkOutlined
+                        className={classes.actionButtonIcon}></LinkOutlined>
                   </IconButton>
                </LightTooltip>
             </Grid>
@@ -109,11 +129,13 @@ export const ReferenceActions = ({
                <Grid item>
                   <LightTooltip title="Copy text" placement="bottom">
                      <IconButton
-                        className={classes.button}
+                        className={classes.actionButton}
                         size="small"
                         color="secondary"
                         onClick={handleCopyText}>
-                        <FileCopyOutlined />
+                        <FileCopyOutlined
+                           className={classes.actionButtonIcon}
+                        />
                      </IconButton>
                   </LightTooltip>
                </Grid>
@@ -121,15 +143,28 @@ export const ReferenceActions = ({
             <Grid item>
                <LightTooltip title="Open page in a new tab" placement="bottom">
                   <IconButton
-                     className={classes.button}
+                     className={classes.actionButton}
                      color="secondary"
                      size="small"
                      onMouseDown={handleNewTabPreventMiddelScroll}
                      onMouseUp={handleNewTabMiddleClick}>
-                     <Launch></Launch>
+                     <Launch className={classes.actionButtonIcon} />
                   </IconButton>
                </LightTooltip>
             </Grid>
+            {mentionSourceId != null && (
+               <Grid item>
+                  <LightTooltip title="Go to mention block" placement="bottom">
+                     <IconButton
+                        className={classes.actionButton}
+                        color="secondary"
+                        size="small"
+                        onClick={handleMentionSourceIdClick}>
+                        <ZoomOutMapIcon className={classes.actionButtonIcon} />
+                     </IconButton>
+                  </LightTooltip>
+               </Grid>
+            )}
          </Grid>
       </Grid>
    );

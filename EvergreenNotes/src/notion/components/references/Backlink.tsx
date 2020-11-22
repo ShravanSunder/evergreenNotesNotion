@@ -11,12 +11,12 @@ import { ReferenceActions } from 'aNotion/components/references/ReferenceActions
 
 import BlockUi from 'aNotion/components/blocks/BlockUi';
 import {
-   useReferenceStyles,
    Accordion,
    AccordionSummary,
    AccordionActions,
    AccordionDetails,
 } from './AccordionStyles';
+import { useReferenceStyles } from './referenceStyles';
 import { BacklinkRecordModel } from 'aNotion/components/references/referenceState';
 import { Path } from 'aNotion/components/references/Path';
 import { TextUi } from '../blocks/TextUi';
@@ -52,7 +52,10 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
                <ReferenceActions
                   id={backlink.backlinkBlock.blockId}
                   path={backlink.path}
-                  text={backlink.backlinkBlock.simpleTitle}></ReferenceActions>
+                  text={backlink.backlinkBlock.simpleTitle}
+                  mentionSourceId={
+                     backlink.backlinkBlock.blockId
+                  }></ReferenceActions>
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>

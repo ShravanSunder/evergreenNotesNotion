@@ -6,12 +6,12 @@ import { NotionContentWithBlocks } from 'aNotion/components/contents/NotionConte
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
 
 import {
-   useReferenceStyles,
    Accordion,
    AccordionSummary,
    AccordionActions,
    AccordionDetails,
 } from './AccordionStyles';
+import { useReferenceStyles } from './referenceStyles';
 import { SearchRecordModel } from 'aNotion/models/SearchRecord';
 import { Path } from './Path';
 

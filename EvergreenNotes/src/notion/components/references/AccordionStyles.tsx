@@ -1,4 +1,4 @@
-import { withStyles, makeStyles, Theme, createStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
 import {
    Accordion as MuiAccordion,
    AccordionSummary as MuiAccordionSummary,
@@ -60,21 +60,3 @@ export const AccordionActions = withStyles((theme) => ({
       backgroundColor: grey[50],
    },
 }))(MuiAccordionActions);
-
-export const useReferenceStyles = makeStyles((theme: Theme) =>
-   createStyles({
-      typography: {
-         overflowWrap: 'anywhere',
-         textAlign: 'left',
-      },
-      button: {
-         fontSize: '0.65rem',
-         color: grey[700],
-         borderColor: grey[700],
-      },
-      reference: {
-         padding: theme.spacing(1),
-         // marginLeft: -theme.spacing(1),
-      },
-   })
-);

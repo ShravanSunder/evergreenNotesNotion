@@ -18,7 +18,11 @@ const handleReceiveMessage = (event: any) => {
          `[data-block-id="${data.blockId}"]`
       );
       if (element != null) {
-         element.scrollIntoView();
+         try {
+            element.scrollIntoView({ behavior: 'smooth' });
+         } catch {
+            /* do nothing*/
+         }
       }
    }
 };
