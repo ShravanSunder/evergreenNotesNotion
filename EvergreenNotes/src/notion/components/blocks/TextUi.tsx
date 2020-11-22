@@ -18,7 +18,7 @@ import {
 import { getColor, parseDate } from 'aNotion/services/blockService';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 import { blockActions } from 'aNotion/components/blocks/blockSlice';
-import { getPageUrl } from 'aNotion/services/notionSiteService';
+import { getPageUrl, getSiteUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
 import { useBlockStyles } from './useBlockStyles';
 import { Variant } from '@material-ui/core/styles/createTypography';
@@ -29,11 +29,11 @@ export interface IBaseTextUiParams {
    block: INotionBlockModel;
    style?: React.CSSProperties;
    semanticFilter?: SemanticFormatEnum[];
+   interactive?: boolean;
 }
 
 export interface ITextUiParams extends IBaseTextUiParams {
    variant?: Variant;
-   interactive?: boolean;
 }
 
 interface ISegmentParams {
@@ -41,7 +41,7 @@ interface ISegmentParams {
    style?: React.CSSProperties;
    semanticFilter?: SemanticFormatEnum[];
    variant?: Variant;
-   interactive?: boolean;
+   interactive: boolean;
 }
 
 export const TextUi = ({
@@ -322,7 +322,7 @@ const formatSegment = (
       segmentDetails != null &&
       segmentType === SemanticFormatEnum.Link
    ) {
-      link = segmentDetails;
+      link = getSiteUrl() + segmentDetails.replace(/-/g, '').replace('/', '');
    } else if (
       segmentDetails != null &&
       segmentType === SemanticFormatEnum.User &&

@@ -9,6 +9,7 @@ export const NumberUi = ({
    block,
    semanticFilter,
    style,
+   interactive,
 }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
    return (
@@ -24,6 +25,7 @@ export const NumberUi = ({
             <TextUi
                block={block}
                semanticFilter={semanticFilter}
+               interactive={interactive}
                style={style}></TextUi>
          </Grid>
       </Grid>

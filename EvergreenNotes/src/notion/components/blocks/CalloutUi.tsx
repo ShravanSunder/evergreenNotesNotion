@@ -3,9 +3,9 @@ import { Typography, Grid } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Callout } from 'aNotion/types/notionV3/notionBlockTypes';
 import { useBlockStyles } from './useBlockStyles';
-import { TextUi } from './TextUi';
+import { IBaseTextUiParams, TextUi } from './TextUi';
 
-export const CalloutUi = ({ block }: { block: INotionBlockModel }) => {
+export const CalloutUi = ({ block, interactive = true }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
    var callout = block.block as Callout;
 
@@ -17,7 +17,7 @@ export const CalloutUi = ({ block }: { block: INotionBlockModel }) => {
             </Typography>
          </Grid>
          <Grid item xs={10}>
-            <TextUi block={block}></TextUi>
+            <TextUi block={block} interactive={interactive}></TextUi>
          </Grid>
       </Grid>
    );

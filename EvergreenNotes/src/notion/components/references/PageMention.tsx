@@ -75,6 +75,7 @@ export const PageMention = ({
                               <NotionContentWithParentId
                                  key={m}
                                  renderPagesAsInline={false}
+                                 interactive={true}
                                  parentBlockId={m}></NotionContentWithParentId>
                            ))}
                         </Grid>

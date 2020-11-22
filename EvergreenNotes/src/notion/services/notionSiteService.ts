@@ -37,14 +37,14 @@ export const extractNavigationData = (
          extractPageIfValid(data, result);
       }
       result.url = url;
-      result.notionSite = getNotionSiteUrl(url);
+      result.notionSite = extractNotionSiteUrl(url);
    } else {
       console.log('error: not notion page');
    }
    return result;
 };
 
-const getNotionSiteUrl = (url: string): string => {
+const extractNotionSiteUrl = (url: string): string => {
    let segments = url.split('/');
    let length = segments.length;
    let result = segments.reduce(
@@ -77,6 +77,11 @@ const isNotionUrl = (url: string) => {
 export const getPageUrl = (pageId: string) => {
    const sidebar = getAppState(sidebarExtensionSelector);
    return sidebar.navigation.notionSite + pageId.replace(/-/g, '');
+};
+
+export const getSiteUrl = () => {
+   const sidebar = getAppState(sidebarExtensionSelector);
+   return sidebar.navigation.notionSite;
 };
 
 function extractPageIfValid(

@@ -7,6 +7,7 @@ export const BulletUi = ({
    block,
    semanticFilter,
    style,
+   interactive,
 }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
    return (
@@ -27,7 +28,8 @@ export const BulletUi = ({
             <TextUi
                block={block}
                semanticFilter={semanticFilter}
-               style={style}></TextUi>
+               style={style}
+               interactive={interactive}></TextUi>
          </Grid>
       </Grid>
    );

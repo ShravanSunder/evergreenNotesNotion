@@ -13,6 +13,7 @@ export const ToggleUi = ({
    block,
    semanticFilter,
    style,
+   interactive,
 }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
    let toggle = block.block as Toggle;
@@ -43,11 +44,13 @@ export const ToggleUi = ({
                block={block}
                semanticFilter={semanticFilter}
                style={style}
+               interactive={interactive}
             />
             {expanded && (
                <NotionContentWithParentId
                   parentBlockId={block.blockId}
                   semanticFilter={aggregatedSemanticFilter}
+                  interactive={interactive}
                   style={style}></NotionContentWithParentId>
             )}
          </Grid>

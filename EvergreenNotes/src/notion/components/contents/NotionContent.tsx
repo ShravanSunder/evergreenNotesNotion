@@ -20,6 +20,7 @@ interface INotionContentParams {
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
    renderPagesAsInline?: boolean;
+   interactive?: boolean;
 }
 
 interface INotionContentWithParentIdParams extends INotionContentParams {
@@ -48,8 +49,9 @@ const NotionContent = ({
    depth,
    maxDepth,
    semanticFilter,
-   style,
+   style = undefined,
    renderPagesAsInline = true,
+   interactive = true,
 }: INotionContentParams &
    INotionContentWithParentIdParams &
    INotionContentWithBlocksParams) => {
@@ -96,17 +98,19 @@ const NotionContent = ({
                   {content.map((p, i) => (
                      <React.Fragment key={p.blockId}>
                         <BlockUi
+                           interactive={interactive}
                            block={p}
                            index={i}
                            semanticFilter={semanticFilter}
                            style={style}
                            renderPagesAsInline={renderPagesAsInline}></BlockUi>
                         {(depth ?? 1) < (maxDepth ?? 6) && (
-                           <Children
+                           <ContentChildren
                               block={p}
                               depth={depth ?? 1}
                               semanticFilter={semanticFilter}
-                              style={style}></Children>
+                              interactive={interactive}
+                              style={style}></ContentChildren>
                         )}
                      </React.Fragment>
                   ))}
@@ -118,17 +122,21 @@ const NotionContent = ({
    );
 };
 
-const Children = ({
-   block,
-   depth,
-   semanticFilter,
-   style,
-}: {
+interface IContentChildren {
    block: INotionBlockModel;
    depth: number;
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
-}) => {
+   interactive?: boolean;
+}
+
+const ContentChildren = ({
+   block,
+   depth,
+   semanticFilter,
+   style,
+   interactive,
+}: IContentChildren) => {
    let classes = useBlockStyles();
 
    switch (block.type) {
@@ -159,7 +167,8 @@ const Children = ({
                parentBlockId={block.blockId}
                semanticFilter={semanticFilter}
                style={style}
-               depth={depth + 1}></NotionContent>
+               depth={depth + 1}
+               interactive={interactive}></NotionContent>
          </Grid>
       </Grid>
    );

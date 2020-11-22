@@ -41,6 +41,7 @@ export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
             <AccordionDetails>
                <div className={classes.reference}>
                   <NotionContentWithBlocks
+                     interactive={true}
                      renderPagesAsInline={false}
                      blockContent={
                         refData.notionBlock

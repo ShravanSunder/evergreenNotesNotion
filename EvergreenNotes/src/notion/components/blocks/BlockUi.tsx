@@ -27,6 +27,7 @@ interface IBlockUi {
    index: number | undefined;
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
+   interactive?: boolean;
    renderPagesAsInline?: boolean;
 }
 
@@ -35,6 +36,7 @@ export const BlockUi = ({
    index,
    semanticFilter,
    style,
+   interactive = true,
    renderPagesAsInline = true,
 }: IBlockUi) => {
    let classes = useBlockStyles();
@@ -61,16 +63,18 @@ export const BlockUi = ({
                   variant={variant}
                   block={block}
                   semanticFilter={semanticFilter}
+                  interactive={interactive}
                   style={blockStyle}></TextUi>
             )}
             {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
             {block.type === BlockTypeEnum.Callout && (
-               <CalloutUi block={block}></CalloutUi>
+               <CalloutUi block={block} interactive={interactive}></CalloutUi>
             )}
             {block.type === BlockTypeEnum.Quote && (
                <QuoteUi
                   block={block}
                   semanticFilter={semanticFilter}
+                  interactive={interactive}
                   style={blockStyle}
                />
             )}
@@ -79,6 +83,7 @@ export const BlockUi = ({
                   block={block}
                   semanticFilter={semanticFilter}
                   style={blockStyle}
+                  interactive={interactive}
                />
             )}
             {block.type === BlockTypeEnum.NumberedList && (
@@ -86,6 +91,7 @@ export const BlockUi = ({
                   block={block}
                   semanticFilter={semanticFilter}
                   style={blockStyle}
+                  interactive={interactive}
                />
             )}
             {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
@@ -95,6 +101,7 @@ export const BlockUi = ({
                   style={style}
                   inlineBlock={renderPagesAsInline}
                   showContent={true}
+                  interactive={interactive}
                />
             )}
             {block.type === BlockTypeEnum.CollectionViewPage && (
@@ -103,12 +110,14 @@ export const BlockUi = ({
                   style={style}
                   inlineBlock={renderPagesAsInline}
                   showContent={true}
+                  interactive={interactive}
                />
             )}
             {block.type === BlockTypeEnum.Toggle && (
                <ToggleUi
                   block={block}
                   semanticFilter={semanticFilter}
+                  interactive={interactive}
                   style={blockStyle}
                />
             )}

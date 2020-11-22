@@ -9,6 +9,7 @@ export const QuoteUi = ({
    block,
    semanticFilter,
    style,
+   interactive,
 }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
    return (
@@ -21,6 +22,7 @@ export const QuoteUi = ({
          <Grid item xs={11}>
             <TextUi
                block={block}
+               interactive={interactive}
                semanticFilter={semanticFilter}
                style={style}></TextUi>
          </Grid>

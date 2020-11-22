@@ -17,7 +17,7 @@ import { handleNavigateToBlockInNotion } from './NavigateToBlockInNotion';
 const useStyles = makeStyles(() =>
    createStyles({
       spacing: {
-         marginBottom: 42,
+         marginBottom: 18,
       },
       toc: {
          cursor: 'pointer',
@@ -34,6 +34,9 @@ export const TableOfContentsPane = () => {
    const headers: INotionBlockModel[] = pageMarks?.headers ?? [];
    const nothingFound = headers.length === 0;
 
+   const hasH1 = headers.some((f) => f.type === BlockTypeEnum.Header1);
+   const hasH2 = headers.some((f) => f.type === BlockTypeEnum.Header2);
+
    const toc = (
       <Grid container>
          {headers.length > 0 &&
@@ -44,6 +47,7 @@ export const TableOfContentsPane = () => {
                      <PageUi
                         block={currentPageData?.pageBlock}
                         inlineBlock={false}
+                        interactive={false}
                         showContent={false}></PageUi>
                   </Grid>
                   <Grid item xs={12} className={classes.spacing}></Grid>
@@ -64,17 +68,19 @@ export const TableOfContentsPane = () => {
                         <BlockUi
                            block={h}
                            index={0}
+                           interactive={false}
                            renderPagesAsInline={true}></BlockUi>
                      </Grid>
                   </>
                );
             } else if (h.type === BlockTypeEnum.Header2) {
+               const indent: number = hasH1 ? 1 : 0;
                return (
                   <>
-                     <Grid item xs={1} />
+                     {indent == 1 && <Grid item xs={1} />}
                      <Grid
                         item
-                        xs={11}
+                        xs={(12 - indent) as any}
                         key={h.blockId}
                         className={classes.toc}
                         onClick={() =>
@@ -83,17 +89,25 @@ export const TableOfContentsPane = () => {
                         <BlockUi
                            block={h}
                            index={0}
+                           interactive={false}
                            renderPagesAsInline={true}></BlockUi>
                      </Grid>
                   </>
                );
             } else if (h.type === BlockTypeEnum.Header3) {
+               let indent = 0;
+               if (hasH1 && hasH2) {
+                  indent = 2;
+               } else if (hasH1 || hasH2) {
+                  indent = 1;
+               }
+
                return (
                   <>
-                     <Grid item xs={2} />
+                     {indent > 0 && <Grid item xs={indent as any} />}
                      <Grid
                         item
-                        xs={10}
+                        xs={(12 - indent) as any}
                         key={h.blockId}
                         className={classes.toc}
                         onClick={() =>
@@ -102,6 +116,7 @@ export const TableOfContentsPane = () => {
                         <BlockUi
                            block={h}
                            index={0}
+                           interactive={false}
                            renderPagesAsInline={true}></BlockUi>
                      </Grid>
                   </>

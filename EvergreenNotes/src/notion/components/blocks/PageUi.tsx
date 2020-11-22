@@ -12,6 +12,7 @@ interface IPageUIParams {
    style?: React.CSSProperties | undefined;
    inlineBlock?: boolean;
    showContent?: boolean | undefined;
+   interactive?: boolean;
 }
 
 export const PageUi = ({
@@ -19,6 +20,7 @@ export const PageUi = ({
    style = undefined,
    inlineBlock = true,
    showContent = undefined,
+   interactive = false,
 }: IPageUIParams) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
@@ -58,11 +60,16 @@ export const PageUi = ({
    return (
       <div id="PageUI" style={style}>
          {iconComponent}
-         <TextUi block={block} variant={variant} style={style}></TextUi>
+         <TextUi
+            block={block}
+            variant={variant}
+            interactive={interactive}
+            style={style}></TextUi>
          {renderChildren && (
             <>
                <div style={{ marginTop: 12 }}></div>
                <NotionContentWithParentId
+                  interactive={interactive}
                   parentBlockId={block.blockId}></NotionContentWithParentId>
             </>
          )}
