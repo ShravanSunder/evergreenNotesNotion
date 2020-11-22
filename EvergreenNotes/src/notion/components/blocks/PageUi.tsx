@@ -6,6 +6,7 @@ import { TextUi } from './TextUi';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { NotionContentWithParentId } from 'aNotion/components/contents/NotionContent';
 import { MaximizeTwoTone } from '@material-ui/icons';
+import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 
 interface IPageUIParams {
    block: INotionBlockModel;
@@ -50,6 +51,13 @@ export const PageUi = ({
       );
    } else {
       icon = '📄';
+      if (
+         block.type === BlockTypeEnum.CollectionViewPage ||
+         block.type === BlockTypeEnum.CollectionViewInline
+      ) {
+         icon = '🗄️';
+      }
+
       iconComponent = (
          <Typography display="inline" variant={variant}>
             {'' + icon + ' '}

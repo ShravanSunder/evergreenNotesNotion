@@ -113,6 +113,15 @@ export const BlockUi = ({
                   interactive={interactive}
                />
             )}
+            {block.type === BlockTypeEnum.CollectionViewInline && (
+               <PageUi
+                  block={block}
+                  style={style}
+                  inlineBlock={renderPagesAsInline}
+                  showContent={true}
+                  interactive={interactive}
+               />
+            )}
             {block.type === BlockTypeEnum.Toggle && (
                <ToggleUi
                   block={block}
