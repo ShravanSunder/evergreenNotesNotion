@@ -50,8 +50,9 @@ export const ErrorFallback = ({ error }: FallbackProps) => {
    );
 };
 export { ErrorBoundary };
+export default ErrorFallback;
 
-function componentMessages(error: any) {
+const componentMessages = (error: any) => {
    let msg = 'Uhoh! There was an error!';
    let showDetails = true; // dev flag needed //todo
 
@@ -64,11 +65,11 @@ function componentMessages(error: any) {
       );
 
    return { msg, showDetails, msgDetails };
-}
+};
 
-function consoleLog(error: any, componentStack: string | undefined) {
+const consoleLog = (error: any, componentStack: string | undefined) => {
    console.log('--------------------');
    console.log(error.stack);
    console.log(componentStack);
    console.log('--------------------');
-}
+};

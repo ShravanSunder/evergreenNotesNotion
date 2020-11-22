@@ -8,13 +8,8 @@ import {
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';
-import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
 
-import { lightGreen, grey } from '@material-ui/core/colors';
-import { makeStyles, Theme, createStyles } from '@material-ui/core';
-import { flushCache } from 'aUtilities/apiCache';
-import { NavigationState } from 'aNotion/components/layout/SidebarExtensionState';
 import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
 import { isGuid } from 'aCommon/extensionHelpers';
 import { updateStatus } from 'aNotion/types/updateStatus';
@@ -26,19 +21,6 @@ import {
 } from './LayoutMenuBar';
 import { NoNotionPageId } from './NoNotionPageId';
 import { TabContent } from './TabContent';
-
-export const ReferencesPane = React.lazy(
-   () => import('aNotion/components/references/ReferencesPane')
-);
-export const MarksPane = React.lazy(
-   () => import('aNotion/components/pageMarks/MarksPane')
-);
-export const SearchPane = React.lazy(
-   () => import('aNotion/components/references/SearchPane')
-);
-export const OptionsPane = React.lazy(
-   () => import('aNotion/components/options/OptionsPane')
-);
 
 export const Layout = () => {
    const dispatch: AppPromiseDispatch<any> = useDispatch();

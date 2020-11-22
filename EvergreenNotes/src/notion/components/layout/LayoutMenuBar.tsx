@@ -6,10 +6,8 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import {
    FindInPageTwoTone,
    BookTwoTone,
-   SubjectTwoTone,
    RefreshTwoTone,
    SettingsTwoTone,
-   FormatListNumberedRtlTwoTone,
    FontDownloadTwoTone,
    TocTwoTone,
 } from '@material-ui/icons/';

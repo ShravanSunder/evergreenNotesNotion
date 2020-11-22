@@ -8,8 +8,22 @@ import {
 import { SidebarExtensionStatus } from 'aNotion/components/layout/SidebarExtensionState';
 import { calculateSidebarStatus } from 'aNotion/services/notionSiteService';
 import { LayoutTabs } from './LayoutMenuBar';
-import { ReferencesPane, MarksPane, SearchPane, OptionsPane } from './Layout';
-import TableOfContentsPane from '../pageMarks/TableOfContentsPane';
+
+export const ReferencesPane = React.lazy(
+   () => import('aNotion/components/references/ReferencesPane')
+);
+export const MarksPane = React.lazy(
+   () => import('aNotion/components/pageMarks/MarksPane')
+);
+export const SearchPane = React.lazy(
+   () => import('aNotion/components/references/SearchPane')
+);
+export const OptionsPane = React.lazy(
+   () => import('aNotion/components/options/OptionsPane')
+);
+export const TableOfContentsPane = React.lazy(
+   () => import('aNotion/components/pageMarks/TableOfContentsPane')
+);
 
 interface ITabContent {
    debouncedStatus: SidebarExtensionStatus;
