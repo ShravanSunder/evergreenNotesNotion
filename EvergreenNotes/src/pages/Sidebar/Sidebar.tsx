@@ -30,17 +30,17 @@ import { appHeight } from 'aSidebar/frameProperties';
 const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 
 const snackbarRoot = {
-   color: grey[600],
+   color: grey[500] + '!important',
    maxWidth: 290,
    zIndex: 1000,
 };
 const useStyles = makeStyles((theme: Theme) =>
    createStyles({
-      info: { backgroundColor: grey[100], ...snackbarRoot },
-      success: { backgroundColor: green[50], ...snackbarRoot },
-      error: { backgroundColor: red[100], ...snackbarRoot },
+      info: { backgroundColor: grey[100] + '!important', ...snackbarRoot },
+      success: { backgroundColor: green[50] + '!important', ...snackbarRoot },
+      error: { backgroundColor: red[100] + '!important', ...snackbarRoot },
       warning: {
-         backgroundColor: yellow[50],
+         backgroundColor: yellow[50] + '!important',
          ...snackbarRoot,
       },
    })
@@ -89,10 +89,10 @@ export const Sidebar = () => {
                               variantInfo: classes.info,
                            }}
                            autoHideDuration={1000}
-                           maxSnack={1}
+                           maxSnack={2}
                            dense={true}
                            preventDuplicate
-                           transitionDuration={{ enter: 250, exit: 100 }}
+                           transitionDuration={{ enter: 200, exit: 75 }}
                            variant="info"
                            anchorOrigin={{
                               vertical: 'bottom',
