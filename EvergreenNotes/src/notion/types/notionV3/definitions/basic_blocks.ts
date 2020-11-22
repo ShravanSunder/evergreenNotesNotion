@@ -65,7 +65,7 @@ export interface IEmptyBlock {
    copied_from?: base.UUID;
 }
 
-export interface BaseTextBlock extends IEmptyBlock {
+export interface IBaseTextBlock extends IEmptyBlock {
    properties?: {
       title?: SemanticString[];
    };
@@ -74,7 +74,7 @@ export interface BaseTextBlock extends IEmptyBlock {
 /**
  * Embedded Sub-Page block or Link To Page block.
  */
-export interface Page extends BaseTextBlock {
+export interface IPage extends IBaseTextBlock {
    type: BlockTypeEnum.Page;
    /**
     * In a database, every record is a page. Properties set in a database
@@ -104,7 +104,7 @@ export interface Page extends BaseTextBlock {
 /**
  * Text block. Editable, can have children.
  */
-export interface Text extends BaseTextBlock {
+export interface IText extends IBaseTextBlock {
    type: BlockTypeEnum.Text;
    properties?: {
       title: SemanticString[];
@@ -114,7 +114,7 @@ export interface Text extends BaseTextBlock {
 /**
  * Bulleted List block. Editable, can have children.
  */
-export interface BulletedList extends BaseTextBlock {
+export interface IBulletedList extends IBaseTextBlock {
    type: BlockTypeEnum.ButtetedList;
    properties?: {
       title: SemanticString[];
@@ -124,7 +124,7 @@ export interface BulletedList extends BaseTextBlock {
 /**
  * Numbered List block. Editable, can have children.
  */
-export interface NumberedList extends BaseTextBlock {
+export interface INumberedList extends IBaseTextBlock {
    type: BlockTypeEnum.NumberedList;
    properties?: {
       title: SemanticString[];
@@ -134,7 +134,7 @@ export interface NumberedList extends BaseTextBlock {
 /**
  * To Do block. Editable, can have children.
  */
-export interface ToDo extends BaseTextBlock {
+export interface IToDo extends IBaseTextBlock {
    type: BlockTypeEnum.ToDo;
    properties?: {
       title: SemanticString[];
@@ -145,7 +145,7 @@ export interface ToDo extends BaseTextBlock {
 /**
  * Toggle block. Editable, can have children.
  */
-export interface Toggle extends BaseTextBlock {
+export interface IToggle extends IBaseTextBlock {
    type: BlockTypeEnum.Toggle;
    properties?: {
       title: SemanticString[];
@@ -155,7 +155,7 @@ export interface Toggle extends BaseTextBlock {
 /**
  * Heading1 block. Editable, can't have children.
  */
-export interface Header1 extends BaseTextBlock {
+export interface IHeader1 extends IBaseTextBlock {
    type: BlockTypeEnum.Header1;
    properties?: {
       title: SemanticString[];
@@ -165,7 +165,7 @@ export interface Header1 extends BaseTextBlock {
 /**
  * Heading2 block. Editable, can't have children.
  */
-export interface Header2 extends BaseTextBlock {
+export interface IHeader2 extends IBaseTextBlock {
    type: BlockTypeEnum.Header2;
    properties?: {
       title: SemanticString[];
@@ -175,7 +175,7 @@ export interface Header2 extends BaseTextBlock {
 /**
  * Heading3 block. Editable, can't have children.
  */
-export interface Header3 extends BaseTextBlock {
+export interface IHeader3 extends IBaseTextBlock {
    type: BlockTypeEnum.Header3;
    properties?: {
       title: SemanticString[];
@@ -185,7 +185,7 @@ export interface Header3 extends BaseTextBlock {
 /**
  * Quote block. Editable, can't have children.
  */
-export interface Quote extends BaseTextBlock {
+export interface IQuote extends IBaseTextBlock {
    type: BlockTypeEnum.Quote;
    properties?: {
       title: SemanticString[];
@@ -195,7 +195,7 @@ export interface Quote extends BaseTextBlock {
 /**
  * Callout block. Editable, can't have children.
  */
-export interface Callout extends BaseTextBlock {
+export interface ICallout extends IBaseTextBlock {
    type: BlockTypeEnum.Callout;
    properties?: {
       title: SemanticString[];
@@ -211,7 +211,7 @@ export interface Callout extends BaseTextBlock {
  *
  * Children of this block must be {@link Column}.
  */
-export interface ColumnList extends IEmptyBlock {
+export interface IColumnList extends IEmptyBlock {
    type: BlockTypeEnum.ColumnList;
 }
 
@@ -220,25 +220,25 @@ export interface ColumnList extends IEmptyBlock {
  *
  * Parent of this block must be {@link ColumnList}.
  */
-export interface Column extends IEmptyBlock {
+export interface IColumn extends IEmptyBlock {
    type: BlockTypeEnum.Column;
 }
 
 /**
  * Divider block. Not editable, can't have children.
  */
-export interface Divider extends IEmptyBlock {
+export interface IDivider extends IEmptyBlock {
    type: BlockTypeEnum.Divider;
 }
 
-export interface TableOfContents extends IEmptyBlock {
+export interface ITableOfContents extends IEmptyBlock {
    type: BlockTypeEnum.TableOfContents;
 }
 
 /**
  * Math Equation block.
  */
-export interface Equation extends BaseTextBlock {
+export interface IEquation extends IBaseTextBlock {
    type: BlockTypeEnum.Equation;
    properties?: {
       /** LaTeX. */
@@ -249,7 +249,7 @@ export interface Equation extends BaseTextBlock {
 /**
  * Template button block.
  */
-export interface TemplateButton extends BaseTextBlock {
+export interface ITemplateButton extends IBaseTextBlock {
    type: BlockTypeEnum.TemplateButton;
    properties?: {
       /** Button name. */
@@ -257,39 +257,39 @@ export interface TemplateButton extends BaseTextBlock {
    };
 }
 
-export interface Breadcrumb extends IEmptyBlock {
+export interface IBreadcrumb extends IEmptyBlock {
    type: BlockTypeEnum.BreadCrumb;
 }
 
-export type BasicBlockUnion =
-   | Text
-   | BulletedList
-   | NumberedList
-   | ToDo
-   | Toggle
-   | Header1
-   | Header2
-   | Header3
-   | Quote
-   | Callout
-   | ColumnList
-   | Column
-   | Divider
-   | TableOfContents
-   | Equation
-   | TemplateButton
-   | Breadcrumb
-   | Image
-   | Video
-   | Audio
-   | Bookmark
-   | Code
-   | File;
+export type TBasicBlockUnion =
+   | IText
+   | IBulletedList
+   | INumberedList
+   | IToDo
+   | IToggle
+   | IHeader1
+   | IHeader2
+   | IHeader3
+   | IQuote
+   | ICallout
+   | IColumnList
+   | IColumn
+   | IDivider
+   | ITableOfContents
+   | IEquation
+   | ITemplateButton
+   | IBreadcrumb
+   | IImage
+   | IVideo
+   | IAudio
+   | IBookmark
+   | ICode
+   | IFile;
 
 /**
  * Image block.
  */
-export interface Image extends IEmptyBlock {
+export interface IImage extends IEmptyBlock {
    type: BlockTypeEnum.Image;
    properties?: {
       /**
@@ -306,7 +306,7 @@ export interface Image extends IEmptyBlock {
 /**
  * Video block.
  */
-export interface Video extends IEmptyBlock {
+export interface IVideo extends IEmptyBlock {
    type: BlockTypeEnum.Video;
    properties?: {
       /**
@@ -323,7 +323,7 @@ export interface Video extends IEmptyBlock {
 /**
  * Audio block.
  */
-export interface Audio extends IEmptyBlock {
+export interface IAudio extends IEmptyBlock {
    type: BlockTypeEnum.Audio;
    properties?: {
       source: [[base.NotionSecureUrl | base.PublicUrl]];
@@ -335,7 +335,7 @@ export interface Audio extends IEmptyBlock {
 /**
  * Web Bookmark block.
  */
-export interface Bookmark extends BaseTextBlock {
+export interface IBookmark extends IBaseTextBlock {
    type: BlockTypeEnum.Bookmark;
    properties?: {
       /** Link of the bookmarked web page. */
@@ -350,7 +350,7 @@ export interface Bookmark extends BaseTextBlock {
 /**
  * Code block.
  */
-export interface Code extends BaseTextBlock {
+export interface ICode extends IBaseTextBlock {
    type: BlockTypeEnum.Code;
    properties?: {
       /** Code content. */
@@ -362,7 +362,7 @@ export interface Code extends BaseTextBlock {
 /**
  * File block.
  */
-export interface File extends IEmptyBlock {
+export interface IFile extends IEmptyBlock {
    type: BlockTypeEnum.File;
    properties?: {
       /** Filename. */

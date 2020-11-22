@@ -16,21 +16,21 @@ import * as BasicBlocks from './definitions/basic_blocks';
 import * as DatabaseBlock from './definitions/database';
 import * as EmbedBlocks from './definitions/embed_blocks';
 
-export type NavigatableBlocks = Page | DatabaseBlock.CollectionViewPage;
+export type NavigatableBlocks = Page | DatabaseBlock.ICollectionViewPage;
 
 export type Block =
    | NavigatableBlocks
-   | BasicBlocks.BasicBlockUnion
-   | DatabaseBlock.DatabaseBlockUnion
+   | BasicBlocks.TBasicBlockUnion
+   | DatabaseBlock.TDatabaseBlockUnion
    | EmbedBlocks.EmbedBlockUnion;
 
-export interface Collection extends i_Collection {}
-export interface CollectionView extends i_CollectionView {}
-export interface Space extends i_Space {}
-export interface SpaceView extends i_SpaceView {}
-export interface Activity extends i_Activity {}
-export type Permission = t_Permission;
-export interface NotionUser extends i_NotionUser {}
+export interface ICollection extends i_Collection {}
+export interface ICollectionView extends i_CollectionView {}
+export interface ISpace extends i_Space {}
+export interface ISpaceView extends i_SpaceView {}
+export interface IActivity extends i_Activity {}
+export type IPermission = t_Permission;
+export interface INotionUser extends i_NotionUser {}
 
 // export {
 //    //Collection,
@@ -46,37 +46,37 @@ export interface NotionUser extends i_NotionUser {}
 //    // UserSettings,
 // };
 
-export type Breadcrumb = BasicBlocks.Breadcrumb;
-export type Equation = BasicBlocks.Equation;
-export type Factory = BasicBlocks.TemplateButton;
-export type TableOfContents = BasicBlocks.TableOfContents;
+export type Breadcrumb = BasicBlocks.IBreadcrumb;
+export type Equation = BasicBlocks.IEquation;
+export type Factory = BasicBlocks.ITemplateButton;
+export type TableOfContents = BasicBlocks.ITableOfContents;
 
-export type BulletedList = BasicBlocks.BulletedList;
-export type Callout = BasicBlocks.Callout;
-export type Column = BasicBlocks.Column;
-export type ColumnList = BasicBlocks.ColumnList;
-export type Divider = BasicBlocks.Divider;
-export type Header = BasicBlocks.Header1;
-export type NumberedList = BasicBlocks.NumberedList;
-export type Page = BasicBlocks.Page;
-export type Quote = BasicBlocks.Quote;
-export type SubHeader = BasicBlocks.Header2;
-export type SubSubHeader = BasicBlocks.Header3;
-export type Text = BasicBlocks.Text;
-export type ToDo = BasicBlocks.ToDo;
-export type Toggle = BasicBlocks.Toggle;
+export type BulletedList = BasicBlocks.IBulletedList;
+export type Callout = BasicBlocks.ICallout;
+export type Column = BasicBlocks.IColumn;
+export type ColumnList = BasicBlocks.IColumnList;
+export type Divider = BasicBlocks.IDivider;
+export type Header = BasicBlocks.IHeader1;
+export type NumberedList = BasicBlocks.INumberedList;
+export type Page = BasicBlocks.IPage;
+export type Quote = BasicBlocks.IQuote;
+export type SubHeader = BasicBlocks.IHeader2;
+export type SubSubHeader = BasicBlocks.IHeader3;
+export type Text = BasicBlocks.IText;
+export type ToDo = BasicBlocks.IToDo;
+export type Toggle = BasicBlocks.IToggle;
 
-export type CollectionViewInline = DatabaseBlock.CollectionViewInline;
-export type CollectionViewPage = DatabaseBlock.CollectionViewPage;
+export type CollectionViewInline = DatabaseBlock.ICollectionViewInline;
+export type CollectionViewPage = DatabaseBlock.ICollectionViewPage;
 
 //export type Codepen = EmbedBlock.Codepen;
 export type Embed = EmbedBlocks.Embed;
 //export type Invision = EmbedBlock.Invision;
 export type PDF = EmbedBlocks.PDF;
 
-export type Audio = BasicBlocks.Audio;
-export type Bookmark = BasicBlocks.Bookmark;
-export type Code = BasicBlocks.Code;
-export type File = BasicBlocks.File;
-export type Image = BasicBlocks.Image;
-export type Video = BasicBlocks.Video;
+export type Audio = BasicBlocks.IAudio;
+export type Bookmark = BasicBlocks.IBookmark;
+export type Code = BasicBlocks.ICode;
+export type File = BasicBlocks.IFile;
+export type Image = BasicBlocks.IImage;
+export type Video = BasicBlocks.IVideo;

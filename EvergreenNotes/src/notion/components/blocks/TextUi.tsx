@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Typography, Link, Icon, SvgIcon } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { grey, red } from '@material-ui/core/colors';
-import { BaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
+import { IBaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import {
    SemanticString,
    SemanticFormat,
@@ -52,7 +52,7 @@ export const TextUi = ({
    semanticFilter,
 }: ITextUiParams) => {
    let classes = useBlockStyles();
-   const bb = block.block as BaseTextBlock;
+   const bb = block.block as IBaseTextBlock;
    const title = bb?.properties?.title as SemanticString[];
 
    if (title != null) {

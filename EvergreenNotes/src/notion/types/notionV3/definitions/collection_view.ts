@@ -44,10 +44,10 @@ export namespace CollectionView {
 
    export interface Format {
       /** Layout settings for table columns. */
-      table_properties?: TableProperty[];
+      table_properties?: ITableProperty[];
       /** Whether to wrap content in a table cell. */
       table_wrap?: boolean;
-      gallery_properties?: GalleryProperty[];
+      gallery_properties?: IGalleryProperty[];
       gallery_cover?: {
          /** TODO: Unfinished */
          type: 'page_content';
@@ -56,13 +56,13 @@ export namespace CollectionView {
       gallery_title_visible?: boolean;
    }
 
-   export interface TableProperty {
+   export interface ITableProperty {
       width: number;
       visible: boolean;
       property: Collection.ColumnID;
    }
 
-   export interface GalleryProperty {
+   export interface IGalleryProperty {
       visible: boolean;
       property: Collection.ColumnID;
    }

@@ -8,28 +8,28 @@ export type Record<T> = {
 };
 
 export type BlockRecord = Record<blockTypes.Block>;
-export type CollectionRecord = Record<blockTypes.Collection>;
-export type CollectionViewRecord = Record<blockTypes.CollectionView>;
-export type SpaceRecord = Record<blockTypes.Space>;
-export type SpaceViewRecord = Record<blockTypes.SpaceView>;
+export type CollectionRecord = Record<blockTypes.ICollection>;
+export type CollectionViewRecord = Record<blockTypes.ICollectionView>;
+export type SpaceRecord = Record<blockTypes.ISpace>;
+export type SpaceViewRecord = Record<blockTypes.ISpaceView>;
 //export type ActivityRecord = Record<blockTypes.Activity>;
-export type NotionUserRecord = Record<blockTypes.NotionUser>;
+export type NotionUserRecord = Record<blockTypes.INotionUser>;
 // export type UserRootRecord = Record<UserRoot>;
 // export type UserSettingsRecord = Record<UserSettings>;
 // export type FollowRecord = Record<Follow>;
 // export type SlackIntegrationRecord = Record<SlackIntegration>;
 
-export interface CursorItem {
+export interface ICursorItem {
    table: Table;
    id: UUID;
    index: number;
 }
 
-export interface Cursor {
-   stack: CursorItem[][];
+export interface ICursor {
+   stack: ICursorItem[][];
 }
 
-export interface RecordMap {
+export interface IRecordMap {
    block: { [key: string]: BlockRecord };
    collection?: { [key: string]: CollectionRecord };
    collection_view?: { [key: string]: CollectionViewRecord };
@@ -37,7 +37,7 @@ export interface RecordMap {
    space: { [key: string]: SpaceRecord };
 }
 
-export interface PageChunk {
-   cursor?: Cursor;
-   recordMap: RecordMap;
+export interface IPageChunk {
+   cursor?: ICursor;
+   recordMap: IRecordMap;
 }

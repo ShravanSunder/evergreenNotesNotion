@@ -1,7 +1,7 @@
 import {
-   RecordMap,
+   IRecordMap,
    Record,
-   PageChunk,
+   IPageChunk,
 } from 'aNotion/types/notionV3/notionRecordTypes';
 import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
 import { BlockTypeEnum, BlockProps } from '../types/notionV3/BlockTypes';
@@ -13,7 +13,7 @@ import { ContentBlocks } from 'aNotion/components/contents/contentState';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 
 export const getContent = (
-   record: RecordMap,
+   record: IRecordMap,
    blockId: string
 ): [INotionBlockModel[], string[], string[]] => {
    let node = record.block?.[blockId];
@@ -61,7 +61,7 @@ export const getContent = (
 
 const getNotionBlocksFromContent = (
    contentIds: string[],
-   record: RecordMap
+   record: IRecordMap
 ): [INotionBlockModel[], string[]] => {
    let content: INotionBlockModel[] = [];
    let idsOfMissingContent: string[] = [];
@@ -81,7 +81,7 @@ const getNotionBlocksFromContent = (
 export const fetchContentForBlock = async (
    blockId: string,
    signal: AbortSignal,
-   chunk?: PageChunk
+   chunk?: IPageChunk
 ): Promise<ContentBlocks[]> => {
    const resultContentBlocks: ContentBlocks[] = [];
    const missingBlocks: ContentBlocks[] = [];
@@ -106,7 +106,7 @@ export const fetchContentForBlock = async (
 };
 
 const extractContentFromChunk = (
-   chunk: PageChunk,
+   chunk: IPageChunk,
    blockId: string,
    resultContentBlocks: ContentBlocks[],
    missingBlocksList: ContentBlocks[],

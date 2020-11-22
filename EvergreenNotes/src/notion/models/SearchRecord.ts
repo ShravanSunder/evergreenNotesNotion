@@ -1,4 +1,4 @@
-import { RecordMap } from 'aNotion/types/notionV3/notionRecordTypes';
+import { IRecordMap } from 'aNotion/types/notionV3/notionRecordTypes';
 import { INotionBlockModel, NotionBlockRecord } from './NotionBlock';
 import { ISearchResultType } from 'aNotion/api/v3/apiRequestTypes';
 import * as blockService from 'aNotion/services/blockService';
@@ -24,7 +24,7 @@ export class SearchRecord implements ISearchRecordModel {
    text: string = '';
    path: INotionBlockModel[] = [];
 
-   constructor(data: RecordMap, searchResult: ISearchResultType) {
+   constructor(data: IRecordMap, searchResult: ISearchResultType) {
       this.id = searchResult.id;
       this.isNavigable = searchResult.isNavigable;
       this.highlight = searchResult.highlight;

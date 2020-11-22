@@ -2,7 +2,7 @@
 // doesn't matter if its a page or collection or whatever
 // get title, properties etc.  using blocks as reference
 
-import { PageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
+import { IPageChunk } from 'aNotion/types/notionV3/notionRecordTypes';
 import {
    NotionBlockRecord,
    INotionBlockModel,
@@ -34,15 +34,15 @@ export const fetchPageRecord = async (
    pageId: string,
    signal: AbortSignal,
    liteApi: boolean = false
-): Promise<[NotionBlockRecord, LoadPageChunk.PageChunk]> => {
-   let chunk: LoadPageChunk.PageChunk | undefined = undefined;
+): Promise<[NotionBlockRecord, LoadPageChunk.IPageChunk]> => {
+   let chunk: LoadPageChunk.IPageChunk | undefined = undefined;
    let block: NotionBlockRecord | undefined = undefined;
 
    if (liteApi) {
       try {
          let sycRecordPromise = blockApi.syncRecordValues([pageId], signal);
          // this method is much faster, but doesn't work for collection pages
-         chunk = (await sycRecordPromise) as LoadPageChunk.PageChunk;
+         chunk = (await sycRecordPromise) as LoadPageChunk.IPageChunk;
 
          if (chunk != null && !signal.aborted) {
             block = getBlockFromPageChunk(chunk, pageId);
@@ -57,7 +57,7 @@ export const fetchPageRecord = async (
 
    let loadChunkPromise = blockApi.loadPageChunk(pageId, 50, signal);
    if (block == null && !signal.aborted) {
-      chunk = (await loadChunkPromise) as LoadPageChunk.PageChunk;
+      chunk = (await loadChunkPromise) as LoadPageChunk.IPageChunk;
 
       if (chunk != null && !signal.aborted) {
          block = getBlockFromPageChunk(chunk, pageId);
@@ -70,14 +70,14 @@ export const fetchPageRecord = async (
 export const syncBlockRecords = async (
    blockIds: string[],
    signal: AbortSignal
-): Promise<[NotionBlockRecord[], LoadPageChunk.PageChunk]> => {
-   let chunk: LoadPageChunk.PageChunk | undefined = undefined;
+): Promise<[NotionBlockRecord[], LoadPageChunk.IPageChunk]> => {
+   let chunk: LoadPageChunk.IPageChunk | undefined = undefined;
    let blocks: NotionBlockRecord[] = [];
 
    let sycRecordPromise = blockApi.syncRecordValues(blockIds, signal);
 
    // this method is much faster, but doesn't work for collection pages
-   chunk = (await sycRecordPromise) as LoadPageChunk.PageChunk;
+   chunk = (await sycRecordPromise) as LoadPageChunk.IPageChunk;
 
    if (chunk != null && !signal.aborted) {
       blockIds.forEach((id) => {
@@ -92,7 +92,7 @@ export const syncBlockRecords = async (
 };
 
 export const getBlockFromPageChunk = (
-   page: PageChunk,
+   page: IPageChunk,
    pageId: string
 ): NotionBlockRecord => {
    try {

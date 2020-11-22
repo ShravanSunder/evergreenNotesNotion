@@ -83,7 +83,7 @@ export namespace Collection {
        * TODO: Not sure if {@link CollectionView.TableProperty}
        * is also possible.
        */
-      collection_page_properties?: CollectionView.GalleryProperty[];
+      collection_page_properties?: CollectionView.IGalleryProperty[];
    }
 
    export type Schema = {

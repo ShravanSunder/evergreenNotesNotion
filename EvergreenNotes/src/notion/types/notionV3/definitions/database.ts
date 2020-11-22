@@ -5,7 +5,7 @@ import { BlockTypeEnum } from '../BlockTypes';
 /**
  * Inline database block or Linked database block.
  */
-export interface CollectionViewInline extends IEmptyBlock {
+export interface ICollectionViewInline extends IEmptyBlock {
    type: BlockTypeEnum.CollectionViewInline;
    view_ids: base.UUID[];
    collection_id: base.UUID;
@@ -14,10 +14,10 @@ export interface CollectionViewInline extends IEmptyBlock {
 /**
  * Full page database block.
  */
-export interface CollectionViewPage extends IEmptyBlock {
+export interface ICollectionViewPage extends IEmptyBlock {
    type: BlockTypeEnum.CollectionViewPage;
    view_ids: base.UUID[];
    collection_id: base.UUID;
 }
 
-export type DatabaseBlockUnion = CollectionViewInline | CollectionViewPage;
+export type TDatabaseBlockUnion = ICollectionViewInline | ICollectionViewPage;

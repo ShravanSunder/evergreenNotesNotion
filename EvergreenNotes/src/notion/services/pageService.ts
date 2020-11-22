@@ -5,13 +5,13 @@ import {
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { INotionPageMarks } from 'aNotion/models/INotionPage';
 import {
-   BaseTextBlock,
-   Page,
+   IBaseTextBlock,
+   IPage,
 } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import { isBackGroundColor } from './blockService';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import {
-   RecordMap,
+   IRecordMap,
    Record,
    BlockRecord,
 } from 'aNotion/types/notionV3/notionRecordTypes';
@@ -55,7 +55,7 @@ export const processPageForMarks = async (
 };
 
 const buildPageRecords = async (
-   recordMapData: RecordMap,
+   recordMapData: IRecordMap,
    pageId: string,
    contentIds: string[],
    signal: AbortSignal
@@ -92,7 +92,7 @@ const buildPageRecords = async (
 };
 
 const traverseForMarks = (
-   recordMapData: RecordMap,
+   recordMapData: IRecordMap,
    pageId: string,
    contentIds: string[],
    signal: AbortSignal,
@@ -122,12 +122,12 @@ const traverseForMarks = (
 
 const getMarksInBlock = (
    block: Record<Block>,
-   recordMapData: RecordMap,
+   recordMapData: IRecordMap,
    pageId: string,
    pageMarks: INotionPageMarks
 ) => {
    try {
-      let b = block.value as BaseTextBlock;
+      let b = block.value as IBaseTextBlock;
       let blockRecord = new NotionBlockRecord(recordMapData, b.id);
       let nb = blockRecord.toSerializable();
 
@@ -176,7 +176,7 @@ export const getPropertiesWithSemanticFormat = (
    let properties: string[] = [];
 
    if (pageBlock.type === BlockTypeEnum.Page) {
-      let page = pageBlock.block as Page;
+      let page = pageBlock.block as IPage;
 
       Object.keys(page.properties)
          .filter((k) => k !== 'title')

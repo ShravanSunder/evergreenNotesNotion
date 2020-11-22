@@ -10,7 +10,7 @@ export const loadPageChunk = async (
    limit: number = 50,
    abort: AbortSignal,
    retry: boolean = true
-): Promise<LoadPageChunk.PageChunk> => {
+): Promise<LoadPageChunk.IPageChunk> => {
    let req = superagent
       .post('https://www.notion.so/api/v3/loadPageChunk')
       //.use(superagentCache)
@@ -30,7 +30,7 @@ export const loadPageChunk = async (
 export const syncRecordValues = async (
    pageIds: string[],
    abort: AbortSignal
-): Promise<LoadPageChunk.PageChunk> => {
+): Promise<LoadPageChunk.IPageChunk> => {
    let reqData: ISyncRecordType = {
       recordVersionMap: {
          block: {},

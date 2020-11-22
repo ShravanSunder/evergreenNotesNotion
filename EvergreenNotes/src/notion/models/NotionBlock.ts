@@ -1,9 +1,9 @@
-import { RecordMap, Record } from 'aNotion/types/notionV3/notionRecordTypes';
+import { IRecordMap, Record } from 'aNotion/types/notionV3/notionRecordTypes';
 import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
 import { BlockTypeEnum, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
 import {
-   BaseTextBlock,
-   Page,
+   IBaseTextBlock,
+   IPage,
 } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import * as recordService from 'aNotion/services/recordService';
 import * as blockService from 'aNotion/services/blockService';
@@ -19,8 +19,8 @@ import {
 
 export interface INotionBlockModel {
    block?: blockTypes.Block;
-   collection?: blockTypes.Collection | undefined;
-   collection_views?: blockTypes.CollectionView[] | undefined;
+   collection?: blockTypes.ICollection | undefined;
+   collection_views?: blockTypes.ICollectionView[] | undefined;
    type: BlockTypeEnum;
    simpleTitle: string;
    semanticTitle: SemanticString[];
@@ -30,9 +30,9 @@ export interface INotionBlockModel {
 
 export class NotionBlockRecord implements INotionBlockModel {
    block?: blockTypes.Block;
-   collection?: blockTypes.Collection | undefined;
-   collection_views?: blockTypes.CollectionView[] | undefined = [];
-   recordMapData: RecordMap;
+   collection?: blockTypes.ICollection | undefined;
+   collection_views?: blockTypes.ICollectionView[] | undefined = [];
+   recordMapData: IRecordMap;
    type: BlockTypeEnum = BlockTypeEnum.Unknown;
    simpleTitle: string;
    semanticTitle: SemanticString[] = [];
@@ -42,7 +42,7 @@ export class NotionBlockRecord implements INotionBlockModel {
    relatedBlocks?: INotionBlockModel[] = undefined;
    contentIds: string[] = [];
 
-   constructor(data: RecordMap, blockId: string) {
+   constructor(data: IRecordMap, blockId: string) {
       this.recordMapData = data;
       this.setupBlockData(data, blockId);
       this.setupCollectionData(data, blockId);
@@ -53,12 +53,12 @@ export class NotionBlockRecord implements INotionBlockModel {
       this.contentIds = this.getContentIds();
    }
 
-   protected setupBlockData(data: RecordMap, blockId: string) {
+   protected setupBlockData(data: IRecordMap, blockId: string) {
       this.block = data.block?.[blockId]?.value;
       this.blockId = blockId;
    }
 
-   protected setupCollectionData(data: RecordMap, blockId: string) {
+   protected setupCollectionData(data: IRecordMap, blockId: string) {
       if (this.block?.type === BlockTypeEnum.CollectionViewPage) {
          let cId = this.block.collection_id;
          this.collection = data.collection?.[cId].value;
@@ -81,7 +81,7 @@ export class NotionBlockRecord implements INotionBlockModel {
       }
    }
 
-   protected setupType(data: RecordMap, blockId: string) {
+   protected setupType(data: IRecordMap, blockId: string) {
       if (this.block != null) {
          this.type = this.block.type;
       } else if (this.collection != null) {
@@ -102,7 +102,7 @@ export class NotionBlockRecord implements INotionBlockModel {
             let page = this.block as blockTypes.Page;
             return blockService.reduceTitle(page.properties?.title);
          } else if (this.type !== BlockTypeEnum.Unknown) {
-            let u = this.block as BaseTextBlock;
+            let u = this.block as IBaseTextBlock;
             return blockService.reduceTitle(u.properties?.title);
          }
       } catch (err) {
@@ -123,7 +123,7 @@ export class NotionBlockRecord implements INotionBlockModel {
             let page = this.block as blockTypes.Page;
             return page.properties?.title;
          } else if (this.type !== BlockTypeEnum.Unknown) {
-            let u = this.block as BaseTextBlock;
+            let u = this.block as IBaseTextBlock;
             return u.properties?.title ?? [];
          }
       } catch (err) {

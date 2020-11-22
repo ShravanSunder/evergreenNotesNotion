@@ -1,4 +1,4 @@
-import { RecordMap } from 'aNotion/types/notionV3/notionRecordTypes';
+import { IRecordMap } from 'aNotion/types/notionV3/notionRecordTypes';
 
 export enum Type {
    blocksInspace = 'BlocksInSpace',
@@ -35,7 +35,7 @@ export interface ISearchResultType {
 }
 
 export interface ISearchResultsType {
-   recordMap: RecordMap;
+   recordMap: IRecordMap;
    results: ISearchResultType[];
    total: number;
 }
@@ -59,5 +59,5 @@ export interface IBacklinkType {
 
 export interface IBacklinkRecordType {
    backlinks: IBacklinkType[];
-   recordMap: RecordMap;
+   recordMap: IRecordMap;
 }
