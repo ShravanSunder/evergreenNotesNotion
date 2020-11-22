@@ -1,7 +1,13 @@
 import React, { Suspense } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
-import { makeStyles, createStyles, Typography } from '@material-ui/core';
+import {
+   makeStyles,
+   createStyles,
+   Typography,
+   IconButton,
+   Grid,
+} from '@material-ui/core';
 import { pageMarksSelector } from 'aNotion/providers/storeSelectors';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,6 +18,14 @@ import {
    NotionContentWithBlocks,
    NotionContentWithParentId,
 } from 'aNotion/components/contents/NotionContent';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import SyncAltIcon from '@material-ui/icons/SyncAlt';
+import ForwardIcon from '@material-ui/icons/Forward';
+import InputIcon from '@material-ui/icons/Input';
+import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
+import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
+import { NotionBlockModel } from 'aNotion/models/NotionBlock';
+import { TNavigateMessage } from 'aSidebar/sidebarMessaging';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -26,6 +40,45 @@ const useStyles = makeStyles(() =>
       },
    })
 );
+
+const NavigateToBlockInNotion = ({ block }: { block: NotionBlockModel }) => {
+   const handleNavigate = (blockId: string) => {
+      const msg: TNavigateMessage = {
+         blockId,
+         type: 'navigate',
+         message: 'NavigateToBlockInNotion',
+      };
+      window.parent.postMessage(msg, '*');
+   };
+
+   return (
+      <>
+         <IconButton
+            onClick={(event) => {
+               handleNavigate(block.blockId);
+            }}
+            edge="end"
+            style={{
+               maxHeight: 12,
+               maxWidth: 12,
+               marginLeft: 1,
+               marginRight: 1,
+               marginTop: 0,
+            }}
+            color="default"
+            size="small">
+            <ZoomOutMapIcon
+               style={{
+                  maxHeight: 13,
+                  maxWidth: 13,
+                  margin: 0,
+                  color: '#9e9e9e',
+               }}
+            />
+         </IconButton>
+      </>
+   );
+};
 
 // comment
 export const MarksPane = () => {
@@ -50,15 +103,13 @@ export const MarksPane = () => {
             <Typography className={classes.sections} variant="h5">
                <b>Highlights</b>
             </Typography>
-            {pageMarks?.highlights?.map((p, i) => (
-               <NotionContentWithBlocks
-                  key={p.blockId}
-                  blockContent={p}
-                  semanticFilter={[
-                     SemanticFormatEnum.Colored,
-                  ]}></NotionContentWithBlocks>
-            ))}
+
             <div className={classes.spacing}></div>
+            {pageMarks?.highlights?.map((p, i) => (
+               <RenderMark
+                  p={p}
+                  semanticFilters={[SemanticFormatEnum.Colored]}></RenderMark>
+            ))}
          </>
       ) : null;
 
@@ -71,14 +122,10 @@ export const MarksPane = () => {
                <b>Mentions</b>
             </Typography>
             {pageMarks?.userMentions?.map((p, i) => (
-               <NotionContentWithBlocks
+               <RenderMark
                   key={p.blockId}
-                  blockContent={p}></NotionContentWithBlocks>
-            ))}
-            {pageMarks?.pageMentions?.map((p, i) => (
-               <NotionContentWithBlocks
-                  key={p.blockId}
-                  blockContent={p}></NotionContentWithBlocks>
+                  p={p}
+                  semanticFilters={[]}></RenderMark>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -91,9 +138,10 @@ export const MarksPane = () => {
                <b>Quotes</b>
             </Typography>
             {pageMarks?.quotes?.map((p, i) => (
-               <NotionContentWithBlocks
+               <RenderMark
                   key={p.blockId}
-                  blockContent={p}></NotionContentWithBlocks>
+                  p={p}
+                  semanticFilters={[]}></RenderMark>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -106,12 +154,10 @@ export const MarksPane = () => {
                <b>Links</b>
             </Typography>
             {pageMarks?.links?.map((p, i) => (
-               <NotionContentWithBlocks
+               <RenderMark
                   key={p.blockId}
-                  blockContent={p}
-                  semanticFilter={[
-                     SemanticFormatEnum.Link,
-                  ]}></NotionContentWithBlocks>
+                  p={p}
+                  semanticFilters={[SemanticFormatEnum.Link]}></RenderMark>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -124,14 +170,12 @@ export const MarksPane = () => {
                <b>Code</b>
             </Typography>
             {pageMarks?.code?.map((p, i) => (
-               <>
-                  <NotionContentWithBlocks
-                     key={p.blockId}
-                     blockContent={p}
-                     semanticFilter={[
-                        SemanticFormatEnum.InlineCode,
-                     ]}></NotionContentWithBlocks>
-               </>
+               <RenderMark
+                  key={p.blockId}
+                  p={p}
+                  semanticFilters={[
+                     SemanticFormatEnum.InlineCode,
+                  ]}></RenderMark>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -143,9 +187,10 @@ export const MarksPane = () => {
                <b>Todo</b>
             </Typography>
             {pageMarks?.todos?.map((p, i) => (
-               <NotionContentWithBlocks
+               <RenderMark
                   key={p.blockId}
-                  blockContent={p}></NotionContentWithBlocks>
+                  p={p}
+                  semanticFilters={[SemanticFormatEnum.Colored]}></RenderMark>
             ))}
             <div className={classes.spacing}></div>
          </>
@@ -176,3 +221,26 @@ export const MarksPane = () => {
 };
 
 export default MarksPane;
+
+const RenderMark = ({
+   p,
+   semanticFilters,
+}: {
+   p: NotionBlockModel;
+   semanticFilters: SemanticFormatEnum[];
+}) => {
+   return (
+      <Grid container>
+         <Grid item xs>
+            <NotionContentWithBlocks
+               key={p.blockId}
+               blockContent={p}
+               semanticFilter={semanticFilters}></NotionContentWithBlocks>
+         </Grid>
+         <Grid item>
+            <div style={{ marginTop: 5 }}></div>
+            <NavigateToBlockInNotion block={p}></NavigateToBlockInNotion>
+         </Grid>
+      </Grid>
+   );
+};

@@ -7,19 +7,19 @@ import {
    appPositionLeft,
    appWidth,
    appHeight,
-} from './frameProperties';
-import { SidebarFab } from './SidebarFab';
+} from 'aSidebar/frameProperties';
+import { SidebarFab } from 'aSidebar/SidebarFab';
 import { useDebouncedCallback } from 'use-debounce/lib';
 import {
    checkDomForNotionFrameChanges,
    modifyNotionFrameAndCreateListeners,
-} from './sidebarFrameMutations';
-import { registerNavigateMessageHandler } from './sidebarMessaging';
+} from 'aSidebar/sidebarFrameMutations';
+import { registerNavigateMessageHandler } from 'aSidebar/sidebarMessaging';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render sidebar frame');
    chrome.extension.getURL('sidebar.html');
-   //registerNavigateMessageHandler();
+   registerNavigateMessageHandler();
 
    ReactDOM.render(<LoadSidebarFrame />, sidebar);
 };

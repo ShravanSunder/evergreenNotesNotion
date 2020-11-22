@@ -10,7 +10,7 @@ export const CalloutUi = ({ block }: { block: NotionBlockModel }) => {
    var callout = block.block as Callout;
 
    return (
-      <Grid id="CalloutUI" container style={{ margin: 6 }}>
+      <Grid id="CalloutUI" container style={{ padding: 9 }}>
          <Grid item style={{ paddingLeft: 9, paddingRight: 9 }}>
             <Typography variant={'body1'}>
                {block.block?.format?.page_icon}

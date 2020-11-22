@@ -17,7 +17,7 @@ export const BulletUi = ({
          style={style}
          className={classes.blockUiGrids}>
          <Grid item className={classes.blockUiGrids}>
-            <div className={classes.bullets}>
+            <div className={classes.bulletsAndIndents}>
                <Typography display={'inline'} variant={'body1'}>
                   {' • '}
                </Typography>

@@ -8,7 +8,7 @@ import { registerTabUpdateListener } from 'aNotion/services/notionListeners';
 import logger from 'redux-logger';
 
 import Debug from 'debug';
-import { Sidebar } from './Sidebar';
+import { Sidebar } from 'aSidebar/Sidebar';
 export const debug = Debug('NS');
 
 const renderApp = (Component: React.FC) =>

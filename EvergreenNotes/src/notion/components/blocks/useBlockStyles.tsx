@@ -4,7 +4,10 @@ import { grey } from '@material-ui/core/colors';
 export const useBlockStyles = makeStyles((theme: Theme) =>
    createStyles({
       block: {
-         margin: 0,
+         marginRight: 3,
+         marginLeft: 3,
+         marginTop: 6,
+         marginBottom: 6,
          padding: 0,
       },
       typography: {
@@ -17,7 +20,7 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
          margin: 0,
          padding: 0,
       },
-      bullets: {
+      bulletsAndIndents: {
          paddingLeft: 6,
          paddingRight: 6,
          marginRight: 1,

@@ -147,7 +147,7 @@ const Children = ({
       <Grid id="NotionContentChild" container justify="flex-start">
          {block.type !== BlockTypeEnum.Column && (
             <Grid item className={classes.blockUiGrids}>
-               <div className={classes.bullets}>
+               <div className={classes.bulletsAndIndents}>
                   <Typography display={'inline'} variant={'body1'}>
                      {'   '}
                   </Typography>

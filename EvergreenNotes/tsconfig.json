@@ -75,7 +75,8 @@
          "aApp/*": ["src/pages/app/*"],
          "aCommon/*": ["src/pages/common/*"],
          "aNotion/*": ["src/notion/*"],
-         "aUtilities/*": ["src/utilities/*"]
+         "aUtilities/*": ["src/utilities/*"],
+         "aSidebar/*": ["src/pages/sidebar/*"]
       }
    },
    "exclude": ["node_modules", "dist", "build"]

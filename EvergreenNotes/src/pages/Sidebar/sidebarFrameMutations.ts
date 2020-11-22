@@ -5,7 +5,7 @@ import {
    setContentChanged,
    notionFrameContentObserver,
    notionFrameBoundsObserver,
-} from './SidebarFrame';
+} from 'aSidebar/SidebarFrame';
 
 const notionScrollDivClass = 'notion-scroller';
 const notionFrameClass = 'notion-frame';

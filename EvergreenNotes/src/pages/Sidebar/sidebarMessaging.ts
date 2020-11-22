@@ -1,6 +1,6 @@
 import { isGuid } from 'aCommon/extensionHelpers';
 
-type TNavigateMessage = {
+export type TNavigateMessage = {
    blockId: string;
    type: 'navigate';
    message?: string;

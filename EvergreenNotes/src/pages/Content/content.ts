@@ -1,4 +1,4 @@
-import { mountSidebar } from '../Sidebar/SidebarFrame';
+import { mountSidebar } from 'aSidebar/SidebarFrame';
 import 'chrome-extension-async';
 import { createAsFloatingElement } from '../Sidebar/sidebarElements';
 import { contentCommands, contentCommandRequest } from './contentMessaging';
