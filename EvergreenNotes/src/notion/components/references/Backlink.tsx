@@ -78,7 +78,8 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
                            style={{ marginTop: 12 }}>
                            <PageUi
                               block={backlinkedPageBlock}
-                              inlineBlock={false}></PageUi>
+                              inlineBlock={false}
+                              showContent={true}></PageUi>
                         </Grid>
                      </>
                   )}

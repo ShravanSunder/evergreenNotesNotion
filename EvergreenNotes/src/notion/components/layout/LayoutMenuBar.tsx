@@ -9,6 +9,9 @@ import {
    SubjectTwoTone,
    RefreshTwoTone,
    SettingsTwoTone,
+   FormatListNumberedRtlTwoTone,
+   FontDownloadTwoTone,
+   TocTwoTone,
 } from '@material-ui/icons/';
 import { lightGreen } from '@material-ui/core/colors';
 import {
@@ -29,6 +32,7 @@ export enum LayoutTabs {
    References = 'References',
    Search = 'Search',
    PageMarkups = 'Page Markups',
+   TOC = 'Table Of Contents',
    Events = 'Events',
    Mentions = 'Mentions',
    Settings = 'Settings',
@@ -140,7 +144,12 @@ export const LayoutMenuBar = ({
                         <ToggleButton
                            value={LayoutTabs.PageMarkups}
                            className={classes.toggleButton}>
-                           <SubjectTwoTone></SubjectTwoTone>
+                           <FontDownloadTwoTone></FontDownloadTwoTone>
+                        </ToggleButton>
+                        <ToggleButton
+                           value={LayoutTabs.TOC}
+                           className={classes.toggleButton}>
+                           <TocTwoTone></TocTwoTone>
                         </ToggleButton>
                         <ToggleButton
                            value={LayoutTabs.Search}

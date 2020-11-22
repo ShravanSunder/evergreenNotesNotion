@@ -39,6 +39,7 @@ export const processPageForMarks = async (
       code: [],
       comments: [],
       links: [],
+      headers: [],
    };
 
    let contentIds = record.recordMapData.block[pageId].value?.content ?? [];
@@ -163,6 +164,13 @@ const getMarksInBlock = (
 
       if (b.type === BlockTypeEnum.Quote) {
          pageMarks.quotes.push(nb);
+      }
+
+      switch (b.type) {
+         case BlockTypeEnum.Header1:
+         case BlockTypeEnum.Header2:
+         case BlockTypeEnum.Header3:
+            pageMarks.headers.push(nb);
       }
    } catch {
       //ignore cast errors, if its not a BaseTextBlock, such as collections

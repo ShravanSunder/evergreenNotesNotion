@@ -9,6 +9,7 @@ import { SidebarExtensionStatus } from 'aNotion/components/layout/SidebarExtensi
 import { calculateSidebarStatus } from 'aNotion/services/notionSiteService';
 import { LayoutTabs } from './LayoutMenuBar';
 import { ReferencesPane, MarksPane, SearchPane, OptionsPane } from './Layout';
+import TableOfContentsPane from '../pageMarks/TableOfContentsPane';
 
 interface ITabContent {
    debouncedStatus: SidebarExtensionStatus;
@@ -55,6 +56,12 @@ const TabContentComponents = ({ tab }: { tab: LayoutTabs }) => {
                display: tab === LayoutTabs.PageMarkups ? 'block' : 'none',
             }}>
             <MarksPane />
+         </div>
+         <div
+            style={{
+               display: tab === LayoutTabs.TOC ? 'block' : 'none',
+            }}>
+            <TableOfContentsPane />
          </div>
          <div
             style={{

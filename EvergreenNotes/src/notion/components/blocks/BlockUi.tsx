@@ -94,6 +94,7 @@ export const BlockUi = ({
                   block={block}
                   style={style}
                   inlineBlock={renderPagesAsInline}
+                  showContent={true}
                />
             )}
             {block.type === BlockTypeEnum.CollectionViewPage && (
@@ -101,6 +102,7 @@ export const BlockUi = ({
                   block={block}
                   style={style}
                   inlineBlock={renderPagesAsInline}
+                  showContent={true}
                />
             )}
             {block.type === BlockTypeEnum.Toggle && (

@@ -5,23 +5,27 @@ import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
 import { TextUi } from './TextUi';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { NotionContentWithParentId } from 'aNotion/components/contents/NotionContent';
+import { MaximizeTwoTone } from '@material-ui/icons';
 
 interface IPageUIParams {
    block: INotionBlockModel;
    style?: React.CSSProperties | undefined;
    inlineBlock?: boolean;
+   showContent?: boolean | undefined;
 }
 
 export const PageUi = ({
    block,
    style = undefined,
    inlineBlock = true,
+   showContent = undefined,
 }: IPageUIParams) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
    let iconComponent: JSX.Element | undefined = undefined;
    const variant = inlineBlock ? 'body1' : 'h4';
-   const renderChildren = !inlineBlock;
+
+   const renderChildren = inlineBlock ? false : showContent ?? false;
 
    if (icon?.length === 1) {
       iconComponent = (
@@ -36,7 +40,10 @@ export const PageUi = ({
          `?table=block&id=${block.blockId}&width=${32}`;
       iconComponent = (
          <Typography display="inline" variant={variant}>
-            <img src={notionUrl} alt="📄"></img>
+            <img
+               style={{ maxHeight: '90%', marginBottom: -4 }}
+               src={notionUrl}
+               alt="📄"></img>
          </Typography>
       );
    } else {

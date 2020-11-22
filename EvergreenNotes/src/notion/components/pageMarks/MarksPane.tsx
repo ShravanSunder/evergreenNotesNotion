@@ -1,13 +1,7 @@
 import React, { Suspense } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
-import {
-   makeStyles,
-   createStyles,
-   Typography,
-   IconButton,
-   Grid,
-} from '@material-ui/core';
+import { makeStyles, createStyles, Typography, Grid } from '@material-ui/core';
 import { pageMarksSelector } from 'aNotion/providers/storeSelectors';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -18,14 +12,8 @@ import {
    NotionContentWithBlocks,
    NotionContentWithParentId,
 } from 'aNotion/components/contents/NotionContent';
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import SyncAltIcon from '@material-ui/icons/SyncAlt';
-import ForwardIcon from '@material-ui/icons/Forward';
-import InputIcon from '@material-ui/icons/Input';
-import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
-import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
-import { TNavigateMessage } from 'aSidebar/sidebarMessaging';
+import { NavigateToBlockInNotion } from './NavigateToBlockInNotion';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -40,45 +28,6 @@ const useStyles = makeStyles(() =>
       },
    })
 );
-
-const NavigateToBlockInNotion = ({ block }: { block: INotionBlockModel }) => {
-   const handleNavigate = (blockId: string) => {
-      const msg: TNavigateMessage = {
-         blockId: blockId,
-         type: 'navigate',
-         message: 'NavigateToBlockInNotion',
-      };
-      window.parent.postMessage(msg, '*');
-   };
-
-   return (
-      <>
-         <IconButton
-            onClick={(event) => {
-               handleNavigate(block.blockId);
-            }}
-            edge="end"
-            style={{
-               maxHeight: 12,
-               maxWidth: 12,
-               marginLeft: 1,
-               marginRight: 1,
-               marginTop: 0,
-            }}
-            color="default"
-            size="small">
-            <ZoomOutMapIcon
-               style={{
-                  maxHeight: 13,
-                  maxWidth: 13,
-                  margin: 0,
-                  color: '#9e9e9e',
-               }}
-            />
-         </IconButton>
-      </>
-   );
-};
 
 // comment
 export const MarksPane = () => {

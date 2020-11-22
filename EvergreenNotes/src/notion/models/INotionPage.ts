@@ -1,4 +1,4 @@
-import { INotionBlockModel } from './NotionBlock';
+import { INotionBlockModel, NotionBlockRecord } from './NotionBlock';
 
 export interface INotionPageMarks {
    pageId: string;
@@ -12,6 +12,7 @@ export interface INotionPageMarks {
    pageMentions: INotionBlockModel[];
    links: INotionBlockModel[];
    comments: INotionBlockModel[];
+   headers: INotionBlockModel[];
 }
 
 export interface ICurrentPageData {
