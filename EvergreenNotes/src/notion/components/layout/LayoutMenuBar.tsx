@@ -114,7 +114,7 @@ export const LayoutMenuBar = ({
                borderRadius: 9,
                padding: 6,
                boxShadow:
-                  '2px 2px 9px #f1f8e9, -2px 2px 9px #f1f8e9, 2px -2px 9px #f1f8e9, -2px -2px 9px #f1f8e9',
+                  '2px 2px 6px #dcedc8, -2px 2px 6px #dcedc8, 2px -2px 6px #dcedc8, -2px -2px 6px #dcedc8',
             }}>
             <Grid container justify="flex-start">
                <Grid xs={1} item>
