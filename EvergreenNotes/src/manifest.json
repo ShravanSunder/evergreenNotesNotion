@@ -17,7 +17,6 @@
       "tabs",
       "*://*.notion.so/*",
       "https://notion.so/*",
-      "cookies",
       "webRequest",
       "clipboardWrite",
       "storage"

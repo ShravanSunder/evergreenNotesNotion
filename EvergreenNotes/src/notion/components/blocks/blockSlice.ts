@@ -36,6 +36,10 @@ const fetchBlockIfNotInStore = async (
          thunkApi.signal,
          true
       );
+      if (chunk.recordMap.block == null) {
+         console.log('Notion api returned nothing for block: ' + blockId);
+      }
+
       let result = record.toSerializable();
       if (result != null) {
          thunkApi.dispatch(

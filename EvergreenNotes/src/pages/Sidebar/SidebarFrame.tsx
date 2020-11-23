@@ -117,7 +117,10 @@ export const LoadSidebarFrame = () => {
             showFrame={showFrame}
             handleClick={handleClick}
             handleDrag={handleDrag}></SidebarFab>
-         <Slide in={showFrame} direction={'left'}>
+         <Slide
+            in={showFrame}
+            direction={'left'}
+            timeout={{ appear: 100, enter: 200, exit: 100 }}>
             <iframe
                id="evergreenNotesForNotion"
                style={{

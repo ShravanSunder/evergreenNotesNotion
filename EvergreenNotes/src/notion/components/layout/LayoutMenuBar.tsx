@@ -49,10 +49,10 @@ export const useStyles = makeStyles((theme: Theme) =>
          },
       },
       toggleButton: {
-         color: lightGreen[700],
+         color: lightGreen[800],
          backgroundColor: lightGreen[50],
          '&$checked': {
-            color: lightGreen[900],
+            color: lightGreen[800],
             backgroundColor: lightGreen[200],
          },
       },
@@ -110,11 +110,11 @@ export const LayoutMenuBar = ({
       <>
          <div
             style={{
-               backgroundColor: lightGreen[50],
+               backgroundColor: lightGreen[100],
                borderRadius: 9,
                padding: 6,
                boxShadow:
-                  '3px 3px 6px #f1f8e9, -3px 3px 6px #f1f8e9 3px -3px 6px #f1f8e9 -3px -3px 6px #f1f8e9',
+                  '2px 2px 9px #f1f8e9, -2px 2px 9px #f1f8e9, 2px -2px 9px #f1f8e9, -2px -2px 9px #f1f8e9',
             }}>
             <Grid container justify="flex-start">
                <Grid xs={1} item>

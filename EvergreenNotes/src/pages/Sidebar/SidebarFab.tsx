@@ -24,10 +24,10 @@ export const SidebarFab = (props: any) => (
                   position: 'absolute',
                   top: 52,
                   left: props.wWidth - 67,
-                  color: props.showFrame ? grey[700] : lightGreen[800],
+                  color: props.showFrame ? grey[600] : lightGreen[800],
                   backgroundColor: props.showFrame
                      ? 'rgb(244, 252, 233, 0.5)'
-                     : lightGreen[50],
+                     : lightGreen[100],
                   zIndex: 1100,
                }}
                className="handle"

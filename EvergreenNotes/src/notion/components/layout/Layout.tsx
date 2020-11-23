@@ -154,7 +154,7 @@ export const Layout = () => {
       };
    }, []);
 
-   const wWidth = useWindowWidth({ wait: 250 });
+   const wWidth = useWindowWidth({ wait: 250, leading: true });
 
    const tabsWithoutSiteLoading =
       tab === LayoutTabs.Search || tab === LayoutTabs.Settings;
