@@ -11,7 +11,10 @@ import {
 } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
+import {
+   TAppDispatchWithPromise,
+   TPromiseReturendFromDispatch,
+} from 'aNotion/providers/appDispatch';
 import { Reference } from './Reference';
 import {
    ReferenceState,
@@ -47,11 +50,16 @@ const useStyles = makeStyles(() =>
 
 // comment
 export const ReferencesPane = () => {
-   const dispatch: AppPromiseDispatch<any> = useDispatch();
+   const dispatch: TAppDispatchWithPromise<any> = useDispatch();
+
    const currentPage = useSelector(currentPageSelector, shallowEqual);
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const references = useSelector(referenceSelector, shallowEqual);
    const marks = useSelector(pageMarksSelector, shallowEqual);
+
+   const [fetchRefsForPagePromise, setFetchRefsForPagePromise] = useState<
+      TPromiseReturendFromDispatch
+   >();
 
    const pageName = currentPage.currentPageData?.pageBlock?.simpleTitle;
    const pageId = currentPage.currentPageData?.pageBlock?.blockId;
@@ -64,23 +72,27 @@ export const ReferencesPane = () => {
    );
 
    useEffect(() => {
-      if (
+      const validPage =
          currentPage.status === thunkStatus.fulfilled &&
-         debouncedPage.updateReferences === updateStatus.shouldUpdate &&
          debouncedPage?.pageId != null &&
-         debouncedPage?.pageName != null &&
+         debouncedPage?.pageName != null;
+      if (
+         validPage &&
+         debouncedPage.updateReferences === updateStatus.shouldUpdate &&
          references.status !== thunkStatus.pending
       ) {
-         dispatch(
+         if (fetchRefsForPagePromise != null) {
+            fetchRefsForPagePromise.abort();
+         }
+         const pr = dispatch(
             referenceActions.fetchRefsForPage({
                query: debouncedPage.pageName!,
                pageId: debouncedPage.pageId!,
             })
          );
+         setFetchRefsForPagePromise(pr);
       }
    }, [dispatch, debouncedPage, sidebar.status.updateReferences]);
-
-   //use sidebar.sidebarStatus.webpageStatus to not show things
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>

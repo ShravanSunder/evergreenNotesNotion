@@ -35,12 +35,11 @@ import { Dispatch } from 'react';
 const initialState: SidebarExtensionState = {
    cookie: { status: thunkStatus.idle },
    navigation: {},
-   currentNotionPage: { status: thunkStatus.idle },
+   currentNotionPage: { status: thunkStatus.idle, retryCounter: 0 },
    status: {
-      webpageStatus: thunkStatus.idle,
+      notionWebpageLoadingStatus: thunkStatus.idle,
       updateReferences: updateStatus.waiting,
       updateMarks: updateStatus.waiting,
-      retryCounter: 0,
    },
 };
 
@@ -142,8 +141,15 @@ const fetchCurrentNotionPageReducers = {
    ) => {
       state.currentNotionPage.currentPageData = action.payload;
       state.navigation.spaceId = action.payload?.spaceId;
-      state.currentNotionPage.status = thunkStatus.fulfilled;
-      state.status.retryCounter += 0;
+      if (
+         state.navigation.spaceId == null ||
+         state.currentNotionPage.currentPageData.pageBlock?.block == null
+      ) {
+         state.currentNotionPage.status = thunkStatus.rejected;
+      } else {
+         state.currentNotionPage.status = thunkStatus.fulfilled;
+         state.currentNotionPage.retryCounter = 0;
+      }
    },
    [fetchCurrentNotionPage.pending.toString()]: (
       state: SidebarExtensionState,
@@ -158,14 +164,14 @@ const fetchCurrentNotionPageReducers = {
    ) => {
       state.currentNotionPage.status = thunkStatus.rejected;
       state.currentNotionPage.currentPageData = undefined;
-      state.status.retryCounter += 1;
+      state.currentNotionPage.retryCounter += 1;
    },
 };
 
 const unloadPreviousPageReducer = (state: SidebarExtensionState) => {
    state.currentNotionPage.currentPageData = undefined;
    state.currentNotionPage.status = thunkStatus.idle;
-   state.status.webpageStatus = thunkStatus.idle;
+   state.status.notionWebpageLoadingStatus = thunkStatus.idle;
 };
 
 const loadCookiesReducer: CaseReducer<
@@ -200,7 +206,7 @@ const updateNavigationDataReducer = {
          }
       } else {
          unloadPreviousPageReducer(state);
-         state.status.webpageStatus = thunkStatus.rejected;
+         state.status.notionWebpageLoadingStatus = thunkStatus.rejected;
          state.status.updateReferences = updateStatus.waiting;
          state.status.updateMarks = updateStatus.waiting;
       }
@@ -233,10 +239,10 @@ const sidebarExtensionSlice = createSlice({
       updateNavigationData: updateNavigationDataReducer,
       unloadPreviousPage: unloadPreviousPageReducer,
       setPageLoadingStatus: (state) => {
-         state.status.webpageStatus = thunkStatus.pending;
+         state.status.notionWebpageLoadingStatus = thunkStatus.pending;
       },
       setPageCompletedStatus: (state) => {
-         state.status.webpageStatus = thunkStatus.fulfilled;
+         state.status.notionWebpageLoadingStatus = thunkStatus.fulfilled;
       },
       setUpdateReferenceStatus: setUpdateReferenceStatusReducer,
       setUpdateMarksStatus: setUpdateMarksStatusReducer,

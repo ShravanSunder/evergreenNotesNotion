@@ -27,7 +27,10 @@ import {
 } from 'aNotion/providers/storeSelectors';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch, getAppState } from 'aNotion/providers/appDispatch';
+import {
+   TAppDispatchWithPromise,
+   getAppState,
+} from 'aNotion/providers/appDispatch';
 import { Reference } from 'aNotion/components/references/Reference';
 import {
    SearchReferences,
@@ -73,7 +76,7 @@ const search: UseApiPromise<SearchReferences, string> = (
 
 // comment
 export const SearchPane = () => {
-   const dispatch: AppPromiseDispatch<any> = useDispatch();
+   const dispatch: TAppDispatchWithPromise<any> = useDispatch();
    const { searchQueries } = useSelector(referenceSelector, shallowEqual);
 
    const [text, setText] = useState<string>('');

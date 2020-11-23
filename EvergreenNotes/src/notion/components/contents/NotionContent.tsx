@@ -1,7 +1,7 @@
 import React, { useEffect, Suspense } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
+import { TAppDispatchWithPromise } from 'aNotion/providers/appDispatch';
 import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { LoadingSection, LoadingLine } from '../common/Loading';
@@ -57,7 +57,7 @@ const NotionContent = ({
    INotionContentWithBlocksParams) => {
    const contentDataFromState = useSelector(contentSelector);
    let status = thunkStatus.idle;
-   const dispatch: AppPromiseDispatch<any> = useDispatch();
+   const dispatch: TAppDispatchWithPromise<any> = useDispatch();
 
    let content: INotionBlockModel[];
    if (blockContent == null && parentBlockId != null) {

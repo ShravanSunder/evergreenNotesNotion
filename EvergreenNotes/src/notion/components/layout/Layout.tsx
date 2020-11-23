@@ -8,7 +8,10 @@ import {
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';
-import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
+import {
+   TAppDispatchWithPromise,
+   TPromiseReturendFromDispatch,
+} from 'aNotion/providers/appDispatch';
 
 import { useDebounce, useDebouncedCallback } from 'use-debounce/lib';
 import { isGuid } from 'aCommon/extensionHelpers';
@@ -23,11 +26,16 @@ import { NoNotionPageId } from './NoNotionPageId';
 import { TabContent } from './TabContent';
 
 export const Layout = () => {
-   const dispatch: AppPromiseDispatch<any> = useDispatch();
+   const dispatch: TAppDispatchWithPromise<any> = useDispatch();
+   const classes = useStyles();
+
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const currentPage = useSelector(currentPageSelector, shallowEqual);
 
-   const classes = useStyles();
+   const [
+      fetchCurrentNotionPagePromise,
+      setFetchCurrentNotionPagePromise,
+   ] = useState<TPromiseReturendFromDispatch>();
    const [noNotionPageId, setNoNotionPageId] = useState(false);
    const [debouncedShowNoPageIdError] = useDebounce(noNotionPageId, 500, {
       trailing: true,
@@ -39,6 +47,7 @@ export const Layout = () => {
 
    const [tab, setTab] = useState(LayoutTabs.References);
 
+   //set the default tab
    useEffect(() => {
       setTab(LayoutTabs.References);
    }, []);
@@ -46,49 +55,62 @@ export const Layout = () => {
    // loading the Notion page content when the page is completely loaded and we have pageId
    // see notionListener -> registerTabUpdateListener for how pageId is obtained
    useEffect(() => {
-      if (
+      const retryFetch =
+         (currentPage.status === thunkStatus.rejected &&
+            currentPage.retryCounter <= 3) ||
+         currentPage.status !== thunkStatus.rejected;
+      const pageIdValid =
          sidebar.navigation.pageId != null &&
-         (sidebar.status.webpageStatus === thunkStatus.fulfilled ||
-            (sidebar.status.webpageStatus === thunkStatus.rejected &&
-               sidebar.status.retryCounter <= 3)) &&
-         isGuid(sidebar.navigation.pageId)
-      ) {
+         isGuid(sidebar.navigation.pageId) &&
+         sidebar.status.notionWebpageLoadingStatus === thunkStatus.fulfilled;
+
+      if (pageIdValid && retryFetch) {
+         // fetch the current page if we have the current pageId
+         if (fetchCurrentNotionPagePromise != null) {
+            //abort the last dispatch chain
+            fetchCurrentNotionPagePromise.abort();
+         }
+
          setNoNotionPageId(false);
          let pr = dispatch(
             sidebarExtensionActions.fetchCurrentNotionPage({
-               pageId: sidebar.navigation.pageId,
+               pageId: sidebar.navigation.pageId!,
             })
          );
+         setFetchCurrentNotionPagePromise(pr);
       } else if (
          sidebar.navigation.pageId == null ||
          !isGuid(sidebar.navigation.pageId)
       ) {
-         //unload notion data
+         //unload notion data if we don't have pageId
          sidebarExtensionActions.unloadPreviousPage();
          setNoNotionPageId(true);
       }
-
-      return () => {};
    }, [
       sidebar.navigation.pageId,
       sidebar.navigation.url,
-      sidebar.status.webpageStatus,
+      sidebar.status.notionWebpageLoadingStatus,
       dispatch,
    ]);
 
-   //update page marks data without a full refresh
+   /** used by debouncedUpdateSignal */
    const [debouncedCurrentPage] = useDebounce(currentPage.status, 250, {
       trailing: true,
    });
 
+   /** used by debouncedUpdateSignal */
    const [debouncedWebpageStatus] = useDebounce(
-      sidebar.status.webpageStatus,
-      10000,
+      sidebar.status.notionWebpageLoadingStatus,
+      9000,
       {
          trailing: true,
       }
    );
 
+   /**
+    * refresh the page if its not updating currently and suffucient time has passed since
+    * the page is loaded
+    */
    const debouncedUpdateSignal = useDebouncedCallback(
       () => {
          if (
@@ -96,7 +118,7 @@ export const Layout = () => {
             sidebar.navigation.pageId != null &&
             sidebar.status.updateMarks === updateStatus.updateSuccessful &&
             debouncedWebpageStatus === thunkStatus.fulfilled &&
-            sidebar.status.webpageStatus === thunkStatus.fulfilled
+            sidebar.status.notionWebpageLoadingStatus === thunkStatus.fulfilled
          ) {
             refreshSidebarContents(dispatch, sidebar.navigation);
          }
@@ -107,6 +129,9 @@ export const Layout = () => {
       }
    );
 
+   /**
+    * receive update signal from the parent window via window.postMessage
+    */
    const handleReceiveMessage = useCallback((event) => {
       if (
          event.data === 'updateEvergreenSidebarData' &&
@@ -116,6 +141,7 @@ export const Layout = () => {
       }
    }, []);
 
+   // hook into the event listener
    useEffect(() => {
       window.addEventListener('message', handleReceiveMessage);
       return () => {

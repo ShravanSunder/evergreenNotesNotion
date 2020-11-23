@@ -56,6 +56,7 @@ export const MarksPane = () => {
             <div className={classes.spacing}></div>
             {pageMarks?.highlights?.map((p, i) => (
                <RenderMark
+                  key={p.blockId}
                   p={p}
                   semanticFilters={[SemanticFormatEnum.Colored]}></RenderMark>
             ))}

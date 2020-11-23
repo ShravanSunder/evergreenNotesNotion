@@ -38,12 +38,10 @@ export const TabContent = ({
    return (
       <>
          <Suspense fallback={<AccessIssue />}>
-            {debouncedStatus.webpageStatus === thunkStatus.idle && (
-               <WaitingToLoadNotionSite />
-            )}
-            {debouncedStatus.webpageStatus === thunkStatus.rejected && (
-               <AccessIssue />
-            )}
+            {debouncedStatus.notionWebpageLoadingStatus ===
+               thunkStatus.idle && <WaitingToLoadNotionSite />}
+            {debouncedStatus.notionWebpageLoadingStatus ===
+               thunkStatus.rejected && <AccessIssue />}
             {calculateSidebarStatus(debouncedStatus) === thunkStatus.pending &&
                !tabsWithoutSiteLoading && <LoadingTab />}
          </Suspense>

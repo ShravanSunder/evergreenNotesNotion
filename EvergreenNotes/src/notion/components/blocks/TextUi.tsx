@@ -16,7 +16,7 @@ import {
    mentionSelector,
 } from 'aNotion/providers/storeSelectors';
 import { getColor, parseDate } from 'aNotion/services/blockService';
-import { AppPromiseDispatch } from 'aNotion/providers/appDispatch';
+import { TAppDispatchWithPromise } from 'aNotion/providers/appDispatch';
 import { blockActions } from 'aNotion/components/blocks/blockSlice';
 import { getPageUrl, getSiteUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
@@ -121,7 +121,7 @@ const TextSegment = ({
    let classes = useBlockStyles();
    let text = segment[0];
    let format = segment[1] ?? [];
-   const dispatch: AppPromiseDispatch<any> = useDispatch();
+   const dispatch: TAppDispatchWithPromise<any> = useDispatch();
 
    const blockData = useSelector(blockSelector);
    const mentionData = useSelector(mentionSelector);

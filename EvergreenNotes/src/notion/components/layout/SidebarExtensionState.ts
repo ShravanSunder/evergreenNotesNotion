@@ -22,6 +22,7 @@ export type NavigationState = {
 export type PageRecordState = {
    status: ThunkStatus;
    currentPageData?: ICurrentPageData;
+   retryCounter: number;
 };
 
 export type SidebarExtensionState = {
@@ -32,8 +33,7 @@ export type SidebarExtensionState = {
 };
 
 export type SidebarExtensionStatus = {
-   webpageStatus: thunkStatus;
+   notionWebpageLoadingStatus: thunkStatus;
    updateReferences: updateStatus;
    updateMarks: updateStatus;
-   retryCounter: number;
 };

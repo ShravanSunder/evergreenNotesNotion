@@ -111,8 +111,8 @@ const extractPageAndBackgroundIfValid = (
 };
 
 export const calculateSidebarStatus = (status: SidebarExtensionStatus) => {
-   if (status.webpageStatus !== thunkStatus.fulfilled) {
-      return status.webpageStatus;
+   if (status.notionWebpageLoadingStatus !== thunkStatus.fulfilled) {
+      return status.notionWebpageLoadingStatus;
    } else {
       if (
          status.updateReferences !== updateStatus.shouldUpdate &&
