@@ -45,7 +45,7 @@ export const LoadSidebarFrame = () => {
    let url = chrome.extension.getURL('sidebar.html');
    let classes = useStyles();
 
-   const [wWidth, wHeight] = useWindowSize({ wait: 100 });
+   const [wWidth, wHeight] = useWindowSize({ wait: 250 });
    const [showFrame, setShowFrame] = useState(false);
    const [wasDragging, setWasDragging] = useState(false);
    const [updateFrame, setUpdateFrame] = useState(false);

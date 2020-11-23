@@ -16,13 +16,13 @@ export const SidebarFab = (props: any) => (
             axis="y"
             handle=".handle"
             position={undefined}
-            bounds={{ top: -50, bottom: props.wHeight - 100 }}
+            bounds={{ top: -40, bottom: props.wHeight - 200 }}
             onDrag={props.handleDrag}
             scale={1}>
             <Fab
                style={{
                   position: 'absolute',
-                  top: 66,
+                  top: 52,
                   left: props.wWidth - 67,
                   color: props.showFrame ? grey[700] : lightGreen[800],
                   backgroundColor: props.showFrame

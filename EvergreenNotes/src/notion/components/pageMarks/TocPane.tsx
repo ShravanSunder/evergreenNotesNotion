@@ -58,7 +58,7 @@ export const TocPane = () => {
          {headers.map((h, i) => {
             if (h.type === BlockTypeEnum.Header1) {
                return (
-                  <>
+                  <React.Fragment key={h.blockId}>
                      <Grid
                         item
                         xs={12}
@@ -73,12 +73,12 @@ export const TocPane = () => {
                            interactive={false}
                            renderPagesAsInline={true}></BlockUi>
                      </Grid>
-                  </>
+                  </React.Fragment>
                );
             } else if (h.type === BlockTypeEnum.Header2) {
                const indent: number = hasH1 ? 1 : 0;
                return (
-                  <>
+                  <React.Fragment key={h.blockId}>
                      {indent == 1 && <Grid item xs={1} />}
                      <Grid
                         item
@@ -94,7 +94,7 @@ export const TocPane = () => {
                            interactive={false}
                            renderPagesAsInline={true}></BlockUi>
                      </Grid>
-                  </>
+                  </React.Fragment>
                );
             } else if (h.type === BlockTypeEnum.Header3) {
                let indent = 0;
@@ -105,7 +105,7 @@ export const TocPane = () => {
                }
 
                return (
-                  <>
+                  <React.Fragment key={h.blockId}>
                      {indent > 0 && <Grid item xs={indent as any} />}
                      <Grid
                         item
@@ -121,7 +121,7 @@ export const TocPane = () => {
                            interactive={false}
                            renderPagesAsInline={true}></BlockUi>
                      </Grid>
-                  </>
+                  </React.Fragment>
                );
             }
             return null;

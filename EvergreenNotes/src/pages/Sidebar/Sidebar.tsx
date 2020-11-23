@@ -74,6 +74,8 @@ export const Sidebar = () => {
                            overflowX: 'hidden',
                            overflowY: 'auto',
                            border: '0px',
+                           margin: 0,
+                           padding: 0,
                         }}>
                         <SnackbarProvider
                            ref={notistackRef}
@@ -102,6 +104,7 @@ export const Sidebar = () => {
                               elevation={3}
                               style={{
                                  padding: 12,
+                                 paddingTop: 0,
                                  overflow: 'hidden',
                                  minHeight: appHeight(wHeight),
                               }}>

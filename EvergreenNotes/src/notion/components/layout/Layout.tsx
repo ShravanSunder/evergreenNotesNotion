@@ -24,6 +24,11 @@ import {
 } from './LayoutMenuBar';
 import { NoNotionPageId } from './NoNotionPageId';
 import { TabContent } from './TabContent';
+import { useWindowWidth } from '@react-hook/window-size';
+import {
+   menuPadding as topMenuBorder,
+   minFrameWidth,
+} from 'aSidebar/frameProperties';
 
 export const Layout = () => {
    const dispatch: TAppDispatchWithPromise<any> = useDispatch();
@@ -149,6 +154,8 @@ export const Layout = () => {
       };
    }, []);
 
+   const wWidth = useWindowWidth({ wait: 250 });
+
    const tabsWithoutSiteLoading =
       tab === LayoutTabs.Search || tab === LayoutTabs.Settings;
 
@@ -158,7 +165,18 @@ export const Layout = () => {
             {debouncedShowNoPageIdError && <NoNotionPageId></NoNotionPageId>}
             {!debouncedShowNoPageIdError && (
                <>
-                  <LayoutMenuBar tab={tab} setTab={setTab}></LayoutMenuBar>
+                  <div
+                     style={{
+                        width: wWidth - topMenuBorder,
+                        position: 'absolute',
+                        zIndex: 100,
+                        minWidth: minFrameWidth - topMenuBorder,
+                     }}>
+                     <LayoutMenuBar tab={tab} setTab={setTab}></LayoutMenuBar>
+                  </div>
+                  <div style={{ width: (wWidth - 30) as any }}>
+                     <LayoutMenuBar tab={tab} setTab={setTab}></LayoutMenuBar>
+                  </div>
                   <div style={{ marginTop: 12 }}></div>
                   <ErrorBoundary FallbackComponent={ErrorFallback}>
                      <TabContent

@@ -113,6 +113,9 @@ export const LayoutMenuBar = ({
                backgroundColor: lightGreen[50],
                borderRadius: 9,
                padding: 6,
+               marginTop: 1,
+               boxShadow:
+                  '3px 3px 3px #f1f8e9, -3px 3px 3px #f1f8e9 0px -3px 3px #f1f8e9',
             }}>
             <Grid container justify="flex-start">
                <Grid xs={1} item>
@@ -170,8 +173,8 @@ export const LayoutMenuBar = ({
                   <Typography
                      variant="h4"
                      style={{
-                        marginTop: 9,
-                        marginBottom: 6,
+                        marginTop: 8,
+                        marginBottom: 4,
                         fontVariant: 'small-caps',
                      }}>
                      <strong>{tab}</strong>

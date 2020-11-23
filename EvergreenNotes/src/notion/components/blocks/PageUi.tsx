@@ -65,6 +65,10 @@ export const PageUi = ({
       );
    }
 
+   if (block.simpleTitle === '' || block.semanticTitle.length === 0) {
+      console.log('empty');
+   }
+
    return (
       <div id="PageUI" style={style}>
          {iconComponent}
