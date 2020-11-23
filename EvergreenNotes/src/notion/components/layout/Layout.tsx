@@ -174,7 +174,12 @@ export const Layout = () => {
                      }}>
                      <LayoutMenuBar tab={tab} setTab={setTab}></LayoutMenuBar>
                   </div>
-                  <div style={{ width: (wWidth - 30) as any }}>
+                  {/* hack for absolute positioning */}
+                  <div
+                     style={{
+                        width: wWidth - topMenuBorder,
+                        overflow: 'clip',
+                     }}>
                      <LayoutMenuBar tab={tab} setTab={setTab}></LayoutMenuBar>
                   </div>
                   <div style={{ marginTop: 12 }}></div>

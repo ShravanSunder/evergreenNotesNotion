@@ -21,7 +21,7 @@ export const PageUi = ({
    style = undefined,
    inlineBlock = true,
    showContent = undefined,
-   interactive = false,
+   interactive = true,
 }: IPageUIParams) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
@@ -65,18 +65,26 @@ export const PageUi = ({
       );
    }
 
-   if (block.simpleTitle === '' || block.semanticTitle.length === 0) {
-      console.log('empty');
+   let untitled = false;
+   if (block.semanticTitle == null || block.semanticTitle.length === 0) {
+      untitled = true;
    }
 
    return (
       <div id="PageUI" style={style}>
          {iconComponent}
-         <TextUi
-            block={block}
-            variant={variant}
-            interactive={interactive}
-            style={style}></TextUi>
+         {!untitled && (
+            <TextUi
+               block={block}
+               variant={variant}
+               interactive={interactive}
+               style={style}></TextUi>
+         )}
+         {untitled && (
+            <Typography variant={variant} style={style} display="inline">
+               Untitled
+            </Typography>
+         )}
          {renderChildren && (
             <>
                <div style={{ marginTop: 12 }}></div>

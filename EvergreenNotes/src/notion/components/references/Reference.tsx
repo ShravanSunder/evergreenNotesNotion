@@ -63,10 +63,12 @@ const parse = (textByContext: string[]) => {
       <React.Fragment>
          {textByContext.map((f, i) => {
             if (i % 2 === 1) {
-               return <strong key={i}>{f}</strong>;
+               return <strong key={f + i}>{f}</strong>;
             } else {
                return (
-                  <React.Fragment key={i}>{getTitle(f, 120)}</React.Fragment>
+                  <React.Fragment key={f + i}>
+                     {getTitle(f, 120)}
+                  </React.Fragment>
                );
             }
          })}

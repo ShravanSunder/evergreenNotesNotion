@@ -1,6 +1,4 @@
-//import { sidebarExtensionActions } from 'aNotion/components/layout/notionSiteSlice';
 import {
-   CookieData,
    NavigationState,
    SidebarExtensionStatus,
 } from 'aNotion/components/layout/SidebarExtensionState';

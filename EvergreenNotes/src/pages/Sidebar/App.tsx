@@ -2,7 +2,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { registerListener as registerCookiesListener } from './appListeners';
 import 'chrome-extension-async';
 import { registerTabUpdateListener } from 'aNotion/services/notionListeners';
 import logger from 'redux-logger';
@@ -16,5 +15,4 @@ const renderApp = (Component: React.FC) =>
 renderApp(Sidebar);
 console.log('App loaded!');
 
-registerCookiesListener();
 registerTabUpdateListener();

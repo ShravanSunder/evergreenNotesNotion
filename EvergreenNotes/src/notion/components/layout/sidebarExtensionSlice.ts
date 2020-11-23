@@ -7,7 +7,6 @@ import {
    ThunkDispatch,
 } from '@reduxjs/toolkit';
 import {
-   CookieData,
    SidebarExtensionState,
    NavigationState,
 } from 'aNotion/components/layout/SidebarExtensionState';
@@ -33,7 +32,6 @@ import { NotionBlockRecord } from 'aNotion/models/NotionBlock';
 import { Dispatch } from 'react';
 
 const initialState: SidebarExtensionState = {
-   cookie: { status: thunkStatus.idle },
    navigation: {},
    currentNotionPage: { status: thunkStatus.idle, retryCounter: 0 },
    status: {
@@ -174,20 +172,6 @@ const unloadPreviousPageReducer = (state: SidebarExtensionState) => {
    state.status.notionWebpageLoadingStatus = thunkStatus.idle;
 };
 
-const loadCookiesReducer: CaseReducer<
-   SidebarExtensionState,
-   PayloadAction<CookieData>
-> = (state, action) => {
-   if (
-      state.cookie.status !== thunkStatus.fulfilled ||
-      state.cookie.data == null ||
-      state.cookie.data?.token == null
-   ) {
-      state.cookie.data = action.payload;
-      state.cookie.status = thunkStatus.fulfilled;
-   }
-};
-
 const updateNavigationDataReducer = {
    reducer: (
       state: SidebarExtensionState,
@@ -204,6 +188,7 @@ const updateNavigationDataReducer = {
             state.status.updateReferences = updateStatus.waiting;
             state.status.updateMarks = updateStatus.waiting;
          }
+         state.status.notionWebpageLoadingStatus = thunkStatus.fulfilled;
       } else {
          unloadPreviousPageReducer(state);
          state.status.notionWebpageLoadingStatus = thunkStatus.rejected;
@@ -235,7 +220,6 @@ const sidebarExtensionSlice = createSlice({
    name: 'notionSiteSlice',
    initialState: initialState,
    reducers: {
-      loadCookies: loadCookiesReducer,
       updateNavigationData: updateNavigationDataReducer,
       unloadPreviousPage: unloadPreviousPageReducer,
       setPageLoadingStatus: (state) => {

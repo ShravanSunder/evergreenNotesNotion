@@ -5,11 +5,6 @@ import {
 import { ICurrentPageData } from 'aNotion/models/INotionPage';
 import { updateStatus } from 'aNotion/types/updateStatus';
 
-export type CookieData = {
-   token: string;
-   cookies: chrome.cookies.Cookie[];
-};
-
 // location of the notion site
 export type NavigationState = {
    pageId?: string;
@@ -26,7 +21,6 @@ export type PageRecordState = {
 };
 
 export type SidebarExtensionState = {
-   cookie: { status: string; data?: CookieData };
    navigation: NavigationState;
    currentNotionPage: PageRecordState;
    status: SidebarExtensionStatus;

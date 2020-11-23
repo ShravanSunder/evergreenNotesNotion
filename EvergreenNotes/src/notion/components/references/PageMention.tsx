@@ -85,9 +85,9 @@ export const PageMention = ({
                            <Divider />
                         </Grid>
                         <Grid item xs={12} className={classes.reference}>
-                           {mentionIds?.map((m) => (
+                           {mentionIds?.map((m, i) => (
                               <NotionContentWithParentId
-                                 key={m}
+                                 key={m + i}
                                  renderPagesAsInline={false}
                                  interactive={true}
                                  parentBlockId={m}></NotionContentWithParentId>

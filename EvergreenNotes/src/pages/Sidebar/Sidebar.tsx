@@ -4,7 +4,6 @@ import React, { useEffect, Suspense } from 'react';
 import { Provider } from 'react-redux';
 import reduxStore from 'aNotion/providers/reduxStore';
 import { appDispatch } from 'aNotion/providers/appDispatch';
-import { commands } from 'aCommon/commands';
 import { activeTab } from 'aCommon/extensionHelpers';
 import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -127,19 +126,8 @@ const setTabId = async () => {
       let tab = await activeTab();
       let tabId = tab.id!;
       w.contentTabId = tabId;
-      fetchCookies(tabId);
       appDispatch(sidebarExtensionActions.updateNavigationData(tab.url!));
    }
-};
-const fetchCookies = (tabId: number) => {
-   console.log('send fetchCookies');
-   chrome.runtime.sendMessage(
-      {
-         command: commands.fetchCookies,
-         tabId: tabId,
-      },
-      () => {}
-   );
 };
 
 export default Sidebar;

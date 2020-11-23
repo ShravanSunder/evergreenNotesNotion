@@ -1,8 +1,6 @@
 import '../../assets/img/icon-34.png';
 import '../../assets/img/icon-128.png';
 import 'chrome-extension-async';
-import { commands } from 'aCommon/commands';
-import { payloadRequest } from 'aCommon/commands';
 import {
    contentCommands,
    contentCommandRequest,
@@ -25,15 +23,6 @@ const isNotionTab = (tab: chrome.tabs.Tab) => {
    return false;
 };
 
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-   switch (request.command) {
-      case commands.fetchCookies:
-         await fetchCookies(request.tabId);
-         break;
-   }
-   return true;
-});
-
 // When the browser-action button is clicked...
 chrome.browserAction.onClicked.addListener(async (tab) => {
    if (isNotionTab(tab)) {
@@ -46,16 +35,5 @@ chrome.browserAction.onClicked.addListener(async (tab) => {
    }
    return true;
 });
-
-const fetchCookies = async (tabId: number) => {
-   let cookies = await chrome.cookies.getAll({ domain: notionDomain });
-   let req = {
-      command: commands.receivedCookies,
-      payload: cookies,
-   } as payloadRequest;
-
-   console.log('send receivedCookies');
-   chrome.tabs.sendMessage(tabId, req);
-};
 
 console.log('Loaded background page');
