@@ -31,7 +31,7 @@ type TIndentType = {
 };
 
 type TLimitedIndentTree = {
-   [key: string]: 'Level1' | 'Level2' | 'Level3';
+   [key: string]: 'Level1' | 'Level2';
 };
 
 /**
@@ -52,9 +52,13 @@ export const TocPane = () => {
    const hasH2 = headers.some((f) => f.type === BlockTypeEnum.Header2);
 
    useEffect(() => {
-      const tempTree = createLimitedTree(headers, pageBlock?.blockId);
-      setTree(tempTree);
-   }, [headers, pageBlock?.blockId]);
+      if (status === thunkStatus.fulfilled) {
+         const tempTree = createLimitedTree(headers, pageBlock?.blockId);
+         setTree(tempTree);
+      } else if (Object.keys(tree).length > 0) {
+         setTree({});
+      }
+   }, [headers, status, pageBlock?.blockId]);
 
    let previousHeaderIndent: TIndentType = {
       level: 0,
@@ -80,49 +84,17 @@ export const TocPane = () => {
          {headers.map((h, i) => {
             if (h.type === BlockTypeEnum.Header1) {
                const indent: number = 0;
-               calculateIndent(previousHeaderIndent, indent, h, tree);
 
-               return (
-                  <React.Fragment key={h.blockId}>
-                     <Grid
-                        item
-                        xs={12}
-                        key={h.blockId}
-                        className={classes.toc}
-                        onClick={() =>
-                           handleNavigateToBlockInNotion(h.blockId)
-                        }>
-                        <BlockUi
-                           block={h}
-                           index={0}
-                           interactive={false}
-                           doNotRenderChildBlocks={true}></BlockUi>
-                     </Grid>
-                  </React.Fragment>
-               );
+               const cIndent = calculateIndent(indent, h, tree);
+
+               return <TocItems h={h} cIndent={cIndent} />;
             } else if (h.type === BlockTypeEnum.Header2) {
                const indent: number = hasH1 ? 1 : 0;
 
-               calculateIndent(previousHeaderIndent, indent, h, tree);
-               return (
-                  <React.Fragment key={h.blockId}>
-                     {indent == 1 && <Grid item xs={1} />}
-                     <Grid
-                        item
-                        xs={(12 - indent) as any}
-                        key={h.blockId}
-                        className={classes.toc}
-                        onClick={() =>
-                           handleNavigateToBlockInNotion(h.blockId)
-                        }>
-                        <BlockUi
-                           block={h}
-                           index={0}
-                           interactive={false}
-                           doNotRenderChildBlocks={true}></BlockUi>
-                     </Grid>
-                  </React.Fragment>
-               );
+               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
+               const cIndent = calculateIndent(indent, h, tree);
+
+               return <TocItems h={h} cIndent={cIndent} />;
             } else if (h.type === BlockTypeEnum.Header3) {
                let indent = 0;
                if (hasH1 && hasH2) {
@@ -131,47 +103,17 @@ export const TocPane = () => {
                   indent = 1;
                }
 
-               calculateIndent(previousHeaderIndent, indent, h, tree);
-               return (
-                  <React.Fragment key={h.blockId}>
-                     {indent > 0 && <Grid item xs={indent as any} />}
-                     <Grid
-                        item
-                        xs={(12 - indent) as any}
-                        key={h.blockId}
-                        className={classes.toc}
-                        onClick={() =>
-                           handleNavigateToBlockInNotion(h.blockId)
-                        }>
-                        <BlockUi
-                           block={h}
-                           index={0}
-                           interactive={false}
-                           doNotRenderChildBlocks={true}></BlockUi>
-                     </Grid>
-                  </React.Fragment>
-               );
+               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
+               const cIndent = calculateIndent(indent, h, tree);
+
+               return <TocItems h={h} cIndent={cIndent} />;
             } else if (h.type === BlockTypeEnum.Toggle) {
-               let indent = previousHeaderIndent.level + 1;
-               return (
-                  <React.Fragment key={h.blockId}>
-                     {indent > 0 && <Grid item xs={indent as any} />}
-                     <Grid
-                        item
-                        xs={(12 - indent) as any}
-                        key={h.blockId}
-                        className={classes.toc}
-                        onClick={() =>
-                           handleNavigateToBlockInNotion(h.blockId)
-                        }>
-                        <BlockUi
-                           block={h}
-                           index={0}
-                           interactive={false}
-                           doNotRenderChildBlocks={true}></BlockUi>
-                     </Grid>
-                  </React.Fragment>
-               );
+               let indent = previousHeaderIndent.level;
+
+               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
+               const cIndent = calculateIndent(indent, h, tree);
+
+               return <TocItems h={h} cIndent={cIndent} />;
             }
             return null;
          })}
@@ -185,6 +127,7 @@ export const TocPane = () => {
             {status === thunkStatus.fulfilled && headers.length === 0 && (
                <NothingToFind></NothingToFind>
             )}
+            {status === thunkStatus.pending && <LoadingSection />}
          </Suspense>
       </ErrorBoundary>
    );
@@ -201,33 +144,66 @@ const createLimitedTree = (
       let tempTree: TLimitedIndentTree = {};
       headers.forEach((f) => {
          if (f.block!.parent_id === pageBlockId) {
-            tempTree[pageBlockId] = 'Level1';
+            tempTree[f.blockId] = 'Level1';
+         } else {
+            tempTree[f.blockId] = 'Level2';
          }
       });
 
-      headers
-         .filter((f) => tempTree[pageBlockId] != null)
-         .forEach((f) => {
-            if (Object.keys(tempTree).some((s) => s === f.block!.parent_id)) {
-               tempTree[pageBlockId] = 'Level2';
-            } else {
-               tempTree[pageBlockId] = 'Level3';
-            }
-         });
       return tempTree;
    }
 
    return {};
 };
 
-function calculateIndent(
-   previousHeaderIndent: TIndentType,
+const calculateIndent = (
    indent: number,
    currentBlock: INotionBlockModel,
    tree: TLimitedIndentTree
-) {
+) => {
    let offset = 0;
 
+   if (tree[currentBlock.blockId] != null) {
+      if (tree[currentBlock.blockId] == 'Level1') offset = 0;
+      else if (tree[currentBlock.blockId] == 'Level2') offset = 1;
+   }
+
+   return indent + offset;
+};
+
+const TocItems = ({
+   h,
+   cIndent,
+}: {
+   h: INotionBlockModel;
+   cIndent: number;
+}) => {
+   let classes = useStyles();
+
+   return (
+      <React.Fragment key={h.blockId}>
+         {cIndent > 0 && <Grid item xs={cIndent as any} />}
+         <Grid
+            item
+            xs={(12 - cIndent) as any}
+            key={h.blockId}
+            className={classes.toc}
+            onClick={() => handleNavigateToBlockInNotion(h.blockId)}>
+            <BlockUi
+               block={h}
+               index={0}
+               interactive={false}
+               doNotRenderChildBlocks={true}></BlockUi>
+         </Grid>
+      </React.Fragment>
+   );
+};
+
+function setPreviousHeaderIndent(
+   previousHeaderIndent: TIndentType,
+   indent: number,
+   h: INotionBlockModel
+) {
    previousHeaderIndent.level = indent;
-   previousHeaderIndent.type = currentBlock.type;
+   previousHeaderIndent.type = h.type;
 }

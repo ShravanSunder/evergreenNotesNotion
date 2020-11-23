@@ -1,6 +1,5 @@
-import { getAppState } from 'aNotion/providers/appDispatch';
-import { currentPageSelector } from 'aNotion/providers/storeSelectors';
 import superagent from 'superagent';
+import { superagentCache } from 'aUtilities/apiCache';
 import {
    ISearchFilters,
    Type,
@@ -22,6 +21,7 @@ export const searchByRelevance = async (
 
    let req = superagent
       .post('https://www.notion.so/api/v3/search')
+      .use(superagentCache)
       .send(createParam(spaceId!, query, filters, sort, limit));
 
    if (abort != null) {

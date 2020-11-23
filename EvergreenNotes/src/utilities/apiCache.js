@@ -3,7 +3,7 @@ import SuperagentCache from 'superagent-cache-plugin';
 
 var cache = new CacheModule({
    storage: 'session',
-   defaultExpiration: 120,
+   defaultExpiration: 30,
 });
 
 export var superagentCache = SuperagentCache(cache);

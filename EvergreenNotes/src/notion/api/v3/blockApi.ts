@@ -2,7 +2,6 @@ import superagent from 'superagent';
 import * as LoadPageChunk from 'aNotion/types/notionV3/notionRecordTypes';
 import { addAbortSignal } from 'aUtilities/apiHelper';
 import { superagentCache } from 'aUtilities/apiCache';
-import 'superagent-cache-plugin';
 import { ISyncRecordType } from './apiRequestTypes';
 
 export const loadPageChunk = async (
@@ -13,7 +12,7 @@ export const loadPageChunk = async (
 ): Promise<LoadPageChunk.IPageChunk> => {
    let req = superagent
       .post('https://www.notion.so/api/v3/loadPageChunk')
-      //.use(superagentCache)
+      .use(superagentCache)
       .send({
          pageId: pageId,
          limit: limit,
