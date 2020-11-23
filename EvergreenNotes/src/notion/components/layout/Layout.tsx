@@ -28,7 +28,7 @@ import { useWindowWidth } from '@react-hook/window-size';
 import {
    menuPadding as topMenuBorder,
    minFrameWidth,
-} from 'aSidebar/frameProperties';
+} from 'aSidebar/sidebarFrameProperties';
 
 export const Layout = () => {
    const dispatch: TAppDispatchWithPromise<any> = useDispatch();

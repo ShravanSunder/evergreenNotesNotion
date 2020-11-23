@@ -12,7 +12,7 @@ interface IPageUIParams {
    block: INotionBlockModel;
    style?: React.CSSProperties | undefined;
    inlineBlock?: boolean;
-   showContent?: boolean | undefined;
+   showContent?: boolean;
    interactive?: boolean;
 }
 
@@ -20,7 +20,7 @@ export const PageUi = ({
    block,
    style = undefined,
    inlineBlock = true,
-   showContent = undefined,
+   showContent = false,
    interactive = true,
 }: IPageUIParams) => {
    const page = block.block as Page;
@@ -28,7 +28,7 @@ export const PageUi = ({
    let iconComponent: JSX.Element | undefined = undefined;
    const variant = inlineBlock ? 'body1' : 'h4';
 
-   const renderChildren = inlineBlock ? false : showContent ?? false;
+   const renderChildren = inlineBlock ? false : showContent;
 
    if (icon?.length === 1) {
       iconComponent = (

@@ -28,7 +28,7 @@ interface IBlockUi {
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
    interactive?: boolean;
-   renderPagesAsInline?: boolean;
+   doNotRenderChildBlocks?: boolean;
 }
 
 export const BlockUi = ({
@@ -37,7 +37,7 @@ export const BlockUi = ({
    semanticFilter,
    style,
    interactive = true,
-   renderPagesAsInline = true,
+   doNotRenderChildBlocks = true,
 }: IBlockUi) => {
    let classes = useBlockStyles();
    let variant = useVariant(block);
@@ -99,8 +99,8 @@ export const BlockUi = ({
                <PageUi
                   block={block}
                   style={style}
-                  inlineBlock={renderPagesAsInline}
-                  showContent={true}
+                  inlineBlock={doNotRenderChildBlocks}
+                  showContent={!doNotRenderChildBlocks}
                   interactive={interactive}
                />
             )}
@@ -108,8 +108,8 @@ export const BlockUi = ({
                <PageUi
                   block={block}
                   style={style}
-                  inlineBlock={renderPagesAsInline}
-                  showContent={true}
+                  inlineBlock={doNotRenderChildBlocks}
+                  showContent={!doNotRenderChildBlocks}
                   interactive={interactive}
                />
             )}
@@ -117,8 +117,8 @@ export const BlockUi = ({
                <PageUi
                   block={block}
                   style={style}
-                  inlineBlock={renderPagesAsInline}
-                  showContent={true}
+                  inlineBlock={doNotRenderChildBlocks}
+                  showContent={!doNotRenderChildBlocks}
                   interactive={interactive}
                />
             )}
@@ -128,6 +128,7 @@ export const BlockUi = ({
                   semanticFilter={semanticFilter}
                   interactive={interactive}
                   style={blockStyle}
+                  doNotRenderChildBlocks={doNotRenderChildBlocks}
                />
             )}
             {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}

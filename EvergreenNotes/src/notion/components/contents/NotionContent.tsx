@@ -103,7 +103,9 @@ const NotionContent = ({
                            index={i}
                            semanticFilter={semanticFilter}
                            style={style}
-                           renderPagesAsInline={renderPagesAsInline}></BlockUi>
+                           doNotRenderChildBlocks={
+                              renderPagesAsInline
+                           }></BlockUi>
                         {(depth ?? 1) < (maxDepth ?? 6) && (
                            <ContentChildren
                               block={p}

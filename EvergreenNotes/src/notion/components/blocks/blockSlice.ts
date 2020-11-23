@@ -19,7 +19,6 @@ const fetchBlock = createAsyncThunk<
          thunkApi.getState() as RootState
       ) as RecordState;
 
-      //if it gets inefficient, we can use contentIds and syncRecordValues
       return await fetchBlockIfNotInStore(state, blockId, thunkApi);
    }
 );

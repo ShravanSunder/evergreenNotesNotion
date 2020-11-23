@@ -10,7 +10,6 @@ export const registerTabUpdateListener = () => {
          }
       }
       if (changeInfo.status === 'complete') {
-         console.log('debug completed');
          if (isNotionTab(tab!) && tab.id === getCurrentTabId()) {
             appDispatch(sidebarExtensionActions.updateNavigationData(tab.url!));
             appDispatch(sidebarExtensionActions.setPageCompletedStatus());

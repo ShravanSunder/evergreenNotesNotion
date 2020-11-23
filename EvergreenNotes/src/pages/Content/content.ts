@@ -18,14 +18,13 @@ chrome.runtime.onMessage.addListener(
             break;
          }
       }
-      return true; //emptyResponse(sendResponse);
+      return true;
    }
 );
 
 const notionAppId = 'notion-app';
-
 export const notionSidebarRootId = 'notion-sidebar-root-987384';
-var initalized = false;
+let initalized = false;
 
 const initalize = async () => {
    await sleep(50);

@@ -24,7 +24,7 @@ import { SnackbarProvider } from 'notistack';
 import { green, yellow, red, grey } from '@material-ui/core/colors';
 import { LoadingUnknown } from 'aNotion/components/common/Loading';
 import { getOptionsFromStorage } from 'aNotion/components/options/optionsService';
-import { appHeight } from 'aSidebar/frameProperties';
+import { appHeight } from 'aSidebar/sidebarFrameProperties';
 
 const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 

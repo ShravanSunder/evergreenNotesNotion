@@ -9,12 +9,17 @@ import { IBaseTextUiParams, TextUi } from './TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 import { aggregateParentSemanticFilter } from 'aNotion/services/blockService';
 
+interface IToggleUIParams extends IBaseTextUiParams {
+   doNotRenderChildBlocks?: boolean;
+}
+
 export const ToggleUi = ({
    block,
    semanticFilter,
    style,
    interactive,
-}: IBaseTextUiParams) => {
+   doNotRenderChildBlocks = false,
+}: IToggleUIParams) => {
    let classes = useBlockStyles();
    let toggle = block.block as Toggle;
 
@@ -33,7 +38,10 @@ export const ToggleUi = ({
       <Grid id="ToggleUI" container>
          <Grid item className={classes.blockUiGrids}>
             <div className={classes.toggle}>
-               <IconButton size="small" onClick={handleClick}>
+               <IconButton
+                  size="small"
+                  onClick={handleClick}
+                  disabled={doNotRenderChildBlocks}>
                   {expanded && <ArrowDropDown fontSize="inherit" />}
                   {!expanded && <ArrowRight fontSize="inherit" />}
                </IconButton>
@@ -46,7 +54,7 @@ export const ToggleUi = ({
                style={style}
                interactive={interactive}
             />
-            {expanded && (
+            {expanded && !doNotRenderChildBlocks && (
                <NotionContentWithParentId
                   parentBlockId={block.blockId}
                   semanticFilter={aggregatedSemanticFilter}

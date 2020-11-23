@@ -170,6 +170,7 @@ const getMarksInBlock = (
          case BlockTypeEnum.Header1:
          case BlockTypeEnum.Header2:
          case BlockTypeEnum.Header3:
+         case BlockTypeEnum.Toggle:
             pageMarks.headers.push(nb);
       }
    } catch {

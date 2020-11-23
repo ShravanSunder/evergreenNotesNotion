@@ -7,7 +7,7 @@ import {
    appPositionLeft,
    appWidth,
    appHeight,
-} from 'aSidebar/frameProperties';
+} from 'aSidebar/sidebarFrameProperties';
 import { SidebarFab } from 'aSidebar/SidebarFab';
 import { useDebouncedCallback } from 'use-debounce/lib';
 import {

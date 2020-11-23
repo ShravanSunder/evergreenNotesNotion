@@ -1,4 +1,4 @@
-import { appWidth, appScrollMargin } from './frameProperties';
+import { appWidth, appScrollMargin } from 'aSidebar/sidebarFrameProperties';
 import {
    styleChangedCallback,
    contentChangedCallback,
