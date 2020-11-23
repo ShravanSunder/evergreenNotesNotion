@@ -21,9 +21,10 @@ import { BacklinkRecordModel } from 'aNotion/components/references/referenceStat
 import { Path } from 'aNotion/components/references/Path';
 import { TextUi } from '../blocks/TextUi';
 import { PageUi } from '../blocks/PageUi';
-import { getValuesForSemanticType } from 'aNotion/services/pageService';
-import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
-import { isGuid } from 'aCommon/extensionHelpers';
+
+import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
+import { grey } from '@material-ui/core/colors';
+import { LightTooltip } from '../common/Styles';
 
 export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
    let classes = useReferenceStyles();
@@ -59,7 +60,20 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
-                  <Grid item xs={12} className={classes.reference}>
+                  <Grid item>
+                     <LightTooltip title="Backlink block" placement="top">
+                        <BookmarksTwoToneIcon
+                           style={{
+                              maxHeight: 15,
+                              maxWidth: 15,
+                              margin: 0,
+                              marginTop: 11,
+                              color: grey[600],
+                           }}
+                        />
+                     </LightTooltip>
+                  </Grid>
+                  <Grid item xs={11} className={classes.reference}>
                      <NotionContentWithBlocks
                         blockContent={
                            backlink.backlinkBlock

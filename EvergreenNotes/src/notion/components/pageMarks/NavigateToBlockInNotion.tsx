@@ -3,6 +3,8 @@ import { IconButton } from '@material-ui/core';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { TNavigateMessage } from 'aSidebar/sidebarMessaging';
+import { grey } from '@material-ui/core/colors';
+import { LightTooltip } from '../common/Styles';
 
 export const handleNavigateToBlockInNotion = (blockId: string) => {
    const msg: TNavigateMessage = {
@@ -34,14 +36,16 @@ export const NavigateToBlockInNotion = ({
             }}
             color="default"
             size="small">
-            <ZoomOutMapIcon
-               style={{
-                  maxHeight: 13,
-                  maxWidth: 13,
-                  margin: 0,
-                  color: '#9e9e9e',
-               }}
-            />
+            <LightTooltip title="Scroll to block" placement="top">
+               <ZoomOutMapIcon
+                  style={{
+                     maxHeight: 13,
+                     maxWidth: 13,
+                     margin: 0,
+                     color: grey[600],
+                  }}
+               />
+            </LightTooltip>
          </IconButton>
       </>
    );

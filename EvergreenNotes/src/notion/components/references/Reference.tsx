@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, Suspense, useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
@@ -14,41 +14,46 @@ import {
 import { useReferenceStyles } from './referenceStyles';
 import { ISearchRecordModel } from 'aNotion/models/SearchRecord';
 import { Path } from './Path';
+import { LoadingSection } from '../common/Loading';
 
 export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
    let classes = useReferenceStyles();
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-         <Accordion TransitionProps={{ unmountOnExit: true }}>
-            <AccordionSummary expandIcon={<ExpandMoreSharp />}>
-               <Grid container spacing={2}>
-                  <Grid item xs>
-                     <Path path={refData.path}></Path>
+         <Suspense fallback={<LoadingSection />}>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
+               <AccordionSummary expandIcon={<ExpandMoreSharp />}>
+                  <Grid container spacing={2}>
+                     <Grid item xs>
+                        <Path path={refData.path}></Path>
+                     </Grid>
+                     <Grid item xs={12}>
+                        <Typography
+                           variant="body1"
+                           className={classes.typography}>
+                           {parse(refData.textByContext)}
+                        </Typography>
+                     </Grid>
                   </Grid>
-                  <Grid item xs={12}>
-                     <Typography variant="body1" className={classes.typography}>
-                        {parse(refData.textByContext)}
-                     </Typography>
-                  </Grid>
-               </Grid>
-            </AccordionSummary>
-            <AccordionActions>
-               <ReferenceActions
-                  id={refData.id}
-                  path={refData.path}
-                  text={refData.text}></ReferenceActions>
-            </AccordionActions>
-            <AccordionDetails>
-               <div className={classes.reference}>
-                  <NotionContentWithBlocks
-                     interactive={true}
-                     renderPagesAsInline={false}
-                     blockContent={
-                        refData.notionBlock
-                     }></NotionContentWithBlocks>
-               </div>
-            </AccordionDetails>
-         </Accordion>
+               </AccordionSummary>
+               <AccordionActions>
+                  <ReferenceActions
+                     id={refData.id}
+                     path={refData.path}
+                     text={refData.text}></ReferenceActions>
+               </AccordionActions>
+               <AccordionDetails>
+                  <div className={classes.reference}>
+                     <NotionContentWithBlocks
+                        interactive={true}
+                        renderPagesAsInline={false}
+                        blockContent={
+                           refData.notionBlock
+                        }></NotionContentWithBlocks>
+                  </div>
+               </AccordionDetails>
+            </Accordion>
+         </Suspense>
       </ErrorBoundary>
    );
 };

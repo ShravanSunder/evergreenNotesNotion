@@ -78,7 +78,7 @@ export const SomethingWentWrong = () => {
          variant="body2"
          style={{ padding: 7, marginBottom: 15 }}
          gutterBottom>
-         😵 Something went wrong in rendering the block...
+         😵 Something went wrong rendering this block...
       </Typography>
    );
 };

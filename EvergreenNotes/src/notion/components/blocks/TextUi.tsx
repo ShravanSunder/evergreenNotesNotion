@@ -25,6 +25,7 @@ import { Variant } from '@material-ui/core/styles/createTypography';
 import { MentionsState } from '../mentions/mentionsState';
 import { RecordState } from './blockState';
 import { SomethingWentWrong } from '../common/Loading';
+import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 
 export interface IBaseTextUiParams {
    block: INotionBlockModel;
@@ -76,6 +77,7 @@ export const TextUi = ({
                   console.log('render error');
                   return (
                      <Typography
+                        key={i}
                         display="inline"
                         className={classes.typography}
                         variant={variant ?? 'body1'}>
@@ -101,7 +103,8 @@ export const TextUi = ({
          </React.Fragment>
       );
    }
-   return <SomethingWentWrong />;
+
+   return null;
 };
 
 export interface ISegmentMeta {

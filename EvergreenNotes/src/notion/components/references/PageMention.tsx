@@ -22,6 +22,9 @@ import { useReferenceStyles } from './referenceStyles';
 import { TextUi } from '../blocks/TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 import { getValuesForSemanticType } from 'aNotion/services/pageService';
+import { LightTooltip } from 'aNotion/components/common/Styles';
+import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
+import { grey } from '@material-ui/core/colors';
 
 export const PageMention = ({
    mentionBlock,
@@ -61,7 +64,18 @@ export const PageMention = ({
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
-                  <Grid item xs={12} className={classes.reference}>
+                  <LightTooltip title="Page mention block" placement="top">
+                     <BookmarksTwoToneIcon
+                        style={{
+                           maxHeight: 15,
+                           maxWidth: 15,
+                           margin: 0,
+                           marginTop: 11,
+                           color: grey[600],
+                        }}
+                     />
+                  </LightTooltip>
+                  <Grid item xs={11} className={classes.reference}>
                      <NotionContentWithBlocks
                         blockContent={mentionBlock}></NotionContentWithBlocks>
                   </Grid>

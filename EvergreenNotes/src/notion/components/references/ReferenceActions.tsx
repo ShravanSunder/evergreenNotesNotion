@@ -154,7 +154,7 @@ export const ReferenceActions = ({
             </Grid>
             {mentionSourceId != null && (
                <Grid item>
-                  <LightTooltip title="Go to mention block" placement="bottom">
+                  <LightTooltip title="Scroll to mention" placement="bottom">
                      <IconButton
                         className={classes.actionButton}
                         color="secondary"

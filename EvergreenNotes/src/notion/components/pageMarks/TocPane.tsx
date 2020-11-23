@@ -25,8 +25,10 @@ const useStyles = makeStyles(() =>
    })
 );
 
-// comment
-export const TableOfContentsPane = () => {
+/**
+ * Table of Contents Pane
+ */
+export const TocPane = () => {
    const { pageMarks, status } = useSelector(pageMarksSelector, shallowEqual);
    const { currentPageData } = useSelector(currentPageSelector, shallowEqual);
 
@@ -139,4 +141,4 @@ export const TableOfContentsPane = () => {
    );
 };
 
-export default TableOfContentsPane;
+export default TocPane;

@@ -70,7 +70,7 @@ export const LoadSidebarFrame = () => {
       3000,
       {
          trailing: true,
-         maxWait: 60000,
+         maxWait: 40000,
       }
    );
 

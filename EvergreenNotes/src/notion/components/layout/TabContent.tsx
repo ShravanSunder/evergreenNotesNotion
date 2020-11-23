@@ -22,7 +22,7 @@ export const OptionsPane = React.lazy(
    () => import('aNotion/components/options/OptionsPane')
 );
 export const TableOfContentsPane = React.lazy(
-   () => import('aNotion/components/pageMarks/TableOfContentsPane')
+   () => import('aNotion/components/pageMarks/TocPane')
 );
 
 interface ITabContent {
