@@ -52,12 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
    createStyles({
       sections: {
          marginLeft: 6,
-         marginTop: 12,
-         marginBottom: 6,
+         marginTop: 36,
+         marginBottom: 12,
+         fontVariant: 'small-caps',
       },
    })
 );
-
 const search: UseApiPromise<SearchReferences, string> = (
    query: string | undefined
 ): [Promise<SearchReferences>, AbortController] => {
@@ -109,17 +109,20 @@ export const SearchPane = () => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Grid container>
             <Grid item xs>
-               <TextField
-                  value={text}
-                  fullWidth
-                  size="small"
-                  helperText="Enter text to search"
-                  variant="outlined"
-                  onChange={handleTextChanged}></TextField>
+               <div style={{ marginLeft: 3, marginRight: 3 }}>
+                  <TextField
+                     value={text}
+                     fullWidth
+                     size="small"
+                     helperText="Enter text to search"
+                     variant="outlined"
+                     onChange={handleTextChanged}></TextField>
+               </div>
             </Grid>
             <Grid item xs={1}>
                <IconButton
                   size="small"
+                  edge="end"
                   {...bindToggle(popupState)}
                   style={{ marginTop: 3 }}>
                   <HistoryIcon></HistoryIcon>
@@ -130,21 +133,29 @@ export const SearchPane = () => {
             {...bindPopover(popupState)}
             anchorOrigin={{
                vertical: 'bottom',
-               horizontal: 'right',
+               horizontal: 'left',
             }}
             transformOrigin={{
                vertical: 'top',
                horizontal: 'right',
-            }}>
-            <div style={{ margin: 6, padding: 6 }}>
+            }}
+            anchorPosition={{ top: 9, left: -3 }}>
+            <div
+               style={{
+                  margin: 6,
+                  padding: 6,
+                  minWidth: 250,
+                  maxWidth: 290,
+                  backgroundColor: '#FFFFFF50',
+               }}>
                <Typography
                   variant="subtitle1"
                   style={{
-                     margin: 12,
-                     marginBottom: 3,
+                     margin: 6,
+                     marginBottom: 6,
                   }}>
                   {'  '}
-                  <strong>Search History</strong>
+                  <strong>Sᴇᴀʀᴄʜ Hɪsᴛᴏʀʏ</strong>
                </Typography>
                <List dense>
                   {searchQueries.map((s) => {
@@ -175,7 +186,7 @@ export const SearchPane = () => {
                   variant="h6"
                   style={{ marginBottom: 15, marginTop: 30 }}
                   gutterBottom>
-                  📚 Search your notes!
+                  📚 Search your space and see their contents here!
                </Typography>
             )}
          {status === thunkStatus.rejected && <div>error!</div>}
@@ -201,7 +212,7 @@ const FullReferences = ({
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Search Results</b>
+                  <b>Sᴇᴀʀᴄʜ Rᴇsᴜʟᴛs</b>
                </Typography>
                {fullTitle.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;
@@ -230,7 +241,7 @@ const RelatedReferences = ({
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Similar Notes</b>
+                  <b>Sɪᴍɪʟᴀʀ Nᴏᴛᴇs</b>
                </Typography>
                {data.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;

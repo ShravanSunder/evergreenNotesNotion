@@ -37,7 +37,7 @@ import { updateStatus } from 'aNotion/types/updateStatus';
 import { calculateSidebarStatus } from 'aNotion/services/notionSiteService';
 import { PageMention } from './PageMention';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
    createStyles({
       sections: {
          marginLeft: 6,

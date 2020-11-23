@@ -7,7 +7,9 @@ export type UseApiPromise<TResult, TInput> = (
 ) => [Promise<TResult>, AbortController];
 
 export function useApi<TResult, TInput>(
-   apiCallback: UseApiPromise<TResult, TInput>
+   apiCallback: UseApiPromise<TResult, TInput>,
+   debounce: number = 300,
+   maxWait: number = 2000
 ): [
    thunkStatus,
    TResult | undefined,
@@ -15,8 +17,9 @@ export function useApi<TResult, TInput>(
    TInput | undefined
 ] {
    const [input, setInput] = useState<TInput>();
-   const [debouncedInput] = useDebounce(input, 350, {
+   const [debouncedInput] = useDebounce(input, debounce, {
       trailing: true,
+      maxWait: maxWait,
    });
    const [lastApiPaylod, setLastApiPayload] = useState<TInput>();
    const [apiAbortController, setAbortController] = useState<AbortController>();

@@ -52,14 +52,13 @@ export const MarksPane = () => {
             <Typography className={classes.sections} variant="h5">
                <b>Highlights</b>
             </Typography>
-
-            <div className={classes.spacing}></div>
             {pageMarks?.highlights?.map((p, i) => (
                <RenderMark
                   key={p.blockId}
                   p={p}
                   semanticFilters={[SemanticFormatEnum.Colored]}></RenderMark>
             ))}
+            <div className={classes.spacing}></div>
          </>
       ) : null;
 
@@ -157,10 +156,9 @@ export const MarksPane = () => {
             )} */}
             {status === thunkStatus.fulfilled && highlights}
             {status === thunkStatus.fulfilled && todos}
-            {/* {status === thunkStatus.fulfilled && Mentions} */}
-            {status === thunkStatus.fulfilled && links}
             {status === thunkStatus.fulfilled && quotes}
             {status === thunkStatus.fulfilled && code}
+            {status === thunkStatus.fulfilled && links}
             {status === thunkStatus.pending && <LoadingSection />}
             {status === thunkStatus.fulfilled && nothingFound && (
                <NothingToFind></NothingToFind>
