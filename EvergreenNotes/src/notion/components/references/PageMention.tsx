@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, Suspense, useEffect, useState } from 'react';
 import { Breadcrumbs, Typography, Grid, Divider } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import {
@@ -25,6 +25,7 @@ import { getValuesForSemanticType } from 'aNotion/services/pageService';
 import { LightTooltip } from 'aNotion/components/common/Styles';
 import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
 import { grey } from '@material-ui/core/colors';
+import { LoadingLine } from '../common/Loading';
 
 export const PageMention = ({
    mentionBlock,
@@ -86,11 +87,15 @@ export const PageMention = ({
                         </Grid>
                         <Grid item xs={12} className={classes.reference}>
                            {mentionIds?.map((m, i) => (
-                              <NotionContentWithParentId
-                                 key={m + i}
-                                 renderPagesAsInline={false}
-                                 interactive={true}
-                                 parentBlockId={m}></NotionContentWithParentId>
+                              <Suspense fallback={LoadingLine}>
+                                 <NotionContentWithParentId
+                                    key={m + i}
+                                    renderPagesAsInline={false}
+                                    interactive={true}
+                                    parentBlockId={
+                                       m
+                                    }></NotionContentWithParentId>
+                              </Suspense>
                            ))}
                         </Grid>
                      </>

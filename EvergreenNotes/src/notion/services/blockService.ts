@@ -33,6 +33,7 @@ import { DateTime } from 'luxon';
 export const fetchPageRecord = async (
    pageId: string,
    signal: AbortSignal,
+   limit: number = 30,
    liteApi: boolean = false
 ): Promise<[NotionBlockRecord, LoadPageChunk.IPageChunk]> => {
    let chunk: LoadPageChunk.IPageChunk | undefined = undefined;
@@ -55,7 +56,7 @@ export const fetchPageRecord = async (
       }
    }
 
-   let loadChunkPromise = blockApi.loadPageChunk(pageId, 50, signal);
+   let loadChunkPromise = blockApi.loadPageChunk(pageId, limit, signal);
    if (block == null && !signal.aborted) {
       chunk = (await loadChunkPromise) as LoadPageChunk.IPageChunk;
 

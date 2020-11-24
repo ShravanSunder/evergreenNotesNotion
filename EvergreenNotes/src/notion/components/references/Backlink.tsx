@@ -25,6 +25,7 @@ import { PageUi } from '../blocks/PageUi';
 import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
 import { grey } from '@material-ui/core/colors';
 import { LightTooltip } from '../common/Styles';
+import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 
 interface IBacklinkProps {
    backlink: BacklinkRecordModel;
@@ -36,11 +37,26 @@ export const Backlink = ({
    showInlineBlock = true,
 }: IBacklinkProps) => {
    let classes = useReferenceStyles();
+   const [backlinkedPageBlock, setBacklinkedPageBlock] = useState<
+      INotionBlockModel | undefined
+   >();
 
-   let backlinkedPageBlock: INotionBlockModel | undefined = undefined;
-   if (backlink.path.length > 0) {
-      backlinkedPageBlock = backlink.path[0];
-   }
+   useEffect(() => {
+      if (backlink.path.length > 0) {
+         if (backlink.backlinkBlock.type == BlockTypeEnum.Page) {
+            setBacklinkedPageBlock(backlink.backlinkBlock);
+         } else {
+            const index = backlink.path
+               .map(
+                  (p) =>
+                     p.type === BlockTypeEnum.Page ||
+                     p.type === BlockTypeEnum.CollectionViewPage
+               )
+               .lastIndexOf(true);
+            setBacklinkedPageBlock(backlink.path[index]);
+         }
+      }
+   }, [backlink.path, backlink.backlinkBlock.blockId]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>

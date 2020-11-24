@@ -33,6 +33,7 @@ const fetchBlockIfNotInStore = async (
       const [record, chunk] = await fetchPageRecord(
          blockId,
          thunkApi.signal,
+         1,
          true
       );
       if (chunk.recordMap.block == null) {

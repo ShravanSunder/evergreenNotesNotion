@@ -21,7 +21,12 @@ export const getContent = (
    let contentIds: string[] = [];
    let idsOfMissingContent: string[] = [];
 
-   if (node != null && node.value?.content != null) {
+   if (
+      node != null &&
+      node.value?.content != null &&
+      node.value?.type !== BlockTypeEnum.CollectionViewPage &&
+      node.value?.type !== BlockTypeEnum.CollectionViewInline
+   ) {
       let [tempContent, tempIdsOfMissingContent] = getNotionBlocksFromContent(
          node.value.content,
          record
@@ -31,7 +36,11 @@ export const getContent = (
       idsOfMissingContent.push(...tempIdsOfMissingContent);
    }
 
-   if (node != null && node.value?.type === BlockTypeEnum.CollectionViewPage) {
+   if (
+      node != null &&
+      (node.value?.type === BlockTypeEnum.CollectionViewPage ||
+         node.value?.type === BlockTypeEnum.CollectionViewInline)
+   ) {
       let colId = (node.value as blockTypes.CollectionViewPage).collection_id;
       if (record.collection != null) {
          //get parent block of collection
@@ -87,7 +96,7 @@ export const fetchContentForBlock = async (
    const missingBlocks: ContentBlocks[] = [];
 
    if (chunk == null) {
-      chunk = await blockApi.loadPageChunk(blockId, 50, signal);
+      chunk = await blockApi.loadPageChunk(blockId, 100, signal);
    }
 
    if (chunk != null && !signal.aborted) {
