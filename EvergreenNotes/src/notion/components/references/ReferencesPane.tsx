@@ -166,9 +166,14 @@ const Relations = ({ refs }: { refs: ReferenceState }) => {
                {relations.map((u) => {
                   let link: BacklinkRecordModel = {
                      backlinkBlock: u,
-                     path: [],
+                     path: [u],
                   };
-                  return <Backlink key={u.blockId} backlink={link}></Backlink>;
+                  return (
+                     <Backlink
+                        key={u.blockId}
+                        backlink={link}
+                        showInlineBlock={false}></Backlink>
+                  );
                })}
                {relations.length === 0 && <NothingToFind />}
             </>
@@ -185,7 +190,6 @@ const Mentions = ({ marks }: { marks: PageMarkState }) => {
 
    return (
       <Suspense fallback={LoadingSection}>
-         {status === thunkStatus.pending && <LoadingSection></LoadingSection>}
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">

@@ -26,7 +26,15 @@ import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
 import { grey } from '@material-ui/core/colors';
 import { LightTooltip } from '../common/Styles';
 
-export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
+interface IBacklinkProps {
+   backlink: BacklinkRecordModel;
+   showInlineBlock?: boolean;
+}
+
+export const Backlink = ({
+   backlink,
+   showInlineBlock = true,
+}: IBacklinkProps) => {
    let classes = useReferenceStyles();
 
    let backlinkedPageBlock: INotionBlockModel | undefined = undefined;
@@ -60,31 +68,37 @@ export const Backlink = ({ backlink }: { backlink: BacklinkRecordModel }) => {
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
-                  <Grid item>
-                     <LightTooltip title="Backlink block" placement="top">
-                        <BookmarksTwoToneIcon
-                           style={{
-                              maxHeight: 15,
-                              maxWidth: 15,
-                              margin: 0,
-                              marginTop: 11,
-                              color: grey[600],
-                           }}
-                        />
-                     </LightTooltip>
-                  </Grid>
-                  <Grid item xs={11} className={classes.reference}>
-                     <NotionContentWithBlocks
-                        blockContent={
-                           backlink.backlinkBlock
-                        }></NotionContentWithBlocks>
-                  </Grid>
+                  {showInlineBlock && (
+                     <>
+                        <Grid item>
+                           <LightTooltip title="Backlink block" placement="top">
+                              <BookmarksTwoToneIcon
+                                 style={{
+                                    maxHeight: 15,
+                                    maxWidth: 15,
+                                    margin: 0,
+                                    marginTop: 11,
+                                    color: grey[600],
+                                 }}
+                              />
+                           </LightTooltip>
+                        </Grid>
+                        <Grid item xs={11} className={classes.reference}>
+                           <NotionContentWithBlocks
+                              blockContent={
+                                 backlink.backlinkBlock
+                              }></NotionContentWithBlocks>
+                        </Grid>
+                     </>
+                  )}
 
                   {backlinkedPageBlock != null && (
                      <>
-                        <Grid item xs={12} className={classes.reference}>
-                           <Divider />
-                        </Grid>
+                        {!showInlineBlock && (
+                           <Grid item xs={12} className={classes.reference}>
+                              <Divider />
+                           </Grid>
+                        )}
                         <Grid
                            item
                            xs={12}

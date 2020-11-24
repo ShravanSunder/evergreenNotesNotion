@@ -24,8 +24,9 @@ import { useBlockStyles } from './useBlockStyles';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { MentionsState } from '../mentions/mentionsState';
 import { RecordState } from './blockState';
-import { SomethingWentWrong } from '../common/Loading';
+import { CantDisplayThisType, SomethingWentWrong } from '../common/Loading';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
+import { Block } from '@material-ui/icons';
 
 export interface IBaseTextUiParams {
    block: INotionBlockModel;
@@ -58,6 +59,19 @@ export const TextUi = ({
       ?.properties?.title as SemanticString[];
    if (title == null) {
       title = block?.collection?.name;
+   }
+
+   if (
+      block.type === BlockTypeEnum.TemplateButton ||
+      block.type === BlockTypeEnum.TableOfContents ||
+      block.type === BlockTypeEnum.Equation ||
+      block.type === BlockTypeEnum.File ||
+      block.type === BlockTypeEnum.PDF ||
+      block.type === BlockTypeEnum.Unknown ||
+      block.type === BlockTypeEnum.Video ||
+      block.type === BlockTypeEnum.Audio
+   ) {
+      return <CantDisplayThisType />;
    }
 
    if (title != null) {

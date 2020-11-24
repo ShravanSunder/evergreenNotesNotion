@@ -72,10 +72,21 @@ export const LoadingImage = () => {
    return <Skeleton variant="rect" style={{ padding: 9 }} height={40} />;
 };
 
+export const CantDisplayThisType = () => {
+   return (
+      <Typography
+         variant="caption"
+         style={{ padding: 7, marginBottom: 15 }}
+         gutterBottom>
+         🤯 We can't display this type of block yet...
+      </Typography>
+   );
+};
+
 export const SomethingWentWrong = () => {
    return (
       <Typography
-         variant="body2"
+         variant="caption"
          style={{ padding: 7, marginBottom: 15 }}
          gutterBottom>
          😵 Something went wrong rendering this block...
@@ -87,7 +98,7 @@ export const NothingToFind = () => {
    return (
       <Typography
          variant="h6"
-         style={{ padding: 7, marginBottom: 15 }}
+         style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
          🙅🏽 We didn't find anything
       </Typography>
@@ -110,7 +121,7 @@ export const ErrorCouldNotLoadEvergreenNotes = () => {
    return (
       <Typography
          variant="h6"
-         style={{ padding: 7, marginBottom: 15 }}
+         style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
          😵 Couldn't load Evergreen Notes. 🙏🏾 Please try refreshing page.
       </Typography>
@@ -121,7 +132,7 @@ export const LoadingTheNotionPage = () => {
    return (
       <Typography
          variant="h6"
-         style={{ padding: 7, marginBottom: 15 }}
+         style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
          🔃 Loading the notion page...
       </Typography>
@@ -132,7 +143,7 @@ export const WaitingToLoadNotionSite = () => {
    return (
       <Typography
          variant="h6"
-         style={{ padding: 7, marginBottom: 15 }}
+         style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
          🤹🏾‍♀️ Waiting for the Notion site to load...
       </Typography>
@@ -143,7 +154,7 @@ export const ErrorCouldNotLoadReferences = () => {
    return (
       <Typography
          variant="h6"
-         style={{ padding: 7, marginBottom: 15 }}
+         style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
          😵😵😵 Couldn't load references. 🙏🏾 Please try refreshing page.
       </Typography>

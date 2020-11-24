@@ -1,6 +1,6 @@
 {
    "name": "Evergreen Notes (for Notion)",
-   "version": "2.1.8",
+   "version": "2.1.9",
    "options_page": "options.html",
    "background": {
       "page": "background.html"
