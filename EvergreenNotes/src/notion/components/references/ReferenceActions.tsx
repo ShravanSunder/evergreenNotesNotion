@@ -10,7 +10,10 @@ import { useSnackbar } from 'notistack';
 import { useReferenceStyles } from './referenceStyles';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { SidebarExtensionState } from '../layout/SidebarExtensionState';
-import { TNavigateMessage } from 'aSidebar/sidebarMessaging';
+import {
+   EvergreenMessagingEnum,
+   TEvergreenMessage,
+} from 'aSidebar/sidebarMessaging';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 
 interface IReferenceActionParams {
@@ -48,10 +51,9 @@ export const ReferenceActions = ({
       e.stopPropagation();
 
       if (mentionSourceId != null && isGuid(mentionSourceId)) {
-         const msg: TNavigateMessage = {
-            blockId: mentionSourceId,
-            type: 'navigate',
-            message: 'NavigateToBlockInNotion',
+         const msg: TEvergreenMessage<string> = {
+            payload: mentionSourceId,
+            type: EvergreenMessagingEnum.navigateToBlock,
          };
          window.parent.postMessage(msg, '*');
       }

@@ -1,21 +1,39 @@
 import { isGuid } from 'aCommon/extensionHelpers';
 
-export type TNavigateMessage = {
-   blockId: string;
-   type: 'navigate';
-   message?: string;
+export enum EvergreenMessagingEnum {
+   updateSidebarData = 'updateEvergreenSidebarData',
+   frameStatusChanged = 'updateEvergreenFrame',
+   navigateToBlock = 'navigateToBlock',
+}
+
+/**
+ * this is the data passed by the window.postMessage for the window <--> iFrame communication.
+ */
+export type TEvergreenMessage<T> = {
+   type: EvergreenMessagingEnum;
+   payload?: T;
+};
+
+export const postMessageToSidebar = <T>(message: TEvergreenMessage<T>) => {
+   let iframe = (document.getElementById(
+      'evergreenNotesForNotion'
+   ) as HTMLIFrameElement)?.contentWindow;
+   if (iframe != null) {
+      iframe?.postMessage(message, '*');
+   }
 };
 
 const handleReceiveMessage = (event: any) => {
-   const data = event.data as TNavigateMessage;
+   const data = event.data as TEvergreenMessage<string>;
    if (
-      data.type == 'navigate' &&
-      data.blockId != null &&
-      isGuid(data.blockId)
+      data != null &&
+      data.type == EvergreenMessagingEnum.navigateToBlock &&
+      data.payload != null &&
+      isGuid(data.payload)
    ) {
       //do stuff
       const element = document.querySelector(
-         `[data-block-id="${data.blockId}"]`
+         `[data-block-id="${data.payload}"]`
       );
       if (element != null) {
          try {

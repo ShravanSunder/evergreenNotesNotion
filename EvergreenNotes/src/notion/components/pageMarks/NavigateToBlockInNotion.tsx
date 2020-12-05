@@ -2,15 +2,17 @@ import React from 'react';
 import { IconButton } from '@material-ui/core';
 import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
-import { TNavigateMessage } from 'aSidebar/sidebarMessaging';
+import {
+   EvergreenMessagingEnum,
+   TEvergreenMessage,
+} from 'aSidebar/sidebarMessaging';
 import { grey } from '@material-ui/core/colors';
 import { LightTooltip } from '../common/Styles';
 
 export const handleNavigateToBlockInNotion = (blockId: string) => {
-   const msg: TNavigateMessage = {
-      blockId: blockId,
-      type: 'navigate',
-      message: 'NavigateToBlockInNotion',
+   const msg: TEvergreenMessage<string> = {
+      payload: blockId,
+      type: EvergreenMessagingEnum.navigateToBlock,
    };
    window.parent.postMessage(msg, '*');
 };

@@ -14,7 +14,11 @@ import {
    checkDomForNotionFrameChanges,
    modifyNotionFrameAndCreateListeners,
 } from 'aSidebar/sidebarFrameMutations';
-import { registerNavigateMessageHandler } from 'aSidebar/sidebarMessaging';
+import {
+   EvergreenMessagingEnum,
+   postMessageToSidebar,
+   registerNavigateMessageHandler,
+} from 'aSidebar/sidebarMessaging';
 
 export const mountSidebar = (sidebar: HTMLElement) => {
    console.log('render sidebar frame');
@@ -51,7 +55,13 @@ export const LoadSidebarFrame = () => {
    const [updateFrame, setUpdateFrame] = useState(false);
 
    const debouncedUpdateFrame = useDebouncedCallback(
-      () => setUpdateFrame(true),
+      () => {
+         setUpdateFrame(true);
+         postMessageToSidebar({
+            type: EvergreenMessagingEnum.frameStatusChanged,
+            payload: showFrame,
+         });
+      },
       200,
       {
          trailing: true,
@@ -60,12 +70,9 @@ export const LoadSidebarFrame = () => {
    );
    const debouncedSidebarContents = useDebouncedCallback(
       () => {
-         let iframe = (document.getElementById(
-            'evergreenNotesForNotion'
-         ) as HTMLIFrameElement)?.contentWindow;
-         if (iframe != null) {
-            iframe?.postMessage('updateEvergreenSidebarData', '*');
-         }
+         postMessageToSidebar({
+            type: EvergreenMessagingEnum.updateSidebarData,
+         });
       },
       3000,
       {

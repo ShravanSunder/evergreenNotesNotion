@@ -67,6 +67,7 @@ export const refreshSidebarContents = (
    if (navigation.pageId != null) {
       flushCache();
       dispatch(contentActions.clearContent());
+
       dispatch(
          sidebarExtensionActions.fetchCurrentNotionPage({
             pageId: navigation.pageId,
