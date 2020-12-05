@@ -8,8 +8,6 @@ import {
    NotionContentWithParentId,
 } from 'aNotion/components/contents/NotionContent';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
-
-import BlockUi from 'aNotion/components/blocks/BlockUi';
 import {
    Accordion,
    AccordionSummary,
@@ -23,6 +21,7 @@ import { TextUi } from '../blocks/TextUi';
 import { PageUi } from '../blocks/PageUi';
 
 import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
+import HelpOutlineTwoToneIcon from '@material-ui/icons/HelpOutlineTwoTone';
 import { grey } from '@material-ui/core/colors';
 import { LightTooltip } from '../common/Styles';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
@@ -86,9 +85,17 @@ export const Backlink = ({
                <Grid container spacing={1}>
                   {showInlineBlock && (
                      <>
+                        <Grid item xs={11} className={classes.reference}>
+                           <NotionContentWithBlocks
+                              blockContent={
+                                 backlink.backlinkBlock
+                              }></NotionContentWithBlocks>
+                        </Grid>
                         <Grid item>
-                           <LightTooltip title="Backlink block" placement="top">
-                              <BookmarksTwoToneIcon
+                           <LightTooltip
+                              title="This is the block that has the backlink"
+                              placement="top">
+                              <HelpOutlineTwoToneIcon
                                  style={{
                                     maxHeight: 15,
                                     maxWidth: 15,
@@ -98,12 +105,6 @@ export const Backlink = ({
                                  }}
                               />
                            </LightTooltip>
-                        </Grid>
-                        <Grid item xs={11} className={classes.reference}>
-                           <NotionContentWithBlocks
-                              blockContent={
-                                 backlink.backlinkBlock
-                              }></NotionContentWithBlocks>
                         </Grid>
                      </>
                   )}

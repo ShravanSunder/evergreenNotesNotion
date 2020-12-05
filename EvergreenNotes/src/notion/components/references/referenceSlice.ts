@@ -183,6 +183,7 @@ const unloadReferences: CaseReducer<ReferenceState, PayloadAction> = (
 ) => {
    state.pageReferences = defaultPageReferences();
    state.status = thunkStatus.idle;
+   return state;
 };
 
 const addSearchQueries: CaseReducer<ReferenceState, PayloadAction<string>> = (
@@ -194,6 +195,7 @@ const addSearchQueries: CaseReducer<ReferenceState, PayloadAction<string>> = (
       (f, i) => i < 10 && f !== text
    );
    state.searchQueries.splice(0, 0, text);
+   return state;
 };
 
 const referenceSlice = createSlice({

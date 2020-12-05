@@ -207,6 +207,7 @@ const setUpdateReferenceStatusReducer: CaseReducer<
    PayloadAction<updateStatus>
 > = (state, action) => {
    state.status.updateReferences = action.payload;
+   return state;
 };
 
 const setUpdateMarksStatusReducer: CaseReducer<
@@ -214,6 +215,7 @@ const setUpdateMarksStatusReducer: CaseReducer<
    PayloadAction<updateStatus>
 > = (state, action) => {
    state.status.updateMarks = action.payload;
+   return state;
 };
 
 const sidebarExtensionSlice = createSlice({

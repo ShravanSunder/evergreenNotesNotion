@@ -61,13 +61,15 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 export const refreshSidebarContents = (
    dispatch: any,
-   navigation: NavigationState
+   navigation: NavigationState,
+   refreshData: boolean = true
 ) => {
    console.log('...received refreshSidebarContents updateevergreensidebar');
    if (navigation.pageId != null) {
-      flushCache();
-      dispatch(contentActions.clearContent());
-
+      if (refreshData) {
+         flushCache();
+         dispatch(contentActions.clearContent());
+      }
       dispatch(
          sidebarExtensionActions.fetchCurrentNotionPage({
             pageId: navigation.pageId,

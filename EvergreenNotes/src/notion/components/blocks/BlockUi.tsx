@@ -24,7 +24,7 @@ import { useBlockStyles } from './useBlockStyles';
 
 interface IBlockUi {
    block: INotionBlockModel;
-   index: number | undefined;
+   index?: number | undefined;
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
    interactive?: boolean;

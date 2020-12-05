@@ -18,6 +18,7 @@ const saveUser: CaseReducer<
          status: thunkStatus.fulfilled,
       };
    }
+   return state;
 };
 
 const saveAllUsers: CaseReducer<
@@ -35,6 +36,7 @@ const saveAllUsers: CaseReducer<
          }
       });
    }
+   return state;
 };
 
 const mentionsSlice = createSlice({

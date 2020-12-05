@@ -92,6 +92,7 @@ const clearContentReducer: CaseReducer<ContentState> = (
    state: ContentState
 ) => {
    state = {};
+   return state;
 };
 
 const contentSlice = createSlice({
