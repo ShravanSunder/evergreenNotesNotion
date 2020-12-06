@@ -25,6 +25,7 @@ import HelpOutlineTwoToneIcon from '@material-ui/icons/HelpOutlineTwoTone';
 import { grey } from '@material-ui/core/colors';
 import { LightTooltip } from '../common/Styles';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
 interface IBacklinkProps {
    backlink: BacklinkRecordModel;
@@ -39,6 +40,14 @@ export const Backlink = ({
    const [backlinkedPageBlock, setBacklinkedPageBlock] = useState<
       INotionBlockModel | undefined
    >();
+
+   const [showColoredBlocksOnly, setShowColoredBlocksOnly] = useState(false);
+
+   const semanticFilter:
+      | SemanticFormatEnum[]
+      | undefined = showColoredBlocksOnly
+      ? [SemanticFormatEnum.Colored]
+      : undefined;
 
    useEffect(() => {
       if (backlink.path.length > 0) {
@@ -77,6 +86,8 @@ export const Backlink = ({
                   id={backlink.backlinkBlock.blockId}
                   path={backlink.path}
                   text={backlink.backlinkBlock.simpleTitle}
+                  markupFocusState={showColoredBlocksOnly}
+                  handleMarkupFocus={() => setShowColoredBlocksOnly((h) => !h)}
                   mentionSourceId={
                      backlink.backlinkBlock.blockId
                   }></ReferenceActions>
@@ -85,15 +96,9 @@ export const Backlink = ({
                <Grid container spacing={1}>
                   {showInlineBlock && (
                      <>
-                        <Grid item xs={11} className={classes.reference}>
-                           <NotionContentWithBlocks
-                              blockContent={
-                                 backlink.backlinkBlock
-                              }></NotionContentWithBlocks>
-                        </Grid>
                         <Grid item>
                            <LightTooltip
-                              title="This is the block that has the backlink"
+                              title="This is the block that contains backlink"
                               placement="top">
                               <HelpOutlineTwoToneIcon
                                  style={{
@@ -106,12 +111,17 @@ export const Backlink = ({
                               />
                            </LightTooltip>
                         </Grid>
+                        <Grid item xs className={classes.reference}>
+                           <NotionContentWithBlocks
+                              blockContent={
+                                 backlink.backlinkBlock
+                              }></NotionContentWithBlocks>
+                        </Grid>
                      </>
                   )}
-
                   {backlinkedPageBlock != null && (
                      <>
-                        {!showInlineBlock && (
+                        {showInlineBlock && (
                            <Grid item xs={12} className={classes.reference}>
                               <Divider />
                            </Grid>
@@ -123,6 +133,7 @@ export const Backlink = ({
                            style={{ marginTop: 12 }}>
                            <PageUi
                               block={backlinkedPageBlock}
+                              semanticFilter={semanticFilter}
                               inlineBlock={false}
                               showContent={true}></PageUi>
                         </Grid>

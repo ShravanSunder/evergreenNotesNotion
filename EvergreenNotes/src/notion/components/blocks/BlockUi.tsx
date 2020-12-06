@@ -102,6 +102,7 @@ export const BlockUi = ({
                   inlineBlock={doNotRenderChildBlocks}
                   showContent={!doNotRenderChildBlocks}
                   interactive={interactive}
+                  semanticFilter={semanticFilter}
                />
             )}
             {block.type === BlockTypeEnum.CollectionViewPage && (

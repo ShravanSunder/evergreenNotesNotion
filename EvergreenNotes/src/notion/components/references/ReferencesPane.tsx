@@ -103,8 +103,8 @@ export const ReferencesPane = () => {
                      <>
                         <Backlinks refs={references}></Backlinks>
                         <Mentions marks={marks}></Mentions>
-                        <Relations refs={references}></Relations>
                         <FullTitle refs={references}></FullTitle>
+                        <Relations refs={references}></Relations>
                         <Related refs={references}></Related>
                      </>
                   )}

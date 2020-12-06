@@ -15,9 +15,18 @@ import { useReferenceStyles } from './referenceStyles';
 import { ISearchRecordModel } from 'aNotion/models/SearchRecord';
 import { Path } from './Path';
 import { LoadingSection } from '../common/Loading';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
 export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
    let classes = useReferenceStyles();
+   const [showColoredBlocksOnly, setShowColoredBlocksOnly] = useState(false);
+
+   const semanticFilter:
+      | SemanticFormatEnum[]
+      | undefined = showColoredBlocksOnly
+      ? [SemanticFormatEnum.Colored]
+      : undefined;
+
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
@@ -40,13 +49,18 @@ export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
                   <ReferenceActions
                      id={refData.id}
                      path={refData.path}
-                     text={refData.text}></ReferenceActions>
+                     text={refData.text}
+                     markupFocusState={showColoredBlocksOnly}
+                     handleMarkupFocus={() =>
+                        setShowColoredBlocksOnly((h) => !h)
+                     }></ReferenceActions>
                </AccordionActions>
                <AccordionDetails>
                   <div className={classes.reference}>
                      <NotionContentWithBlocks
                         interactive={true}
                         renderPagesAsInline={false}
+                        semanticFilter={semanticFilter}
                         blockContent={
                            refData.notionBlock
                         }></NotionContentWithBlocks>

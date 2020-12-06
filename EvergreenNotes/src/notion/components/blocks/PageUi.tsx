@@ -7,6 +7,7 @@ import { Variant } from '@material-ui/core/styles/createTypography';
 import { NotionContentWithParentId } from 'aNotion/components/contents/NotionContent';
 import { MaximizeTwoTone } from '@material-ui/icons';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
+import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
 interface IPageUIParams {
    block: INotionBlockModel;
@@ -14,6 +15,7 @@ interface IPageUIParams {
    inlineBlock?: boolean;
    showContent?: boolean;
    interactive?: boolean;
+   semanticFilter?: SemanticFormatEnum[];
 }
 
 export const PageUi = ({
@@ -22,6 +24,7 @@ export const PageUi = ({
    inlineBlock = true,
    showContent = false,
    interactive = true,
+   semanticFilter = undefined,
 }: IPageUIParams) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
@@ -90,6 +93,7 @@ export const PageUi = ({
                <div style={{ marginTop: 12 }}></div>
                <NotionContentWithParentId
                   interactive={interactive}
+                  semanticFilter={semanticFilter}
                   parentBlockId={block.blockId}></NotionContentWithParentId>
             </>
          )}

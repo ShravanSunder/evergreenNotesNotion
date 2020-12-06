@@ -14,13 +14,17 @@ import {
    EvergreenMessagingEnum,
    TEvergreenMessage,
 } from 'aSidebar/sidebarMessaging';
-import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
+import PlayForWorkIcon from '@material-ui/icons/PlayForWork';
+import CropFreeOutlinedIcon from '@material-ui/icons/CropFreeOutlined';
+import CenterFocusStrongIcon from '@material-ui/icons/CenterFocusStrong';
 
 interface IReferenceActionParams {
    id: string;
    text: string | undefined;
    path: INotionBlockModel[];
    mentionSourceId?: string;
+   handleMarkupFocus?: () => void;
+   markupFocusState?: boolean;
 }
 
 export const ReferenceActions = ({
@@ -28,6 +32,8 @@ export const ReferenceActions = ({
    text,
    path,
    mentionSourceId = undefined,
+   handleMarkupFocus = undefined,
+   markupFocusState = false,
 }: IReferenceActionParams) => {
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const { enqueueSnackbar } = useSnackbar();
@@ -115,6 +121,30 @@ export const ReferenceActions = ({
             </Grid>
          </Grid>
          <Grid xs item container justify="flex-end">
+            {handleMarkupFocus != null && (
+               <Grid item>
+                  <LightTooltip title="Focus view" placement="bottom">
+                     <IconButton
+                        className={classes.actionButton}
+                        color="primary"
+                        size="small"
+                        onClick={() => handleMarkupFocus()}>
+                        {markupFocusState && (
+                           <CenterFocusStrongIcon
+                              className={
+                                 classes.actionButtonIcon
+                              }></CenterFocusStrongIcon>
+                        )}
+                        {!markupFocusState && (
+                           <CropFreeOutlinedIcon
+                              className={
+                                 classes.actionButtonIcon
+                              }></CropFreeOutlinedIcon>
+                        )}
+                     </IconButton>
+                  </LightTooltip>
+               </Grid>
+            )}
             <Grid item>
                <LightTooltip title="Copy link" placement="bottom">
                   <IconButton
@@ -162,7 +192,7 @@ export const ReferenceActions = ({
                         color="secondary"
                         size="small"
                         onClick={handleMentionSourceIdClick}>
-                        <ZoomOutMapIcon className={classes.actionButtonIcon} />
+                        <PlayForWorkIcon className={classes.actionButtonIcon} />
                      </IconButton>
                   </LightTooltip>
                </Grid>

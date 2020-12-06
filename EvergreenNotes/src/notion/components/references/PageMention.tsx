@@ -45,6 +45,13 @@ export const PageMention = ({
    let classes = useReferenceStyles();
    const blocks = useSelector(blockSelector);
    const [mentionIds, setMentionIds] = useState<string[]>();
+   const [showColoredBlocksOnly, setShowColoredBlocksOnly] = useState(false);
+
+   const semanticFilter:
+      | SemanticFormatEnum[]
+      | undefined = showColoredBlocksOnly
+      ? [SemanticFormatEnum.Colored]
+      : undefined;
 
    useEffect(() => {
       let pageIds = getValuesForSemanticType(
@@ -71,18 +78,18 @@ export const PageMention = ({
                      id={mentionIds[0]}
                      path={[]}
                      text={undefined}
+                     markupFocusState={showColoredBlocksOnly}
+                     handleMarkupFocus={() =>
+                        setShowColoredBlocksOnly((h) => !h)
+                     }
                      mentionSourceId={mentionBlock.blockId}></ReferenceActions>
                )}
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
-                  <Grid item xs={11} className={classes.reference}>
-                     <NotionContentWithBlocks
-                        blockContent={mentionBlock}></NotionContentWithBlocks>
-                  </Grid>
                   <Grid item>
                      <LightTooltip
-                        title="This is the block that has the page mention"
+                        title="This is the block that contains the page mention"
                         placement="top">
                         <HelpOutlineTwoToneIcon
                            style={{
@@ -95,6 +102,11 @@ export const PageMention = ({
                         />
                      </LightTooltip>
                   </Grid>
+                  <Grid item xs className={classes.reference}>
+                     <NotionContentWithBlocks
+                        blockContent={mentionBlock}></NotionContentWithBlocks>
+                  </Grid>
+
                   {mentionIds != null && mentionIds?.length > 0 && (
                      <>
                         <Grid item xs={12} className={classes.reference}>
@@ -110,6 +122,7 @@ export const PageMention = ({
                                           key={i}
                                           block={blocks?.[m]?.block!}
                                           inlineBlock={false}
+                                          semanticFilter={semanticFilter}
                                           showContent={true}></PageUi>
                                     )}
                               </Suspense>
