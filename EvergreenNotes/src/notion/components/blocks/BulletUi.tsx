@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { useBlockStyles } from './useBlockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
-import { hasValidChildren } from 'aUtilities/reactHelpers';
 import * as ReactIs from 'react-is';
 
 export const BulletUi = ({
@@ -12,18 +11,18 @@ export const BulletUi = ({
    interactive,
 }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
+   const [hasSegments, setHasSegments] = useState(true);
 
    const textUIComponent = (
       <TextUi
          block={block}
          semanticFilter={semanticFilter}
          style={style}
-         interactive={interactive}></TextUi>
+         interactive={interactive}
+         setHasSegments={setHasSegments}></TextUi>
    );
 
-   const d = ReactIs.isElement(textUIComponent);
-   console.log(d);
-   if (!hasValidChildren(textUIComponent)) {
+   if (hasSegments) {
       return null;
    }
 

@@ -33,6 +33,7 @@ export interface IBaseTextUiParams {
    style?: React.CSSProperties;
    semanticFilter?: SemanticFormatEnum[];
    interactive?: boolean;
+   setHasSegments?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ITextUiParams extends IBaseTextUiParams {
@@ -45,6 +46,7 @@ interface ISegmentParams {
    semanticFilter?: SemanticFormatEnum[];
    variant?: Variant;
    interactive: boolean;
+   setHasSegments?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const TextUi = ({
@@ -53,6 +55,7 @@ export const TextUi = ({
    interactive,
    style,
    semanticFilter,
+   setHasSegments: setSegmentCount,
 }: ITextUiParams) => {
    let classes = useBlockStyles();
    let title: SemanticString[] | undefined = (block.block as IBaseTextBlock)
@@ -78,6 +81,7 @@ export const TextUi = ({
       //if not interactive also truncate the max segment size
       let textCount = 0;
       const maxLen = 150;
+      let segmentCount = 0;
 
       const textUi = title.map((segment, i) => {
          if (
@@ -87,6 +91,7 @@ export const TextUi = ({
          ) {
             //catch errors
             console.log('render error');
+            segmentCount++;
             return (
                <Typography
                   key={i}
@@ -102,6 +107,8 @@ export const TextUi = ({
             //catch errors
             return null;
          }
+
+         segmentCount++;
          return (
             <TextSegment
                key={i}
@@ -109,11 +116,12 @@ export const TextUi = ({
                variant={variant ?? 'body1'}
                interactive={interactive ?? true}
                semanticFilter={semanticFilter}
+               setHasSegments={setSegmentCount}
                style={{ ...style }}></TextSegment>
          );
       });
 
-      if (textUi == null) {
+      if (segmentCount === 0) {
          return null;
       }
 
@@ -136,6 +144,7 @@ const TextSegment = ({
    interactive,
    style,
    semanticFilter,
+   setHasSegments: hasSegments,
 }: ISegmentParams) => {
    let classes = useBlockStyles();
    let text = segment[0];
@@ -168,13 +177,17 @@ const TextSegment = ({
 
    //nothing to render
    if (text == null || (text.trim().length === 0 && segmentDetails == null)) {
+      if (hasSegments != null) hasSegments(true);
       return null;
    }
 
    //hide the text
    if (hideSegment) {
+      if (hasSegments != null) hasSegments(true);
       return null;
    }
+
+   if (hasSegments != null) hasSegments(false);
 
    return (
       <React.Fragment>
