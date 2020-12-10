@@ -12,6 +12,19 @@ export const QuoteUi = ({
    interactive,
 }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
+
+   const textUIComponent = (
+      <TextUi
+         block={block}
+         semanticFilter={semanticFilter}
+         style={style}
+         interactive={interactive}></TextUi>
+   );
+
+   if (textUIComponent == null) {
+      return null;
+   }
+
    return (
       <Grid id="QuoteUI" container>
          <Grid item style={{ paddingRight: 9 }}>
@@ -20,11 +33,7 @@ export const QuoteUi = ({
                style={{ backgroundColor: '#262626', width: 2 }}></Divider>
          </Grid>
          <Grid item xs={11}>
-            <TextUi
-               block={block}
-               interactive={interactive}
-               semanticFilter={semanticFilter}
-               style={style}></TextUi>
+            {textUIComponent}
          </Grid>
       </Grid>
    );

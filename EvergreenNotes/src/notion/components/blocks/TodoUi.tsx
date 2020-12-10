@@ -15,6 +15,20 @@ export const TodoUi = ({
    let todo = block.block as ToDo;
    let checked = todo.properties?.checked?.[0]?.[0] === 'Yes' ?? false;
 
+   const textUIComponent = (
+      <TextUi
+         block={block}
+         interactive={interactive}
+         semanticFilter={semanticFilter}
+         style={{
+            textDecoration: checked ? 'line-through' : '',
+         }}></TextUi>
+   );
+
+   if (textUIComponent == null) {
+      return null;
+   }
+
    return (
       <Grid
          id="TodoUi"
@@ -36,13 +50,7 @@ export const TodoUi = ({
             </div>
          </Grid>
          <Grid item xs className={classes.blockUiGrids}>
-            <TextUi
-               block={block}
-               interactive={interactive}
-               semanticFilter={semanticFilter}
-               style={{
-                  textDecoration: checked ? 'line-through' : '',
-               }}></TextUi>
+            {textUIComponent}
          </Grid>
       </Grid>
    );

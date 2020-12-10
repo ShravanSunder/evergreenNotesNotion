@@ -75,7 +75,7 @@ export const TextUi = ({
    }
 
    if (title != null) {
-      //using interactive as a switch to truncate text size
+      //if not interactive also truncate the max segment size
       let textCount = 0;
       const maxLen = 150;
 
