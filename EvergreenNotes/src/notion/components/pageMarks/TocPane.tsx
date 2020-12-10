@@ -193,7 +193,8 @@ const TocItems = ({
                block={h}
                index={0}
                interactive={false}
-               doNotRenderChildBlocks={true}></BlockUi>
+               renderPagesAsInline={true}
+               disableToggles={true}></BlockUi>
          </Grid>
       </React.Fragment>
    );

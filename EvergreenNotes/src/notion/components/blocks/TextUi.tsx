@@ -79,43 +79,45 @@ export const TextUi = ({
       let textCount = 0;
       const maxLen = 150;
 
-      return (
-         <React.Fragment>
-            {title.map((segment, i) => {
-               if (
-                  interactive === false &&
-                  textCount < maxLen &&
-                  textCount + segment[0].length > maxLen
-               ) {
-                  //catch errors
-                  console.log('render error');
-                  return (
-                     <Typography
-                        key={i}
-                        display="inline"
-                        className={classes.typography}
-                        variant={variant ?? 'body1'}>
-                        {'...'}
-                     </Typography>
-                  );
-               }
-               textCount += segment[0].length;
-               if (interactive === false && textCount > maxLen) {
-                  //catch errors
-                  return null;
-               }
-               return (
-                  <TextSegment
-                     key={i}
-                     segment={segment}
-                     variant={variant ?? 'body1'}
-                     interactive={interactive ?? true}
-                     semanticFilter={semanticFilter}
-                     style={{ ...style }}></TextSegment>
-               );
-            })}
-         </React.Fragment>
-      );
+      const textUi = title.map((segment, i) => {
+         if (
+            interactive === false &&
+            textCount < maxLen &&
+            textCount + segment[0].length > maxLen
+         ) {
+            //catch errors
+            console.log('render error');
+            return (
+               <Typography
+                  key={i}
+                  display="inline"
+                  className={classes.typography}
+                  variant={variant ?? 'body1'}>
+                  {'...'}
+               </Typography>
+            );
+         }
+         textCount += segment[0].length;
+         if (interactive === false && textCount > maxLen) {
+            //catch errors
+            return null;
+         }
+         return (
+            <TextSegment
+               key={i}
+               segment={segment}
+               variant={variant ?? 'body1'}
+               interactive={interactive ?? true}
+               semanticFilter={semanticFilter}
+               style={{ ...style }}></TextSegment>
+         );
+      });
+
+      if (textUi == null) {
+         return null;
+      }
+
+      return <React.Fragment>{textUi}</React.Fragment>;
    }
 
    return null;
@@ -171,11 +173,7 @@ const TextSegment = ({
 
    //hide the text
    if (hideSegment) {
-      return (
-         <div style={{ paddingTop: 3 }}>
-            <Typography> {'  '} </Typography>
-         </div>
-      );
+      return null;
    }
 
    return (
@@ -233,18 +231,8 @@ const useSegmentData = (
    let segmentStyle: React.CSSProperties = { ...style } ?? {};
    let segmentDetails: string | undefined = undefined;
    let segmentType: SemanticFormatEnum | undefined = undefined;
-   let hideSegment: boolean =
-      semanticFilter?.length === 0 || semanticFilter == null ? false : true;
 
-   if (hideSegment) {
-      if (
-         style?.backgroundColor != null &&
-         style?.backgroundColor !== '#FFFFFF' &&
-         semanticFilter?.find((f) => f === SemanticFormatEnum.Colored)
-      ) {
-         hideSegment = false;
-      }
-   }
+   let hideSegment: boolean = shouldSegmentBeHidden(semanticFilter, style);
 
    format.forEach((d) => {
       if (hideSegment && semanticFilter?.includes(d[0])) {
@@ -360,3 +348,21 @@ const formatSegment = (
    }
    return { link, text };
 };
+function shouldSegmentBeHidden(
+   semanticFilter: SemanticFormatEnum[] | undefined,
+   style: React.CSSProperties | undefined
+) {
+   let hideSegment: boolean =
+      semanticFilter?.length === 0 || semanticFilter == null ? false : true;
+
+   if (hideSegment) {
+      if (
+         style?.backgroundColor != null &&
+         style?.backgroundColor !== '#FFFFFF' &&
+         semanticFilter?.find((f) => f === SemanticFormatEnum.Colored)
+      ) {
+         hideSegment = false;
+      }
+   }
+   return hideSegment;
+}

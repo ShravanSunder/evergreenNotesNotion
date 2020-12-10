@@ -28,7 +28,8 @@ interface IBlockUi {
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
    interactive?: boolean;
-   doNotRenderChildBlocks?: boolean;
+   renderPagesAsInline?: boolean;
+   disableToggles?: boolean;
 }
 
 export const BlockUi = ({
@@ -37,7 +38,8 @@ export const BlockUi = ({
    semanticFilter,
    style,
    interactive = true,
-   doNotRenderChildBlocks = true,
+   renderPagesAsInline = true,
+   disableToggles = false,
 }: IBlockUi) => {
    let classes = useBlockStyles();
    let variant = useVariant(block);
@@ -99,8 +101,8 @@ export const BlockUi = ({
                <PageUi
                   block={block}
                   style={style}
-                  inlineBlock={doNotRenderChildBlocks}
-                  showContent={!doNotRenderChildBlocks}
+                  inlineBlock={renderPagesAsInline}
+                  showContent={!renderPagesAsInline}
                   interactive={interactive}
                   semanticFilter={semanticFilter}
                />
@@ -109,8 +111,8 @@ export const BlockUi = ({
                <PageUi
                   block={block}
                   style={style}
-                  inlineBlock={doNotRenderChildBlocks}
-                  showContent={!doNotRenderChildBlocks}
+                  inlineBlock={renderPagesAsInline}
+                  showContent={!renderPagesAsInline}
                   interactive={interactive}
                />
             )}
@@ -118,8 +120,8 @@ export const BlockUi = ({
                <PageUi
                   block={block}
                   style={style}
-                  inlineBlock={doNotRenderChildBlocks}
-                  showContent={!doNotRenderChildBlocks}
+                  inlineBlock={renderPagesAsInline}
+                  showContent={!renderPagesAsInline}
                   interactive={interactive}
                />
             )}
@@ -129,7 +131,7 @@ export const BlockUi = ({
                   semanticFilter={semanticFilter}
                   interactive={interactive}
                   style={blockStyle}
-                  doNotRenderChildBlocks={doNotRenderChildBlocks}
+                  disableToggles={disableToggles}
                />
             )}
             {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}

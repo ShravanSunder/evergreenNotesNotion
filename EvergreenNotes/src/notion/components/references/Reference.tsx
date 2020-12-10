@@ -59,8 +59,8 @@ export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
                   <div className={classes.reference}>
                      <NotionContentWithBlocks
                         interactive={true}
-                        renderPagesAsInline={false}
                         semanticFilter={semanticFilter}
+                        renderPagesAsInline={false}
                         blockContent={
                            refData.notionBlock
                         }></NotionContentWithBlocks>

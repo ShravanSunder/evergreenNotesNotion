@@ -2,6 +2,8 @@ import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { useBlockStyles } from './useBlockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
+import { hasValidChildren } from 'aUtilities/reactHelpers';
+import * as ReactIs from 'react-is';
 
 export const BulletUi = ({
    block,
@@ -19,7 +21,9 @@ export const BulletUi = ({
          interactive={interactive}></TextUi>
    );
 
-   if (textUIComponent == null) {
+   const d = ReactIs.isElement(textUIComponent);
+   console.log(d);
+   if (!hasValidChildren(textUIComponent)) {
       return null;
    }
 
