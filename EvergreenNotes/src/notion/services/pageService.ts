@@ -18,9 +18,8 @@ import {
 import { Block } from 'aNotion/types/notionV3/notionBlockTypes';
 import {
    SemanticFormatEnum,
-   SemanticString,
+   Segment,
    SemanticFormat,
-   SemanticFormatValue,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 
 export const processPageForMarks = async (
@@ -213,7 +212,7 @@ export const getPropertiesWithSemanticFormat = (
 };
 
 export const hasSemanticFormatType = (
-   property: SemanticString[],
+   property: Segment[],
    formatType: SemanticFormatEnum
 ) => {
    return property.some((s) => {
@@ -230,7 +229,7 @@ export const hasSemanticFormatType = (
    });
 };
 
-export const hasBackgroundColorFormat = (property: SemanticString[]) => {
+export const hasBackgroundColorFormat = (property: Segment[]) => {
    return property.some((s) => {
       if (s[0] != null && s[1] != null) {
          let format: SemanticFormat[] = s[1];
@@ -248,9 +247,9 @@ export const hasBackgroundColorFormat = (property: SemanticString[]) => {
 };
 
 export const getSemanticStringForType = (
-   property: SemanticString[],
+   property: Segment[],
    formatType: SemanticFormatEnum
-): SemanticString[] => {
+): Segment[] => {
    return property.filter((s) => {
       if (s[0] != null && s[1] != null) {
          let format: SemanticFormat[] = s[1];
@@ -266,7 +265,7 @@ export const getSemanticStringForType = (
 };
 
 export const getValuesForSemanticType = (
-   property: SemanticString[],
+   property: Segment[],
    formatType: SemanticFormatEnum
 ): string[] => {
    const filtered = getSemanticStringForType(property, formatType);
@@ -274,8 +273,8 @@ export const getValuesForSemanticType = (
 };
 
 export const getValuesOfSemanticString = (
-   property: SemanticString
-): SemanticFormatValue | undefined => {
+   property: Segment
+): string | undefined => {
    if (property[1]?.[0]?.[1] != null) {
       return property[1][0][1];
    } else {
@@ -284,7 +283,7 @@ export const getValuesOfSemanticString = (
 };
 
 export const getValuesOfSemanticStringArray = (
-   property: SemanticString[]
+   property: Segment[]
 ): string[] => {
    return property
       .flatMap((m) => getValuesOfSemanticString(m))

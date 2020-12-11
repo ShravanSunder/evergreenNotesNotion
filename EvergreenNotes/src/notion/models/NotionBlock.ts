@@ -8,7 +8,7 @@ import {
 import * as recordService from 'aNotion/services/recordService';
 import * as blockService from 'aNotion/services/blockService';
 import {
-   SemanticString,
+   Segment,
    SemanticFormatEnum,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import {
@@ -23,7 +23,7 @@ export interface INotionBlockModel {
    collection_views?: blockTypes.ICollectionView[] | undefined;
    type: BlockTypeEnum;
    simpleTitle: string;
-   semanticTitle: SemanticString[];
+   semanticTitle: Segment[];
    blockId: string;
    contentIds: string[];
 }
@@ -35,7 +35,7 @@ export class NotionBlockRecord implements INotionBlockModel {
    recordMapData: IRecordMap;
    type: BlockTypeEnum = BlockTypeEnum.Unknown;
    simpleTitle: string;
-   semanticTitle: SemanticString[] = [];
+   semanticTitle: Segment[] = [];
    blockId: string = '';
    parentNodes?: INotionBlockModel[] = undefined;
    contentNodes?: INotionBlockModel[] = undefined;
@@ -112,7 +112,7 @@ export class NotionBlockRecord implements INotionBlockModel {
       return '';
    };
 
-   protected getTitle = (): SemanticString[] => {
+   protected getTitle = (): Segment[] => {
       try {
          if (
             this.type === BlockTypeEnum.CollectionViewPage ||

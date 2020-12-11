@@ -17,11 +17,9 @@ export enum SemanticFormatEnum {
    Page = 'p',
    DateTime = 'd',
 }
-export type SemanticFormatValue = string | undefined;
-export type SemanticStringValue = string;
 
-export type SemanticFormat = [SemanticFormatEnum, SemanticFormatValue];
-export type SemanticString = [SemanticStringValue, SemanticFormat[]?];
+export type SemanticFormat = [SemanticFormatEnum, string | undefined];
+export type Segment = [string, SemanticFormat[]?];
 
 // export type InlineMentionUser = ['‣', SemanticFormat[]];
 // export type InlineMentionPage = ['‣', SemanticFormat[]];

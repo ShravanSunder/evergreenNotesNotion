@@ -1,4 +1,4 @@
-import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
+import { Segment } from 'aNotion/types/notionV3/semanticStringTypes';
 import { t_Permission as Permission } from './permission';
 import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { BlockTypeEnum } from '../BlockTypes';
@@ -67,7 +67,7 @@ export interface IEmptyBlock {
 
 export interface IBaseTextBlock extends IEmptyBlock {
    properties?: {
-      title?: SemanticString[];
+      title?: Segment[];
    };
 }
 
@@ -91,8 +91,8 @@ export interface IPage extends IBaseTextBlock {
     * ```
     */
    properties: {
-      title: SemanticString[];
-      [key: string]: SemanticString[];
+      title: Segment[];
+      [key: string]: Segment[];
    };
    permissions?: Permission[];
    /**
@@ -107,7 +107,7 @@ export interface IPage extends IBaseTextBlock {
 export interface IText extends IBaseTextBlock {
    type: BlockTypeEnum.Text;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
 }
 
@@ -117,7 +117,7 @@ export interface IText extends IBaseTextBlock {
 export interface IBulletedList extends IBaseTextBlock {
    type: BlockTypeEnum.ButtetedList;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
 }
 
@@ -127,7 +127,7 @@ export interface IBulletedList extends IBaseTextBlock {
 export interface INumberedList extends IBaseTextBlock {
    type: BlockTypeEnum.NumberedList;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
 }
 
@@ -137,7 +137,7 @@ export interface INumberedList extends IBaseTextBlock {
 export interface IToDo extends IBaseTextBlock {
    type: BlockTypeEnum.ToDo;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
       checked?: [['Yes' | 'No']];
    };
 }
@@ -148,7 +148,7 @@ export interface IToDo extends IBaseTextBlock {
 export interface IToggle extends IBaseTextBlock {
    type: BlockTypeEnum.Toggle;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
 }
 
@@ -158,7 +158,7 @@ export interface IToggle extends IBaseTextBlock {
 export interface IHeader1 extends IBaseTextBlock {
    type: BlockTypeEnum.Header1;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
 }
 
@@ -168,7 +168,7 @@ export interface IHeader1 extends IBaseTextBlock {
 export interface IHeader2 extends IBaseTextBlock {
    type: BlockTypeEnum.Header2;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
 }
 
@@ -178,7 +178,7 @@ export interface IHeader2 extends IBaseTextBlock {
 export interface IHeader3 extends IBaseTextBlock {
    type: BlockTypeEnum.Header3;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
 }
 
@@ -188,7 +188,7 @@ export interface IHeader3 extends IBaseTextBlock {
 export interface IQuote extends IBaseTextBlock {
    type: BlockTypeEnum.Quote;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
 }
 
@@ -198,7 +198,7 @@ export interface IQuote extends IBaseTextBlock {
 export interface ICallout extends IBaseTextBlock {
    type: BlockTypeEnum.Callout;
    properties?: {
-      title: SemanticString[];
+      title: Segment[];
    };
    /** Defined if the user uploaded an image for icon. */
    file_ids?: base.UUID[];
@@ -242,7 +242,7 @@ export interface IEquation extends IBaseTextBlock {
    type: BlockTypeEnum.Equation;
    properties?: {
       /** LaTeX. */
-      title?: SemanticString[];
+      title?: Segment[];
    };
 }
 
@@ -253,7 +253,7 @@ export interface ITemplateButton extends IBaseTextBlock {
    type: BlockTypeEnum.TemplateButton;
    properties?: {
       /** Button name. */
-      title?: SemanticString[];
+      title?: Segment[];
    };
 }
 
@@ -297,7 +297,7 @@ export interface IImage extends IEmptyBlock {
        * When they are different, use `display_source`.
        */
       source?: [[base.NotionSecureUrl | base.PublicUrl]];
-      caption?: SemanticString[];
+      caption?: Segment[];
    };
    /**  Defined if the user uploaded an image. */
    file_ids?: base.UUID[];
@@ -314,7 +314,7 @@ export interface IVideo extends IEmptyBlock {
        * When they are different, use `display_source`.
        */
       source?: [[base.NotionSecureUrl | base.PublicUrl]];
-      caption?: SemanticString[];
+      caption?: Segment[];
    };
    /**  Defined if the user uploaded a video. */
    file_ids?: base.UUID[];
@@ -341,7 +341,7 @@ export interface IBookmark extends IBaseTextBlock {
       /** Link of the bookmarked web page. */
       link: [[string]];
       /** Title of the bookmarked web page, auto detected. */
-      title?: SemanticString[];
+      title?: Segment[];
       /** Description of the bookmarked web page, auto detected. */
       description?: [[string]];
    };
@@ -354,7 +354,7 @@ export interface ICode extends IBaseTextBlock {
    type: BlockTypeEnum.Code;
    properties?: {
       /** Code content. */
-      title?: SemanticString[];
+      title?: Segment[];
       language?: [[string]];
    };
 }

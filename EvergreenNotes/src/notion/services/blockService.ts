@@ -12,7 +12,7 @@ import {
    AbsoluteDateTime,
    RelativeDateTime,
    SemanticFormatEnum,
-   SemanticString,
+   Segment,
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as blockApi from 'aNotion/api/v3/blockApi';
 import * as LoadPageChunk from 'aNotion/types/notionV3/notionRecordTypes';
@@ -142,7 +142,7 @@ export const parseDate = (dateData: any) => {
    return segmentDetails;
 };
 
-export const reduceTitle = (title?: SemanticString[]) => {
+export const reduceTitle = (title?: Segment[]) => {
    if (title != null) {
       return title
          .map((segment) => {

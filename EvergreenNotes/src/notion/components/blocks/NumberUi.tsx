@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { useBlockStyles } from './useBlockStyles';
@@ -12,6 +12,7 @@ export const NumberUi = ({
    interactive,
 }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
+   const [hasSegments, setHasSegments] = useState(true);
 
    const textUIComponent = (
       <TextUi
@@ -21,7 +22,7 @@ export const NumberUi = ({
          interactive={interactive}></TextUi>
    );
 
-   if (textUIComponent == null) {
+   if (!hasSegments) {
       return null;
    }
 

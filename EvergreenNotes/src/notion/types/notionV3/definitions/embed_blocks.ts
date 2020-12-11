@@ -1,4 +1,4 @@
-import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
+import { Segment } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { BlockTypeEnum } from '../BlockTypes';
 import { IEmptyBlock } from './basic_blocks';
@@ -18,7 +18,7 @@ export interface Embed extends IEmptyBlock {
        * Use `display_source` in {@link BlockFormat} for an iframe.
        */
       source?: [[base.PublicUrl]];
-      caption?: SemanticString[];
+      caption?: Segment[];
    };
 }
 

@@ -22,7 +22,7 @@ export const BulletUi = ({
          setHasSegments={setHasSegments}></TextUi>
    );
 
-   if (hasSegments) {
+   if (!hasSegments) {
       return null;
    }
 

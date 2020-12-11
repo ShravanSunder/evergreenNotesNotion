@@ -4,7 +4,7 @@ import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { grey, red } from '@material-ui/core/colors';
 import { IBaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import {
-   SemanticString,
+   Segment,
    SemanticFormat,
    SemanticFormatEnum,
    AbsoluteDateTime,
@@ -41,7 +41,7 @@ export interface ITextUiParams extends IBaseTextUiParams {
 }
 
 interface ISegmentParams {
-   segment: SemanticString;
+   segment: Segment;
    style?: React.CSSProperties;
    semanticFilter?: SemanticFormatEnum[];
    variant?: Variant;
@@ -58,8 +58,8 @@ export const TextUi = ({
    setHasSegments: setSegmentCount,
 }: ITextUiParams) => {
    let classes = useBlockStyles();
-   let title: SemanticString[] | undefined = (block.block as IBaseTextBlock)
-      ?.properties?.title as SemanticString[];
+   let title: Segment[] | undefined = (block.block as IBaseTextBlock)
+      ?.properties?.title as Segment[];
    if (title == null) {
       title = block?.collection?.name;
    }
@@ -177,17 +177,29 @@ const TextSegment = ({
 
    //nothing to render
    if (text == null || (text.trim().length === 0 && segmentDetails == null)) {
-      if (hasSegments != null) hasSegments(true);
+      if (hasSegments != null) {
+         useEffect(() => {
+            hasSegments(false);
+         }, [hasSegments]);
+      }
       return null;
    }
 
    //hide the text
    if (hideSegment) {
-      if (hasSegments != null) hasSegments(true);
+      if (hasSegments != null) {
+         useEffect(() => {
+            hasSegments(false);
+         }, [hasSegments]);
+      }
       return null;
    }
 
-   if (hasSegments != null) hasSegments(false);
+   if (hasSegments != null) {
+      useEffect(() => {
+         hasSegments(true);
+      }, [hasSegments]);
+   }
 
    return (
       <React.Fragment>
@@ -252,70 +264,12 @@ const useSegmentData = (
          hideSegment = false;
       }
 
-      switch (d[0]) {
-         case SemanticFormatEnum.Bold:
-            segmentStyle.fontWeight = 'bold';
-            break;
-         case SemanticFormatEnum.Italic:
-            segmentStyle.fontStyle = 'italic';
-            break;
-         case SemanticFormatEnum.Colored:
-            if (d[1] != null && getColor(d[1]) != null) {
-               if (d[1].includes('background')) {
-                  segmentStyle.backgroundColor = getColor(d[1]);
-               } else {
-                  segmentStyle.color = getColor(d[1]);
-               }
-            }
-            break;
-         case SemanticFormatEnum.Strike:
-            segmentStyle.textDecoration = 'line-through';
-            break;
-         case SemanticFormatEnum.User:
-            if (d[1] != null) {
-               segmentDetails = d[1];
-               segmentType = d[0];
-            }
-            if (segmentStyle.color == null) {
-               segmentStyle.color = grey[700];
-            }
-            break;
-         case SemanticFormatEnum.Link:
-            if (d[1] != null) {
-               segmentDetails = d[1];
-               segmentType = d[0];
-            }
-            if (segmentStyle.color == null) {
-               segmentStyle.color = grey[800];
-            }
-            break;
-         case SemanticFormatEnum.Page:
-            segmentStyle.color = grey[700];
-            segmentStyle.fontWeight = 'bold';
-            if (d[1] != null) {
-               segmentDetails = d[1];
-               segmentType = d[0];
-            }
-            break;
-         case SemanticFormatEnum.InlineCode:
-            segmentStyle.fontFamily = 'Consolas';
-            if (segmentStyle.backgroundColor == null) {
-               segmentStyle.background = grey[300];
-            }
-            if (segmentStyle.color == null) {
-               segmentStyle.color = red[700];
-            }
-            break;
-         case SemanticFormatEnum.DateTime:
-            if (d[1] != null) {
-               let dateData = d[1] as any;
-               segmentDetails = parseDate(dateData);
-               segmentType = d[0];
-            }
-            if (segmentStyle.color == null) {
-               segmentStyle.color = grey[700];
-            }
-      }
+      ({ segmentDetails, segmentType } = parseSegment(
+         d,
+         segmentStyle,
+         segmentDetails,
+         segmentType
+      ));
    });
 
    return {
@@ -361,10 +315,11 @@ const formatSegment = (
    }
    return { link, text };
 };
-function shouldSegmentBeHidden(
+
+const shouldSegmentBeHidden = (
    semanticFilter: SemanticFormatEnum[] | undefined,
    style: React.CSSProperties | undefined
-) {
+) => {
    let hideSegment: boolean =
       semanticFilter?.length === 0 || semanticFilter == null ? false : true;
 
@@ -378,4 +333,77 @@ function shouldSegmentBeHidden(
       }
    }
    return hideSegment;
-}
+};
+
+const parseSegment = (
+   d: SemanticFormat,
+   segmentStyle: React.CSSProperties,
+   segmentDetails: string | undefined,
+   segmentType: SemanticFormatEnum | undefined
+) => {
+   switch (d[0]) {
+      case SemanticFormatEnum.Bold:
+         segmentStyle.fontWeight = 'bold';
+         break;
+      case SemanticFormatEnum.Italic:
+         segmentStyle.fontStyle = 'italic';
+         break;
+      case SemanticFormatEnum.Colored:
+         if (d[1] != null && getColor(d[1]) != null) {
+            if (d[1].includes('background')) {
+               segmentStyle.backgroundColor = getColor(d[1]);
+            } else {
+               segmentStyle.color = getColor(d[1]);
+            }
+         }
+         break;
+      case SemanticFormatEnum.Strike:
+         segmentStyle.textDecoration = 'line-through';
+         break;
+      case SemanticFormatEnum.User:
+         if (d[1] != null) {
+            segmentDetails = d[1];
+            segmentType = d[0];
+         }
+         if (segmentStyle.color == null) {
+            segmentStyle.color = grey[700];
+         }
+         break;
+      case SemanticFormatEnum.Link:
+         if (d[1] != null) {
+            segmentDetails = d[1];
+            segmentType = d[0];
+         }
+         if (segmentStyle.color == null) {
+            segmentStyle.color = grey[800];
+         }
+         break;
+      case SemanticFormatEnum.Page:
+         segmentStyle.color = grey[700];
+         segmentStyle.fontWeight = 'bold';
+         if (d[1] != null) {
+            segmentDetails = d[1];
+            segmentType = d[0];
+         }
+         break;
+      case SemanticFormatEnum.InlineCode:
+         segmentStyle.fontFamily = 'Consolas';
+         if (segmentStyle.backgroundColor == null) {
+            segmentStyle.background = grey[300];
+         }
+         if (segmentStyle.color == null) {
+            segmentStyle.color = red[700];
+         }
+         break;
+      case SemanticFormatEnum.DateTime:
+         if (d[1] != null) {
+            let dateData = d[1] as any;
+            segmentDetails = parseDate(dateData);
+            segmentType = d[0];
+         }
+         if (segmentStyle.color == null) {
+            segmentStyle.color = grey[700];
+         }
+   }
+   return { segmentDetails, segmentType };
+};

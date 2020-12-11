@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ToDo } from 'aNotion/types/notionV3/notionBlockTypes';
@@ -12,6 +12,8 @@ export const TodoUi = ({
    interactive,
 }: IBaseTextUiParams) => {
    let classes = useBlockStyles();
+   const [hasSegments, setHasSegments] = useState(true);
+
    let todo = block.block as ToDo;
    let checked = todo.properties?.checked?.[0]?.[0] === 'Yes' ?? false;
 
@@ -25,7 +27,7 @@ export const TodoUi = ({
          }}></TextUi>
    );
 
-   if (textUIComponent == null) {
+   if (!hasSegments) {
       return null;
    }
 

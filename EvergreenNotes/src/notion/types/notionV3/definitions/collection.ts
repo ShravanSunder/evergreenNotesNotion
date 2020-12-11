@@ -1,14 +1,14 @@
-import { SemanticString } from 'aNotion/types/notionV3/semanticStringTypes';
+import { Segment } from 'aNotion/types/notionV3/semanticStringTypes';
 import * as base from 'aNotion/types/notionV3/notionBaseTypes';
 import { CollectionView } from './collection_view';
 
 export interface i_Collection {
    id: base.UUID;
    /** `name[0][0]` is the collection's name. */
-   name?: SemanticString[];
+   name?: Segment[];
    icon?: base.Emoji | base.NotionSecureUrl | base.PublicUrl;
    cover?: base.NotionRelativePath | base.NotionSecureUrl | base.PublicUrl;
-   description?: SemanticString[];
+   description?: Segment[];
    format?: Collection.Format;
    parent_id: base.UUID;
    parent_table: base.Table;
