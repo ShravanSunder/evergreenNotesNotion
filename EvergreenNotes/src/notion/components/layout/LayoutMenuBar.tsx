@@ -49,12 +49,18 @@ export const useStyles = makeStyles((theme: Theme) =>
          },
       },
       toggleButton: {
-         color: lightGreen[800],
-         backgroundColor: lightGreen[50],
+         color: theme.palette.layoutAccent.main,
+         backgroundColor: theme.palette.layoutAccent.light,
          '&$checked': {
-            color: lightGreen[800],
-            backgroundColor: lightGreen[200],
+            color: theme.palette.layoutAccent.main,
+            backgroundColor: theme.palette.layoutBackground.dark,
          },
+      },
+      headerAura: {
+         backgroundColor: theme.palette.layoutBackground.main,
+         borderRadius: 9,
+         padding: 6,
+         boxShadow: `2px 2px 6px ${theme.palette.layoutBackground.main}, -2px 2px 6px ${theme.palette.layoutBackground.main}, 2px -2px 6px ${theme.palette.layoutBackground.main}, -2px -2px 6px ${theme.palette.layoutBackground.main}`,
       },
    })
 );
@@ -111,14 +117,7 @@ export const LayoutMenuBar = ({
 
    return (
       <>
-         <div
-            style={{
-               backgroundColor: lightGreen[100],
-               borderRadius: 9,
-               padding: 6,
-               boxShadow:
-                  '2px 2px 6px #dcedc8, -2px 2px 6px #dcedc8, 2px -2px 6px #dcedc8, -2px -2px 6px #dcedc8',
-            }}>
+         <div className={classes.headerAura}>
             <Grid container justify="flex-start">
                <Grid xs={1} item>
                   <div style={{ marginTop: 11 }}>

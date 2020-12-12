@@ -52,27 +52,6 @@ export const OptionsPane = () => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
-            {/* <Typography className={classes.sections} variant="h5">
-               <b>General</b>
-            </Typography>
-            {options != null && (
-               <div>
-                  <FormGroup>
-                     <FormControlLabel
-                        label={AppOptionDescriptions.darkmode}
-                        control={
-                           <Switch
-                              checked={options.darkmode}
-                              onChange={() =>
-                                 (options.darkmode = !options.darkmode)
-                              }
-                              color="primary"
-                           />
-                        }
-                     />
-                  </FormGroup>
-               </div>
-            )} */}
             <div className={classes.spacing}></div>
             <Typography className={classes.sections} variant="h5">
                <b>Information and Feedback</b>

@@ -7,9 +7,10 @@ import {
 } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 
-export const Accordion = withStyles({
+export const Accordion = withStyles((theme) => ({
    root: {
-      border: '1px solid rgba(0, 0, 0, .33)',
+      border: '1px solid',
+      borderColor: theme.palette.reference.main,
       borderRadius: 6,
       boxShadow: 'none',
 
@@ -25,13 +26,14 @@ export const Accordion = withStyles({
       },
    },
    expanded: {},
-})(MuiAccordion);
+}))(MuiAccordion);
 
 export const AccordionSummary = withStyles((theme) => ({
    root: {
-      backgroundColor: grey[100],
+      backgroundColor: theme.palette.reference.main,
       borderRadius: 6,
-      borderBottom: '1px solid rgba(0, 0, 0, .125)',
+      borderBottom: '1px solid',
+      borderBottomColor: theme.palette.referenceBorder.main,
       marginBottom: 0,
       minHeight: 42,
       '&$expanded': {
@@ -55,8 +57,8 @@ export const AccordionDetails = withStyles((theme) => ({
 export const AccordionActions = withStyles((theme) => ({
    root: {
       padding: theme.spacing(2),
-      boxShadow: '0px 1px 6px #f5f5f5',
+      boxShadow: `0px 1px 6px ${theme.palette.reference.main}`,
       borderRadius: 6,
-      backgroundColor: grey[50],
+      backgroundColor: theme.palette.reference.light,
    },
 }))(MuiAccordionActions);

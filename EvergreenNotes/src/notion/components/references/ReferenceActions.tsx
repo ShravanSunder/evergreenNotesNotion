@@ -126,7 +126,6 @@ export const ReferenceActions = ({
                   <LightTooltip title="Focus view" placement="bottom">
                      <IconButton
                         className={classes.actionButton}
-                        color="primary"
                         size="small"
                         onClick={() => handleMarkupFocus()}>
                         {markupFocusState && (
@@ -149,7 +148,6 @@ export const ReferenceActions = ({
                <LightTooltip title="Copy link" placement="bottom">
                   <IconButton
                      className={classes.actionButton}
-                     color="secondary"
                      size="small"
                      onMouseDown={handleCopyLink}>
                      <LinkOutlined
@@ -163,7 +161,6 @@ export const ReferenceActions = ({
                      <IconButton
                         className={classes.actionButton}
                         size="small"
-                        color="secondary"
                         onClick={handleCopyText}>
                         <FileCopyOutlined
                            className={classes.actionButtonIcon}
@@ -176,7 +173,6 @@ export const ReferenceActions = ({
                <LightTooltip title="Open page in a new tab" placement="bottom">
                   <IconButton
                      className={classes.actionButton}
-                     color="secondary"
                      size="small"
                      onMouseDown={handleNewTabPreventMiddelScroll}
                      onMouseUp={handleNewTabMiddleClick}>
@@ -189,7 +185,6 @@ export const ReferenceActions = ({
                   <LightTooltip title="Scroll to mention" placement="bottom">
                      <IconButton
                         className={classes.actionButton}
-                        color="secondary"
                         size="small"
                         onClick={handleMentionSourceIdClick}>
                         <VerticalAlignBottomIcon

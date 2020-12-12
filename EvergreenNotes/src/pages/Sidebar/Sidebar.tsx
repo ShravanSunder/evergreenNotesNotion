@@ -1,6 +1,6 @@
 //import { hot } from 'react-hot-loader';
 
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect, Suspense, useMemo } from 'react';
 import { Provider } from 'react-redux';
 import reduxStore from 'aNotion/providers/reduxStore';
 import { appDispatch } from 'aNotion/providers/appDispatch';
@@ -17,8 +17,9 @@ import {
    createStyles,
    Zoom,
    Button,
+   createMuiTheme,
 } from '@material-ui/core';
-import { theme } from 'aNotion/components/theme';
+import { createAppTheme } from 'aNotion/components/theme';
 import { useWindowSize } from '@react-hook/window-size';
 import { SnackbarProvider } from 'notistack';
 import { green, yellow, red, grey } from '@material-ui/core/colors';
@@ -28,13 +29,14 @@ import { appHeight } from 'aSidebar/sidebarFrameProperties';
 
 const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 
-const snackbarRoot = {
-   color: grey[500] + '!important',
-   maxWidth: 290,
-   zIndex: 1000,
-};
-const useStyles = makeStyles((theme: Theme) =>
-   createStyles({
+const useStyles = makeStyles((theme: Theme) => {
+   const snackbarRoot = {
+      color: grey[500] + '!important',
+      maxWidth: 290,
+      zIndex: 1000,
+   };
+
+   return createStyles({
       info: { backgroundColor: grey[100] + '!important', ...snackbarRoot },
       success: { backgroundColor: green[50] + '!important', ...snackbarRoot },
       error: { backgroundColor: red[100] + '!important', ...snackbarRoot },
@@ -42,8 +44,8 @@ const useStyles = makeStyles((theme: Theme) =>
          backgroundColor: yellow[50] + '!important',
          ...snackbarRoot,
       },
-   })
-);
+   });
+});
 
 console.log('App loading...');
 export const Sidebar = () => {
@@ -59,6 +61,11 @@ export const Sidebar = () => {
    const onClickDismiss = (key: any) => () => {
       notistackRef.current.closeSnackbar(key);
    };
+   const isDark = false;
+
+   const theme = useMemo(() => {
+      return createAppTheme(isDark);
+   }, [isDark]);
 
    return (
       <React.StrictMode>
