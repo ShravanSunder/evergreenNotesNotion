@@ -14,7 +14,7 @@ import {
    EvergreenMessagingEnum,
    TEvergreenMessage,
 } from 'aSidebar/sidebarMessaging';
-import PlayForWorkIcon from '@material-ui/icons/PlayForWork';
+import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import CropFreeOutlinedIcon from '@material-ui/icons/CropFreeOutlined';
 import CenterFocusStrongIcon from '@material-ui/icons/CenterFocusStrong';
 
@@ -192,7 +192,9 @@ export const ReferenceActions = ({
                         color="secondary"
                         size="small"
                         onClick={handleMentionSourceIdClick}>
-                        <PlayForWorkIcon className={classes.actionButtonIcon} />
+                        <VerticalAlignBottomIcon
+                           className={classes.actionButtonIcon}
+                        />
                      </IconButton>
                   </LightTooltip>
                </Grid>

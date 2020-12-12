@@ -13,6 +13,7 @@ import { contentSelector } from 'aNotion/providers/storeSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 import { fetchContentForBlock } from 'aNotion/services/recordService';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
+import { mentionsActions } from '../mentions/mentionsSlice';
 
 const initialState: ContentState = {};
 
@@ -47,7 +48,10 @@ const fetchContent = createAsyncThunk<
             forceUpdate
          ) {
             const result = await fetchContentForBlock(blockId, thunkApi.signal);
-            return result;
+            if (result.userMap != null) {
+               thunkApi.dispatch(mentionsActions.saveAllUsers(result.userMap));
+            }
+            return result.contentBlocks;
          } else {
             return undefined;
          }

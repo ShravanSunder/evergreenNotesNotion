@@ -23,7 +23,7 @@ export const BulletUi = ({
    );
 
    if (!hasSegments) {
-      return null;
+      return textUIComponent;
    }
 
    return (

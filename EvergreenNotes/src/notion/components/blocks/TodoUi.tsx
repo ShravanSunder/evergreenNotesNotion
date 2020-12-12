@@ -28,7 +28,7 @@ export const TodoUi = ({
    );
 
    if (!hasSegments) {
-      return null;
+      return textUIComponent;
    }
 
    return (

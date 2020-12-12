@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Link, Icon, SvgIcon } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { grey, red } from '@material-ui/core/colors';
@@ -24,9 +24,8 @@ import { useBlockStyles } from './useBlockStyles';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { MentionsState } from '../mentions/mentionsState';
 import { RecordState } from './blockState';
-import { CantDisplayThisType, SomethingWentWrong } from '../common/Loading';
+import { CantDisplayThisType } from '../common/Loading';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
-import { Block } from '@material-ui/icons';
 
 export interface IBaseTextUiParams {
    block: INotionBlockModel;
@@ -40,24 +39,16 @@ export interface ITextUiParams extends IBaseTextUiParams {
    variant?: Variant;
 }
 
-interface ISegmentParams {
-   segment: Segment;
-   style?: React.CSSProperties;
-   semanticFilter?: SemanticFormatEnum[];
-   variant?: Variant;
-   interactive: boolean;
-   setHasSegments?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 export const TextUi = ({
    block,
    variant,
    interactive,
    style,
    semanticFilter,
-   setHasSegments: setSegmentCount,
+   setHasSegments,
 }: ITextUiParams) => {
    let classes = useBlockStyles();
+   const [segmentCount, setSegmentCount] = useState(0);
    let title: Segment[] | undefined = (block.block as IBaseTextBlock)
       ?.properties?.title as Segment[];
    if (title == null) {
@@ -77,13 +68,19 @@ export const TextUi = ({
       return <CantDisplayThisType />;
    }
 
+   let segmentTally = { count: 0 };
+   const incrementSegmentCount = () => {
+      segmentTally.count = segmentTally.count + 1;
+   };
+
+   let textUi: (JSX.Element | null)[] | null = null;
+
    if (title != null) {
       //if not interactive also truncate the max segment size
       let textCount = 0;
       const maxLen = 150;
-      let segmentCount = 0;
 
-      const textUi = title.map((segment, i) => {
+      textUi = title.map((segment, i) => {
          if (
             interactive === false &&
             textCount < maxLen &&
@@ -91,7 +88,7 @@ export const TextUi = ({
          ) {
             //catch errors
             console.log('render error');
-            segmentCount++;
+            incrementSegmentCount();
             return (
                <Typography
                   key={i}
@@ -108,7 +105,6 @@ export const TextUi = ({
             return null;
          }
 
-         segmentCount++;
          return (
             <TextSegment
                key={i}
@@ -116,20 +112,29 @@ export const TextUi = ({
                variant={variant ?? 'body1'}
                interactive={interactive ?? true}
                semanticFilter={semanticFilter}
-               setHasSegments={setSegmentCount}
+               incrementSegmentCount={incrementSegmentCount}
                style={{ ...style }}></TextSegment>
          );
       });
-
-      if (segmentCount === 0) {
-         return null;
-      }
-
-      return <React.Fragment>{textUi}</React.Fragment>;
    }
 
-   return null;
+   useEffect(() => {
+      if (setHasSegments != null) {
+         setHasSegments(segmentTally.count > 0);
+      }
+   });
+
+   return <>{textUi}</>;
 };
+
+interface ISegmentParams {
+   segment: Segment;
+   style?: React.CSSProperties;
+   semanticFilter: SemanticFormatEnum[] | undefined;
+   variant: Variant | undefined;
+   interactive: boolean;
+   incrementSegmentCount: () => void;
+}
 
 export interface ISegmentMeta {
    segmentStyle: React.CSSProperties;
@@ -144,7 +149,7 @@ const TextSegment = ({
    interactive,
    style,
    semanticFilter,
-   setHasSegments: hasSegments,
+   incrementSegmentCount,
 }: ISegmentParams) => {
    let classes = useBlockStyles();
    let text = segment[0];
@@ -177,29 +182,12 @@ const TextSegment = ({
 
    //nothing to render
    if (text == null || (text.trim().length === 0 && segmentDetails == null)) {
-      if (hasSegments != null) {
-         useEffect(() => {
-            hasSegments(false);
-         }, [hasSegments]);
-      }
+      return null;
+   } else if (hideSegment) {
       return null;
    }
 
-   //hide the text
-   if (hideSegment) {
-      if (hasSegments != null) {
-         useEffect(() => {
-            hasSegments(false);
-         }, [hasSegments]);
-      }
-      return null;
-   }
-
-   if (hasSegments != null) {
-      useEffect(() => {
-         hasSegments(true);
-      }, [hasSegments]);
-   }
+   incrementSegmentCount();
 
    return (
       <React.Fragment>
@@ -398,7 +386,7 @@ const parseSegment = (
       case SemanticFormatEnum.DateTime:
          if (d[1] != null) {
             let dateData = d[1] as any;
-            segmentDetails = parseDate(dateData);
+            segmentDetails = parseDate(dateData) + ' ';
             segmentType = d[0];
          }
          if (segmentStyle.color == null) {

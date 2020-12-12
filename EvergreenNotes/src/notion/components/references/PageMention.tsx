@@ -114,7 +114,7 @@ export const PageMention = ({
                         </Grid>
                         <Grid item xs={12} className={classes.reference}>
                            {mentionIds?.map((m, i) => (
-                              <Suspense fallback={LoadingLine}>
+                              <Suspense fallback={LoadingLine} key={i}>
                                  {blocks?.[m]?.status ===
                                     thunkStatus.fulfilled &&
                                     blocks?.[m]?.block != null && (

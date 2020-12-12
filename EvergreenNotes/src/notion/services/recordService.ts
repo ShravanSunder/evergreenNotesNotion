@@ -2,6 +2,7 @@ import {
    IRecordMap,
    Record,
    IPageChunk,
+   NotionUserRecord,
 } from 'aNotion/types/notionV3/notionRecordTypes';
 import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
 import { BlockTypeEnum, BlockProps } from '../types/notionV3/BlockTypes';
@@ -11,6 +12,7 @@ import {
 } from 'aNotion/models/NotionBlock';
 import { ContentBlocks } from 'aNotion/components/contents/contentState';
 import * as blockApi from 'aNotion/api/v3/blockApi';
+import { dispatchSaveMentionAction } from './serviceDispatch';
 
 export const getContent = (
    record: IRecordMap,
@@ -91,7 +93,10 @@ export const fetchContentForBlock = async (
    blockId: string,
    signal: AbortSignal,
    chunk?: IPageChunk
-): Promise<ContentBlocks[]> => {
+): Promise<{
+   contentBlocks: ContentBlocks[];
+   userMap: { [key: string]: NotionUserRecord } | undefined;
+}> => {
    const resultContentBlocks: ContentBlocks[] = [];
    const missingBlocks: ContentBlocks[] = [];
 
@@ -111,7 +116,9 @@ export const fetchContentForBlock = async (
       await fetchContentFromSync(missingBlocks, signal, resultContentBlocks);
    }
 
-   return resultContentBlocks;
+   let userMap = chunk?.recordMap.notion_user;
+
+   return { contentBlocks: resultContentBlocks, userMap };
 };
 
 const extractContentFromChunk = (

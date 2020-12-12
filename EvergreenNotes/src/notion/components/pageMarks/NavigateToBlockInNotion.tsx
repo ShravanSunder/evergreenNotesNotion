@@ -1,6 +1,6 @@
 import React from 'react';
 import { IconButton } from '@material-ui/core';
-import PlayForWorkIcon from '@material-ui/icons/PlayForWork';
+import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import {
    EvergreenMessagingEnum,
@@ -39,7 +39,7 @@ export const NavigateToBlockInNotion = ({
             color="default"
             size="small">
             <LightTooltip title="Scroll to block" placement="top">
-               <PlayForWorkIcon
+               <VerticalAlignBottomIcon
                   style={{
                      maxHeight: 13,
                      maxWidth: 13,

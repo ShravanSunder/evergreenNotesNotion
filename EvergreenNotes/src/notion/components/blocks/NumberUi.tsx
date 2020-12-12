@@ -19,11 +19,12 @@ export const NumberUi = ({
          block={block}
          semanticFilter={semanticFilter}
          style={style}
+         setHasSegments={setHasSegments}
          interactive={interactive}></TextUi>
    );
 
    if (!hasSegments) {
-      return null;
+      return textUIComponent;
    }
 
    return (

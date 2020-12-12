@@ -21,9 +21,9 @@ export const ToggleUi = ({
    disableToggles = false,
 }: IToggleUIParams) => {
    let classes = useBlockStyles();
-   let toggle = block.block as Toggle;
 
    const [expanded, setExpanded] = useState(false);
+   const [hasSegments, setHasSegments] = useState(true);
    const handleClick = (e: React.SyntheticEvent) => {
       e.stopPropagation();
       setExpanded(!expanded);
@@ -32,6 +32,24 @@ export const ToggleUi = ({
    const aggregatedSemanticFilter: SemanticFormatEnum[] = aggregateParentSemanticFilter(
       style,
       semanticFilter
+   );
+
+   const textUIComponent = (
+      <TextUi
+         block={block}
+         semanticFilter={semanticFilter}
+         style={style}
+         setHasSegments={setHasSegments}
+         interactive={interactive}></TextUi>
+   );
+
+   const minimumTextSpace = (
+      <Typography
+         display="inline"
+         className={classes.typography}
+         variant={'body1'}>
+         {' '}
+      </Typography>
    );
 
    return (
@@ -48,12 +66,9 @@ export const ToggleUi = ({
             </div>
          </Grid>
          <Grid item xs className={classes.blockUiGrids}>
-            <TextUi
-               block={block}
-               semanticFilter={semanticFilter}
-               style={style}
-               interactive={interactive}
-            />
+            {textUIComponent}
+            {/* the below is to make sure text line space is taken up*/}
+            {!hasSegments && minimumTextSpace}
             {expanded && !disableToggles && (
                <NotionContentWithParentId
                   parentBlockId={block.blockId}
