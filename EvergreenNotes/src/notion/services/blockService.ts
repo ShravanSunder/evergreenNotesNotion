@@ -26,6 +26,9 @@ import {
    blue,
    pink,
    red,
+   deepPurple,
+   indigo,
+   amber,
 } from '@material-ui/core/colors';
 import { NotionColor } from 'aNotion/types/notionV3/notionBaseTypes';
 import { DateTime } from 'luxon';
@@ -160,11 +163,14 @@ export const reduceTitle = (title?: Segment[]) => {
    return '';
 };
 
-export const getColor = (color: NotionColor | string): string | undefined => {
+export const getColor = (
+   color: NotionColor | string,
+   isDark: boolean
+): string | undefined => {
    if (color != null) {
       switch (color) {
          case NotionColor.Grey:
-            return grey[600];
+            return isDark ? grey[900] : grey[600];
          case NotionColor.Brown:
             return brown[400];
          case NotionColor.Orange:
@@ -182,23 +188,23 @@ export const getColor = (color: NotionColor | string): string | undefined => {
          case NotionColor.Red:
             return red[400];
          case NotionColor.GreyBg:
-            return grey[200];
+            return isDark ? grey[700] : grey[200];
          case NotionColor.BrownBg:
-            return brown[100];
+            return isDark ? brown[900] : brown[100];
          case NotionColor.OrangeBg:
-            return deepOrange[50];
+            return isDark ? deepOrange[900] : deepOrange[50];
          case NotionColor.YellowBg:
-            return yellow[100];
+            return isDark ? amber[800] : yellow[100];
          case NotionColor.TealBg:
-            return teal[50];
+            return isDark ? teal[900] : teal[50];
          case NotionColor.BlueBg:
-            return blue[50];
+            return isDark ? indigo[900] : blue[50];
          case NotionColor.PurpleBg:
-            return purple[50];
+            return isDark ? deepPurple[900] : purple[50];
          case NotionColor.PinkBg:
-            return pink[50];
+            return isDark ? pink[900] : pink[50];
          case NotionColor.RedBg:
-            return red[50];
+            return isDark ? red[900] : red[50];
       }
    }
 
@@ -206,7 +212,10 @@ export const getColor = (color: NotionColor | string): string | undefined => {
    return undefined;
 };
 
-export const getBackgroundColor = (block: INotionBlockModel) => {
+export const getBackgroundColor = (
+   block: INotionBlockModel,
+   isDark: boolean
+) => {
    let bgColor = block.block?.format?.block_color;
    if (block.type === BlockTypeEnum.Code) {
       bgColor = NotionColor.GreyBg;
@@ -214,19 +223,22 @@ export const getBackgroundColor = (block: INotionBlockModel) => {
 
    let color: string | undefined = undefined;
    if (bgColor && isBackGroundColor(bgColor)) {
-      color = getColor(bgColor);
+      color = getColor(bgColor, isDark);
    }
 
    //transparent
    return color ?? '#FFFFFF';
 };
 
-export const getForegroundColor = (block: INotionBlockModel) => {
+export const getForegroundColor = (
+   block: INotionBlockModel,
+   isDark: boolean
+) => {
    let bgColor = block.block?.format?.block_color;
 
    let color: string | undefined = undefined;
    if (bgColor && !isBackGroundColor(bgColor)) {
-      color = getColor(bgColor);
+      color = getColor(bgColor, isDark);
    }
 
    //transparent

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Typography, Divider } from '@material-ui/core';
+import { Typography, Divider, useTheme } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Variant } from '@material-ui/core/styles/createTypography';
@@ -41,10 +41,15 @@ export const BlockUi = ({
    renderPagesAsInline = true,
    disableToggles = false,
 }: IBlockUi) => {
-   let classes = blockStyles();
-   let variant = useVariant(block);
-   let backgroundColor = getBackgroundColor(block);
-   let color = getForegroundColor(block);
+   const classes = blockStyles();
+   const variant = useVariant(block);
+   const theme = useTheme();
+
+   let backgroundColor = getBackgroundColor(
+      block,
+      theme.palette.type === 'dark'
+   );
+   let color = getForegroundColor(block, theme.palette.type === 'dark');
    const useGeneric =
       variant != null &&
       block.type !== BlockTypeEnum.Page &&

@@ -54,7 +54,7 @@ export const TextUi = ({
    setHasSegments,
 }: ITextUiParams) => {
    let classes = blockStyles();
-   const [segmentCount, setSegmentCount] = useState(0);
+
    let title: Segment[] | undefined = (block.block as IBaseTextBlock)
       ?.properties?.title as Segment[];
    if (title == null) {
@@ -346,11 +346,20 @@ const parseSegment = (
          segmentStyle.fontStyle = 'italic';
          break;
       case SemanticFormatEnum.Colored:
-         if (d[1] != null && getColor(d[1]) != null) {
+         if (
+            d[1] != null &&
+            getColor(d[1], theme.palette.type === 'dark') != null
+         ) {
             if (d[1].includes('background')) {
-               segmentStyle.backgroundColor = getColor(d[1]);
+               segmentStyle.backgroundColor = getColor(
+                  d[1],
+                  theme.palette.type === 'dark'
+               );
             } else {
-               segmentStyle.color = getColor(d[1]);
+               segmentStyle.color = getColor(
+                  d[1],
+                  theme.palette.type === 'dark'
+               );
             }
          }
          break;
