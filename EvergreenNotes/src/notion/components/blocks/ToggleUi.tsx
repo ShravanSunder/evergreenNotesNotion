@@ -4,7 +4,7 @@ import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Toggle } from 'aNotion/types/notionV3/notionBlockTypes';
 import { ArrowDropDown, ArrowRight } from '@material-ui/icons';
 import { NotionContentWithParentId } from 'aNotion/components/contents/NotionContent';
-import { useBlockStyles } from './useBlockStyles';
+import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 import { aggregateParentSemanticFilter } from 'aNotion/services/blockService';
@@ -20,7 +20,7 @@ export const ToggleUi = ({
    interactive,
    disableToggles = false,
 }: IToggleUIParams) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
 
    const [expanded, setExpanded] = useState(false);
    const [hasSegments, setHasSegments] = useState(true);

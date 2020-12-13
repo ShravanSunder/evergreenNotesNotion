@@ -9,8 +9,8 @@ export const useReferenceStyles = makeStyles((theme: Theme) =>
       },
       actionButton: {
          fontSize: '0.65rem',
-         color: grey[700],
-         borderColor: grey[700],
+         color: theme.palette.referenceAccent.main,
+         borderColor: theme.palette.referenceAccent.light,
          maxHeight: 21,
       },
       reference: {

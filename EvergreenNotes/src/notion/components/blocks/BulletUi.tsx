@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
-import { useBlockStyles } from './useBlockStyles';
+import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
 import * as ReactIs from 'react-is';
 
@@ -10,7 +10,7 @@ export const BulletUi = ({
    style,
    interactive,
 }: IBaseTextUiParams) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
    const [hasSegments, setHasSegments] = useState(true);
 
    const textUIComponent = (

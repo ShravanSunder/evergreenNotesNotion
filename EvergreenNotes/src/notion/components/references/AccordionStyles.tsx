@@ -10,9 +10,10 @@ import { grey } from '@material-ui/core/colors';
 export const Accordion = withStyles((theme) => ({
    root: {
       border: '1px solid',
-      borderColor: theme.palette.reference.main,
+      borderColor: theme.palette.referenceBackground.main,
+      backgroundColor: theme.palette.referenceBackground.light,
       borderRadius: 6,
-      boxShadow: 'none',
+      boxShadow: `1px 1px 6px ${theme.palette.referenceBackground.main} -1px 1px 6px ${theme.palette.referenceBackground.main} 1px -1px 6px ${theme.palette.referenceBackground.main} -1px -1px 6px ${theme.palette.referenceBackground.main}`,
 
       marginTop: '12px',
       marginBottom: '12px',
@@ -30,9 +31,9 @@ export const Accordion = withStyles((theme) => ({
 
 export const AccordionSummary = withStyles((theme) => ({
    root: {
-      backgroundColor: theme.palette.reference.main,
+      backgroundColor: theme.palette.referenceBackground.main,
       borderRadius: 6,
-      borderBottom: '1px solid',
+      boxShadow: `1px 1px 6px ${theme.palette.referenceBackground.main}`,
       borderBottomColor: theme.palette.referenceBorder.main,
       marginBottom: 0,
       minHeight: 42,
@@ -51,14 +52,15 @@ export const AccordionSummary = withStyles((theme) => ({
 export const AccordionDetails = withStyles((theme) => ({
    root: {
       padding: theme.spacing(2),
+      backgroundColor: theme.palette.referenceBackground.light,
    },
 }))(MuiAccordionDetails);
 
 export const AccordionActions = withStyles((theme) => ({
    root: {
       padding: theme.spacing(2),
-      boxShadow: `0px 1px 6px ${theme.palette.reference.main}`,
+      boxShadow: `0px 1px 6px ${theme.palette.referenceBackground.main}`,
       borderRadius: 6,
-      backgroundColor: theme.palette.reference.light,
+      backgroundColor: theme.palette.referenceBackground.light,
    },
 }))(MuiAccordionActions);

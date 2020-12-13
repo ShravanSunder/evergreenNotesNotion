@@ -1,7 +1,7 @@
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 
-export const useBlockStyles = makeStyles((theme: Theme) =>
+export const blockStyles = makeStyles((theme: Theme) =>
    createStyles({
       block: {
          marginRight: 3,
@@ -40,6 +40,10 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
          marginTop: 1,
          float: 'right',
       },
+      quote: {
+         backgroundColor: theme.palette.referenceAccent.main,
+         width: 2,
+      },
       toggle: {
          paddingLeft: 0,
          marginLeft: 0,
@@ -53,7 +57,7 @@ export const useBlockStyles = makeStyles((theme: Theme) =>
       link: {
          overflowWrap: 'anywhere',
          wordBreak: 'break-all',
-         color: grey[600],
+         color: theme.palette.referenceAccent.main,
       },
    })
 );

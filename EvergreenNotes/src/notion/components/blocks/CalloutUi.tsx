@@ -2,11 +2,11 @@ import React from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Callout } from 'aNotion/types/notionV3/notionBlockTypes';
-import { useBlockStyles } from './useBlockStyles';
+import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
 
 export const CalloutUi = ({ block, interactive = true }: IBaseTextUiParams) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
    var callout = block.block as Callout;
 
    return (

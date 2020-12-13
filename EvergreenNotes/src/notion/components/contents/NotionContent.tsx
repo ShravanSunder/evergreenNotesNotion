@@ -10,7 +10,7 @@ import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Grid, Typography } from '@material-ui/core';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
-import { useBlockStyles } from '../blocks/useBlockStyles';
+import { blockStyles } from '../blocks/blockStyles';
 
 const BlockUi = React.lazy(() => import('../blocks/BlockUi'));
 
@@ -137,7 +137,7 @@ const ContentChildren = ({
    style,
    interactive,
 }: IContentChildren) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
 
    switch (block.type) {
       case BlockTypeEnum.Page:

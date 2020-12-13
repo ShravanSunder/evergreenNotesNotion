@@ -2,12 +2,12 @@ import React, { Suspense } from 'react';
 import { Grid, Box } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Image } from 'aNotion/types/notionV3/notionBlockTypes';
-import { useBlockStyles } from './useBlockStyles';
+import { blockStyles } from './blockStyles';
 import { ErrorBoundary, ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { LoadingImage } from '../common/Loading';
 
 export const ImageUi = ({ block }: { block: INotionBlockModel }) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
    let image = block.block as Image;
 
    let src = image.properties?.source?.[0]?.[0] ?? '';

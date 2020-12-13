@@ -84,7 +84,7 @@ export const PageUi = ({
                style={style}></TextUi>
          )}
          {untitled && (
-            <Typography variant={variant} style={style} display="inline">
+            <Typography variant={variant} display="inline">
                Untitled
             </Typography>
          )}

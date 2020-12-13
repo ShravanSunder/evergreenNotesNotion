@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ToDo } from 'aNotion/types/notionV3/notionBlockTypes';
-import { useBlockStyles } from './useBlockStyles';
+import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
 
 export const TodoUi = ({
@@ -11,7 +11,7 @@ export const TodoUi = ({
    style,
    interactive,
 }: IBaseTextUiParams) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
    const [hasSegments, setHasSegments] = useState(true);
 
    let todo = block.block as ToDo;

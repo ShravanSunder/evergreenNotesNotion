@@ -59,7 +59,7 @@ const LoadingDetails = () => {
          </Typography>
          <Typography variant="body2">
             <Skeleton></Skeleton>
-            <Skeleton variant="rect" style={{ padding: 9 }} height={40} />;
+            <Skeleton variant="rect" style={{ padding: 9 }} height={40} />
             <Skeleton></Skeleton>
             <Skeleton></Skeleton>
          </Typography>

@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Link, Icon, SvgIcon } from '@material-ui/core';
+import {
+   Typography,
+   Link,
+   Icon,
+   SvgIcon,
+   useTheme,
+   Theme,
+} from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { grey, red } from '@material-ui/core/colors';
 import { IBaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
@@ -20,7 +27,7 @@ import { TAppDispatchWithPromise } from 'aNotion/providers/appDispatch';
 import { blockActions } from 'aNotion/components/blocks/blockSlice';
 import { getPageUrl, getSiteUrl } from 'aNotion/services/notionSiteService';
 import OpenInNewOutlinedIcon from '@material-ui/icons/OpenInNewOutlined';
-import { useBlockStyles } from './useBlockStyles';
+import { blockStyles } from './blockStyles';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { MentionsState } from '../mentions/mentionsState';
 import { RecordState } from './blockState';
@@ -47,7 +54,7 @@ export const TextUi = ({
    semanticFilter,
    setHasSegments,
 }: ITextUiParams) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
    const [segmentCount, setSegmentCount] = useState(0);
    let title: Segment[] | undefined = (block.block as IBaseTextBlock)
       ?.properties?.title as Segment[];
@@ -151,7 +158,7 @@ const TextSegment = ({
    semanticFilter,
    incrementSegmentCount,
 }: ISegmentParams) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
    let text = segment[0];
    let format = segment[1] ?? [];
    const dispatch: TAppDispatchWithPromise<any> = useDispatch();
@@ -244,6 +251,7 @@ const useSegmentData = (
    let segmentStyle: React.CSSProperties = { ...style } ?? {};
    let segmentDetails: string | undefined = undefined;
    let segmentType: SemanticFormatEnum | undefined = undefined;
+   const theme = useTheme();
 
    let hideSegment: boolean = shouldSegmentBeHidden(semanticFilter, style);
 
@@ -256,7 +264,8 @@ const useSegmentData = (
          d,
          segmentStyle,
          segmentDetails,
-         segmentType
+         segmentType,
+         theme
       ));
    });
 
@@ -327,7 +336,8 @@ const parseSegment = (
    d: SemanticFormat,
    segmentStyle: React.CSSProperties,
    segmentDetails: string | undefined,
-   segmentType: SemanticFormatEnum | undefined
+   segmentType: SemanticFormatEnum | undefined,
+   theme: Theme
 ) => {
    switch (d[0]) {
       case SemanticFormatEnum.Bold:
@@ -354,7 +364,7 @@ const parseSegment = (
             segmentType = d[0];
          }
          if (segmentStyle.color == null) {
-            segmentStyle.color = grey[700];
+            segmentStyle.color = theme.palette.notionColors.mentions;
          }
          break;
       case SemanticFormatEnum.Link:
@@ -363,11 +373,11 @@ const parseSegment = (
             segmentType = d[0];
          }
          if (segmentStyle.color == null) {
-            segmentStyle.color = grey[800];
+            segmentStyle.color = theme.palette.referenceAccent.main;
          }
          break;
       case SemanticFormatEnum.Page:
-         segmentStyle.color = grey[700];
+         segmentStyle.color = theme.palette.referenceAccent.main;
          segmentStyle.fontWeight = 'bold';
          if (d[1] != null) {
             segmentDetails = d[1];
@@ -377,10 +387,10 @@ const parseSegment = (
       case SemanticFormatEnum.InlineCode:
          segmentStyle.fontFamily = 'Consolas';
          if (segmentStyle.backgroundColor == null) {
-            segmentStyle.background = grey[300];
+            segmentStyle.background = theme.palette.referenceAccent.light;
          }
          if (segmentStyle.color == null) {
-            segmentStyle.color = red[700];
+            segmentStyle.color = theme.palette.notionColors.inlineCode;
          }
          break;
       case SemanticFormatEnum.DateTime:
@@ -390,7 +400,7 @@ const parseSegment = (
             segmentType = d[0];
          }
          if (segmentStyle.color == null) {
-            segmentStyle.color = grey[700];
+            segmentStyle.color = theme.palette.notionColors.mentions;
          }
    }
    return { segmentDetails, segmentType };

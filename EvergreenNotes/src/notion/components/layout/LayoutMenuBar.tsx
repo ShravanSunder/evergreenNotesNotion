@@ -11,7 +11,7 @@ import {
    FontDownloadTwoTone,
    TocTwoTone,
 } from '@material-ui/icons/';
-import { lightGreen } from '@material-ui/core/colors';
+import { lightGreen, red } from '@material-ui/core/colors';
 import {
    Grid,
    Typography,
@@ -50,10 +50,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
       toggleButton: {
          color: theme.palette.layoutAccent.main,
-         backgroundColor: theme.palette.layoutAccent.light,
-         '&$checked': {
-            color: theme.palette.layoutAccent.main,
-            backgroundColor: theme.palette.layoutBackground.dark,
+         backgroundColor: theme.palette.layoutBackground.main,
+
+         '&.Mui-selected': {
+            color: theme.palette.layoutAccent.dark,
          },
       },
       headerAura: {
@@ -64,6 +64,26 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
    })
 );
+
+// export const useToggleStyles = makeStyles(
+//    (theme: Theme) =>
+//       createStyles({
+//          root: {
+//             //color: red[100],
+//             // backgroundColor: theme.palette.layoutBackground.light,
+//             // '&$selected': {
+//             //    color: red[500],
+//             //    // backgroundColor: theme.palette.layoutBackground.dark,
+//             // },
+//             '&.Mui-selected': {
+//                color: theme.palette.layoutAccent.main,
+//                // backgroundColor: theme.palette.layoutBackground.dark,
+//             },
+//          },
+//          // selected: {},
+//       })
+//    //{ name: 'MuiToggleButton' }
+// );
 
 export const refreshSidebarContents = (
    dispatch: any,
@@ -92,6 +112,7 @@ export const LayoutMenuBar = ({
    setTab: React.Dispatch<React.SetStateAction<LayoutTabs>>;
 }) => {
    const classes = useStyles();
+   //const toggleClasses = useToggleStyles();
 
    const dispatch = useDispatch();
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);

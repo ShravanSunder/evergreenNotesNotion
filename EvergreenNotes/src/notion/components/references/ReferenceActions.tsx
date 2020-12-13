@@ -111,7 +111,6 @@ export const ReferenceActions = ({
                   <Button
                      className={classes.actionButton}
                      size="small"
-                     color="secondary"
                      variant="outlined"
                      onClick={handleEmbedBlock}
                      startIcon={<WidgetsTwoTone />}>

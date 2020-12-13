@@ -20,7 +20,7 @@ import { ImageUi } from './ImageUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 import { LoadingLine } from 'aNotion/components/common/Loading';
 import { TextUi } from 'aNotion/components/blocks/TextUi';
-import { useBlockStyles } from './useBlockStyles';
+import { blockStyles } from './blockStyles';
 
 interface IBlockUi {
    block: INotionBlockModel;
@@ -41,7 +41,7 @@ export const BlockUi = ({
    renderPagesAsInline = true,
    disableToggles = false,
 }: IBlockUi) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
    let variant = useVariant(block);
    let backgroundColor = getBackgroundColor(block);
    let color = getForegroundColor(block);

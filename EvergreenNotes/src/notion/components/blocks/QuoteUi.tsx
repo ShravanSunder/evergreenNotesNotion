@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Divider, Grid } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
-import { useBlockStyles } from './useBlockStyles';
+import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 
@@ -11,7 +11,7 @@ export const QuoteUi = ({
    style,
    interactive,
 }: IBaseTextUiParams) => {
-   let classes = useBlockStyles();
+   let classes = blockStyles();
 
    const textUIComponent = (
       <TextUi
