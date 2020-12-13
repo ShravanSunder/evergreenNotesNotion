@@ -1,12 +1,11 @@
 import React from 'react';
-import { IconButton } from '@material-ui/core';
+import { createStyles, IconButton, makeStyles } from '@material-ui/core';
 import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import {
    EvergreenMessagingEnum,
    TEvergreenMessage,
 } from 'aSidebar/sidebarMessaging';
-import { grey } from '@material-ui/core/colors';
 import { LightTooltip } from '../common/Styles';
 
 export const handleNavigateToBlockInNotion = (blockId: string) => {
@@ -17,11 +16,26 @@ export const handleNavigateToBlockInNotion = (blockId: string) => {
    window.parent.postMessage(msg, '*');
 };
 
+const useStyles = makeStyles((theme) =>
+   createStyles({
+      icon: {
+         maxHeight: 12,
+         maxWidth: 12,
+         marginLeft: 1,
+         marginRight: 1,
+         marginTop: 0,
+         color: theme.palette.primary.main,
+      },
+   })
+);
+
 export const NavigateToBlockInNotion = ({
    block,
 }: {
    block: INotionBlockModel;
 }) => {
+   const classes = useStyles();
+
    return (
       <>
          <IconButton
@@ -39,14 +53,7 @@ export const NavigateToBlockInNotion = ({
             color="default"
             size="small">
             <LightTooltip title="Scroll to block" placement="top">
-               <VerticalAlignBottomIcon
-                  style={{
-                     maxHeight: 13,
-                     maxWidth: 13,
-                     margin: 0,
-                     color: grey[600],
-                  }}
-               />
+               <VerticalAlignBottomIcon className={classes.icon} />
             </LightTooltip>
          </IconButton>
       </>

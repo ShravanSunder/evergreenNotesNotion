@@ -5,7 +5,6 @@ import {
    AccordionDetails as MuiAccordionDetails,
    AccordionActions as MuiAccordionActions,
 } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
 
 export const Accordion = withStyles((theme) => ({
    root: {

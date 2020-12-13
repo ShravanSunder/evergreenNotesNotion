@@ -1,5 +1,12 @@
 import React, { MouseEvent, useEffect, useState } from 'react';
-import { Breadcrumbs, Typography, Grid, Divider } from '@material-ui/core';
+import {
+   Breadcrumbs,
+   Typography,
+   Grid,
+   Divider,
+   createStyles,
+   makeStyles,
+} from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
@@ -22,7 +29,6 @@ import { PageUi } from '../blocks/PageUi';
 
 import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
 import HelpOutlineTwoToneIcon from '@material-ui/icons/HelpOutlineTwoTone';
-import { grey } from '@material-ui/core/colors';
 import { LightTooltip } from '../common/Styles';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
@@ -36,7 +42,8 @@ export const Backlink = ({
    backlink,
    showInlineBlock = true,
 }: IBacklinkProps) => {
-   let classes = useReferenceStyles();
+   const classes = useReferenceStyles();
+
    const [backlinkedPageBlock, setBacklinkedPageBlock] = useState<
       INotionBlockModel | undefined
    >();
@@ -101,13 +108,7 @@ export const Backlink = ({
                               title="This is the block that contains backlink"
                               placement="top">
                               <HelpOutlineTwoToneIcon
-                                 style={{
-                                    maxHeight: 15,
-                                    maxWidth: 15,
-                                    margin: 0,
-                                    marginTop: 11,
-                                    color: grey[600],
-                                 }}
+                                 className={classes.informationIcon}
                               />
                            </LightTooltip>
                         </Grid>

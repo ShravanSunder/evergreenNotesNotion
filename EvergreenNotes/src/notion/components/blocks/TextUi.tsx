@@ -8,7 +8,6 @@ import {
    Theme,
 } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
-import { grey, red } from '@material-ui/core/colors';
 import { IBaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
 import {
    Segment,

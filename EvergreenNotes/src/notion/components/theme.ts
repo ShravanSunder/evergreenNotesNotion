@@ -23,6 +23,7 @@ declare module '@material-ui/core/styles/createPalette' {
    }
 
    interface Palette {
+      fabBackground: Palette['primary'];
       layoutBackground: Palette['primary'];
       layoutAccent: Palette['primary'];
       referenceBackground: Palette['primary'];
@@ -31,6 +32,7 @@ declare module '@material-ui/core/styles/createPalette' {
       notionColors: INotionColors;
    }
    interface PaletteOptions {
+      fabBackground: PaletteOptions['primary'];
       layoutBackground: PaletteOptions['primary'];
       layoutAccent: PaletteOptions['primary'];
       referenceBackground: PaletteOptions['primary'];
@@ -46,21 +48,24 @@ export const createAppTheme = (isDark: boolean): Theme => {
    const notionSecondaryDark: string = '#373c3f';
 
    const appPalette = {
+      fabBackground: {
+         main: isDark ? '#505558' : lightGreen[100],
+      },
       layoutBackground: {
          main: isDark ? '#373c3f' : lightGreen[100],
       },
       layoutAccent: {
+         light: isDark ? lightGreen[300] : lightGreen[700],
          main: isDark ? lightGreen[500] : lightGreen[800],
-         light: isDark ? lightGreen[400] : lightGreen[700],
          dark: isDark ? lightGreen[700] : lightGreen[900],
       },
       referenceBackground: {
          main: isDark ? notionSecondaryDark : grey[100],
       },
       referenceAccent: {
-         main: isDark ? grey[200] : grey[800],
          light: isDark ? grey[100] : grey[700],
-         dark: isDark ? grey[300] : grey[900],
+         main: isDark ? grey[200] : grey[800],
+         dark: isDark ? grey[400] : grey[900],
       },
       referenceBorder: {
          main: isDark ? notionSecondaryDark : 'rgba(0, 0, 0, 0.125)',

@@ -2,11 +2,10 @@ import React, { useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Fab, ThemeProvider } from '@material-ui/core';
 import { createAppTheme } from 'aNotion/components/theme';
-import { lightGreen, grey } from '@material-ui/core/colors';
 import MenuBookTwoToneIcon from '@material-ui/icons/MenuBookTwoTone';
 
 export const SidebarFab = (props: any) => {
-   const isDark = false;
+   const isDark = true;
 
    const theme = useMemo(() => {
       return createAppTheme(isDark);
@@ -31,10 +30,12 @@ export const SidebarFab = (props: any) => {
                      position: 'absolute',
                      top: 52,
                      left: props.wWidth - 67,
-                     color: props.showFrame ? grey[600] : lightGreen[800],
+                     color: props.showFrame
+                        ? theme.palette.layoutAccent.main
+                        : theme.palette.layoutAccent.light,
                      backgroundColor: props.showFrame
-                        ? 'rgb(244, 252, 233, 0.5)'
-                        : lightGreen[100],
+                        ? theme.palette.referenceBorder.main
+                        : theme.palette.fabBackground.main,
                      zIndex: 1100,
                   }}
                   className="handle"

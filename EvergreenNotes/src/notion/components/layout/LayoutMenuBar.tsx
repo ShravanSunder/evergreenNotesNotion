@@ -11,7 +11,6 @@ import {
    FontDownloadTwoTone,
    TocTwoTone,
 } from '@material-ui/icons/';
-import { lightGreen, red } from '@material-ui/core/colors';
 import {
    Grid,
    Typography,

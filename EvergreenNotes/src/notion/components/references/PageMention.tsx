@@ -26,7 +26,6 @@ import { LightTooltip } from 'aNotion/components/common/Styles';
 
 import HelpOutlineTwoToneIcon from '@material-ui/icons/HelpOutlineTwoTone';
 import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
-import { grey } from '@material-ui/core/colors';
 import { LoadingLine } from '../common/Loading';
 import {
    blockSelector,
@@ -92,13 +91,7 @@ export const PageMention = ({
                         title="This is the block that contains the page mention"
                         placement="top">
                         <HelpOutlineTwoToneIcon
-                           style={{
-                              maxHeight: 15,
-                              maxWidth: 15,
-                              margin: 0,
-                              marginTop: 11,
-                              color: grey[600],
-                           }}
+                           className={classes.informationIcon}
                         />
                      </LightTooltip>
                   </Grid>

@@ -43,7 +43,7 @@ export const TocPane = () => {
 
    const [tree, setTree] = useState<TLimitedIndentTree>(createLimitedTree());
 
-   let classes = useStyles();
+   const classes = useStyles();
    const headers: INotionBlockModel[] = pageMarks?.headers ?? [];
    const pageBlock: INotionBlockModel | undefined = currentPageData?.pageBlock;
    const nothingFound = headers.length === 0;
