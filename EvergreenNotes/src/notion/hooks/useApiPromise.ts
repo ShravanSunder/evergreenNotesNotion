@@ -9,7 +9,7 @@ export type UseApiPromise<TResult, TInput> = (
 export function useApi<TResult, TInput>(
    apiCallback: UseApiPromise<TResult, TInput>,
    debounce: number = 300,
-   maxWait: number = 2000
+   maxWait: number = 6000
 ): [
    thunkStatus,
    TResult | undefined,
@@ -34,7 +34,7 @@ export function useApi<TResult, TInput>(
             //you can also check for max retries here
             if (
                debouncedInput !== lastApiPaylod ||
-               (status === thunkStatus.rejected && retry <= 2)
+               (status === thunkStatus.rejected && retry <= 3)
             ) {
                setStatus(thunkStatus.pending);
                if (

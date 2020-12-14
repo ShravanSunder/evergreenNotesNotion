@@ -55,6 +55,13 @@ const useStyles = makeStyles((theme: Theme) =>
          marginBottom: 12,
          fontVariant: 'small-caps',
       },
+      recentSearches: {
+         margin: 6,
+         padding: 6,
+         minWidth: 250,
+         maxWidth: 290,
+         backgroundColor: theme.palette.layoutBackground.main,
+      },
    })
 );
 const search: UseApiPromise<SearchReferences, string> = (
@@ -76,8 +83,9 @@ const search: UseApiPromise<SearchReferences, string> = (
 // comment
 export const SearchPane = () => {
    const dispatch: TAppDispatchWithPromise<any> = useDispatch();
-   const { searchQueries } = useSelector(referenceSelector, shallowEqual);
+   const classes = useStyles();
 
+   const { searchQueries } = useSelector(referenceSelector, shallowEqual);
    const [text, setText] = useState<string>('');
 
    let [status, result, setSearchText, searchText] = useApi<
@@ -139,14 +147,7 @@ export const SearchPane = () => {
                horizontal: 'right',
             }}
             anchorPosition={{ top: 9, left: -3 }}>
-            <div
-               style={{
-                  margin: 6,
-                  padding: 6,
-                  minWidth: 250,
-                  maxWidth: 290,
-                  backgroundColor: '#FFFFFF50',
-               }}>
+            <div className={classes.recentSearches}>
                <Typography
                   variant="subtitle1"
                   style={{

@@ -188,7 +188,7 @@ export const getColor = (
          case NotionColor.Red:
             return '#e35151';
          case NotionColor.GreyBg:
-            return isDark ? '#454b4e' : '#ebeed';
+            return isDark ? '#454b4e' : '#ebeced';
          case NotionColor.BrownBg:
             return isDark ? '#434040' : '#e9e5e3';
          case NotionColor.OrangeBg:
