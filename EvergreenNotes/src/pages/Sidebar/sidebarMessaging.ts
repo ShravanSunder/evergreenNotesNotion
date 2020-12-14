@@ -4,6 +4,7 @@ export enum EvergreenMessagingEnum {
    updateSidebarData = 'updateEvergreenSidebarData',
    frameStatusChanged = 'updateEvergreenFrame',
    navigateToBlock = 'navigateToBlock',
+   darkModeChanged = 'updateSideDarkmode',
 }
 
 /**

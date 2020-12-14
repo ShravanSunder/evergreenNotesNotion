@@ -47,7 +47,6 @@ declare module '@material-ui/core/styles/createPalette' {
 }
 
 export const createAppTheme = (isDark: boolean): Theme => {
-   isDark = true;
    const notionBackground: string = isDark ? '#2f3437' : '#ffffff';
    const notionSecondaryDark: string = '#373c3f';
 
@@ -82,7 +81,7 @@ export const createAppTheme = (isDark: boolean): Theme => {
 
    let theme = createMuiTheme({
       palette: {
-         type: 'dark',
+         type: isDark ? 'dark' : 'light',
          primary: {
             main: isDark ? grey[100] : grey[500],
          },

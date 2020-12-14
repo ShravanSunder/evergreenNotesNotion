@@ -6,6 +6,10 @@ import {
    notionFrameContentObserver,
    notionFrameBoundsObserver,
 } from 'aSidebar/SidebarFrame';
+import {
+   postMessageToSidebar,
+   EvergreenMessagingEnum,
+} from './sidebarMessaging';
 
 const notionScrollDivClass = 'notion-scroller';
 const notionFrameClass = 'notion-frame';
@@ -133,5 +137,19 @@ export const checkDomForNotionFrameChanges = (
 
    if (dialogElements != null) {
       setUpdate(true);
+   }
+};
+
+let hasDarkModeEnabled = false;
+export const checkAndSendDarkModeStatus = () => {
+   const isDark: boolean = document.body.classList.contains('dark') ?? false;
+
+   if (hasDarkModeEnabled != isDark) {
+      hasDarkModeEnabled = isDark;
+
+      postMessageToSidebar({
+         type: EvergreenMessagingEnum.darkModeChanged,
+         payload: isDark,
+      });
    }
 };

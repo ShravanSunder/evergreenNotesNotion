@@ -11,6 +11,7 @@ import {
 import { SidebarFab } from 'aSidebar/SidebarFab';
 import { useDebouncedCallback } from 'use-debounce/lib';
 import {
+   checkAndSendDarkModeStatus,
    checkDomForNotionFrameChanges,
    modifyNotionFrameAndCreateListeners,
 } from 'aSidebar/sidebarFrameMutations';
@@ -57,6 +58,7 @@ export const LoadSidebarFrame = () => {
    const debouncedUpdateFrame = useDebouncedCallback(
       () => {
          setUpdateFrame(true);
+
          postMessageToSidebar({
             type: EvergreenMessagingEnum.frameStatusChanged,
             payload: showFrame,
@@ -86,6 +88,7 @@ export const LoadSidebarFrame = () => {
       setUpdateSidebarContents = debouncedSidebarContents.callback;
 
       const schedule = () => {
+         checkAndSendDarkModeStatus();
          if (window.location.href !== href) {
             checkDomForNotionFrameChanges(setUpdateNotionFramesAndScroller);
          }

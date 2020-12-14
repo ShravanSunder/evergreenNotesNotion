@@ -1,6 +1,12 @@
 //import { hot } from 'react-hot-loader';
 
-import React, { useEffect, Suspense, useMemo } from 'react';
+import React, {
+   useEffect,
+   Suspense,
+   useMemo,
+   useCallback,
+   useState,
+} from 'react';
 import { Provider } from 'react-redux';
 import reduxStore from 'aNotion/providers/reduxStore';
 import { appDispatch } from 'aNotion/providers/appDispatch';
@@ -26,6 +32,7 @@ import { green, yellow, red, grey } from '@material-ui/core/colors';
 import { LoadingUnknown } from 'aNotion/components/common/Loading';
 import { getOptionsFromStorage } from 'aNotion/components/options/optionsService';
 import { appHeight } from 'aSidebar/sidebarFrameProperties';
+import { TEvergreenMessage, EvergreenMessagingEnum } from './sidebarMessaging';
 
 const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 
@@ -61,7 +68,33 @@ export const Sidebar = () => {
    const onClickDismiss = (key: any) => () => {
       notistackRef.current.closeSnackbar(key);
    };
-   const isDark = false;
+
+   const [isDark, setIsDark] = useState(false);
+
+   /**
+    * receive update signal from the parent window via window.postMessage
+    */
+   const handleUpdateDataReceiveMessage = useCallback((event) => {
+      const data = event.data as TEvergreenMessage<any>;
+      if (
+         data?.type === EvergreenMessagingEnum.darkModeChanged &&
+         data?.payload != null &&
+         event.origin.includes('notion')
+      ) {
+         const payload = (event.data as TEvergreenMessage<boolean>).payload;
+         if (payload != null) {
+            setIsDark(payload);
+         }
+      }
+   }, []);
+
+   // hook into the event listener
+   useEffect(() => {
+      window.addEventListener('message', handleUpdateDataReceiveMessage);
+      return () => {
+         window.removeEventListener('message', handleUpdateDataReceiveMessage);
+      };
+   }, []);
 
    const theme = useMemo(() => {
       return createAppTheme(isDark);

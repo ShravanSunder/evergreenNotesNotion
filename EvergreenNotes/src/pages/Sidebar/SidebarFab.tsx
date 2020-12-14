@@ -5,11 +5,12 @@ import { createAppTheme } from 'aNotion/components/theme';
 import MenuBookTwoToneIcon from '@material-ui/icons/MenuBookTwoTone';
 
 export const SidebarFab = (props: any) => {
-   const isDark = true;
+   const darkModeEanbled: boolean =
+      document.body.classList.contains('dark') ?? false;
 
    const theme = useMemo(() => {
-      return createAppTheme(isDark);
-   }, [isDark]);
+      return createAppTheme(darkModeEanbled);
+   }, [darkModeEanbled]);
 
    return (
       <ThemeProvider theme={theme}>

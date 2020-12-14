@@ -33,6 +33,7 @@ import {
    EvergreenMessagingEnum,
    TEvergreenMessage,
 } from 'aSidebar/sidebarMessaging';
+//import { TFrameStatusChanged } from 'aSidebar/messageTypes';
 
 export const Layout = () => {
    const dispatch: TAppDispatchWithPromise<any> = useDispatch();
@@ -157,7 +158,9 @@ export const Layout = () => {
          event.origin.includes('notion')
       ) {
          const payload = (event.data as TEvergreenMessage<boolean>).payload;
-         if (payload != null) setIsSidebarOpen(payload);
+         if (payload != null) {
+            setIsSidebarOpen(payload);
+         }
       }
    }, []);
 
