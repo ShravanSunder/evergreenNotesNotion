@@ -140,16 +140,11 @@ export const checkDomForNotionFrameChanges = (
    }
 };
 
-let hasDarkModeEnabled = false;
 export const checkAndSendDarkModeStatus = () => {
    const isDark: boolean = document.body.classList.contains('dark') ?? false;
 
-   if (hasDarkModeEnabled != isDark) {
-      hasDarkModeEnabled = isDark;
-
-      postMessageToSidebar({
-         type: EvergreenMessagingEnum.darkModeChanged,
-         payload: isDark,
-      });
-   }
+   postMessageToSidebar({
+      type: EvergreenMessagingEnum.darkModeChanged,
+      payload: isDark,
+   });
 };

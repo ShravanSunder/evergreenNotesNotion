@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 
 console.log('App loading...');
+let darkModeEnabled = false;
 export const Sidebar = () => {
    useEffect(() => {
       setTabId();
@@ -69,7 +70,7 @@ export const Sidebar = () => {
       notistackRef.current.closeSnackbar(key);
    };
 
-   const [isDark, setIsDark] = useState(false);
+   const [isDark, setIsDark] = useState(darkModeEnabled);
 
    /**
     * receive update signal from the parent window via window.postMessage
@@ -84,6 +85,7 @@ export const Sidebar = () => {
          const payload = (event.data as TEvergreenMessage<boolean>).payload;
          if (payload != null) {
             setIsDark(payload);
+            darkModeEnabled = payload;
          }
       }
    }, []);

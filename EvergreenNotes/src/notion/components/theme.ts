@@ -52,10 +52,10 @@ export const createAppTheme = (isDark: boolean): Theme => {
 
    const appPalette = {
       fabBackground: {
-         main: isDark ? '#505558' : lightGreen[100],
+         main: isDark ? '#505558' : lightGreen[50],
       },
       layoutBackground: {
-         main: isDark ? '#373c3f' : lightGreen[100],
+         main: isDark ? '#373c3f' : '#f7f6f3',
       },
       layoutAccent: {
          light: isDark ? lightGreen[300] : lightGreen[700],

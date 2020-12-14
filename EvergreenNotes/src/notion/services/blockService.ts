@@ -188,23 +188,23 @@ export const getColor = (
          case NotionColor.Red:
             return red[400];
          case NotionColor.GreyBg:
-            return isDark ? grey[700] : grey[200];
+            return isDark ? '#454b4e' : '#ebeed';
          case NotionColor.BrownBg:
-            return isDark ? brown[900] : brown[100];
+            return isDark ? '#434040' : '#e9e5e3';
          case NotionColor.OrangeBg:
-            return isDark ? deepOrange[900] : deepOrange[50];
+            return isDark ? '#594a3a' : '#faebdd';
          case NotionColor.YellowBg:
-            return isDark ? amber[800] : yellow[100];
+            return isDark ? '#3f4138' : '#fbf3db';
          case NotionColor.TealBg:
-            return isDark ? teal[900] : teal[50];
+            return isDark ? '#354c4b' : '#ddedea';
          case NotionColor.BlueBg:
-            return isDark ? indigo[900] : blue[50];
+            return isDark ? '#364954' : '#ddebf1';
          case NotionColor.PurpleBg:
-            return isDark ? deepPurple[900] : purple[50];
+            return isDark ? '#443f57' : '#eae4f2';
          case NotionColor.PinkBg:
-            return isDark ? pink[900] : pink[50];
+            return isDark ? '#533b4c' : '#f4dfeb';
          case NotionColor.RedBg:
-            return isDark ? red[900] : red[50];
+            return isDark ? '#594141' : '#fbe4e4';
       }
    }
 

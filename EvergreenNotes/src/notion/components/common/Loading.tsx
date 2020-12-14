@@ -181,7 +181,7 @@ export const LoadingUnknown = () => {
                      transitionDelay: loading ? '500ms' : '0ms',
                   }}
                   unmountOnExit>
-                  <CircularProgress />
+                  <CircularProgress color="primary" />
                </Fade>
             </Grid>
          </Grid>
