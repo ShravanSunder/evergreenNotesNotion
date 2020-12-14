@@ -3,10 +3,10 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core';
 export const blockStyles = makeStyles((theme: Theme) =>
    createStyles({
       block: {
-         marginRight: 3,
-         marginLeft: 3,
-         marginTop: 6,
-         marginBottom: 6,
+         marginRight: theme.spacing(0.5),
+         marginLeft: theme.spacing(0.5),
+         marginTop: theme.spacing(1),
+         marginBottom: theme.spacing(1),
          padding: 0,
       },
       typography: {
@@ -20,21 +20,21 @@ export const blockStyles = makeStyles((theme: Theme) =>
          padding: 0,
       },
       bulletsAndIndents: {
-         paddingLeft: 6,
-         paddingRight: 6,
+         paddingLeft: theme.spacing(1),
+         paddingRight: theme.spacing(1),
          marginRight: 1,
          marginTop: 1,
          float: 'right',
       },
       numbers: {
          paddingLeft: 4,
-         paddingRight: 6,
+         paddingRight: theme.spacing(1),
          marginRight: 1,
          float: 'right',
       },
       todo: {
          paddingLeft: 2,
-         paddingRight: 6,
+         paddingRight: theme.spacing(1),
          marginRight: 1,
          marginTop: 1,
          float: 'right',

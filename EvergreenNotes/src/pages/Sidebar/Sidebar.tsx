@@ -151,7 +151,7 @@ export const Sidebar = () => {
                                  borderRadius: 6,
                                  borderTopLeftRadius: 0,
                                  borderTopRightRadius: 0,
-                                 margin: 3,
+                                 margin: 1,
                                  marginTop: -1,
                                  borderColor:
                                     theme.palette.layoutBackground.main,

@@ -32,7 +32,7 @@ export const AccordionSummary = withStyles((theme) => ({
    root: {
       backgroundColor: theme.palette.referenceBackground.main,
       borderRadius: 6,
-      boxShadow: `1px 1px 6px ${theme.palette.referenceBackground.main}`,
+      boxShadow: `1px 1px 6px ${theme.palette.referenceBackground.main} 1px -1px 6px ${theme.palette.referenceBackground.main} -1px 1px 6px ${theme.palette.referenceBackground.main} -1px -1px 6px ${theme.palette.referenceBackground.main}`,
       borderBottomColor: theme.palette.referenceBorder.main,
       marginBottom: 0,
       minHeight: 42,

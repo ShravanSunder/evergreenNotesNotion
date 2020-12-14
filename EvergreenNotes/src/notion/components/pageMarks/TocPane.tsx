@@ -17,7 +17,7 @@ import { handleNavigateToBlockInNotion } from './NavigateToBlockInNotion';
 const useStyles = makeStyles(() =>
    createStyles({
       spacing: {
-         marginBottom: 18,
+         marginBottom: 36,
       },
       toc: {
          cursor: 'pointer',
@@ -31,7 +31,7 @@ type TIndentType = {
 };
 
 type TLimitedIndentTree = {
-   [key: string]: 'Level1' | 'Level2';
+   [key: string]: 'Level1' | 'Level2' | 'Level3';
 };
 
 /**
@@ -72,11 +72,13 @@ export const TocPane = () => {
             currentPageData?.pageBlock.blockId != null && (
                <>
                   <Grid item xs={12}>
-                     <PageUi
-                        block={currentPageData?.pageBlock}
-                        inlineBlock={false}
-                        interactive={false}
-                        showContent={false}></PageUi>
+                     <strong>
+                        <PageUi
+                           block={currentPageData?.pageBlock}
+                           inlineBlock={false}
+                           interactive={false}
+                           showContent={false}></PageUi>
+                     </strong>
                   </Grid>
                   <Grid item xs={12} className={classes.spacing}></Grid>
                </>
@@ -145,6 +147,8 @@ const createLimitedTree = (
       headers.forEach((f) => {
          if (f.block!.parent_id === pageBlockId) {
             tempTree[f.blockId] = 'Level1';
+         } else if (tempTree[f.block!.parent_id] != null) {
+            tempTree[f.blockId] = 'Level3';
          } else {
             tempTree[f.blockId] = 'Level2';
          }
@@ -161,14 +165,26 @@ const calculateIndent = (
    currentBlock: INotionBlockModel,
    tree: TLimitedIndentTree
 ) => {
-   let offset = 0;
+   let offset = getOffset(tree, currentBlock.blockId);
 
-   if (tree[currentBlock.blockId] != null) {
-      if (tree[currentBlock.blockId] == 'Level1') offset = 0;
-      else if (tree[currentBlock.blockId] == 'Level2') offset = 1;
+   if (
+      currentBlock.block?.parent_id != null &&
+      tree[currentBlock.block?.parent_id] != null
+   ) {
+      offset += getOffset(tree, currentBlock.block!.parent_id!);
    }
 
    return indent + offset;
+};
+
+const getOffset = (tree: TLimitedIndentTree, blockId: string) => {
+   let offset = 0;
+   if (tree[blockId] != null) {
+      if (tree[blockId] == 'Level1') offset = 0;
+      else if (tree[blockId] == 'Level2') offset = 1;
+      else if (tree[blockId] == 'Level3') offset = 2;
+   }
+   return offset;
 };
 
 const TocItems = ({
@@ -200,11 +216,11 @@ const TocItems = ({
    );
 };
 
-function setPreviousHeaderIndent(
+const setPreviousHeaderIndent = (
    previousHeaderIndent: TIndentType,
    indent: number,
    h: INotionBlockModel
-) {
+) => {
    previousHeaderIndent.level = indent;
    previousHeaderIndent.type = h.type;
-}
+};
