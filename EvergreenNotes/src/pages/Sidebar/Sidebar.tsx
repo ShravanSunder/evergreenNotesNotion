@@ -144,9 +144,15 @@ export const Sidebar = () => {
                            <Paper
                               elevation={3}
                               style={{
-                                 padding: 12,
                                  paddingTop: 0,
                                  overflow: 'hidden',
+                                 border: '1px',
+                                 borderRadius: 6,
+                                 margin: 3,
+                                 marginTop: 1,
+                                 borderColor:
+                                    theme.palette.layoutBackground.main,
+                                 boxShadow: `1px 1px 3px ${theme.palette.layoutBackground.main}, -1px 1px 3px ${theme.palette.layoutBackground.main}, 1px -1px 3px ${theme.palette.layoutBackground.main}, -1px -1px 3px ${theme.palette.layoutBackground.main}`,
                                  minHeight: appHeight(wHeight),
                               }}>
                               <Suspense fallback={<LoadingUnknown />}>

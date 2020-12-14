@@ -83,7 +83,7 @@ export const createAppTheme = (isDark: boolean): Theme => {
       palette: {
          type: isDark ? 'dark' : 'light',
          primary: {
-            main: isDark ? grey[100] : grey[500],
+            main: isDark ? grey[300] : grey[500],
          },
          ...appPalette,
          tonalOffset: 0.2,

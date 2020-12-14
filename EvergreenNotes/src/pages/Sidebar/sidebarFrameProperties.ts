@@ -7,4 +7,4 @@ export const appPositionLeft = (wWidth: number) =>
    wWidth - appWidth(wWidth) - appScrollMargin;
 export const appHeight = (wHeight: number) =>
    Math.max(wHeight - appPositionTop() - 1, 400);
-export const menuPadding = 27;
+export const menuPadding = 0;

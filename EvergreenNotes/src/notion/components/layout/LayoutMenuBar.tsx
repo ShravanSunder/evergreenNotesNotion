@@ -57,32 +57,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       },
       headerAura: {
          backgroundColor: theme.palette.layoutBackground.main,
-         borderRadius: 9,
-         padding: 6,
-         boxShadow: `2px 2px 6px ${theme.palette.layoutBackground.main}, -2px 2px 6px ${theme.palette.layoutBackground.main}, 2px -2px 6px ${theme.palette.layoutBackground.main}, -2px -2px 6px ${theme.palette.layoutBackground.main}`,
+         borderRadius: 6,
+         padding: 3,
+         margin: 3,
+         boxShadow: `2px 2px 3px ${theme.palette.layoutBackground.main}, -2px 2px 3px ${theme.palette.layoutBackground.main}, 2px -2px 3px ${theme.palette.layoutBackground.main}, -2px -2px 3px ${theme.palette.layoutBackground.main}`,
       },
    })
 );
-
-// export const useToggleStyles = makeStyles(
-//    (theme: Theme) =>
-//       createStyles({
-//          root: {
-//             //color: red[100],
-//             // backgroundColor: theme.palette.layoutBackground.light,
-//             // '&$selected': {
-//             //    color: red[500],
-//             //    // backgroundColor: theme.palette.layoutBackground.dark,
-//             // },
-//             '&.Mui-selected': {
-//                color: theme.palette.layoutAccent.main,
-//                // backgroundColor: theme.palette.layoutBackground.dark,
-//             },
-//          },
-//          // selected: {},
-//       })
-//    //{ name: 'MuiToggleButton' }
-// );
 
 export const refreshSidebarContents = (
    dispatch: any,

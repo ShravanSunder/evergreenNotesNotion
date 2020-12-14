@@ -202,11 +202,13 @@ export const Layout = () => {
                   </div>
                   <div style={{ marginTop: 12 }}></div>
                   <ErrorBoundary FallbackComponent={ErrorFallback}>
-                     <TabContent
-                        debouncedStatus={debouncedSidebarStatus}
-                        tabsWithoutSiteLoading={tabsWithoutSiteLoading}
-                        tab={tab}
-                     />
+                     <div style={{ padding: 12 }}>
+                        <TabContent
+                           debouncedStatus={debouncedSidebarStatus}
+                           tabsWithoutSiteLoading={tabsWithoutSiteLoading}
+                           tab={tab}
+                        />
+                     </div>
                   </ErrorBoundary>
                   <div style={{ marginTop: 12 }}></div>
                </>
