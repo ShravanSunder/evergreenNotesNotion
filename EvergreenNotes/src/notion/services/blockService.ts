@@ -170,23 +170,23 @@ export const getColor = (
    if (color != null) {
       switch (color) {
          case NotionColor.Grey:
-            return isDark ? grey[900] : grey[600];
+            return isDark ? '#a0a3a4' : grey[600];
          case NotionColor.Brown:
-            return brown[400];
+            return '#9a887f';
          case NotionColor.Orange:
-            return deepOrange[400];
+            return '#eab279';
          case NotionColor.Yellow:
-            return yellow[600];
+            return '#e2b41b';
          case NotionColor.Teal:
-            return teal[400];
+            return '#42978b';
          case NotionColor.Blue:
-            return blue[400];
+            return '#6aa6c1';
          case NotionColor.Purple:
-            return purple[400];
+            return '#987cc1';
          case NotionColor.Pink:
-            return pink[400];
+            return '#d588b5';
          case NotionColor.Red:
-            return red[400];
+            return '#e35151';
          case NotionColor.GreyBg:
             return isDark ? '#454b4e' : '#ebeed';
          case NotionColor.BrownBg:
