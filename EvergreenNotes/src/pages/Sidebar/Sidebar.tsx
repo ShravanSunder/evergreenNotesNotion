@@ -117,6 +117,7 @@ export const Sidebar = () => {
                            border: '0px',
                            margin: 0,
                            padding: 0,
+                           borderRadius: 6,
                         }}>
                         <SnackbarProvider
                            ref={notistackRef}
@@ -148,8 +149,10 @@ export const Sidebar = () => {
                                  overflow: 'hidden',
                                  border: '1px',
                                  borderRadius: 6,
+                                 borderTopLeftRadius: 0,
+                                 borderTopRightRadius: 0,
                                  margin: 3,
-                                 marginTop: 1,
+                                 marginTop: -1,
                                  borderColor:
                                     theme.palette.layoutBackground.main,
                                  boxShadow: `1px 1px 3px ${theme.palette.layoutBackground.main}, -1px 1px 3px ${theme.palette.layoutBackground.main}, 1px -1px 3px ${theme.palette.layoutBackground.main}, -1px -1px 3px ${theme.palette.layoutBackground.main}`,
