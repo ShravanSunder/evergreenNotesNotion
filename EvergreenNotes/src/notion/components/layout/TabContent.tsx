@@ -82,7 +82,7 @@ const TabContentComponents = ({ tab }: { tab: LayoutTabs }) => {
             <SearchPane />
          </div>
          {tab === LayoutTabs.Events && <div>not implemented</div>}
-         {tab === LayoutTabs.Settings && <OptionsPane />}
+         {tab === LayoutTabs.Help && <OptionsPane />}
       </>
    );
 };

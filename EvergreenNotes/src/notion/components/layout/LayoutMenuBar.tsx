@@ -10,6 +10,7 @@ import {
    SettingsTwoTone,
    FontDownloadTwoTone,
    TocTwoTone,
+   HelpTwoTone,
 } from '@material-ui/icons/';
 import {
    Grid,
@@ -32,7 +33,7 @@ export enum LayoutTabs {
    TOC = 'Table Of Contents',
    Events = 'Events',
    Mentions = 'Mentions',
-   Settings = 'Settings',
+   Help = 'Help',
 }
 
 export const useStyles = makeStyles((theme: Theme) =>
@@ -160,9 +161,9 @@ export const LayoutMenuBar = ({
                            <FindInPageTwoTone></FindInPageTwoTone>
                         </ToggleButton>
                         <ToggleButton
-                           value={LayoutTabs.Settings}
+                           value={LayoutTabs.Help}
                            className={classes.toggleButton}>
-                           <SettingsTwoTone></SettingsTwoTone>
+                           <HelpTwoTone></HelpTwoTone>
                         </ToggleButton>
                      </ToggleButtonGroup>
                   </Grid>

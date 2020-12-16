@@ -175,7 +175,7 @@ export const Layout = () => {
    const wWidth = useWindowWidth({ wait: 250, leading: true });
 
    const tabsWithoutSiteLoading =
-      tab === LayoutTabs.Search || tab === LayoutTabs.Settings;
+      tab === LayoutTabs.Search || tab === LayoutTabs.Help;
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
