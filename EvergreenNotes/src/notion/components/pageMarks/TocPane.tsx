@@ -171,7 +171,7 @@ const calculateIndent = (
       currentBlock.block?.parent_id != null &&
       tree[currentBlock.block?.parent_id] != null
    ) {
-      offset += getOffset(tree, currentBlock.block!.parent_id!);
+      offset += getOffset(tree, currentBlock.block!.parent_id!) + 1;
    }
 
    return indent + offset;

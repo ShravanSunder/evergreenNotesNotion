@@ -41,7 +41,7 @@ const useStyles = makeStyles(() =>
    })
 );
 
-export const OptionsPane = () => {
+export const HelpPane = () => {
    let classes = useStyles();
 
    const [options, setOptions] = useState<AppOptions>();
@@ -59,44 +59,52 @@ export const OptionsPane = () => {
       }
    }, [options]);
 
-   const aboutText1 =
-      '📝 Notion is a great tool, wonderful to organize your life.  However there are a few things missing with regards to seeing the connection between your different notes and topics. ';
    const aboutText2 =
-      '🔰 Evergreen Notes brings the power of networked notes and combines it with Notions organization, powerful database system and beautiful design.It makes it easy to see your related notes use networked knowledge management to produce better work. All your references, backlinks relations and mentions are right in the sidebar.';
+      'Evergreen Notes brings the power of networked notes and combines it with Notions organization, powerful database system and beautiful design.It makes it easy to see your related notes use networked knowledge management to produce better work. All your references, backlinks relations and mentions are right in the sidebar.';
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
             <div className={classes.spacing}></div>
-            <Typography className={classes.sections} variant="h4">
-               <b>Information</b>
-            </Typography>
+            <Link
+               className={classes.sections}
+               variant="h4"
+               target="_blank"
+               href="https://www.notion.so/shravansunder/Evergreen-Notes-For-Notion-e35e6ed4dd5a45b19bf2de2bb86b1a7e">
+               <b>Go to the website to learn more! 👉🏾</b>
+            </Link>
             <div className={classes.paragraphs}></div>
             <Grid container style={{ marginLeft: 9 }}>
                <Grid item>
-                  <Typography>{aboutText1}</Typography>
-                  <div className={classes.paragraphs}></div>
-                  <div className={classes.paragraphs}></div>
-                  <Typography>{aboutText2}</Typography>
+                  <Typography>
+                     If you enjoy this, I would be grateful if you could rate
+                     the app!
+                  </Typography>
                   <div className={classes.paragraphs}></div>
                   <div className={classes.paragraphs}></div>
                   <Link
                      variant="body1"
                      target="_blank"
-                     href="https://www.notion.so/shravansunder/Evergreen-Notes-For-Notion-e35e6ed4dd5a45b19bf2de2bb86b1a7e">
-                     🤙🏾 Find out more here! Feel free to leave comments or email
-                     me any questions!
+                     href="https://www.producthunt.com/posts/evergreen-notes-for-notion">
+                     Product Hunt
+                  </Link>
+                  <div className={classes.paragraphs}></div>
+                  <Link
+                     variant="body1"
+                     target="_blank"
+                     href="https://chrome.google.com/webstore/detail/evergreen-notes-for-notio/chhpogndpjcgjbnbcodhdnilklfanmfh?hl=en-US">
+                     Chrome Store
                   </Link>
                </Grid>
             </Grid>
-            <></>
+            {/************* */}
             <div className={classes.spacing}></div>
             <Typography className={classes.sections} variant="h4">
                <b>Support and Donations</b>
             </Typography>
             <div className={classes.paragraphs}></div>
             <Grid container style={{ marginLeft: 9 }}>
-               <Grid item xs={12}>
+               <Grid item xs={12} style={{ marginLeft: 1 }}>
                   {!isDark && (
                      <a
                         href="https://www.buymeacoffee.com/ShravanSunder"
@@ -129,7 +137,7 @@ export const OptionsPane = () => {
                   </a>
                </Grid>
             </Grid>
-            <></>
+            {/************* */}
             <div className={classes.spacing}></div>
             <Typography className={classes.sections} variant="h4">
                <b>About</b>
@@ -176,4 +184,4 @@ export const OptionsPane = () => {
    );
 };
 
-export default OptionsPane;
+export default HelpPane;

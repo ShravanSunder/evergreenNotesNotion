@@ -19,7 +19,7 @@ export const SearchPane = React.lazy(
    () => import('aNotion/components/references/SearchPane')
 );
 export const OptionsPane = React.lazy(
-   () => import('aNotion/components/options/OptionsPane')
+   () => import('aNotion/components/options/HelpPane')
 );
 export const TableOfContentsPane = React.lazy(
    () => import('aNotion/components/pageMarks/TocPane')

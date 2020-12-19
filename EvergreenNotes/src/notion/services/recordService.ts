@@ -5,14 +5,13 @@ import {
    NotionUserRecord,
 } from 'aNotion/types/notionV3/notionRecordTypes';
 import * as blockTypes from 'aNotion/types/notionV3/notionBlockTypes';
-import { BlockTypeEnum, BlockProps } from '../types/notionV3/BlockTypes';
+import { BlockTypeEnum, BlockProps } from 'aNotion/types/notionV3/BlockTypes';
 import {
    NotionBlockRecord,
    INotionBlockModel,
 } from 'aNotion/models/NotionBlock';
 import { ContentBlocks } from 'aNotion/components/contents/contentState';
 import * as blockApi from 'aNotion/api/v3/blockApi';
-import { dispatchSaveMentionAction } from './serviceDispatch';
 
 export const getContent = (
    record: IRecordMap,

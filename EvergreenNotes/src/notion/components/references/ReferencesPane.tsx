@@ -222,7 +222,7 @@ const FullTitle = ({ refs }: { refs: ReferenceState }) => {
          {refs.status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>Unlinked References</b>
+                  <b>Search Results</b>
                </Typography>
                {fullTitle.map((u) => {
                   return <Reference key={u.id} refData={u}></Reference>;

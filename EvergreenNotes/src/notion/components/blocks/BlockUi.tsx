@@ -18,9 +18,14 @@ import {
 } from 'aNotion/services/blockService';
 import { ImageUi } from './ImageUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
-import { LoadingLine } from 'aNotion/components/common/Loading';
+import {
+   LoadingLine,
+   SomethingWentWrong,
+} from 'aNotion/components/common/Loading';
 import { TextUi } from 'aNotion/components/blocks/TextUi';
 import { blockStyles } from './blockStyles';
+import { ErrorBoundary } from 'aCommon/Components/ErrorFallback';
+import { BookmarkUi } from './BookmarkUI';
 
 interface IBlockUi {
    block: INotionBlockModel;
@@ -63,86 +68,93 @@ export const BlockUi = ({
    );
 
    return (
-      <Suspense fallback={LoadingLine}>
-         <div id="BlockUI" className={classes.block} style={blockStyle}>
-            {useGeneric && (
-               <TextUi
-                  variant={variant}
-                  block={block}
-                  semanticFilter={semanticFilter}
-                  interactive={interactive}
-                  style={blockStyle}></TextUi>
-            )}
-            {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
-            {block.type === BlockTypeEnum.Callout && (
-               <CalloutUi block={block} interactive={interactive}></CalloutUi>
-            )}
-            {block.type === BlockTypeEnum.Quote && (
-               <QuoteUi
-                  block={block}
-                  semanticFilter={semanticFilter}
-                  interactive={interactive}
-                  style={blockStyle}
-               />
-            )}
-            {block.type === BlockTypeEnum.ButtetedList && (
-               <BulletUi
-                  block={block}
-                  semanticFilter={semanticFilter}
-                  style={blockStyle}
-                  interactive={interactive}
-               />
-            )}
-            {block.type === BlockTypeEnum.NumberedList && (
-               <NumberUi
-                  block={block}
-                  semanticFilter={semanticFilter}
-                  style={blockStyle}
-                  interactive={interactive}
-               />
-            )}
-            {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
-            {block.type === BlockTypeEnum.Page && (
-               <PageUi
-                  block={block}
-                  style={style}
-                  inlineBlock={renderPagesAsInline}
-                  showContent={!renderPagesAsInline}
-                  interactive={interactive}
-                  semanticFilter={semanticFilter}
-               />
-            )}
-            {block.type === BlockTypeEnum.CollectionViewPage && (
-               <PageUi
-                  block={block}
-                  style={style}
-                  inlineBlock={renderPagesAsInline}
-                  showContent={!renderPagesAsInline}
-                  interactive={interactive}
-               />
-            )}
-            {block.type === BlockTypeEnum.CollectionViewInline && (
-               <PageUi
-                  block={block}
-                  style={style}
-                  inlineBlock={renderPagesAsInline}
-                  showContent={!renderPagesAsInline}
-                  interactive={interactive}
-               />
-            )}
-            {block.type === BlockTypeEnum.Toggle && (
-               <ToggleUi
-                  block={block}
-                  semanticFilter={semanticFilter}
-                  interactive={interactive}
-                  style={blockStyle}
-                  disableToggles={disableToggles}
-               />
-            )}
-            {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
-            {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
-         </div>
-      </Suspense>
+      <ErrorBoundary FallbackComponent={SomethingWentWrong}>
+         <Suspense fallback={LoadingLine}>
+            <div id="BlockUI" className={classes.block} style={blockStyle}>
+               {useGeneric && (
+                  <TextUi
+                     variant={variant}
+                     block={block}
+                     semanticFilter={semanticFilter}
+                     interactive={interactive}
+                     style={blockStyle}></TextUi>
+               )}
+               {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
+               {block.type === BlockTypeEnum.Callout && (
+                  <CalloutUi
+                     block={block}
+                     interactive={interactive}></CalloutUi>
+               )}
+               {block.type === BlockTypeEnum.Quote && (
+                  <QuoteUi
+                     block={block}
+                     semanticFilter={semanticFilter}
+                     interactive={interactive}
+                     style={blockStyle}
+                  />
+               )}
+               {block.type === BlockTypeEnum.ButtetedList && (
+                  <BulletUi
+                     block={block}
+                     semanticFilter={semanticFilter}
+                     style={blockStyle}
+                     interactive={interactive}
+                  />
+               )}
+               {block.type === BlockTypeEnum.NumberedList && (
+                  <NumberUi
+                     block={block}
+                     semanticFilter={semanticFilter}
+                     style={blockStyle}
+                     interactive={interactive}
+                  />
+               )}
+               {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
+               {block.type === BlockTypeEnum.Page && (
+                  <PageUi
+                     block={block}
+                     style={style}
+                     inlineBlock={renderPagesAsInline}
+                     showContent={!renderPagesAsInline}
+                     interactive={interactive}
+                     semanticFilter={semanticFilter}
+                  />
+               )}
+               {block.type === BlockTypeEnum.CollectionViewPage && (
+                  <PageUi
+                     block={block}
+                     style={style}
+                     inlineBlock={renderPagesAsInline}
+                     showContent={!renderPagesAsInline}
+                     interactive={interactive}
+                  />
+               )}
+               {block.type === BlockTypeEnum.CollectionViewInline && (
+                  <PageUi
+                     block={block}
+                     style={style}
+                     inlineBlock={renderPagesAsInline}
+                     showContent={!renderPagesAsInline}
+                     interactive={interactive}
+                  />
+               )}
+               {block.type === BlockTypeEnum.Toggle && (
+                  <ToggleUi
+                     block={block}
+                     semanticFilter={semanticFilter}
+                     interactive={interactive}
+                     style={blockStyle}
+                     disableToggles={disableToggles}
+                  />
+               )}
+               {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
+               {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
+               {block.type === BlockTypeEnum.Bookmark && (
+                  <BookmarkUi block={block} />
+               )}
+            </div>
+         </Suspense>
+      </ErrorBoundary>
    );
 };
 export default BlockUi;
@@ -152,7 +164,6 @@ const useVariant = (block: INotionBlockModel) => {
    switch (block.type) {
       case BlockTypeEnum.Text:
       case BlockTypeEnum.Date:
-      case BlockTypeEnum.Bookmark:
       case BlockTypeEnum.Page:
          variant = 'body1';
          break;
@@ -165,6 +176,13 @@ const useVariant = (block: INotionBlockModel) => {
          break;
       case BlockTypeEnum.Header3:
          variant = 'h6';
+         break;
+      case BlockTypeEnum.Equation:
+      case BlockTypeEnum.File:
+      case BlockTypeEnum.PDF:
+      case BlockTypeEnum.Video:
+      case BlockTypeEnum.Audio:
+         variant = 'caption';
          break;
    }
    return variant;

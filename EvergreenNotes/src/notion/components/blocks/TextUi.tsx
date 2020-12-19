@@ -395,7 +395,7 @@ const parseSegment = (
       case SemanticFormatEnum.InlineCode:
          segmentStyle.fontFamily = 'Consolas';
          if (segmentStyle.backgroundColor == null) {
-            segmentStyle.background = theme.palette.referenceAccent.light;
+            segmentStyle.background = theme.palette.referenceBackground.light;
          }
          if (segmentStyle.color == null) {
             segmentStyle.color = theme.palette.notionColors.inlineCode;
