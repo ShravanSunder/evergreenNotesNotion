@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useEffect, useState, Suspense } from 'react';
+import React, { useEffect, useState, Suspense, useMemo } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { Typography, makeStyles, createStyles, Theme } from '@material-ui/core';
@@ -120,9 +120,18 @@ export const ReferencesPane = () => {
 export default ReferencesPane;
 
 const Backlinks = ({ refs }: { refs: ReferenceState }) => {
-   let classes = useStyles();
+   const classes = useStyles();
 
-   let backlinks = refs.pageReferences.backlinks;
+   const backlinks = refs.pageReferences.backlinks;
+   const backlinksMemo = useMemo(
+      () =>
+         backlinks.map((u) => {
+            return (
+               <Backlink key={u.backlinkBlock.blockId} backlink={u}></Backlink>
+            );
+         }),
+      [backlinks]
+   );
 
    return (
       <Suspense fallback={LoadingSection}>
@@ -134,13 +143,7 @@ const Backlinks = ({ refs }: { refs: ReferenceState }) => {
                <Typography className={classes.sections} variant="h5">
                   <b>Backlinks</b>
                </Typography>
-               {backlinks.map((u) => {
-                  return (
-                     <Backlink
-                        key={u.backlinkBlock.blockId}
-                        backlink={u}></Backlink>
-                  );
-               })}
+               {backlinksMemo}
                {backlinks.length === 0 && <NothingToFind />}
             </>
          )}
@@ -149,9 +152,25 @@ const Backlinks = ({ refs }: { refs: ReferenceState }) => {
 };
 
 const Relations = ({ refs }: { refs: ReferenceState }) => {
-   let classes = useStyles();
+   const classes = useStyles();
 
-   let relations = refs.pageReferences.relations;
+   const relations = refs.pageReferences.relations;
+   const relationsMemo = useMemo(
+      () =>
+         relations.map((u) => {
+            let link: BacklinkRecordModel = {
+               backlinkBlock: u,
+               path: [u],
+            };
+            return (
+               <Backlink
+                  key={u.blockId}
+                  backlink={link}
+                  showInlineBlock={false}></Backlink>
+            );
+         }),
+      [relations]
+   );
 
    return (
       <Suspense fallback={LoadingSection}>
@@ -163,18 +182,7 @@ const Relations = ({ refs }: { refs: ReferenceState }) => {
                <Typography className={classes.sections} variant="h5">
                   <b>Database Relations</b>
                </Typography>
-               {relations.map((u) => {
-                  let link: BacklinkRecordModel = {
-                     backlinkBlock: u,
-                     path: [u],
-                  };
-                  return (
-                     <Backlink
-                        key={u.blockId}
-                        backlink={link}
-                        showInlineBlock={false}></Backlink>
-                  );
-               })}
+               {relationsMemo}
                {relations.length === 0 && <NothingToFind />}
             </>
          )}
@@ -183,10 +191,17 @@ const Relations = ({ refs }: { refs: ReferenceState }) => {
 };
 
 const Mentions = ({ marks }: { marks: PageMarkState }) => {
-   let classes = useStyles();
+   const classes = useStyles();
 
-   let mentions = marks.pageMarks?.pageMentions ?? [];
-   let status = marks.status;
+   const mentions = marks.pageMarks?.pageMentions ?? [];
+   const status = marks.status;
+   const mentionsMemo = useMemo(
+      () =>
+         mentions.map((u) => {
+            return <PageMention key={u.blockId} mentionBlock={u}></PageMention>;
+         }),
+      [mentions]
+   );
 
    return (
       <Suspense fallback={LoadingSection}>
@@ -195,13 +210,7 @@ const Mentions = ({ marks }: { marks: PageMarkState }) => {
                <Typography className={classes.sections} variant="h5">
                   <b>@Mentions in Page</b>
                </Typography>
-               {mentions.map((u) => {
-                  return (
-                     <PageMention
-                        key={u.blockId}
-                        mentionBlock={u}></PageMention>
-                  );
-               })}
+               {mentionsMemo}
                {mentions.length === 0 && <NothingToFind />}
             </>
          )}
@@ -210,9 +219,16 @@ const Mentions = ({ marks }: { marks: PageMarkState }) => {
 };
 
 const FullTitle = ({ refs }: { refs: ReferenceState }) => {
-   let classes = useStyles();
+   const classes = useStyles();
 
-   let fullTitle = refs.pageReferences.references.fullTitle;
+   const fullTitle = refs.pageReferences.references.fullTitle;
+   const fullTitleMemo = useMemo(
+      () =>
+         fullTitle.map((u) => {
+            return <Reference key={u.id} refData={u}></Reference>;
+         }),
+      [fullTitle]
+   );
 
    return (
       <Suspense fallback={LoadingSection}>
@@ -224,9 +240,7 @@ const FullTitle = ({ refs }: { refs: ReferenceState }) => {
                <Typography className={classes.sections} variant="h5">
                   <b>Search Results</b>
                </Typography>
-               {fullTitle.map((u) => {
-                  return <Reference key={u.id} refData={u}></Reference>;
-               })}
+               {fullTitleMemo}
                {fullTitle.length === 0 && <NothingToFind />}
             </>
          )}
@@ -235,9 +249,16 @@ const FullTitle = ({ refs }: { refs: ReferenceState }) => {
 };
 
 const Related = ({ refs }: { refs: ReferenceState }) => {
-   let classes = useStyles();
+   const classes = useStyles();
 
-   let data = refs.pageReferences.references.related;
+   const related = refs.pageReferences.references.related;
+   const relatedMemo = useMemo(
+      () =>
+         related.map((u) => {
+            return <Reference key={u.id} refData={u}></Reference>;
+         }),
+      [related]
+   );
 
    return (
       <Suspense fallback={LoadingSection}>
@@ -249,10 +270,8 @@ const Related = ({ refs }: { refs: ReferenceState }) => {
                <Typography className={classes.sections} variant="h5">
                   <b>Similar Notes</b>
                </Typography>
-               {data.map((u) => {
-                  return <Reference key={u.id} refData={u}></Reference>;
-               })}
-               {data.length === 0 && <NothingToFind />}
+               {relatedMemo}
+               {related.length === 0 && <NothingToFind />}
             </>
          )}
       </Suspense>

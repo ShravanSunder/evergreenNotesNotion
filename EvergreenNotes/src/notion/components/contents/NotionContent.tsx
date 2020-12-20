@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect, Suspense, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { TAppDispatchWithPromise } from 'aNotion/providers/appDispatch';
@@ -59,7 +59,7 @@ const NotionContent = ({
    let status = thunkStatus.idle;
    const dispatch: TAppDispatchWithPromise<any> = useDispatch();
 
-   let content: INotionBlockModel[];
+   let content: INotionBlockModel[] = [];
    if (blockContent == null && parentBlockId != null) {
       content = contentDataFromState?.[parentBlockId]?.content;
       status = contentDataFromState?.[parentBlockId]?.status;
@@ -90,32 +90,20 @@ const NotionContent = ({
       return () => {};
    }, [parentBlockId, status, content, dispatch]);
 
+   const contentMemo = useContentMemo(
+      content,
+      interactive,
+      semanticFilter,
+      style,
+      renderPagesAsInline,
+      depth,
+      maxDepth
+   );
+
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
-            {status === thunkStatus.fulfilled && (
-               <>
-                  {content.map((p, i) => (
-                     <React.Fragment key={p.blockId}>
-                        <BlockUi
-                           interactive={interactive}
-                           block={p}
-                           index={i}
-                           semanticFilter={semanticFilter}
-                           style={style}
-                           renderPagesAsInline={renderPagesAsInline}></BlockUi>
-                        {(depth ?? 1) < (maxDepth ?? 6) && (
-                           <ContentChildren
-                              block={p}
-                              depth={depth ?? 1}
-                              semanticFilter={semanticFilter}
-                              interactive={interactive}
-                              style={style}></ContentChildren>
-                        )}
-                     </React.Fragment>
-                  ))}
-               </>
-            )}
+            {status === thunkStatus.fulfilled && <>{contentMemo}</>}
             {status === thunkStatus.pending && <LoadingSection />}
          </Suspense>
       </ErrorBoundary>
@@ -171,5 +159,39 @@ const ContentChildren = ({
                interactive={interactive}></NotionContent>
          </Grid>
       </Grid>
+   );
+};
+
+const useContentMemo = (
+   content: INotionBlockModel[],
+   interactive: boolean,
+   semanticFilter: SemanticFormatEnum[] | undefined,
+   style: React.CSSProperties | undefined,
+   renderPagesAsInline: boolean,
+   depth: number | undefined,
+   maxDepth: number | undefined
+) => {
+   return useMemo(
+      () =>
+         (content ?? []).map((p, i) => (
+            <React.Fragment key={p.blockId}>
+               <BlockUi
+                  interactive={interactive}
+                  block={p}
+                  index={i}
+                  semanticFilter={semanticFilter}
+                  style={style}
+                  renderPagesAsInline={renderPagesAsInline}></BlockUi>
+               {(depth ?? 1) < (maxDepth ?? 6) && (
+                  <ContentChildren
+                     block={p}
+                     depth={depth ?? 1}
+                     semanticFilter={semanticFilter}
+                     interactive={interactive}
+                     style={style}></ContentChildren>
+               )}
+            </React.Fragment>
+         )),
+      [content, interactive, semanticFilter, style, renderPagesAsInline, depth]
    );
 };

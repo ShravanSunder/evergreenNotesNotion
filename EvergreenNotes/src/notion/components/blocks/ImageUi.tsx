@@ -7,6 +7,7 @@ import { ErrorBoundary, ErrorFallback } from 'aCommon/Components/ErrorFallback';
 import { LoadingImage } from '../common/Loading';
 import { Segment } from 'aNotion/types/notionV3/semanticStringTypes';
 import { TextSegment } from './TextSegment';
+import { CaptionUi } from './CaptionUI';
 
 export const ImageUi = ({ block }: { block: INotionBlockModel }) => {
    const classes = blockStyles();
@@ -40,18 +41,11 @@ export const ImageUi = ({ block }: { block: INotionBlockModel }) => {
                <Grid item>
                   <div style={{ marginTop: theme.spacing(1) }}></div>
                </Grid>
-               <Grid item>
-                  {caption != null &&
-                     caption.length > 0 &&
-                     caption.map((s, i) => (
-                        <TextSegment
-                           key={i}
-                           segment={s}
-                           variant="caption"
-                           incrementSegmentCount={() => {}}
-                           interactive={false}></TextSegment>
-                     ))}
-               </Grid>
+               {caption != null && (
+                  <Grid item>
+                     <CaptionUi captions={caption} />
+                  </Grid>
+               )}
                <Grid item>
                   <div style={{ marginTop: theme.spacing(2) }}></div>
                </Grid>

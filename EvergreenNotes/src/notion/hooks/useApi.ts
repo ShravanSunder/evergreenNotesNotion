@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 
-export type UseApiPromise<TResult, TInput> = (
+export type TUseApiPromise<TResult, TInput> = (
    input: TInput
 ) => [Promise<TResult>, AbortController];
 
 export function useApi<TResult, TInput>(
-   apiCallback: UseApiPromise<TResult, TInput>,
+   apiCallback: TUseApiPromise<TResult, TInput>,
    debounce: number = 300,
    maxWait: number = 6000
 ): [

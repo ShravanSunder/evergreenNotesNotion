@@ -7,7 +7,7 @@ import {
 } from 'aNotion/providers/storeSelectors';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { BlockUi } from '../blocks/BlockUi';
 import { PageUi } from '../blocks/PageUi';
@@ -60,10 +60,18 @@ export const TocPane = () => {
       }
    }, [headers, status, pageBlock?.blockId]);
 
-   let previousHeaderIndent: TIndentType = {
+   const previousHeaderIndent: TIndentType = {
       level: 0,
       type: BlockTypeEnum.Header1,
    };
+
+   const headersMemo = useHeadersMemo(
+      headers,
+      tree,
+      previousHeaderIndent,
+      hasH1,
+      hasH2
+   );
 
    const toc = (
       <Grid container>
@@ -83,42 +91,7 @@ export const TocPane = () => {
                   <Grid item xs={12} className={classes.spacing}></Grid>
                </>
             )}
-         {headers.map((h, i) => {
-            if (h.type === BlockTypeEnum.Header1) {
-               const indent: number = 0;
-
-               const cIndent = calculateIndent(indent, h, tree);
-
-               return <TocItems h={h} cIndent={cIndent} />;
-            } else if (h.type === BlockTypeEnum.Header2) {
-               const indent: number = hasH1 ? 1 : 0;
-
-               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
-               const cIndent = calculateIndent(indent, h, tree);
-
-               return <TocItems h={h} cIndent={cIndent} />;
-            } else if (h.type === BlockTypeEnum.Header3) {
-               let indent = 0;
-               if (hasH1 && hasH2) {
-                  indent = 2;
-               } else if (hasH1 || hasH2) {
-                  indent = 1;
-               }
-
-               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
-               const cIndent = calculateIndent(indent, h, tree);
-
-               return <TocItems h={h} cIndent={cIndent} />;
-            } else if (h.type === BlockTypeEnum.Toggle) {
-               let indent = previousHeaderIndent.level;
-
-               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
-               const cIndent = calculateIndent(indent, h, tree);
-
-               return <TocItems h={h} cIndent={cIndent} />;
-            }
-            return null;
-         })}
+         {headersMemo}
       </Grid>
    );
 
@@ -223,4 +196,52 @@ const setPreviousHeaderIndent = (
 ) => {
    previousHeaderIndent.level = indent;
    previousHeaderIndent.type = h.type;
+};
+
+const useHeadersMemo = (
+   headers: INotionBlockModel[],
+   tree: TLimitedIndentTree,
+   previousHeaderIndent: TIndentType,
+   hasH1: boolean,
+   hasH2: boolean
+) => {
+   return useMemo(
+      () =>
+         headers.map((h, i) => {
+            if (h.type === BlockTypeEnum.Header1) {
+               const indent: number = 0;
+               const cIndent = calculateIndent(indent, h, tree);
+
+               return <TocItems key={i} h={h} cIndent={cIndent} />;
+            } else if (h.type === BlockTypeEnum.Header2) {
+               const indent: number = hasH1 ? 1 : 0;
+
+               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
+               const cIndent = calculateIndent(indent, h, tree);
+
+               return <TocItems key={i} h={h} cIndent={cIndent} />;
+            } else if (h.type === BlockTypeEnum.Header3) {
+               let indent = 0;
+               if (hasH1 && hasH2) {
+                  indent = 2;
+               } else if (hasH1 || hasH2) {
+                  indent = 1;
+               }
+
+               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
+               const cIndent = calculateIndent(indent, h, tree);
+
+               return <TocItems key={i} h={h} cIndent={cIndent} />;
+            } else if (h.type === BlockTypeEnum.Toggle) {
+               let indent = previousHeaderIndent.level;
+
+               setPreviousHeaderIndent(previousHeaderIndent, indent, h);
+               const cIndent = calculateIndent(indent, h, tree);
+
+               return <TocItems key={i} h={h} cIndent={cIndent} />;
+            }
+            return null;
+         }),
+      [headers, previousHeaderIndent, tree, hasH1, hasH2]
+   );
 };

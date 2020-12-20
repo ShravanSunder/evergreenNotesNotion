@@ -5,6 +5,7 @@ import React, {
    useState,
    SyntheticEvent,
    Suspense,
+   useMemo,
 } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
@@ -37,7 +38,7 @@ import {
    defaultSearchReferences,
 } from 'aNotion/components/references/referenceState';
 import { NothingToFind, LoadingSection } from '../common/Loading';
-import { useApi, UseApiPromise } from 'aNotion/hooks/useApiPromise';
+import { useApi, TUseApiPromise } from 'aNotion/hooks/useApi';
 import { searchNotion } from 'aNotion/services/referenceService';
 import {
    usePopupState,
@@ -64,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
    })
 );
-const search: UseApiPromise<SearchReferences, string> = (
+const search: TUseApiPromise<SearchReferences, string> = (
    query: string | undefined
 ): [Promise<SearchReferences>, AbortController] => {
    let spaceId = getAppState(currentPageSelector).currentPageData?.spaceId;
@@ -104,6 +105,15 @@ export const SearchPane = () => {
       setText(text);
    };
 
+   const handleKeyDown = (event: any) => {
+      let text = event.target.value;
+
+      if (event.keyCode === 13) {
+         setSearchText(text);
+         setText(text);
+      }
+   };
+
    useEffect(() => {
       if (status === thunkStatus.fulfilled && searchText != null) {
          dispatch(referenceActions.addSearchQueries(searchText));
@@ -111,6 +121,23 @@ export const SearchPane = () => {
    }, [status, searchText, dispatch]);
 
    result = result ?? defaultSearchReferences();
+
+   const searchQueriesMemo = useMemo(
+      () =>
+         searchQueries.map((s) => {
+            const handleHistoryClick = (e: any) => {
+               setSearchText(s);
+               setText(s);
+               popupState.close();
+            };
+            return (
+               <ListItem key={s} button onClick={handleHistoryClick}>
+                  <ListItemText primary={s} />
+               </ListItem>
+            );
+         }),
+      [searchQueries]
+   );
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -123,6 +150,7 @@ export const SearchPane = () => {
                      size="small"
                      helperText="Enter text to search"
                      variant="outlined"
+                     onKeyDown={handleKeyDown}
                      onChange={handleTextChanged}></TextField>
                </div>
             </Grid>
@@ -157,20 +185,7 @@ export const SearchPane = () => {
                   {'  '}
                   <strong>Sᴇᴀʀᴄʜ Hɪsᴛᴏʀʏ</strong>
                </Typography>
-               <List dense>
-                  {searchQueries.map((s) => {
-                     const handleHistoryClick = (e: any) => {
-                        setSearchText(s);
-                        setText(s);
-                        popupState.close();
-                     };
-                     return (
-                        <ListItem key={s} button onClick={handleHistoryClick}>
-                           <ListItemText primary={s} />
-                        </ListItem>
-                     );
-                  })}
-               </List>
+               <List dense>{searchQueriesMemo}</List>
             </div>
          </Popover>
          <FullReferences
@@ -202,9 +217,16 @@ const FullReferences = ({
    searchResults: SearchReferences;
    status: thunkStatus;
 }) => {
-   let classes = useStyles();
+   const classes = useStyles();
 
-   let fullTitle = searchResults.fullTitle;
+   const fullTitle = searchResults.fullTitle;
+   const fullTitleMemo = useMemo(
+      () =>
+         fullTitle.map((u) => {
+            return <Reference key={u.id} refData={u}></Reference>;
+         }),
+      [fullTitle]
+   );
 
    return (
       <Suspense fallback={LoadingSection}>
@@ -214,9 +236,7 @@ const FullReferences = ({
                <Typography className={classes.sections} variant="h5">
                   <b>Sᴇᴀʀᴄʜ Rᴇsᴜʟᴛs</b>
                </Typography>
-               {fullTitle.map((u) => {
-                  return <Reference key={u.id} refData={u}></Reference>;
-               })}
+               {fullTitleMemo}
                {fullTitle.length === 0 && <NothingToFind />}
             </>
          )}
@@ -231,9 +251,15 @@ const RelatedReferences = ({
    searchResults: SearchReferences;
    status: thunkStatus;
 }) => {
-   let classes = useStyles();
-
-   let data = searchResults.related;
+   const classes = useStyles();
+   const related = searchResults.related;
+   const relatedMemo = useMemo(
+      () =>
+         related.map((u) => {
+            return <Reference key={u.id} refData={u}></Reference>;
+         }),
+      [related]
+   );
 
    return (
       <Suspense fallback={LoadingSection}>
@@ -243,10 +269,8 @@ const RelatedReferences = ({
                <Typography className={classes.sections} variant="h5">
                   <b>Sɪᴍɪʟᴀʀ Nᴏᴛᴇs</b>
                </Typography>
-               {data.map((u) => {
-                  return <Reference key={u.id} refData={u}></Reference>;
-               })}
-               {data.length === 0 && <NothingToFind />}
+               {relatedMemo}
+               {related.length === 0 && <NothingToFind />}
             </>
          )}
       </Suspense>

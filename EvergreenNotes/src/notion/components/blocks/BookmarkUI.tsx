@@ -9,6 +9,7 @@ import {
 } from 'aNotion/types/notionV3/semanticStringTypes';
 import { Bookmark } from 'aNotion/types/notionV3/notionBlockTypes';
 import { TextSegment } from './TextSegment';
+import { CaptionUi } from './CaptionUI';
 
 export const BookmarkUi = ({
    block,
@@ -66,18 +67,11 @@ export const BookmarkUi = ({
                      <Grid item>
                         <div style={{ marginTop: theme.spacing(2) }}></div>
                      </Grid>
-                     <Grid item xs={11}>
-                        {caption != null &&
-                           caption.length > 0 &&
-                           caption.map((s, i) => (
-                              <TextSegment
-                                 key={i}
-                                 segment={s}
-                                 variant="caption"
-                                 incrementSegmentCount={() => {}}
-                                 interactive={false}></TextSegment>
-                           ))}
-                     </Grid>
+                     {caption != null && (
+                        <Grid item>
+                           <CaptionUi captions={caption} />
+                        </Grid>
+                     )}
                   </Grid>
                </Box>
             )}

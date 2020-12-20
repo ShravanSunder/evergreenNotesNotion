@@ -1,4 +1,4 @@
-import React, { MouseEvent, Suspense, useState } from 'react';
+import React, { MouseEvent, Suspense, useState, useMemo } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
@@ -73,9 +73,9 @@ export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
 };
 
 const parse = (textByContext: string[]) => {
-   return (
-      <React.Fragment>
-         {textByContext.map((f, i) => {
+   const text = useMemo(
+      () =>
+         textByContext.map((f, i) => {
             if (i % 2 === 1) {
                return <strong key={f + i}>{f}</strong>;
             } else {
@@ -85,9 +85,11 @@ const parse = (textByContext: string[]) => {
                   </React.Fragment>
                );
             }
-         })}
-      </React.Fragment>
+         }),
+      [textByContext]
    );
+
+   return <>{text}</>;
 };
 
 export const getTitle = (title: string, size: number = 100) => {
