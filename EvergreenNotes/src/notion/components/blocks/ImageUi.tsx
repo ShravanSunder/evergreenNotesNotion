@@ -37,10 +37,10 @@ export const ImageUi = ({ block }: { block: INotionBlockModel }) => {
                      </Box>
                   </div>
                </Grid>
-               <Grid>
-                  <div style={{ paddingTop: theme.spacing(1) }}></div>
+               <Grid item>
+                  <div style={{ marginTop: theme.spacing(1) }}></div>
                </Grid>
-               <Grid>
+               <Grid item>
                   {caption != null &&
                      caption.length > 0 &&
                      caption.map((s, i) => (
@@ -52,8 +52,8 @@ export const ImageUi = ({ block }: { block: INotionBlockModel }) => {
                            interactive={false}></TextSegment>
                      ))}
                </Grid>
-               <Grid>
-                  <div style={{ paddingTop: theme.spacing(2) }}></div>
+               <Grid item>
+                  <div style={{ marginTop: theme.spacing(2) }}></div>
                </Grid>
             </Grid>
          </Suspense>

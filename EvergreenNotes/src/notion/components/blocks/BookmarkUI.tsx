@@ -46,7 +46,7 @@ export const BookmarkUi = ({
       <>
          {bookmark?.properties?.link != null &&
             bookmark.properties.description != null && (
-               <Box onClick={handleClick} className={classes.embed}>
+               <Box onClick={handleClick} className={classes.embed} border={1}>
                   <Grid
                      id="BookmarkUi"
                      container
@@ -55,16 +55,16 @@ export const BookmarkUi = ({
                      <Grid item xs={11}>
                         {textUIComponent}
                      </Grid>
-                     <Grid>
-                        <div style={{ paddingTop: theme.spacing(1) }}></div>
+                     <Grid item>
+                        <div style={{ marginTop: theme.spacing(1) }}></div>
                      </Grid>
                      <Grid item xs={11}>
                         <Typography variant="body2">
                            {bookmark.properties.description[0][0]}
                         </Typography>
                      </Grid>
-                     <Grid>
-                        <div style={{ paddingTop: theme.spacing(2) }}></div>
+                     <Grid item>
+                        <div style={{ marginTop: theme.spacing(2) }}></div>
                      </Grid>
                      <Grid item xs={11}>
                         {caption != null &&

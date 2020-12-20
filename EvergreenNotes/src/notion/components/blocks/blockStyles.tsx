@@ -60,7 +60,9 @@ export const blockStyles = makeStyles((theme: Theme) =>
       },
       embed: {
          padding: theme.spacing(1),
-         backgroundColor: theme.palette.layoutBackground.main,
+         borderWidth: theme.spacing(0.5),
+         borderColor: theme.palette.layoutBackground.main,
+         //backgroundColor: theme.palette.layoutBackground.main,
          cursor: 'pointer',
          margin: 0,
          marginTop: theme.spacing(0.5),
