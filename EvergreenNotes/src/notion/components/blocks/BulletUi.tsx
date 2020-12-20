@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
-import * as ReactIs from 'react-is';
 
 export const BulletUi = ({
    block,

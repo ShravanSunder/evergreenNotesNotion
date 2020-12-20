@@ -26,6 +26,7 @@ import { TextUi } from 'aNotion/components/blocks/TextUi';
 import { blockStyles } from './blockStyles';
 import { ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { BookmarkUi } from './BookmarkUI';
+import { EmbedUi } from './EmbedUI';
 
 interface IBlockUi {
    block: INotionBlockModel;
@@ -59,13 +60,17 @@ export const BlockUi = ({
       variant != null &&
       block.type !== BlockTypeEnum.Page &&
       block.type !== BlockTypeEnum.CollectionViewPage;
-   const hasChildren = block.contentIds.length > 0;
 
    const blockStyle: React.CSSProperties = inheritAndCombineStyles(
       style,
       backgroundColor,
       color
    );
+
+   const isEmbedBlock =
+      block.type === BlockTypeEnum.Audio ||
+      block.type === BlockTypeEnum.Video ||
+      block.type === BlockTypeEnum.File;
 
    return (
       <ErrorBoundary FallbackComponent={SomethingWentWrong}>
@@ -152,6 +157,7 @@ export const BlockUi = ({
                {block.type === BlockTypeEnum.Bookmark && (
                   <BookmarkUi block={block} />
                )}
+               {isEmbedBlock && <EmbedUi block={block} />}
             </div>
          </Suspense>
       </ErrorBoundary>
@@ -176,13 +182,6 @@ const useVariant = (block: INotionBlockModel) => {
          break;
       case BlockTypeEnum.Header3:
          variant = 'h6';
-         break;
-      case BlockTypeEnum.Equation:
-      case BlockTypeEnum.File:
-      case BlockTypeEnum.PDF:
-      case BlockTypeEnum.Video:
-      case BlockTypeEnum.Audio:
-         variant = 'caption';
          break;
    }
    return variant;

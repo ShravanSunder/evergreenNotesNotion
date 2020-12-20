@@ -289,7 +289,21 @@ export type TBasicBlockUnion =
 /**
  * Image block.
  */
-export interface IImage extends IEmptyBlock {
+export interface IBaseSourceBlock extends IEmptyBlock {
+   properties?: {
+      /**
+       * Normally, the same as `display_source` in {@link BlockFormat}.
+       * When they are different, use `display_source`.
+       */
+      source?: [[base.NotionSecureUrl | base.PublicUrl]];
+      title?: [[string]];
+   };
+}
+
+/**
+ * Image block.
+ */
+export interface IImage extends IBaseSourceBlock {
    type: BlockTypeEnum.Image;
    properties?: {
       /**
@@ -306,7 +320,7 @@ export interface IImage extends IEmptyBlock {
 /**
  * Video block.
  */
-export interface IVideo extends IEmptyBlock {
+export interface IVideo extends IBaseSourceBlock {
    type: BlockTypeEnum.Video;
    properties?: {
       /**
@@ -323,12 +337,29 @@ export interface IVideo extends IEmptyBlock {
 /**
  * Audio block.
  */
-export interface IAudio extends IEmptyBlock {
+export interface IAudio extends IBaseSourceBlock {
    type: BlockTypeEnum.Audio;
    properties?: {
       source: [[base.NotionSecureUrl | base.PublicUrl]];
    };
    /**  Defined if the user uploaded an audio file. */
+   file_ids?: base.UUID[];
+}
+
+/**
+ * File block.
+ */
+export interface IFile extends IEmptyBlock {
+   type: BlockTypeEnum.File;
+   properties?: {
+      /** Filename. */
+      title: [[string]];
+      /** URL of the file. */
+      source: [[base.NotionSecureUrl | base.PublicUrl]];
+      /** File size, defined if the user uploaded a file. */
+      size?: [[string]];
+   };
+   /**  Defined if the user uploaded a file. */
    file_ids?: base.UUID[];
 }
 
@@ -357,21 +388,4 @@ export interface ICode extends IBaseTextBlock {
       title?: Segment[];
       language?: [[string]];
    };
-}
-
-/**
- * File block.
- */
-export interface IFile extends IEmptyBlock {
-   type: BlockTypeEnum.File;
-   properties?: {
-      /** Filename. */
-      title: [[string]];
-      /** URL of the file. */
-      source: [[base.NotionSecureUrl | base.PublicUrl]];
-      /** File size, defined if the user uploaded a file. */
-      size?: [[string]];
-   };
-   /**  Defined if the user uploaded a file. */
-   file_ids?: base.UUID[];
 }
