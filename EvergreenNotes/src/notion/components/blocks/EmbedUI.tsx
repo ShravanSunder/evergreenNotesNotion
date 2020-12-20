@@ -43,8 +43,9 @@ export const EmbedUi = ({
                   <Grid>
                      {caption != null &&
                         caption.length > 0 &&
-                        caption.map((s) => (
+                        caption.map((s, i) => (
                            <TextSegment
+                              key={i}
                               segment={s}
                               variant="caption"
                               incrementSegmentCount={() => {}}
