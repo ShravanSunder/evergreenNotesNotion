@@ -38,13 +38,13 @@ const Layout = React.lazy(() => import('aNotion/components/layout/Layout'));
 
 const useStyles = makeStyles((theme: Theme) => {
    const snackbarRoot = {
-      color: grey[500] + '!important',
-      maxWidth: 290,
+      color: grey[700] + '!important',
+      maxWidth: 280,
       zIndex: 1000,
    };
 
    return createStyles({
-      info: { backgroundColor: grey[100] + '!important', ...snackbarRoot },
+      info: { backgroundColor: grey[200] + '!important', ...snackbarRoot },
       success: { backgroundColor: green[50] + '!important', ...snackbarRoot },
       error: { backgroundColor: red[100] + '!important', ...snackbarRoot },
       warning: {
@@ -132,11 +132,11 @@ export const Sidebar = () => {
                               variantWarning: classes.warning,
                               variantInfo: classes.info,
                            }}
-                           autoHideDuration={1000}
+                           autoHideDuration={1200}
                            maxSnack={2}
                            dense={true}
                            preventDuplicate
-                           transitionDuration={{ enter: 200, exit: 75 }}
+                           transitionDuration={{ enter: 200, exit: 50 }}
                            variant="info"
                            anchorOrigin={{
                               vertical: 'bottom',

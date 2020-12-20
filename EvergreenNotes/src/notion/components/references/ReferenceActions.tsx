@@ -5,7 +5,7 @@ import { LinkOutlined } from '@material-ui/icons';
 import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
 import { Launch, FileCopyOutlined, WidgetsTwoTone } from '@material-ui/icons';
 import { copyToClipboard, isGuid } from 'aCommon/extensionHelpers';
-import { LightTooltip } from '../common/Styles';
+import { LightTooltip } from '../common/TooltipStyles';
 import { useSnackbar } from 'notistack';
 import { useReferenceStyles } from './referenceStyles';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';

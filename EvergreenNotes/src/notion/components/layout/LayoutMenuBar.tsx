@@ -20,7 +20,7 @@ import {
    makeStyles,
    Theme,
 } from '@material-ui/core';
-import { LightTooltip } from 'aNotion/components/common/Styles';
+import { LightTooltip } from 'aNotion/components/common/TooltipStyles';
 import { updateStatus } from 'aNotion/types/updateStatus';
 import { flushCache } from 'aUtilities/apiCache';
 import { contentActions } from '../contents/contentSlice';

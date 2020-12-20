@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { Typography, Divider, useTheme } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum, inBlockTypes } from 'aNotion/types/notionV3/BlockTypes';
@@ -74,94 +74,97 @@ export const BlockUi = ({
       block.type === BlockTypeEnum.Embed ||
       !inBlockTypes(block.type);
 
+   const blockMemo = useMemo(
+      () => (
+         <div id="BlockUI" className={classes.block} style={blockStyle}>
+            {useGeneric && (
+               <TextUi
+                  variant={variant}
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  interactive={interactive}
+                  style={blockStyle}></TextUi>
+            )}
+            {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
+            {block.type === BlockTypeEnum.Callout && (
+               <CalloutUi block={block} interactive={interactive}></CalloutUi>
+            )}
+            {block.type === BlockTypeEnum.Quote && (
+               <QuoteUi
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  interactive={interactive}
+                  style={blockStyle}
+               />
+            )}
+            {block.type === BlockTypeEnum.ButtetedList && (
+               <BulletUi
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  style={blockStyle}
+                  interactive={interactive}
+               />
+            )}
+            {block.type === BlockTypeEnum.NumberedList && (
+               <NumberUi
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  style={blockStyle}
+                  interactive={interactive}
+               />
+            )}
+            {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
+            {block.type === BlockTypeEnum.Page && (
+               <PageUi
+                  block={block}
+                  style={blockStyle}
+                  inlineBlock={renderPagesAsInline}
+                  showContent={!renderPagesAsInline}
+                  interactive={interactive}
+                  semanticFilter={semanticFilter}
+               />
+            )}
+            {block.type === BlockTypeEnum.CollectionViewPage && (
+               <PageUi
+                  block={block}
+                  style={blockStyle}
+                  inlineBlock={renderPagesAsInline}
+                  showContent={!renderPagesAsInline}
+                  interactive={interactive}
+               />
+            )}
+            {block.type === BlockTypeEnum.CollectionViewInline && (
+               <PageUi
+                  block={block}
+                  style={blockStyle}
+                  inlineBlock={renderPagesAsInline}
+                  showContent={!renderPagesAsInline}
+                  interactive={interactive}
+               />
+            )}
+            {block.type === BlockTypeEnum.Toggle && (
+               <ToggleUi
+                  block={block}
+                  semanticFilter={semanticFilter}
+                  interactive={interactive}
+                  style={blockStyle}
+                  disableToggles={disableToggles}
+               />
+            )}
+            {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
+            {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
+            {block.type === BlockTypeEnum.Bookmark && (
+               <BookmarkUi block={block} />
+            )}
+            {isEmbedBlock && <EmbedUi block={block} />}
+         </div>
+      ),
+      [block, blockStyle, renderPagesAsInline, interactive, disableToggles]
+   );
+
    return (
       <ErrorBoundary FallbackComponent={SomethingWentWrong}>
-         <Suspense fallback={LoadingLine}>
-            <div id="BlockUI" className={classes.block} style={blockStyle}>
-               {useGeneric && (
-                  <TextUi
-                     variant={variant}
-                     block={block}
-                     semanticFilter={semanticFilter}
-                     interactive={interactive}
-                     style={blockStyle}></TextUi>
-               )}
-               {block.type === BlockTypeEnum.Divider && <Divider></Divider>}
-               {block.type === BlockTypeEnum.Callout && (
-                  <CalloutUi
-                     block={block}
-                     interactive={interactive}></CalloutUi>
-               )}
-               {block.type === BlockTypeEnum.Quote && (
-                  <QuoteUi
-                     block={block}
-                     semanticFilter={semanticFilter}
-                     interactive={interactive}
-                     style={blockStyle}
-                  />
-               )}
-               {block.type === BlockTypeEnum.ButtetedList && (
-                  <BulletUi
-                     block={block}
-                     semanticFilter={semanticFilter}
-                     style={blockStyle}
-                     interactive={interactive}
-                  />
-               )}
-               {block.type === BlockTypeEnum.NumberedList && (
-                  <NumberUi
-                     block={block}
-                     semanticFilter={semanticFilter}
-                     style={blockStyle}
-                     interactive={interactive}
-                  />
-               )}
-               {block.type === BlockTypeEnum.ToDo && <TodoUi block={block} />}
-               {block.type === BlockTypeEnum.Page && (
-                  <PageUi
-                     block={block}
-                     style={style}
-                     inlineBlock={renderPagesAsInline}
-                     showContent={!renderPagesAsInline}
-                     interactive={interactive}
-                     semanticFilter={semanticFilter}
-                  />
-               )}
-               {block.type === BlockTypeEnum.CollectionViewPage && (
-                  <PageUi
-                     block={block}
-                     style={style}
-                     inlineBlock={renderPagesAsInline}
-                     showContent={!renderPagesAsInline}
-                     interactive={interactive}
-                  />
-               )}
-               {block.type === BlockTypeEnum.CollectionViewInline && (
-                  <PageUi
-                     block={block}
-                     style={style}
-                     inlineBlock={renderPagesAsInline}
-                     showContent={!renderPagesAsInline}
-                     interactive={interactive}
-                  />
-               )}
-               {block.type === BlockTypeEnum.Toggle && (
-                  <ToggleUi
-                     block={block}
-                     semanticFilter={semanticFilter}
-                     interactive={interactive}
-                     style={blockStyle}
-                     disableToggles={disableToggles}
-                  />
-               )}
-               {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
-               {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
-               {block.type === BlockTypeEnum.Bookmark && (
-                  <BookmarkUi block={block} />
-               )}
-               {isEmbedBlock && <EmbedUi block={block} />}
-            </div>
-         </Suspense>
+         <Suspense fallback={LoadingLine}>{blockMemo}</Suspense>
       </ErrorBoundary>
    );
 };

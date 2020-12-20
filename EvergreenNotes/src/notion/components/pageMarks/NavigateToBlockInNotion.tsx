@@ -6,7 +6,7 @@ import {
    EvergreenMessagingEnum,
    TEvergreenMessage,
 } from 'aSidebar/sidebarMessaging';
-import { LightTooltip } from '../common/Styles';
+import { LightTooltip } from '../common/TooltipStyles';
 
 export const handleNavigateToBlockInNotion = (blockId: string) => {
    const msg: TEvergreenMessage<string> = {

@@ -10,7 +10,7 @@ import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { Grid, Typography } from '@material-ui/core';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
-import { blockStyles } from '../blocks/blockStyles';
+import { blockStyles } from 'aNotion/components/blocks/blockStyles';
 
 const BlockUi = React.lazy(() => import('../blocks/BlockUi'));
 

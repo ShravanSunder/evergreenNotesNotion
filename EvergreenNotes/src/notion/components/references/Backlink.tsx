@@ -29,7 +29,7 @@ import { PageUi } from '../blocks/PageUi';
 
 import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';
 import HelpOutlineTwoToneIcon from '@material-ui/icons/HelpOutlineTwoTone';
-import { LightTooltip } from '../common/Styles';
+import { LightTooltip } from '../common/TooltipStyles';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 

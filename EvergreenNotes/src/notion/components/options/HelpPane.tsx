@@ -65,45 +65,51 @@ export const HelpPane = () => {
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
          <Suspense fallback={<LoadingSection />}>
-            <div className={classes.spacing}></div>
+            <div className={classes.paragraphs}></div>
             <Link
                className={classes.sections}
-               variant="h4"
+               variant="h3"
                target="_blank"
                href="https://www.notion.so/shravansunder/Evergreen-Notes-For-Notion-e35e6ed4dd5a45b19bf2de2bb86b1a7e">
-               <b>Go to the website to learn more! 👉🏾</b>
+               <b>Information </b>
             </Link>
             <div className={classes.paragraphs}></div>
-            <Grid container style={{ marginLeft: 9 }}>
+            <Grid container style={{ marginLeft: 10 }}>
                <Grid item>
+                  <Link
+                     variant="body1"
+                     target="_blank"
+                     href="https://www.notion.so/shravansunder/Evergreen-Notes-For-Notion-e35e6ed4dd5a45b19bf2de2bb86b1a7e">
+                     <b>👉🏾 Click here to learn more from the website! </b>
+                  </Link>
+                  <div className={classes.paragraphs}></div>
                   <Typography>
                      If you enjoy this, I would be grateful if you could rate
                      the app!
                   </Typography>
-                  <div className={classes.paragraphs}></div>
-                  <div className={classes.paragraphs}></div>
+                  <div></div>
                   <Link
                      variant="body1"
                      target="_blank"
                      href="https://www.producthunt.com/posts/evergreen-notes-for-notion">
-                     Product Hunt
+                     🔗 Product Hunt
                   </Link>
-                  <div className={classes.paragraphs}></div>
+                  <div></div>
                   <Link
                      variant="body1"
                      target="_blank"
                      href="https://chrome.google.com/webstore/detail/evergreen-notes-for-notio/chhpogndpjcgjbnbcodhdnilklfanmfh?hl=en-US">
-                     Chrome Store
+                     🔗 Chrome Store
                   </Link>
                </Grid>
             </Grid>
             {/************* */}
             <div className={classes.spacing}></div>
-            <Typography className={classes.sections} variant="h4">
+            <Typography className={classes.sections} variant="h3">
                <b>Support and Donations</b>
             </Typography>
             <div className={classes.paragraphs}></div>
-            <Grid container style={{ marginLeft: 9 }}>
+            <Grid container style={{ marginLeft: 10 }}>
                <Grid item xs={12} style={{ marginLeft: 1 }}>
                   {!isDark && (
                      <a
@@ -139,11 +145,10 @@ export const HelpPane = () => {
             </Grid>
             {/************* */}
             <div className={classes.spacing}></div>
-            <Typography className={classes.sections} variant="h4">
+            <Typography className={classes.sections} variant="h3">
                <b>About</b>
             </Typography>
-            <div className={classes.paragraphs}></div>
-            <Grid container style={{ marginLeft: 9 }}>
+            <Grid container style={{ marginLeft: 10 }}>
                <Grid item xs={12}>
                   <Typography>
                      <strong>Version:</strong> v{manifest.version}
@@ -177,6 +182,19 @@ export const HelpPane = () => {
                      href="mailto:evergreen.software.dev@gmail.com">
                      evergreen.software.dev@gmail.com
                   </Link>
+               </Grid>
+            </Grid>
+            {/************* */}
+            <div className={classes.spacing}></div>
+            <Typography className={classes.sections} variant="h3">
+               <b>Caveats</b>
+            </Typography>
+            <Grid container style={{ marginLeft: 10 }}>
+               <Grid item xs={12}>
+                  <Typography>
+                     🚧 Collections, collection views and equations cannot be
+                     rendered.
+                  </Typography>
                </Grid>
             </Grid>
          </Suspense>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Typography, Icon } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { Page } from 'aNotion/types/notionV3/notionBlockTypes';
@@ -28,11 +28,54 @@ export const PageUi = ({
 }: IPageUIParams) => {
    const page = block.block as Page;
    let icon = page.format?.page_icon;
-   let iconComponent: JSX.Element | undefined = undefined;
    const variant = inlineBlock ? 'body1' : 'h4';
 
    const renderChildren = inlineBlock ? false : showContent;
 
+   const iconComponent: JSX.Element | undefined = useMemo(
+      () => getIcon(icon, variant, block),
+      [icon, variant, block]
+   );
+
+   let untitled = false;
+   if (block.semanticTitle == null || block.semanticTitle.length === 0) {
+      untitled = true;
+   }
+
+   return (
+      <div id="PageUI" style={style}>
+         {iconComponent}
+         {!untitled && (
+            <TextUi
+               block={block}
+               variant={variant}
+               interactive={interactive}
+               style={style}></TextUi>
+         )}
+         {untitled && (
+            <Typography variant={variant} display="inline">
+               Untitled
+            </Typography>
+         )}
+         {renderChildren && (
+            <>
+               <div style={{ marginTop: 12 }}></div>
+               <NotionContentWithParentId
+                  interactive={interactive}
+                  semanticFilter={semanticFilter}
+                  parentBlockId={block.blockId}></NotionContentWithParentId>
+            </>
+         )}
+      </div>
+   );
+};
+
+function getIcon(
+   icon: string | undefined,
+   variant: Variant,
+   block: INotionBlockModel
+) {
+   let iconComponent: JSX.Element | undefined;
    if (icon?.length === 1) {
       iconComponent = (
          <Typography display="inline" variant={variant}>
@@ -67,36 +110,5 @@ export const PageUi = ({
          </Typography>
       );
    }
-
-   let untitled = false;
-   if (block.semanticTitle == null || block.semanticTitle.length === 0) {
-      untitled = true;
-   }
-
-   return (
-      <div id="PageUI" style={style}>
-         {iconComponent}
-         {!untitled && (
-            <TextUi
-               block={block}
-               variant={variant}
-               interactive={interactive}
-               style={style}></TextUi>
-         )}
-         {untitled && (
-            <Typography variant={variant} display="inline">
-               Untitled
-            </Typography>
-         )}
-         {renderChildren && (
-            <>
-               <div style={{ marginTop: 12 }}></div>
-               <NotionContentWithParentId
-                  interactive={interactive}
-                  semanticFilter={semanticFilter}
-                  parentBlockId={block.blockId}></NotionContentWithParentId>
-            </>
-         )}
-      </div>
-   );
-};
+   return iconComponent;
+}

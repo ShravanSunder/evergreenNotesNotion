@@ -22,7 +22,7 @@ import { useReferenceStyles } from './referenceStyles';
 import { TextUi } from '../blocks/TextUi';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
 import { getValuesForSemanticType } from 'aNotion/services/pageService';
-import { LightTooltip } from 'aNotion/components/common/Styles';
+import { LightTooltip } from 'aNotion/components/common/TooltipStyles';
 
 import HelpOutlineTwoToneIcon from '@material-ui/icons/HelpOutlineTwoTone';
 import BookmarksTwoToneIcon from '@material-ui/icons/BookmarksTwoTone';

@@ -1,9 +1,10 @@
 import { withStyles, Theme, Tooltip } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 
 export const LightTooltip = withStyles((theme: Theme) => ({
    tooltip: {
-      backgroundColor: theme.palette.common.white,
-      color: 'rgba(0, 0, 0, 0.87)',
+      backgroundColor: grey[100],
+      color: grey[800],
       boxShadow: theme.shadows[1],
       fontSize: 11,
    },
