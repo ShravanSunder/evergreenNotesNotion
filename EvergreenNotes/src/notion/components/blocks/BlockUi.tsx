@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Typography, Divider, useTheme } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
-import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
+import { BlockTypeEnum, inBlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { Variant } from '@material-ui/core/styles/createTypography';
 import { PageUi } from './PageUi';
 import { BulletUi } from './BulletUi';
@@ -72,7 +72,7 @@ export const BlockUi = ({
       block.type === BlockTypeEnum.Video ||
       block.type === BlockTypeEnum.File ||
       block.type === BlockTypeEnum.Embed ||
-      !(block.type in BlockTypeEnum);
+      !inBlockTypes(block.type);
 
    return (
       <ErrorBoundary FallbackComponent={SomethingWentWrong}>

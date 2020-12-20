@@ -37,9 +37,11 @@ export enum BlockTypeEnum {
    BreadCrumb = 'breadcrumb',
 
    Embed = 'embed',
-   EmbedCodePen = 'codepen',
-   EmbedInvision = 'invision',
 }
+
+export const inBlockTypes = (e: BlockTypeEnum) => {
+   return Object.values(BlockTypeEnum).includes(e as BlockTypeEnum);
+};
 
 export enum BlockProps {
    Title = 'title',

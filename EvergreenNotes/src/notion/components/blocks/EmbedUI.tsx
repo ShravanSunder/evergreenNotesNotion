@@ -3,7 +3,7 @@ import { Box, Grid, Link, Typography, useTheme } from '@material-ui/core';
 import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
 import { IBaseSourceBlock as IBaseEmbedBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
-import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
+import { BlockTypeEnum, inBlockTypes } from 'aNotion/types/notionV3/BlockTypes';
 import { TextSegment } from './TextSegment';
 import { Segment } from 'aNotion/types/notionV3/semanticStringTypes';
 
@@ -26,7 +26,20 @@ export const EmbedUi = ({
       embed?.properties?.caption ?? undefined;
 
    const handleClick = () => {
-      window.open(source);
+      let notionUrl = source;
+      if (
+         source != null &&
+         block.type !== BlockTypeEnum.Embed &&
+         block.type !== BlockTypeEnum.Video &&
+         inBlockTypes(block.type)
+      ) {
+         notionUrl =
+            'https://www.notion.so/signed/' +
+            encodeURIComponent(source) +
+            `?table=block&id=${block.blockId}`;
+      }
+
+      window.open(notionUrl);
    };
 
    return (
