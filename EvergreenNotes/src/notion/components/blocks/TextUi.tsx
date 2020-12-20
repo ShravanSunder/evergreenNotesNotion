@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Typography, Icon } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { IBaseTextBlock } from 'aNotion/types/notionV3/definitions/basic_blocks';
@@ -34,8 +34,6 @@ export const TextUi = ({
    semanticFilter,
    setHasSegments,
 }: ITextUiParams) => {
-   let classes = blockStyles();
-
    let title: Segment[] | undefined = (block.block as IBaseTextBlock)
       ?.properties?.title as Segment[];
    if (title == null) {
@@ -60,50 +58,14 @@ export const TextUi = ({
       segmentTally.count = segmentTally.count + 1;
    };
 
-   let textUi: (JSX.Element | null)[] | null = null;
-
-   if (title != null) {
-      //if not interactive also truncate the max segment size
-      let textCount = 0;
-      const maxLen = 150;
-
-      textUi = title.map((segment, i) => {
-         if (
-            interactive === false &&
-            textCount < maxLen &&
-            textCount + segment[0].length > maxLen
-         ) {
-            //catch errors
-            console.log('render error');
-            incrementSegmentCount();
-            return (
-               <Typography
-                  key={i}
-                  display="inline"
-                  className={classes.typography}
-                  variant={variant ?? 'body1'}>
-                  {'...'}
-               </Typography>
-            );
-         }
-         textCount += segment[0].length;
-         if (interactive === false && textCount > maxLen) {
-            //catch errors
-            return null;
-         }
-
-         return (
-            <TextSegment
-               key={i}
-               segment={segment}
-               variant={variant ?? 'body1'}
-               interactive={interactive ?? true}
-               semanticFilter={semanticFilter}
-               incrementSegmentCount={incrementSegmentCount}
-               style={{ ...style }}></TextSegment>
-         );
-      });
-   }
+   const textUi: (JSX.Element | null)[] | null = useTitleMemo(
+      title,
+      interactive,
+      incrementSegmentCount,
+      variant,
+      semanticFilter,
+      style
+   );
 
    useEffect(() => {
       if (setHasSegments != null) {
@@ -112,4 +74,60 @@ export const TextUi = ({
    });
 
    return <>{textUi}</>;
+};
+
+const useTitleMemo = (
+   title: Segment[] | undefined,
+   interactive: boolean | undefined,
+   incrementSegmentCount: () => void,
+   variant: Variant | undefined,
+   semanticFilter: SemanticFormatEnum[] | undefined,
+   style: React.CSSProperties | undefined
+) => {
+   const classes = blockStyles();
+
+   //if not interactive also truncate the max segment size
+   let textCount = 0;
+   const maxLen = 150;
+
+   return useMemo(
+      () =>
+         (title ?? []).map((segment, i) => {
+            if (
+               interactive === false &&
+               textCount < maxLen &&
+               textCount + segment[0].length > maxLen
+            ) {
+               //catch errors
+               console.log('render error');
+               incrementSegmentCount();
+               return (
+                  <Typography
+                     key={i}
+                     display="inline"
+                     className={classes.typography}
+                     variant={variant ?? 'body1'}>
+                     {'...'}
+                  </Typography>
+               );
+            }
+            textCount += segment[0].length;
+            if (interactive === false && textCount > maxLen) {
+               //catch errors
+               return null;
+            }
+
+            return (
+               <TextSegment
+                  key={i}
+                  segment={segment}
+                  variant={variant ?? 'body1'}
+                  interactive={interactive ?? true}
+                  semanticFilter={semanticFilter}
+                  incrementSegmentCount={incrementSegmentCount}
+                  style={{ ...style }}></TextSegment>
+            );
+         }),
+      [title, variant, interactive, semanticFilter, style]
+   );
 };
