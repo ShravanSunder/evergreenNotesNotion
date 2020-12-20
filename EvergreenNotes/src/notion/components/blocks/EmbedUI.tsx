@@ -52,7 +52,9 @@ export const EmbedUi = ({
                         {title ?? block.type}
                      </Link>
                   </Grid>
-                  <Grid style={{ paddingTop: theme.spacing(2) }}></Grid>
+                  <Grid>
+                     <div style={{ paddingTop: theme.spacing(1) }}></div>
+                  </Grid>
                   <Grid>
                      {caption != null &&
                         caption.length > 0 &&
@@ -64,6 +66,9 @@ export const EmbedUi = ({
                               incrementSegmentCount={() => {}}
                               interactive={false}></TextSegment>
                         ))}
+                  </Grid>
+                  <Grid>
+                     <div style={{ paddingTop: theme.spacing(2) }}></div>
                   </Grid>
                </Grid>
             </Box>

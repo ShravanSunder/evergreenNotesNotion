@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Divider, Grid, Box } from '@material-ui/core';
+import { Typography, Divider, Grid, useTheme, Box } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
@@ -18,6 +18,8 @@ export const BookmarkUi = ({
 }: IBaseTextUiParams) => {
    let bookmark = block.block as Bookmark;
    let classes = blockStyles();
+
+   const theme = useTheme();
 
    const textUIComponent = (
       <TextUi
@@ -53,13 +55,17 @@ export const BookmarkUi = ({
                      <Grid item xs={11}>
                         {textUIComponent}
                      </Grid>
-                     <Grid style={{ paddingTop: 12 }}></Grid>
+                     <Grid>
+                        <div style={{ paddingTop: theme.spacing(1) }}></div>
+                     </Grid>
                      <Grid item xs={11}>
                         <Typography variant="body2">
                            {bookmark.properties.description[0][0]}
                         </Typography>
                      </Grid>
-                     <Grid style={{ paddingTop: 12 }}></Grid>
+                     <Grid>
+                        <div style={{ paddingTop: theme.spacing(2) }}></div>
+                     </Grid>
                      <Grid item xs={11}>
                         {caption != null &&
                            caption.length > 0 &&
