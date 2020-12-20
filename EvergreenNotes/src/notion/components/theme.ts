@@ -55,7 +55,7 @@ export const createAppTheme = (isDark: boolean): Theme => {
          main: isDark ? '#505558' : lightGreen[50],
       },
       layoutBackground: {
-         main: isDark ? '#373c3f' : '#f7f6f3',
+         main: isDark ? notionSecondaryDark : '#f7f6f3',
       },
       layoutAccent: {
          light: isDark ? lightGreen[300] : lightGreen[700],

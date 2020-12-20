@@ -1,10 +1,14 @@
 import React from 'react';
-import { Typography, Divider, Grid } from '@material-ui/core';
+import { Typography, Divider, Grid, Box } from '@material-ui/core';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { blockStyles } from './blockStyles';
 import { IBaseTextUiParams, TextUi } from './TextUi';
-import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import {
+   Segment,
+   SemanticFormatEnum,
+} from 'aNotion/types/notionV3/semanticStringTypes';
 import { Bookmark } from 'aNotion/types/notionV3/notionBlockTypes';
+import { TextSegment } from './TextSegment';
 
 export const BookmarkUi = ({
    block,
@@ -27,7 +31,10 @@ export const BookmarkUi = ({
       return null;
    }
 
-   const handleOnclick = () => {
+   const caption: Segment[] | undefined =
+      bookmark?.properties?.caption ?? undefined;
+
+   const handleClick = () => {
       if (bookmark?.properties?.link != null) {
          window.open(bookmark.properties.link[0][0]!);
       }
@@ -37,21 +44,35 @@ export const BookmarkUi = ({
       <>
          {bookmark?.properties?.link != null &&
             bookmark.properties.description != null && (
-               <Grid
-                  id="BookmarkUi"
-                  container
-                  onClick={handleOnclick}
-                  style={{ cursor: 'pointer' }}>
-                  <Grid item xs={11}>
-                     {textUIComponent}
+               <Box onClick={handleClick} className={classes.embed}>
+                  <Grid
+                     id="BookmarkUi"
+                     container
+                     onClick={handleClick}
+                     style={{ cursor: 'pointer' }}>
+                     <Grid item xs={11}>
+                        {textUIComponent}
+                     </Grid>
+                     <Grid style={{ paddingTop: 12 }}></Grid>
+                     <Grid item xs={11}>
+                        <Typography variant="body2">
+                           {bookmark.properties.description[0][0]}
+                        </Typography>
+                     </Grid>
+                     <Grid style={{ paddingTop: 12 }}></Grid>
+                     <Grid item xs={11}>
+                        {caption != null &&
+                           caption.length > 0 &&
+                           caption.map((s) => (
+                              <TextSegment
+                                 segment={s}
+                                 variant="caption"
+                                 incrementSegmentCount={() => {}}
+                                 interactive={false}></TextSegment>
+                           ))}
+                     </Grid>
                   </Grid>
-                  <Grid style={{ paddingTop: 6 }}></Grid>
-                  <Grid item xs={11}>
-                     <Typography variant="caption">
-                        {bookmark.properties.description[0][0]}
-                     </Typography>
-                  </Grid>
-               </Grid>
+               </Box>
             )}
       </>
    );

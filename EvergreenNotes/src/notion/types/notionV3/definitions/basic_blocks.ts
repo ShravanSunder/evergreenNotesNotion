@@ -297,6 +297,7 @@ export interface IBaseSourceBlock extends IEmptyBlock {
        */
       source?: [[base.NotionSecureUrl | base.PublicUrl]];
       title?: [[string]];
+      caption?: Segment[];
    };
 }
 
@@ -375,6 +376,7 @@ export interface IBookmark extends IBaseTextBlock {
       title?: Segment[];
       /** Description of the bookmarked web page, auto detected. */
       description?: [[string]];
+      caption?: Segment[];
    };
 }
 

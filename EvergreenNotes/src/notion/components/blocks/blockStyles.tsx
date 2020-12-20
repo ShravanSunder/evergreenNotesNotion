@@ -58,5 +58,13 @@ export const blockStyles = makeStyles((theme: Theme) =>
          wordBreak: 'break-all',
          color: theme.palette.referenceAccent.main,
       },
+      embed: {
+         padding: theme.spacing(1),
+         backgroundColor: theme.palette.layoutBackground.main,
+         cursor: 'pointer',
+         margin: 0,
+         marginTop: theme.spacing(0.5),
+         marginBottom: theme.spacing(0.5),
+      },
    })
 );

@@ -14,15 +14,13 @@ import { i_NotionUser } from './definitions/notion_user';
 // All types of blocks.
 import * as BasicBlocks from './definitions/basic_blocks';
 import * as DatabaseBlock from './definitions/database';
-import * as EmbedBlocks from './definitions/embed_blocks';
 
 export type NavigatableBlocks = Page | DatabaseBlock.ICollectionViewPage;
 
 export type Block =
    | NavigatableBlocks
    | BasicBlocks.TBasicBlockUnion
-   | DatabaseBlock.TDatabaseBlockUnion
-   | EmbedBlocks.EmbedBlockUnion;
+   | DatabaseBlock.TDatabaseBlockUnion;
 
 export interface ICollection extends i_Collection {}
 export interface ICollectionView extends i_CollectionView {}
@@ -68,11 +66,6 @@ export type Toggle = BasicBlocks.IToggle;
 
 export type CollectionViewInline = DatabaseBlock.ICollectionViewInline;
 export type CollectionViewPage = DatabaseBlock.ICollectionViewPage;
-
-//export type Codepen = EmbedBlock.Codepen;
-export type Embed = EmbedBlocks.Embed;
-//export type Invision = EmbedBlock.Invision;
-export type PDF = EmbedBlocks.PDF;
 
 export type Audio = BasicBlocks.IAudio;
 export type Bookmark = BasicBlocks.IBookmark;

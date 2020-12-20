@@ -70,7 +70,9 @@ export const BlockUi = ({
    const isEmbedBlock =
       block.type === BlockTypeEnum.Audio ||
       block.type === BlockTypeEnum.Video ||
-      block.type === BlockTypeEnum.File;
+      block.type === BlockTypeEnum.File ||
+      block.type === BlockTypeEnum.Embed ||
+      !(block.type in BlockTypeEnum);
 
    return (
       <ErrorBoundary FallbackComponent={SomethingWentWrong}>
