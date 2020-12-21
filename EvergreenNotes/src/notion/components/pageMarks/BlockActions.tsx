@@ -1,5 +1,16 @@
 import React, { SyntheticEvent } from 'react';
-import { createStyles, IconButton, makeStyles } from '@material-ui/core';
+import {
+   createStyles,
+   IconButton,
+   ListItemIcon,
+   Box,
+   ListItemText,
+   makeStyles,
+   Menu,
+   MenuItem,
+   Typography,
+   withStyles,
+} from '@material-ui/core';
 import {
    UnfoldMore,
    MoreVert,
@@ -46,20 +57,39 @@ const handleCopyEmbedBlock = (
 const useStyles = makeStyles((theme) =>
    createStyles({
       icon: {
-         maxHeight: 12,
-         maxWidth: 12,
+         maxHeight: theme.spacing(2),
+         maxWidth: theme.spacing(2),
          marginLeft: 1,
          marginRight: 1,
          marginTop: 0,
          color: theme.palette.primary.main,
       },
+      menuIcon: {
+         marginRight: theme.spacing(1.5),
+      },
    })
 );
+
+const StyledMenuItem = withStyles((theme) => ({
+   root: {
+      height: theme.spacing(3),
+      padding: theme.spacing(2),
+      margin: theme.spacing(1),
+   },
+}))(MenuItem);
 
 export const BlockActions = ({ block }: { block: INotionBlockModel }) => {
    const classes = useStyles();
    const sidebar = useSelector(sidebarExtensionSelector, shallowEqual);
    const { enqueueSnackbar } = useSnackbar();
+
+   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+   };
+   const handleClose = () => {
+      setAnchorEl(null);
+   };
 
    if (block.blockId == null) {
       return null;
@@ -69,7 +99,7 @@ export const BlockActions = ({ block }: { block: INotionBlockModel }) => {
       <>
          <IconButton
             onClick={(event) => {
-               handleNavigateToBlockInNotion(block.blockId);
+               handleClick(event);
             }}
             edge="end"
             style={{
@@ -81,41 +111,44 @@ export const BlockActions = ({ block }: { block: INotionBlockModel }) => {
             }}
             color="default"
             size="small">
-            <LightTooltip title="Scroll to block" placement="top">
-               <UnfoldMore className={classes.icon} />
+            <LightTooltip title="Click to open menu" placement="top">
+               <MoreVert className={classes.icon} />
             </LightTooltip>
          </IconButton>
-         <div></div>
-         {sidebar.navigation.notionSite && (
-            <IconButton
-               onClick={(event) => {
-                  handleCopyEmbedBlock(
-                     event,
-                     block.blockId!,
-                     sidebar.navigation.notionSite!,
-                     () =>
-                        enqueueSnackbar('Copied embed block', {
-                           variant: 'info',
-                        })
-                  );
-               }}
-               edge="end"
-               style={{
-                  maxHeight: 12,
-                  maxWidth: 12,
-                  marginLeft: 1,
-                  marginRight: 1,
-                  marginTop: 0,
-               }}
-               color="default"
-               size="small">
-               <LightTooltip
-                  title="Copy a global embed block link"
-                  placement="top">
-                  <WidgetsTwoTone className={classes.icon} />
-               </LightTooltip>
-            </IconButton>
-         )}
+         <Menu
+            id="block-actions-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}>
+            <StyledMenuItem
+               onClick={(event) => handleNavigateToBlockInNotion(block.blockId)}
+               dense>
+               <UnfoldMore fontSize="small" style={{ marginRight: 6 }} />
+               <Typography variant="caption">{'  Scroll to block '}</Typography>
+            </StyledMenuItem>
+            {sidebar.navigation.notionSite && (
+               <StyledMenuItem
+                  onClick={(event) => {
+                     handleCopyEmbedBlock(
+                        event,
+                        block.blockId,
+                        sidebar.navigation.notionSite!,
+                        () =>
+                           enqueueSnackbar('Copied embed block', {
+                              variant: 'info',
+                           })
+                     );
+                     handleClose();
+                  }}
+                  dense>
+                  <WidgetsTwoTone fontSize="small" style={{ marginRight: 6 }} />
+                  <Typography variant="caption">
+                     {'  Copy embed block '}
+                  </Typography>
+               </StyledMenuItem>
+            )}
+         </Menu>
       </>
    );
 };
