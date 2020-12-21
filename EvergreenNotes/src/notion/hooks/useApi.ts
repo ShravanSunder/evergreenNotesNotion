@@ -6,6 +6,16 @@ export type TUseApiPromise<TResult, TInput> = (
    input: TInput
 ) => [Promise<TResult>, AbortController];
 
+/**
+ * A hook that calls an api as an input (payload) changes based on a debouce
+
+ * It will abort the prior api call and then call the api with the new payload
+ * provides a status, result, setInput and current search input as a result.
+ * It handles errors and sets the status to rejected
+ * @param apiCallback the function that calls the api.  returns a TUseApiPromise
+ * @param debounce ms debounce
+ * @param maxWait maximum wait time before calling function
+ */
 export function useApi<TResult, TInput>(
    apiCallback: TUseApiPromise<TResult, TInput>,
    debounce: number = 300,
@@ -21,7 +31,7 @@ export function useApi<TResult, TInput>(
       trailing: true,
       maxWait: maxWait,
    });
-   const [lastApiPaylod, setLastApiPayload] = useState<TInput>();
+   const [promise, setPromise] = useState<Promise<TResult>>();
    const [apiAbortController, setAbortController] = useState<AbortController>();
    const [result, setResult] = useState<TResult>();
    const [status, setStatus] = useState<thunkStatus>(thunkStatus.idle);
@@ -33,24 +43,25 @@ export function useApi<TResult, TInput>(
             console.log(debouncedInput);
             //you can also check for max retries here
             if (
-               debouncedInput !== lastApiPaylod ||
-               (status === thunkStatus.rejected && retry <= 3)
+               (status === thunkStatus.rejected && retry <= 3) ||
+               status == thunkStatus.idle ||
+               status == thunkStatus.pending ||
+               status == thunkStatus.fulfilled
             ) {
                setStatus(thunkStatus.pending);
-               if (
-                  apiAbortController != null &&
-                  !apiAbortController?.signal.aborted
-               ) {
+               setResult(undefined);
+               if (promise != null && apiAbortController != null) {
                   apiAbortController.abort();
                }
 
                let [resultPromise, ab] = apiCallback(debouncedInput);
-               setLastApiPayload(debouncedInput);
+               setPromise(resultPromise);
                setAbortController(ab);
                try {
                   let result = await resultPromise;
                   setStatus(thunkStatus.fulfilled);
                   setResult(result);
+                  setPromise(undefined);
                   setAbortController(undefined);
                   setRetry(0);
                } catch (err) {
@@ -58,26 +69,14 @@ export function useApi<TResult, TInput>(
                      setStatus(thunkStatus.rejected);
                      setResult(undefined);
                      setRetry(retry + 1);
+                     setPromise(undefined);
+                     setAbortController(undefined);
                   }
                }
             }
          }
       })();
-
-      return () => {
-         if (apiAbortController != null) {
-            apiAbortController.abort();
-         }
-      };
-   }, [
-      //input,
-      apiAbortController,
-      debouncedInput,
-      lastApiPaylod,
-      apiCallback,
-      setAbortController,
-      status,
-   ]);
+   }, [debouncedInput]);
 
    return [status, result, setInput, debouncedInput];
 }

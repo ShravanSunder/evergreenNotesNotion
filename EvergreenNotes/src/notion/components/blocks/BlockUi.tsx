@@ -154,9 +154,11 @@ export const BlockUi = ({
             {block.type === BlockTypeEnum.Code && <CodeUi block={block} />}
             {block.type === BlockTypeEnum.Image && <ImageUi block={block} />}
             {block.type === BlockTypeEnum.Bookmark && (
-               <BookmarkUi block={block} />
+               <BookmarkUi block={block} semanticFilter={semanticFilter} />
             )}
-            {isEmbedBlock && <EmbedUi block={block} />}
+            {isEmbedBlock && (
+               <EmbedUi block={block} semanticFilter={semanticFilter} />
+            )}
          </div>
       ),
       [block, blockStyle, renderPagesAsInline, interactive, disableToggles]

@@ -89,7 +89,7 @@ export const SearchPane = () => {
    const { searchQueries } = useSelector(referenceSelector, shallowEqual);
    const [text, setText] = useState<string>('');
 
-   let [status, result, setSearchText, searchText] = useApi<
+   let [status, result, setSearchText, currentSearchText] = useApi<
       SearchReferences,
       string
    >(search);
@@ -115,10 +115,10 @@ export const SearchPane = () => {
    };
 
    useEffect(() => {
-      if (status === thunkStatus.fulfilled && searchText != null) {
-         dispatch(referenceActions.addSearchQueries(searchText));
+      if (status === thunkStatus.fulfilled && currentSearchText != null) {
+         dispatch(referenceActions.addSearchQueries(currentSearchText));
       }
-   }, [status, searchText, dispatch]);
+   }, [status, currentSearchText, dispatch]);
 
    result = result ?? defaultSearchReferences();
 

@@ -23,11 +23,7 @@ export const BookmarkUi = ({
    const theme = useTheme();
 
    const textUIComponent = (
-      <TextUi
-         block={block}
-         semanticFilter={semanticFilter}
-         style={style}
-         interactive={interactive}></TextUi>
+      <TextUi block={block} style={style} interactive={interactive}></TextUi>
    );
 
    if (textUIComponent == null) {
