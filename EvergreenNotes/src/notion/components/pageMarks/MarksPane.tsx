@@ -19,7 +19,7 @@ import {
    NotionContentWithParentId,
 } from 'aNotion/components/contents/NotionContent';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
-import { NavigateToBlockInNotion } from './NavigateToBlockInNotion';
+import { BlockActions } from './BlockActions';
 
 const useStyles = makeStyles(() =>
    createStyles({
@@ -210,7 +210,7 @@ const RenderMark = ({
          </Grid>
          <Grid item>
             <div style={{ marginTop: theme.spacing(1) }}></div>
-            <NavigateToBlockInNotion block={p}></NavigateToBlockInNotion>
+            <BlockActions block={p}></BlockActions>
          </Grid>
       </Grid>
    );

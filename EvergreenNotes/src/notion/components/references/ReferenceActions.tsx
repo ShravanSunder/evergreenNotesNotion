@@ -14,7 +14,7 @@ import {
    EvergreenMessagingEnum,
    TEvergreenMessage,
 } from 'aSidebar/sidebarMessaging';
-import VerticalAlignBottomIcon from '@material-ui/icons/VerticalAlignBottom';
+import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
 import CropFreeOutlinedIcon from '@material-ui/icons/CropFreeOutlined';
 import CenterFocusStrongIcon from '@material-ui/icons/CenterFocusStrong';
 
@@ -186,9 +186,7 @@ export const ReferenceActions = ({
                         className={classes.actionButton}
                         size="small"
                         onClick={handleMentionSourceIdClick}>
-                        <VerticalAlignBottomIcon
-                           className={classes.actionButtonIcon}
-                        />
+                        <UnfoldMoreIcon className={classes.actionButtonIcon} />
                      </IconButton>
                   </LightTooltip>
                </Grid>

@@ -103,6 +103,12 @@ export const Backlink = ({
                <Grid container spacing={1}>
                   {showInlineBlock && (
                      <>
+                        <Grid item xs className={classes.reference}>
+                           <NotionContentWithBlocks
+                              blockContent={
+                                 backlink.backlinkBlock
+                              }></NotionContentWithBlocks>
+                        </Grid>
                         <Grid item>
                            <LightTooltip
                               title="This is the block that contains backlink"
@@ -111,12 +117,6 @@ export const Backlink = ({
                                  className={classes.informationIcon}
                               />
                            </LightTooltip>
-                        </Grid>
-                        <Grid item xs className={classes.reference}>
-                           <NotionContentWithBlocks
-                              blockContent={
-                                 backlink.backlinkBlock
-                              }></NotionContentWithBlocks>
                         </Grid>
                      </>
                   )}

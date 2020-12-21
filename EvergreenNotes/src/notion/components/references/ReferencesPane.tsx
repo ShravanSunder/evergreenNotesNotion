@@ -208,7 +208,7 @@ const Mentions = ({ marks }: { marks: PageMarkState }) => {
          {status === thunkStatus.fulfilled && (
             <>
                <Typography className={classes.sections} variant="h5">
-                  <b>@Mentions in Page</b>
+                  <b>Page Mentions</b>
                </Typography>
                {mentionsMemo}
                {mentions.length === 0 && <NothingToFind />}

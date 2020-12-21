@@ -12,7 +12,7 @@ import { useSelector, shallowEqual } from 'react-redux';
 import { BlockUi } from '../blocks/BlockUi';
 import { PageUi } from '../blocks/PageUi';
 import { LoadingSection, NothingToFind } from '../common/Loading';
-import { handleNavigateToBlockInNotion } from './NavigateToBlockInNotion';
+import { handleNavigateToBlockInNotion } from './BlockActions';
 
 const useStyles = makeStyles(() =>
    createStyles({

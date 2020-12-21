@@ -86,6 +86,10 @@ export const PageMention = ({
             </AccordionActions>
             <AccordionDetails>
                <Grid container spacing={1}>
+                  <Grid item xs className={classes.reference}>
+                     <NotionContentWithBlocks
+                        blockContent={mentionBlock}></NotionContentWithBlocks>
+                  </Grid>
                   <Grid item>
                      <LightTooltip
                         title="This is the block that contains the page mention"
@@ -94,10 +98,6 @@ export const PageMention = ({
                            className={classes.informationIcon}
                         />
                      </LightTooltip>
-                  </Grid>
-                  <Grid item xs className={classes.reference}>
-                     <NotionContentWithBlocks
-                        blockContent={mentionBlock}></NotionContentWithBlocks>
                   </Grid>
 
                   {mentionIds != null && mentionIds?.length > 0 && (

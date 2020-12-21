@@ -38,7 +38,7 @@ const handleReceiveMessage = (event: any) => {
       );
       if (element != null) {
          try {
-            element.scrollIntoView({ behavior: 'smooth' });
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
          } catch {
             /* do nothing*/
          }
