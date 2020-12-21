@@ -10,10 +10,7 @@ import {
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
-import {
-   NotionContentWithBlocks,
-   NotionContentWithParentId,
-} from 'aNotion/components/contents/NotionContent';
+import { NotionContentWithBlocks } from 'aNotion/components/contents/NotionContent';
 import { ReferenceActions } from 'aNotion/components/references/ReferenceActions';
 import {
    Accordion,
@@ -94,9 +91,8 @@ export const Backlink = ({
                   path={backlink.path}
                   text={backlink.backlinkBlock.simpleTitle}
                   markupFocusState={showColoredBlocksOnly}
-                  handleMarkupFocus={() => setShowColoredBlocksOnly((h) => !h)}
-                  mentionSourceId={
-                     backlink.backlinkBlock.blockId
+                  handleMarkupFocus={() =>
+                     setShowColoredBlocksOnly((h) => !h)
                   }></ReferenceActions>
             </AccordionActions>
             <AccordionDetails>
@@ -105,6 +101,7 @@ export const Backlink = ({
                      <>
                         <Grid item xs className={classes.reference}>
                            <NotionContentWithBlocks
+                              parentPageId={backlinkedPageBlock?.blockId}
                               blockContent={
                                  backlink.backlinkBlock
                               }></NotionContentWithBlocks>

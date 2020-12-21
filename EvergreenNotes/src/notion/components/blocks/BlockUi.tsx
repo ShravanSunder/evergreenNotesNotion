@@ -27,6 +27,7 @@ import { blockStyles } from './blockStyles';
 import { ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { BookmarkUi } from './BookmarkUI';
 import { EmbedUi } from './EmbedUI';
+import { BlockContextMenu } from '../pageMarks/BlockContextMenu';
 
 interface IBlockUi {
    block: INotionBlockModel;
@@ -36,6 +37,7 @@ interface IBlockUi {
    interactive?: boolean;
    renderPagesAsInline?: boolean;
    disableToggles?: boolean;
+   parentPageId?: string;
 }
 
 export const BlockUi = ({
@@ -46,6 +48,7 @@ export const BlockUi = ({
    interactive = true,
    renderPagesAsInline = true,
    disableToggles = false,
+   parentPageId,
 }: IBlockUi) => {
    const classes = blockStyles();
    const variant = useVariant(block);
@@ -67,6 +70,29 @@ export const BlockUi = ({
       color
    );
 
+   const [anchorEl, setAnchorEl] = React.useState<{
+      mouseX: null | number;
+      mouseY: null | number;
+   }>({
+      mouseX: null,
+      mouseY: null,
+   });
+
+   const contextClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      if (event.type === 'contextmenu') {
+         event.preventDefault();
+         setAnchorEl({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+         });
+      } else {
+         setAnchorEl({
+            mouseX: null,
+            mouseY: null,
+         });
+      }
+   };
+
    const isEmbedBlock =
       block.type === BlockTypeEnum.Audio ||
       block.type === BlockTypeEnum.Video ||
@@ -76,7 +102,12 @@ export const BlockUi = ({
 
    const blockMemo = useMemo(
       () => (
-         <div id="BlockUI" className={classes.block} style={blockStyle}>
+         <div
+            id="BlockUI"
+            className={classes.block}
+            style={{ ...blockStyle, cursor: 'context-menu' }}
+            onContextMenu={contextClick}
+            onClick={contextClick}>
             {useGeneric && (
                <TextUi
                   variant={variant}
@@ -166,7 +197,14 @@ export const BlockUi = ({
 
    return (
       <ErrorBoundary FallbackComponent={SomethingWentWrong}>
-         <Suspense fallback={LoadingLine}>{blockMemo}</Suspense>
+         <Suspense fallback={LoadingLine}>
+            {blockMemo}
+            <BlockContextMenu
+               block={block}
+               anchorEl={anchorEl}
+               setAnchorEl={setAnchorEl}
+               pageId={parentPageId}></BlockContextMenu>
+         </Suspense>
       </ErrorBoundary>
    );
 };

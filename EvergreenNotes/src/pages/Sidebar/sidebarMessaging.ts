@@ -5,6 +5,7 @@ export enum EvergreenMessagingEnum {
    frameStatusChanged = 'updateEvergreenFrame',
    navigateToBlock = 'navigateToBlock',
    darkModeChanged = 'updateSideDarkmode',
+   copyToClipboard = 'copyToClipboard',
 }
 
 /**
@@ -43,6 +44,13 @@ const handleReceiveMessage = (event: any) => {
             /* do nothing*/
          }
       }
+   } else if (
+      data != null &&
+      data.type == EvergreenMessagingEnum.copyToClipboard &&
+      data.payload != null
+   ) {
+      navigator.clipboard.writeText(data.payload);
+      console.log('Copied to clipboard' + data.payload);
    }
 };
 

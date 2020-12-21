@@ -21,6 +21,7 @@ interface INotionContentParams {
    style?: React.CSSProperties;
    renderPagesAsInline?: boolean;
    interactive?: boolean;
+   parentPageId?: string;
 }
 
 interface INotionContentWithParentIdParams extends INotionContentParams {
@@ -52,6 +53,7 @@ const NotionContent = ({
    style = undefined,
    renderPagesAsInline = true,
    interactive = true,
+   parentPageId,
 }: INotionContentParams &
    INotionContentWithParentIdParams &
    INotionContentWithBlocksParams) => {
@@ -97,7 +99,8 @@ const NotionContent = ({
       style,
       renderPagesAsInline,
       depth,
-      maxDepth
+      maxDepth,
+      parentPageId
    );
 
    return (
@@ -116,6 +119,7 @@ interface IContentChildren {
    semanticFilter?: SemanticFormatEnum[];
    style?: React.CSSProperties;
    interactive?: boolean;
+   parentPageId?: string;
 }
 
 const ContentChildren = ({
@@ -124,6 +128,7 @@ const ContentChildren = ({
    semanticFilter,
    style,
    interactive,
+   parentPageId,
 }: IContentChildren) => {
    let classes = blockStyles();
 
@@ -152,6 +157,7 @@ const ContentChildren = ({
          )}
          <Grid item xs className={classes.blockUiGrids}>
             <NotionContent
+               parentPageId={parentPageId}
                parentBlockId={block.blockId}
                semanticFilter={semanticFilter}
                style={style}
@@ -169,7 +175,8 @@ const useContentMemo = (
    style: React.CSSProperties | undefined,
    renderPagesAsInline: boolean,
    depth: number | undefined,
-   maxDepth: number | undefined
+   maxDepth: number | undefined,
+   parentPageId: string | undefined
 ) => {
    return useMemo(
       () =>
@@ -181,7 +188,8 @@ const useContentMemo = (
                   index={i}
                   semanticFilter={semanticFilter}
                   style={style}
-                  renderPagesAsInline={renderPagesAsInline}></BlockUi>
+                  renderPagesAsInline={renderPagesAsInline}
+                  parentPageId={parentPageId}></BlockUi>
                {(depth ?? 1) < (maxDepth ?? 6) && (
                   <ContentChildren
                      block={p}
@@ -192,6 +200,14 @@ const useContentMemo = (
                )}
             </React.Fragment>
          )),
-      [content, interactive, semanticFilter, style, renderPagesAsInline, depth]
+      [
+         content,
+         interactive,
+         semanticFilter,
+         style,
+         renderPagesAsInline,
+         depth,
+         parentPageId,
+      ]
    );
 };

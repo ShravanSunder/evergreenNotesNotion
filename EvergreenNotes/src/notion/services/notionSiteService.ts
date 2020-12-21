@@ -77,6 +77,16 @@ export const getPageUrl = (pageId: string) => {
    return sidebar.navigation.notionSite + pageId.replace(/-/g, '');
 };
 
+export const getBlockUrl = (pageId: string, blockId: string) => {
+   const sidebar = getAppState(sidebarExtensionSelector);
+   return (
+      sidebar.navigation.notionSite +
+      pageId.replace(/-/g, '') +
+      '#' +
+      blockId.replace(/-/g, '')
+   );
+};
+
 export const getSiteUrl = () => {
    const sidebar = getAppState(sidebarExtensionSelector);
    return sidebar.navigation.notionSite;

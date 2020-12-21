@@ -1,4 +1,10 @@
-import React, { MouseEvent, Suspense, useState, useMemo } from 'react';
+import React, {
+   MouseEvent,
+   Suspense,
+   useState,
+   useMemo,
+   useEffect,
+} from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { ExpandMoreSharp } from '@material-ui/icons';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
@@ -16,6 +22,8 @@ import { ISearchRecordModel } from 'aNotion/models/SearchRecord';
 import { Path } from './Path';
 import { LoadingSection } from '../common/Loading';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import { INotionBlockModel } from 'aNotion/models/NotionBlock';
+import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 
 export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
    let classes = useReferenceStyles();
@@ -26,6 +34,27 @@ export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
       | undefined = showColoredBlocksOnly
       ? [SemanticFormatEnum.Colored]
       : undefined;
+
+   const [parentPageBlock, setParentPageBlock] = useState<
+      INotionBlockModel | undefined
+   >();
+
+   useEffect(() => {
+      if (refData.path.length > 0) {
+         if (refData.notionBlock.type == BlockTypeEnum.Page) {
+            setParentPageBlock(refData.notionBlock);
+         } else {
+            const index = refData.path
+               .map(
+                  (p) =>
+                     p.type === BlockTypeEnum.Page ||
+                     p.type === BlockTypeEnum.CollectionViewPage
+               )
+               .lastIndexOf(true);
+            setParentPageBlock(refData.path[index]);
+         }
+      }
+   }, [refData.path, refData.notionBlock.blockId]);
 
    return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -61,6 +90,7 @@ export const Reference = ({ refData }: { refData: ISearchRecordModel }) => {
                         interactive={true}
                         semanticFilter={semanticFilter}
                         renderPagesAsInline={false}
+                        parentPageId={parentPageBlock?.blockId}
                         blockContent={
                            refData.notionBlock
                         }></NotionContentWithBlocks>

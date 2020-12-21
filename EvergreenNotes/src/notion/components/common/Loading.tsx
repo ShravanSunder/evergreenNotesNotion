@@ -112,7 +112,7 @@ export const AccessIssue = () => {
          style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
          🙅🏾‍♂️ Either This isn't a notion page, the API is down or you do not have
-         full access...
+         full access. 🙏🏾 You can try refreshing the page.
       </Typography>
    );
 };
@@ -123,7 +123,7 @@ export const ErrorCouldNotLoadEvergreenNotes = () => {
          variant="h6"
          style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
-         😵 Couldn't load Evergreen Notes. 🙏🏾 Please try refreshing page.
+         😵 Couldn't load Evergreen Notes. 🙏🏾 Please try refreshing the page.
       </Typography>
    );
 };
@@ -156,7 +156,7 @@ export const ErrorCouldNotLoadReferences = () => {
          variant="h6"
          style={{ padding: 7, marginBottom: 15, marginTop: 15 }}
          gutterBottom>
-         😵😵😵 Couldn't load references. 🙏🏾 Please try refreshing page.
+         😵😵😵 Couldn't load references. 🙏🏾 Please try refreshing the page.
       </Typography>
    );
 };

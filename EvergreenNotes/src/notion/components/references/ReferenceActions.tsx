@@ -3,7 +3,14 @@ import { shallowEqual, useSelector } from 'react-redux';
 import { Button, Grid, IconButton } from '@material-ui/core';
 import { LinkOutlined } from '@material-ui/icons';
 import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
-import { Launch, FileCopyOutlined, WidgetsTwoTone } from '@material-ui/icons';
+import {
+   Launch,
+   FileCopyOutlined,
+   WidgetsTwoTone,
+   UnfoldMore,
+   CropFreeOutlined,
+   CenterFocusStrong,
+} from '@material-ui/icons';
 import { copyToClipboard, isGuid } from 'aCommon/extensionHelpers';
 import { LightTooltip } from '../common/TooltipStyles';
 import { useSnackbar } from 'notistack';
@@ -14,9 +21,6 @@ import {
    EvergreenMessagingEnum,
    TEvergreenMessage,
 } from 'aSidebar/sidebarMessaging';
-import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
-import CropFreeOutlinedIcon from '@material-ui/icons/CropFreeOutlined';
-import CenterFocusStrongIcon from '@material-ui/icons/CenterFocusStrong';
 
 interface IReferenceActionParams {
    id: string;
@@ -45,7 +49,6 @@ export const ReferenceActions = ({
       if (sidebar.navigation.notionSite != null) {
          let url = sidebar.navigation.notionSite + id.replace(/-/g, '');
          let success = copyToClipboard(url);
-         console.log('copied to clipboard');
          if (success) {
             console.log('copied to clipboard');
             enqueueSnackbar('Copied embed block', { variant: 'info' });
@@ -128,16 +131,16 @@ export const ReferenceActions = ({
                         size="small"
                         onClick={() => handleMarkupFocus()}>
                         {markupFocusState && (
-                           <CenterFocusStrongIcon
+                           <CenterFocusStrong
                               className={
                                  classes.actionButtonIcon
-                              }></CenterFocusStrongIcon>
+                              }></CenterFocusStrong>
                         )}
                         {!markupFocusState && (
-                           <CropFreeOutlinedIcon
+                           <CropFreeOutlined
                               className={
                                  classes.actionButtonIcon
-                              }></CropFreeOutlinedIcon>
+                              }></CropFreeOutlined>
                         )}
                      </IconButton>
                   </LightTooltip>
@@ -186,7 +189,7 @@ export const ReferenceActions = ({
                         className={classes.actionButton}
                         size="small"
                         onClick={handleMentionSourceIdClick}>
-                        <UnfoldMoreIcon className={classes.actionButtonIcon} />
+                        <UnfoldMore className={classes.actionButtonIcon} />
                      </IconButton>
                   </LightTooltip>
                </Grid>
@@ -196,7 +199,7 @@ export const ReferenceActions = ({
    );
 };
 
-export const getNotionUrl = (
+const getNotionUrl = (
    path: INotionBlockModel[],
    sidebar: SidebarExtensionState,
    id: string

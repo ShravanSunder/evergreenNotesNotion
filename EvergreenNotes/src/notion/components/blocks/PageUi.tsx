@@ -8,6 +8,7 @@ import { NotionContentWithParentId } from 'aNotion/components/contents/NotionCon
 import { MaximizeTwoTone } from '@material-ui/icons';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { SemanticFormatEnum } from 'aNotion/types/notionV3/semanticStringTypes';
+import { BlockContextMenu } from '../pageMarks/BlockContextMenu';
 
 interface IPageUIParams {
    block: INotionBlockModel;
@@ -32,6 +33,22 @@ export const PageUi = ({
 
    const renderChildren = inlineBlock ? false : showContent;
 
+   const [anchorEl, setAnchorEl] = React.useState<{
+      mouseX: null | number;
+      mouseY: null | number;
+   }>({
+      mouseX: null,
+      mouseY: null,
+   });
+
+   const contextClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      setAnchorEl({
+         mouseX: event.clientX - 2,
+         mouseY: event.clientY - 4,
+      });
+   };
+
    const iconComponent: JSX.Element | undefined = useMemo(
       () => getIcon(icon, variant, block),
       [icon, variant, block]
@@ -44,23 +61,31 @@ export const PageUi = ({
 
    return (
       <div id="PageUI" style={style}>
-         {iconComponent}
-         {!untitled && (
-            <TextUi
+         <div style={{ cursor: 'context-menu' }} onContextMenu={contextClick}>
+            {iconComponent}
+            {!untitled && (
+               <TextUi
+                  block={block}
+                  variant={variant}
+                  interactive={interactive}
+                  style={style}></TextUi>
+            )}
+            {untitled && (
+               <Typography variant={variant} display="inline">
+                  Untitled
+               </Typography>
+            )}
+            <BlockContextMenu
                block={block}
-               variant={variant}
-               interactive={interactive}
-               style={style}></TextUi>
-         )}
-         {untitled && (
-            <Typography variant={variant} display="inline">
-               Untitled
-            </Typography>
-         )}
+               pageId={block.blockId}
+               anchorEl={anchorEl}
+               setAnchorEl={setAnchorEl}></BlockContextMenu>
+         </div>
          {renderChildren && (
             <>
                <div style={{ marginTop: 12 }}></div>
                <NotionContentWithParentId
+                  parentPageId={block.blockId}
                   interactive={interactive}
                   semanticFilter={semanticFilter}
                   parentBlockId={block.blockId}></NotionContentWithParentId>
