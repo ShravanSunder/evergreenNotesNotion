@@ -105,7 +105,7 @@ export const BlockUi = ({
          <div
             id="BlockUI"
             className={classes.block}
-            style={{ ...blockStyle, cursor: 'context-menu' }}
+            style={{ ...blockStyle }}
             onContextMenu={contextClick}
             onClick={contextClick}>
             {useGeneric && (
