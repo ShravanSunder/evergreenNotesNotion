@@ -8,7 +8,7 @@ import {
    Grid,
    useTheme,
 } from '@material-ui/core';
-import { pageMarksSelector } from 'aNotion/providers/storeSelectors';
+import { pageMarksSelector } from 'aNotion/providers/rootSelectors';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from 'aCommon/Components/ErrorFallback';

@@ -8,7 +8,7 @@ import {
    referenceSelector,
    pageMarksSelector,
    sidebarExtensionSelector,
-} from 'aNotion/providers/storeSelectors';
+} from 'aNotion/providers/rootSelectors';
 import { referenceActions } from 'aNotion/components/references/referenceSlice';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import {

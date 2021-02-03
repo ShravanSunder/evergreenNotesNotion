@@ -2,7 +2,7 @@ import React, { SyntheticEvent } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { Button, Grid, IconButton } from '@material-ui/core';
 import { LinkOutlined } from '@material-ui/icons';
-import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
+import { sidebarExtensionSelector } from 'aNotion/providers/rootSelectors';
 import {
    Launch,
    FileCopyOutlined,

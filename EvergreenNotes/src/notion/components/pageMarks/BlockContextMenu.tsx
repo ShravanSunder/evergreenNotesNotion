@@ -14,7 +14,7 @@ import {
    WidgetsTwoTone,
 } from '@material-ui/icons';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
-import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
+import { sidebarExtensionSelector } from 'aNotion/providers/rootSelectors';
 import { useSelector, shallowEqual } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { copyToClipboard } from 'aCommon/extensionHelpers';

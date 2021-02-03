@@ -18,7 +18,7 @@ const middleware = getDefaultMiddleware().concat(logger);
 export const reduxStore = configureStore({
    reducer: rootReducer,
    middleware: middleware,
-   devTools: true, //process.env.NODE_ENV !== 'production',
+   devTools: process.env.NODE_ENV !== 'production',
    //preloadedState: preloadedState,
    //enhancers: [composeEnhancers()],
 });

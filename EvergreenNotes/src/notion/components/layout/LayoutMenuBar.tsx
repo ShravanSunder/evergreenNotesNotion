@@ -1,6 +1,6 @@
 import React, { SyntheticEvent } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
-import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
+import { sidebarExtensionSelector } from 'aNotion/providers/rootSelectors';
 import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import {

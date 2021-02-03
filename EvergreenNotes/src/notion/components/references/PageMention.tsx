@@ -30,7 +30,7 @@ import { LoadingLine } from '../common/Loading';
 import {
    blockSelector,
    contentSelector,
-} from 'aNotion/providers/storeSelectors';
+} from 'aNotion/providers/rootSelectors';
 import { useSelector } from 'react-redux';
 import BlockUi from '../blocks/BlockUi';
 import { thunkStatus } from 'aNotion/types/thunkStatus';

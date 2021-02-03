@@ -9,7 +9,7 @@ import {
    ContentState,
    ContentBlocks,
 } from 'aNotion/components/contents/contentState';
-import { contentSelector } from 'aNotion/providers/storeSelectors';
+import { contentSelector } from 'aNotion/providers/rootSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 import { fetchContentForBlock } from 'aNotion/services/recordService';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';

@@ -25,7 +25,7 @@ import {
    processBacklinks,
    getRelationsForPage,
 } from 'aNotion/services/referenceService';
-import { currentPageSelector } from 'aNotion/providers/storeSelectors';
+import { currentPageSelector } from 'aNotion/providers/rootSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';

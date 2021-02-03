@@ -4,7 +4,7 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import {
    currentPageSelector,
    sidebarExtensionSelector,
-} from 'aNotion/providers/storeSelectors';
+} from 'aNotion/providers/rootSelectors';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { sidebarExtensionActions } from 'aNotion/components/layout/sidebarExtensionSlice';

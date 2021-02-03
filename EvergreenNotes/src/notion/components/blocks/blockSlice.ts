@@ -3,7 +3,7 @@ import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { fetchPageRecord } from 'aNotion/services/blockService';
 import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import { RecordState } from 'aNotion/components/blocks/blockState';
-import { blockSelector } from 'aNotion/providers/storeSelectors';
+import { blockSelector } from 'aNotion/providers/rootSelectors';
 import { RootState } from 'aNotion/providers/rootReducer';
 import { mentionsActions } from 'aNotion/components/mentions/mentionsSlice';
 

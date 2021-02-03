@@ -5,7 +5,7 @@ import {
 import { appDispatch, getAppState } from 'aNotion/providers/appDispatch';
 import { isGuid, isGuidOnlyNumbers, toGuid } from 'aCommon/extensionHelpers';
 import * as queryString from 'query-string';
-import { sidebarExtensionSelector } from 'aNotion/providers/storeSelectors';
+import { sidebarExtensionSelector } from 'aNotion/providers/rootSelectors';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { updateStatus } from 'aNotion/types/updateStatus';
 

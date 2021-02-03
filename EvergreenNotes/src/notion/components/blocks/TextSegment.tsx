@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
    blockSelector,
    mentionSelector,
-} from 'aNotion/providers/storeSelectors';
+} from 'aNotion/providers/rootSelectors';
 import { getColor, parseDate } from 'aNotion/services/blockService';
 import { TAppDispatchWithPromise } from 'aNotion/providers/appDispatch';
 import { blockActions } from 'aNotion/components/blocks/blockSlice';

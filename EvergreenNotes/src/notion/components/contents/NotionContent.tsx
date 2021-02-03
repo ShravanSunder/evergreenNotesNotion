@@ -2,7 +2,7 @@ import React, { useEffect, Suspense, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import { TAppDispatchWithPromise } from 'aNotion/providers/appDispatch';
-import { contentSelector } from 'aNotion/providers/storeSelectors';
+import { contentSelector } from 'aNotion/providers/rootSelectors';
 import { contentActions } from 'aNotion/components/contents/contentSlice';
 import { LoadingSection, LoadingLine } from '../common/Loading';
 import { ErrorFallback, ErrorBoundary } from 'aCommon/Components/ErrorFallback';

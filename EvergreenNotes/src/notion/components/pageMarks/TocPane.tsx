@@ -4,7 +4,7 @@ import { INotionBlockModel } from 'aNotion/models/NotionBlock';
 import {
    currentPageSelector,
    pageMarksSelector,
-} from 'aNotion/providers/storeSelectors';
+} from 'aNotion/providers/rootSelectors';
 import { BlockTypeEnum } from 'aNotion/types/notionV3/BlockTypes';
 import { thunkStatus } from 'aNotion/types/thunkStatus';
 import React, { Suspense, useEffect, useMemo, useState } from 'react';

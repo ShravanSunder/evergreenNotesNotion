@@ -27,7 +27,7 @@ import {
    currentPageSelector,
    referenceSelector,
    sidebarExtensionSelector,
-} from 'aNotion/providers/storeSelectors';
+} from 'aNotion/providers/rootSelectors';
 import { NotionBlockRecord } from 'aNotion/models/NotionBlock';
 import { Dispatch } from 'react';
 
