@@ -94,9 +94,9 @@ export const Layout = () => {
             refreshSidebarContents(dispatch, sidebar.navigation);
          }
       },
-      3000,
+      60000,
       {
-         maxWait: 60000,
+         maxWait: 300000,
       }
    );
 
@@ -158,7 +158,7 @@ export const Layout = () => {
          event.origin.includes('notion')
       ) {
          const payload = (event.data as TEvergreenMessage<boolean>).payload;
-         if (payload != null) {
+         if (payload != null && isSidebarOpen !== payload) {
             setIsSidebarOpen(payload);
          }
       }
