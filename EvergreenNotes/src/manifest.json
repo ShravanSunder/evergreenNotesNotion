@@ -1,6 +1,6 @@
 {
    "name": "Evergreen Notes (for Notion)",
-   "version": "2.2.6",
+   "version": "2.2.7",
    "options_page": "options.html",
    "background": {
       "page": "background.html"
@@ -13,11 +13,9 @@
       "128": "icon-128.png"
    },
    "permissions": [
-      "activeTab",
       "tabs",
       "*://*.notion.so/*",
       "https://notion.so/*",
-      "webRequest",
       "clipboardWrite",
       "storage"
    ],
