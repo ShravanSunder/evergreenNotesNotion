@@ -26,7 +26,7 @@
       "chrome-extension-async": "^3.4.1",
       "debug": "^4.2.0",
       "fontsource-roboto": "^3.0.3",
-      "luxon": "^1.25.0",
+      "luxon": "^2.5.2",
       "material-ui-popup-state": "^1.7.0",
       "notistack": "^1.0.1",
       "npm": "^6.14.8",
